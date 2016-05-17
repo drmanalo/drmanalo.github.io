@@ -1,0 +1,283 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dhon.manalo</title>
+    <link>https://drmanalo.github.io</link>
+    <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
+    <language>en-gb</language>
+    <pubDate>Wed, 18 May 2016 00:04:51 +0100</pubDate>
+    <lastBuildDate>Wed, 18 May 2016 00:04:51 +0100</lastBuildDate>
+
+      <item>
+        <title>Blogging With JBake</title>
+        <link>https://drmanalo.github.io/blog/2015/blogging-with-jbake.html</link>
+        <pubDate>Sun, 1 May 2016 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/blogging-with-jbake.html</guid>
+        <description>
+  	         &lt;p&gt;I have an existing &lt;strong&gt;Octopress&lt;/strong&gt; blog which is probably near its useful days. Octopress which is &lt;strong&gt;Jekyll&lt;/strong&gt; underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I&apos;m a &lt;strong&gt;Ruby&lt;/strong&gt; guy, I will certainly stick with Octopress or Jekyll. But I&apos;m not, being a Java developer. One of the biggest reason why I&apos;m switching to &lt;code&gt;jbake&lt;/code&gt; is being able to run it on JVM. &lt;strong&gt;JBake&lt;/strong&gt; is not as mature as Jekyll, it&apos;s Github inception was 17th of July 2012.&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Prerequisites&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://oracle.com/technetwork/java/javase/downloads/index.html&quot;&gt;JDK&lt;/a&gt; - the oven&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/&quot;&gt;git&lt;/a&gt; - the stupid content tracker&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://sdkman.io&quot;&gt;sdkman&lt;/a&gt; - to easily install Software Development Kits&lt;br/&gt; &lt;code&gt;$ curl -s &amp;quot;https://get.sdkman.io&amp;quot; | bash&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/pledbrook/lazybones&quot;&gt;lazybones&lt;/a&gt; - template generator&lt;br/&gt; &lt;code&gt;$ sdk install lazybones&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://gradle.org/&quot;&gt;gradle&lt;/a&gt; - for the optional github deployment script&lt;br/&gt; &lt;code&gt;$ sdk install gradle&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;h3&gt;Setting up your bakery&lt;/h3&gt;&lt;p&gt;I followed &lt;a href=&quot;http://coffeaelectronica.com/blog/2015/baking-with-groovy-and-github.html&quot;&gt;CoffeaElectronica&lt;/a&gt; to initially setup my bakery.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ lazybones create jbake-groovy blog
+Creating project from template jbake-groovy (latest) in &apos;blog&apos;
+Define value for &apos;JBake Plugin Version&apos; [0.2]:
+Define value for &apos;JBake Version&apos; [2.3.2]: 2.4.0
+Define value for &apos;Gradle version&apos; [2.3]: 2.9
+GitHub project: [username/projectname.git]: drmanalo/dhon.github.io.git
+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then I cloned one of knes1 repositories &lt;code&gt;git clone https://github.com/knes1/tehartikli-jbake-template.git&lt;/code&gt; since it has the Freemarker templates that I wanted for my blog. After cloning, I placed the cloned template into &lt;code&gt;src/jbake&lt;/code&gt; replacing all existing folders there. I also deleted the initial contents under &lt;code&gt;content/blog/2013&lt;/code&gt; folder which are initial posts on &lt;strong&gt;HTML&lt;/strong&gt;, &lt;strong&gt;Markdown&lt;/strong&gt; and &lt;strong&gt;AsciiDoc&lt;/strong&gt; format to show you how to write your posts.&lt;/p&gt;&lt;p&gt;I changed the &lt;code&gt;build.gradle&lt;/code&gt; slightly to support Freemarker.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-groovy&quot;&gt;
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath &apos;me.champeau.gradle:jbake-gradle-plugin:0.2&apos;
+        classpath &apos;org.jbake:jbake-core:2.3.1&apos;
+        classpath &apos;org.pegdown:pegdown:1.4.2&apos;
+        classpath &apos;org.asciidoctor:asciidoctorj:1.5.2&apos;
+        classpath &apos;org.freemarker:freemarker:2.3.19&apos;
+    }
+}
+
+apply plugin: &apos;me.champeau.jbake&apos;
+
+task publish(type: GradleBuild) {
+    buildFile = &apos;publish.gradle&apos;
+    tasks = [&apos;publishGhPages&apos;]
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Header of every recipe&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;
+title=Disclaimer
+date=2015-05-01
+type=page
+keywords=drmanalo,disclaimer
+status=published
+~~~~~
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;On the above snippet type could be either &lt;code&gt;post&lt;/code&gt; or &lt;code&gt;page&lt;/code&gt;. The difference on how it will be baked is purely based on your moulder which happen to be the files inside &lt;code&gt;templates&lt;/code&gt; folder.&lt;/p&gt;&lt;h3&gt;Baking your recipe&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-groovy&quot;&gt;
+$ gradle jbake
+:jbake
+
+BUILD SUCCESSFUL
+
+Total time: 5.542 secs
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Previewing your posts&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ groovy serve.groovy
+Starting Jetty, press Ctrl+C to stop.
+2016-05-07 15:17:10.455:INFO:oejs.Server:jetty-7.6.15.v20140411
+2016-05-07 15:17:10.496:INFO:oejsh.ContextHandler:started o.e.j.s.ServletContextHandler{/,file:/home/drmanalo/workspace/blog/}
+2016-05-07 15:17:10.520:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:8080
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Publishing to github&lt;/h3&gt;&lt;p&gt;This requires your associated &lt;code&gt;SSH key&lt;/code&gt; for the configured github username.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ gradle publish
+:publish
+:dhon.github.io:publishGhPages
+
+BUILD SUCCESSFUL
+
+Total time: 14.107 secs
+
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Custom JSP Tags</title>
+        <link>https://drmanalo.github.io/blog/2015/custom-jsp-tags.html</link>
+        <pubDate>Sat, 30 Apr 2016 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/custom-jsp-tags.html</guid>
+        <description>
+  	         &lt;p&gt;We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.&lt;/p&gt;&lt;p&gt;There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside &lt;code&gt;javax.servlet.jsp.tagext&lt;/code&gt; and then writing your &lt;code&gt;tld&lt;/code&gt; Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you&apos;re a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.&lt;/p&gt;&lt;p&gt;The other approach is by writing a tag file that goes to &lt;code&gt;WEB-INF/tags&lt;/code&gt; folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here &lt;a href=&quot;http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html&quot;&gt;JSP Tags 5&lt;/a&gt;.&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;input.tag&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;%@ tag language=&amp;quot;java&amp;quot; pageEncoding=&amp;quot;UTF-8&amp;quot;%&amp;gt;
+&amp;lt;%@ tag description=&amp;quot;Bootstrap input tag with error, icon and i8n support&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;c&amp;quot; uri=&amp;quot;http://java.sun.com/jsp/jstl/core&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;fn&amp;quot; uri=&amp;quot;http://java.sun.com/jsp/jstl/functions&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;form&amp;quot; uri=&amp;quot;http://www.springframework.org/tags/form&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;s&amp;quot; uri=&amp;quot;http://www.springframework.org/tags&amp;quot;%&amp;gt;
+
+&amp;lt;%@ attribute name=&amp;quot;path&amp;quot; required=&amp;quot;true&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;cssClass&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;cssStyle&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;label&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;placeholder&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;required&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.Boolean&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;append&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.Boolean&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;prepend&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.Boolean&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;icon&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+
+&amp;lt;c:if test=&amp;quot;${ empty label }&amp;quot;&amp;gt;
+    &amp;lt;c:set var=&amp;quot;label&amp;quot; value=&amp;quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&amp;quot; /&amp;gt;
+&amp;lt;/c:if&amp;gt;
+&amp;lt;c:if test=&amp;quot;${ fn:length(icon) gt 1 }&amp;quot;&amp;gt;
+  	&amp;lt;c:set var=&amp;quot;icon&amp;quot; value=&amp;#39;&amp;lt;i class=&amp;quot;${ icon }&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;&amp;#39;/&amp;gt;
+&amp;lt;/c:if&amp;gt;
+
+&amp;lt;s:bind path=&amp;quot;${ path }&amp;quot;&amp;gt;
+	&amp;lt;div class=&amp;quot;row form-group ${ status.error ? &amp;#39;error&amp;#39; : &amp;#39;&amp;#39; }&amp;quot;&amp;gt;
+		&amp;lt;label class=&amp;quot;col-sm-2 control-label&amp;quot; for=&amp;quot;${ path }&amp;quot;&amp;gt;
+			&amp;lt;s:message code=&amp;quot;${ label }&amp;quot;/&amp;gt;
+			&amp;lt;c:if test=&amp;quot;${ required }&amp;quot;&amp;gt;
+				&amp;lt;span class=&amp;quot;required&amp;quot;&amp;gt; *&amp;lt;/span&amp;gt;
+			&amp;lt;/c:if&amp;gt;
+		&amp;lt;/label&amp;gt;
+		&amp;lt;div class=&amp;quot;col-sm-4&amp;quot;&amp;gt;
+		  	&amp;lt;c:choose&amp;gt;
+				&amp;lt;c:when test=&amp;quot;${ prepend }&amp;quot;&amp;gt;
+					&amp;lt;div class=&amp;quot;input-prepend&amp;quot;&amp;gt;
+		  				&amp;lt;span class=&amp;quot;add-on&amp;quot;&amp;gt;${ icon }&amp;lt;/span&amp;gt;
+						&amp;lt;form:input path=&amp;quot;${ path }&amp;quot; cssClass=&amp;quot;${ empty cssClass ? &amp;#39;input-xlarge&amp;#39; : cssClass }&amp;quot;/&amp;gt;
+					&amp;lt;/div&amp;gt;
+				&amp;lt;/c:when&amp;gt;
+				&amp;lt;c:when test=&amp;quot;${ append }&amp;quot;&amp;gt;
+					&amp;lt;div class=&amp;quot;input-append&amp;quot;&amp;gt;
+				  		&amp;lt;form:input path=&amp;quot;${ path }&amp;quot; cssClass=&amp;quot;${ empty cssClass ? &amp;#39;input-xlarge&amp;#39; : cssClass }&amp;quot;/&amp;gt;
+						&amp;lt;span class=&amp;quot;add-on&amp;quot;&amp;gt;${ icon }&amp;lt;/span&amp;gt;
+					&amp;lt;/div&amp;gt;
+				&amp;lt;/c:when&amp;gt;
+				&amp;lt;c:otherwise&amp;gt;
+					&amp;lt;form:input path=&amp;quot;${ path }&amp;quot; class=&amp;quot;form-control&amp;quot; placeholder=&amp;quot;${ empty placeholder ? label : placeholder }&amp;quot; autocomplete=&amp;quot;off&amp;quot; cssStyle=&amp;quot;${ empty cssStyle ? &amp;#39;&amp;#39; : cssStyle }&amp;quot;/&amp;gt;
+				&amp;lt;/c:otherwise&amp;gt;
+			&amp;lt;/c:choose&amp;gt;
+			&amp;lt;c:if test=&amp;quot;${ status.error }&amp;quot;&amp;gt;
+				&amp;lt;form:errors path=&amp;quot;${ path }&amp;quot; cssClass=&amp;quot;text-danger&amp;quot; /&amp;gt;
+			&amp;lt;/c:if&amp;gt;
+	  	&amp;lt;/div&amp;gt;
+	&amp;lt;/div&amp;gt;
+&amp;lt;/s:bind&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;calendar.tag&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;%@ tag language=&amp;quot;java&amp;quot; pageEncoding=&amp;quot;UTF-8&amp;quot;%&amp;gt;
+&amp;lt;%@ tag description=&amp;quot;Bootstrap input grouped tag with error, calendar icon and i8n support&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;c&amp;quot; uri=&amp;quot;http://java.sun.com/jsp/jstl/core&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;fn&amp;quot; uri=&amp;quot;http://java.sun.com/jsp/jstl/functions&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;form&amp;quot; uri=&amp;quot;http://www.springframework.org/tags/form&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;s&amp;quot; uri=&amp;quot;http://www.springframework.org/tags&amp;quot;%&amp;gt;
+
+&amp;lt;%@ attribute name=&amp;quot;label&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;path&amp;quot; required=&amp;quot;true&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;required&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.Boolean&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;groupId&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;btnTitle&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;icon&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+
+&amp;lt;c:if test=&amp;quot;${ empty label }&amp;quot;&amp;gt;
+    &amp;lt;c:set var=&amp;quot;label&amp;quot; value=&amp;quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&amp;quot; /&amp;gt;
+&amp;lt;/c:if&amp;gt;
+
+&amp;lt;s:bind path=&amp;quot;${ path }&amp;quot;&amp;gt;
+	&amp;lt;div class=&amp;quot;row form-group ${ status.error ? &amp;#39;error&amp;#39; : &amp;#39;&amp;#39; }&amp;quot;&amp;gt;
+		&amp;lt;label class=&amp;quot;col-sm-2 control-label&amp;quot; for=&amp;quot;${ path }&amp;quot;&amp;gt;
+			&amp;lt;s:message code=&amp;quot;${ label }&amp;quot;/&amp;gt;
+			&amp;lt;c:if test=&amp;quot;${ required }&amp;quot;&amp;gt;
+				&amp;lt;span class=&amp;quot;required&amp;quot;&amp;gt; *&amp;lt;/span&amp;gt;
+			&amp;lt;/c:if&amp;gt;
+		&amp;lt;/label&amp;gt;
+		&amp;lt;div class=&amp;quot;col-sm-4&amp;quot;&amp;gt;
+			&amp;lt;div class=&amp;quot;input-group date&amp;quot; id=&amp;quot;${ empty groupId ? &amp;#39;&amp;#39; : groupId }&amp;quot;&amp;gt;
+				&amp;lt;span class=&amp;quot;input-group-addon btn btn-sm btn-primary&amp;quot;&amp;gt;
+					&amp;lt;span class=&amp;quot;${ icon }&amp;quot; title=&amp;quot;${ empty btnTitle ? &amp;#39;&amp;#39; : btnTitle }&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;
+				&amp;lt;/span&amp;gt;
+				&amp;lt;form:input path=&amp;quot;${ path }&amp;quot; class=&amp;quot;form-control&amp;quot; autocomplete=&amp;quot;off&amp;quot; cssStyle=&amp;quot;width:180px;&amp;quot; /&amp;gt;
+			&amp;lt;/div&amp;gt;
+		&amp;lt;/div&amp;gt;
+	&amp;lt;/div&amp;gt;
+&amp;lt;/s:bind&amp;gt;		
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;textarea.tag&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;%@ tag language=&amp;quot;java&amp;quot; pageEncoding=&amp;quot;UTF-8&amp;quot;%&amp;gt;
+&amp;lt;%@ tag description=&amp;quot;Bootstrap textarea tag with error, icon and i8n support&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;c&amp;quot; uri=&amp;quot;http://java.sun.com/jsp/jstl/core&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;fn&amp;quot; uri=&amp;quot;http://java.sun.com/jsp/jstl/functions&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;form&amp;quot; uri=&amp;quot;http://www.springframework.org/tags/form&amp;quot;%&amp;gt;
+&amp;lt;%@ taglib prefix=&amp;quot;s&amp;quot; uri=&amp;quot;http://www.springframework.org/tags&amp;quot;%&amp;gt;
+
+&amp;lt;%@ attribute name=&amp;quot;label&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;path&amp;quot; required=&amp;quot;true&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;required&amp;quot; required=&amp;quot;false&amp;quot; type=&amp;quot;java.lang.Boolean&amp;quot;%&amp;gt;
+
+&amp;lt;c:if test=&amp;quot;${ empty label }&amp;quot;&amp;gt;
+    &amp;lt;c:set var=&amp;quot;label&amp;quot; value=&amp;quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&amp;quot; /&amp;gt;
+&amp;lt;/c:if&amp;gt;
+
+&amp;lt;s:bind path=&amp;quot;${ path }&amp;quot;&amp;gt;
+	&amp;lt;div class=&amp;quot;row form-group ${ status.error ? &amp;#39;error&amp;#39; : &amp;#39;&amp;#39; }&amp;quot;&amp;gt;
+		&amp;lt;label class=&amp;quot;col-sm-2 control-label&amp;quot; for=&amp;quot;${ path }&amp;quot;&amp;gt;
+			&amp;lt;s:message code=&amp;quot;${ label }&amp;quot;/&amp;gt;
+			&amp;lt;c:if test=&amp;quot;${ required }&amp;quot;&amp;gt;
+				&amp;lt;span class=&amp;quot;required&amp;quot;&amp;gt; *&amp;lt;/span&amp;gt;
+			&amp;lt;/c:if&amp;gt;
+		&amp;lt;/label&amp;gt;
+		&amp;lt;div class=&amp;quot;col-sm-4&amp;quot;&amp;gt;
+			&amp;lt;form:textarea path=&amp;quot;${ path }&amp;quot; class=&amp;quot;form-control&amp;quot; placeholder=&amp;quot;${ empty placeholder ? label : placeholder }&amp;quot; /&amp;gt;
+			&amp;lt;c:if test=&amp;quot;${ status.error }&amp;quot;&amp;gt;
+				&amp;lt;form:errors path=&amp;quot;${ path }&amp;quot; cssClass=&amp;quot;text-danger&amp;quot; /&amp;gt;
+			&amp;lt;/c:if&amp;gt;
+		&amp;lt;/div&amp;gt;
+	&amp;lt;/div&amp;gt;
+&amp;lt;/s:bind&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;actions.tag&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;%@ tag language=&amp;quot;java&amp;quot; pageEncoding=&amp;quot;UTF-8&amp;quot;%&amp;gt;
+&amp;lt;%@ tag	description=&amp;quot;Bootstrap cancel, reset and submit buttons without i8n support&amp;quot;%&amp;gt;
+&amp;lt;%@ attribute name=&amp;quot;cancelPath&amp;quot; required=&amp;quot;true&amp;quot; type=&amp;quot;java.lang.String&amp;quot;%&amp;gt;
+
+&amp;lt;div class=&amp;quot;row form-group&amp;quot;&amp;gt;
+	&amp;lt;div class=&amp;quot;col-sm-4 col-sm-offset-2&amp;quot;&amp;gt;
+		&amp;lt;a href=&amp;quot;${ cancelPath }&amp;quot; class=&amp;quot;btn btn-default&amp;quot;&amp;gt;Cancel&amp;lt;/a&amp;gt;
+		&amp;lt;input type=&amp;quot;reset&amp;quot; id=&amp;quot;reset&amp;quot; value=&amp;quot;Reset&amp;quot; class=&amp;quot;btn btn-default&amp;quot; /&amp;gt;
+		&amp;lt;input type=&amp;quot;submit&amp;quot; value=&amp;quot;Submit&amp;quot; class=&amp;quot;btn btn-primary&amp;quot; /&amp;gt;
+	&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Importing the tags&lt;/h3&gt;&lt;p&gt;Just import it like any other JSP tag&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;%@taglib tagdir=&amp;quot;/WEB-INF/tags&amp;quot; prefix=&amp;quot;bs&amp;quot;%&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Adding Local JAR to Maven</title>
+        <link>https://drmanalo.github.io/blog/2014/adding-local-jar-to-maven.html</link>
+        <pubDate>Sat, 13 Sep 2014 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2014/adding-local-jar-to-maven.html</guid>
+        <description>
+  	         &lt;p&gt;Oracle JDBC is not available from Maven&apos;s online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.&lt;/p&gt;&lt;p&gt;After downloading the JAR, you have to open your console and issue &lt;code&gt;mvn install:install-file&lt;/code&gt;. Please refer below for the complete syntax. &lt;strong&gt;-Dfile requires fullpath.&lt;/strong&gt;&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;mvn install&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0 -Dpackaging=jar
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- maven-install-plugin:2.4:install-file (default-cli) @ standalone-pom ---
+[INFO] Installing /home/drmanalo/java/ojdbc6.jar to /home/drmanalo/.m2/repository/com/oracle/ojdb6/11.2.0/ojdb6-11.2.0.jar
+[INFO] Installing /tmp/mvninstall6607716975508685322.pom to /home/drmanalo/.m2/repository/com/oracle/ojdb6/11.2.0/ojdb6-11.2.0.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 0.687 s
+[INFO] Finished at: 2014-09-09T15:11:54+01:00
+[INFO] Final Memory: 5M/106M
+[INFO] ------------------------------------------------------------------------
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;pom.xml&lt;/h3&gt;&lt;p&gt;Within your POM&apos;s dependencies, you need to add the dependency after mvn install.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;com.oracle&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;ojdbc6&amp;lt;/artifactId&amp;gt;
+	&amp;lt;version&amp;gt;11.2.0&amp;lt;/version&amp;gt;
+&amp;lt;dependency&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If you have a remote build server, you have to do the &lt;code&gt;mvn install&lt;/code&gt; bit to add the dependency knowing you are using different maven local repository. There is another solution posted on &lt;a href=&quot;http://blog.valdaris.com/post/custom-jar/&quot; target=&quot;_new&quot;&gt;this blog&lt;/a&gt; but I haven&apos;t tried this approach. I&apos;m referring to &lt;strong&gt;Installing the jar by using install-plugin&lt;/strong&gt;. Perhaps this is the way to go but for the time being I&apos;m happy with &lt;code&gt;maven install:install-file&lt;/code&gt;.&lt;/p&gt;
+  	    </description>
+      </item>
+  </channel>
+</rss>

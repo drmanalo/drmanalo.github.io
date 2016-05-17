@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Blogging With JBake</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../../plugins/prism/prism.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+		<!-- Fixed navbar -->
+				<header class="header" id="header">
+			<div class="container">
+					<h1 class="logo pull-left">
+							<a href="/"><span class="logo-title">dhon.manalo</span></a>
+					</h1>
+					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
+							<div class="navbar-header">
+									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+											<span class="sr-only">Toggle navigation</span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+									</button>
+							</div>
+							<div id="navbar-collapse" class="navbar-collapse collapse">
+									<ul class="nav navbar-nav">
+											<li class="nav-item sr-only active"><a href="/">Home</a></li>
+											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
+											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
+									</ul>
+							</div>
+					</nav>
+			</div>
+		</header>
+
+	<section class="section promo offset-header">
+		<div class="container">
+			<h1 class="page-header title">Blogging With JBake</h1>
+			<p><em>01 May 2016</em></p>
+			<p><p>I have an existing <strong>Octopress</strong> blog which is probably near its useful days. Octopress which is <strong>Jekyll</strong> underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I'm a <strong>Ruby</strong> guy, I will certainly stick with Octopress or Jekyll. But I'm not, being a Java developer. One of the biggest reason why I'm switching to <code>jbake</code> is being able to run it on JVM. <strong>JBake</strong> is not as mature as Jekyll, it's Github inception was 17th of July 2012.</p>
+<!-- more --><h3>Prerequisites</h3>
+<ul>
+  <li><p><a href="http://oracle.com/technetwork/java/javase/downloads/index.html">JDK</a> - the oven</p></li>
+  <li><p><a href="https://git-scm.com/">git</a> - the stupid content tracker</p></li>
+  <li><p><a href="http://sdkman.io">sdkman</a> - to easily install Software Development Kits<br/> <code>$ curl -s &quot;https://get.sdkman.io&quot; | bash</code></p></li>
+  <li><p><a href="https://github.com/pledbrook/lazybones">lazybones</a> - template generator<br/> <code>$ sdk install lazybones</code></p></li>
+  <li><p><a href="http://gradle.org/">gradle</a> - for the optional github deployment script<br/> <code>$ sdk install gradle</code></p></li>
+</ul><h3>Setting up your bakery</h3><p>I followed <a href="http://coffeaelectronica.com/blog/2015/baking-with-groovy-and-github.html">CoffeaElectronica</a> to initially setup my bakery.</p>
+<pre><code class="language-bash">
+$ lazybones create jbake-groovy blog
+Creating project from template jbake-groovy (latest) in 'blog'
+Define value for 'JBake Plugin Version' [0.2]:
+Define value for 'JBake Version' [2.3.2]: 2.4.0
+Define value for 'Gradle version' [2.3]: 2.9
+GitHub project: [username/projectname.git]: drmanalo/dhon.github.io.git
+
+</code></pre><p>Then I cloned one of knes1 repositories <code>git clone https://github.com/knes1/tehartikli-jbake-template.git</code> since it has the Freemarker templates that I wanted for my blog. After cloning, I placed the cloned template into <code>src/jbake</code> replacing all existing folders there. I also deleted the initial contents under <code>content/blog/2013</code> folder which are initial posts on <strong>HTML</strong>, <strong>Markdown</strong> and <strong>AsciiDoc</strong> format to show you how to write your posts.</p><p>I changed the <code>build.gradle</code> slightly to support Freemarker.</p>
+<pre><code class="language-groovy">
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2'
+        classpath 'org.jbake:jbake-core:2.3.1'
+        classpath 'org.pegdown:pegdown:1.4.2'
+        classpath 'org.asciidoctor:asciidoctorj:1.5.2'
+        classpath 'org.freemarker:freemarker:2.3.19'
+    }
+}
+
+apply plugin: 'me.champeau.jbake'
+
+task publish(type: GradleBuild) {
+    buildFile = 'publish.gradle'
+    tasks = ['publishGhPages']
+}
+
+</code></pre><h3>Header of every recipe</h3>
+<pre><code class="language-markdown">
+title=Disclaimer
+date=2015-05-01
+type=page
+keywords=drmanalo,disclaimer
+status=published
+~~~~~
+</code></pre><p>On the above snippet type could be either <code>post</code> or <code>page</code>. The difference on how it will be baked is purely based on your moulder which happen to be the files inside <code>templates</code> folder.</p><h3>Baking your recipe</h3>
+<pre><code class="language-groovy">
+$ gradle jbake
+:jbake
+
+BUILD SUCCESSFUL
+
+Total time: 5.542 secs
+</code></pre><h3>Previewing your posts</h3>
+<pre><code class="language-bash">
+$ groovy serve.groovy
+Starting Jetty, press Ctrl+C to stop.
+2016-05-07 15:17:10.455:INFO:oejs.Server:jetty-7.6.15.v20140411
+2016-05-07 15:17:10.496:INFO:oejsh.ContextHandler:started o.e.j.s.ServletContextHandler{/,file:/home/drmanalo/workspace/blog/}
+2016-05-07 15:17:10.520:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:8080
+
+</code></pre><h3>Publishing to github</h3><p>This requires your associated <code>SSH key</code> for the configured github username.</p>
+<pre><code class="language-bash">
+$ gradle publish
+:publish
+:dhon.github.io:publishGhPages
+
+BUILD SUCCESSFUL
+
+Total time: 14.107 secs
+
+</code></pre></p>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/blogging-with-jbake.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/blogging-with-jbake.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+	<script>hljs.initHighlightingOnLoad();</script>
+
+		</div><!--//container-->
+	</section>
+
+	<!-- ******FOOTER****** -->
+	<footer class="footer">
+    <div class="container text-center">
+        <small class="copyright">Bootstrap theme by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+    </div>
+	</footer>
+
+  <!-- Javascript -->
+	<script src="../../plugins/jquery-1.11.3.min.js"></script>
+	<script src="../../plugins/jquery.easing.1.3.js"></script>
+	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+	<script src="../../plugins/prism/prism.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

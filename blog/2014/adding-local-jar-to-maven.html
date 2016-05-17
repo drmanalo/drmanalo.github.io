@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Adding Local JAR to Maven</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../../plugins/prism/prism.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+		<!-- Fixed navbar -->
+				<header class="header" id="header">
+			<div class="container">
+					<h1 class="logo pull-left">
+							<a href="/"><span class="logo-title">dhon.manalo</span></a>
+					</h1>
+					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
+							<div class="navbar-header">
+									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+											<span class="sr-only">Toggle navigation</span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+									</button>
+							</div>
+							<div id="navbar-collapse" class="navbar-collapse collapse">
+									<ul class="nav navbar-nav">
+											<li class="nav-item sr-only active"><a href="/">Home</a></li>
+											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
+											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
+									</ul>
+							</div>
+					</nav>
+			</div>
+		</header>
+
+	<section class="section promo offset-header">
+		<div class="container">
+			<h1 class="page-header title">Adding Local JAR to Maven</h1>
+			<p><em>13 September 2014</em></p>
+			<p><p>Oracle JDBC is not available from Maven's online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.</p><p>After downloading the JAR, you have to open your console and issue <code>mvn install:install-file</code>. Please refer below for the complete syntax. <strong>-Dfile requires fullpath.</strong></p>
+<!-- more --><h3>mvn install</h3>
+<pre><code class="language-bash">
+$ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0 -Dpackaging=jar
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- maven-install-plugin:2.4:install-file (default-cli) @ standalone-pom ---
+[INFO] Installing /home/drmanalo/java/ojdbc6.jar to /home/drmanalo/.m2/repository/com/oracle/ojdb6/11.2.0/ojdb6-11.2.0.jar
+[INFO] Installing /tmp/mvninstall6607716975508685322.pom to /home/drmanalo/.m2/repository/com/oracle/ojdb6/11.2.0/ojdb6-11.2.0.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 0.687 s
+[INFO] Finished at: 2014-09-09T15:11:54+01:00
+[INFO] Final Memory: 5M/106M
+[INFO] ------------------------------------------------------------------------
+
+</code></pre><h3>pom.xml</h3><p>Within your POM's dependencies, you need to add the dependency after mvn install.</p>
+<pre><code>&lt;dependency&gt;
+	&lt;groupId&gt;com.oracle&lt;/groupId&gt;
+	&lt;artifactId&gt;ojdbc6&lt;/artifactId&gt;
+	&lt;version&gt;11.2.0&lt;/version&gt;
+&lt;dependency&gt;
+
+</code></pre><p>If you have a remote build server, you have to do the <code>mvn install</code> bit to add the dependency knowing you are using different maven local repository. There is another solution posted on <a href="http://blog.valdaris.com/post/custom-jar/" target="_new">this blog</a> but I haven't tried this approach. I'm referring to <strong>Installing the jar by using install-plugin</strong>. Perhaps this is the way to go but for the time being I'm happy with <code>maven install:install-file</code>.</p></p>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2014/adding-local-jar-to-maven.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2014/adding-local-jar-to-maven.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+	<script>hljs.initHighlightingOnLoad();</script>
+
+		</div><!--//container-->
+	</section>
+
+	<!-- ******FOOTER****** -->
+	<footer class="footer">
+    <div class="container text-center">
+        <small class="copyright">Bootstrap theme by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+    </div>
+	</footer>
+
+  <!-- Javascript -->
+	<script src="../../plugins/jquery-1.11.3.min.js"></script>
+	<script src="../../plugins/jquery.easing.1.3.js"></script>
+	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+	<script src="../../plugins/prism/prism.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

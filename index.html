@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>dhon.manalo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="plugins/prism/prism.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+		<!-- Fixed navbar -->
+				<header class="header" id="header">
+			<div class="container">
+					<h1 class="logo pull-left">
+							<a href="/"><span class="logo-title">dhon.manalo</span></a>
+					</h1>
+					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
+							<div class="navbar-header">
+									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+											<span class="sr-only">Toggle navigation</span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+									</button>
+							</div>
+							<div id="navbar-collapse" class="navbar-collapse collapse">
+									<ul class="nav navbar-nav">
+											<li class="nav-item sr-only active"><a href="/">Home</a></li>
+											<li class="nav-item"><a href="pages/disclaimer.html">Disclaimer</a></li>
+											<li class="nav-item"><a href="archive.html">Archives</a></li>
+											<li class="nav-item"><a href="feed.xml">Feed</a></li>
+									</ul>
+							</div>
+					</nav>
+			</div>
+		</header>
+	<section class="section promo">
+		<div class="container">
+		  			<a href="blog/2015/blogging-with-jbake.html"><h1 class="title">Blogging With JBake</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 01 May 2016 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>I have an existing <strong>Octopress</strong> blog which is probably near its useful days. Octopress which is <strong>Jekyll</strong> underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I'm a <strong>Ruby</strong> guy, I will certainly stick with Octopress or Jekyll. But I'm not, being a Java developer. One of the biggest reason why I'm switching to <code>jbake</code> is being able to run it on JVM. <strong>JBake</strong> is not as mature as Jekyll, it's Github inception was 17th of July 2012.</p>
+</p>
+						<a class="btn btn-default" href="blog/2015/blogging-with-jbake.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2015/custom-jsp-tags.html"><h1 class="title">Custom JSP Tags</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 30 April 2016 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.</p><p>There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside <code>javax.servlet.jsp.tagext</code> and then writing your <code>tld</code> Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you're a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.</p><p>The other approach is by writing a tag file that goes to <code>WEB-INF/tags</code> folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html">JSP Tags 5</a>.</p>
+</p>
+						<a class="btn btn-default" href="blog/2015/custom-jsp-tags.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2014/adding-local-jar-to-maven.html"><h1 class="title">Adding Local JAR to Maven</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 13 September 2014 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>Oracle JDBC is not available from Maven's online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.</p><p>After downloading the JAR, you have to open your console and issue <code>mvn install:install-file</code>. Please refer below for the complete syntax. <strong>-Dfile requires fullpath.</strong></p>
+</p>
+						<a class="btn btn-default" href="blog/2014/adding-local-jar-to-maven.html">Read More →</a>
+						<hr>
+
+				<p>Older posts are available in the <a href="/archive.html">archive</a></p>
+	<script type="text/javascript">
+		var disqus_shortname = '';
+
+		(function () {
+		var s = document.createElement('script'); s.async = true;
+		s.type = 'text/javascript';
+		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+		}());
+	</script>
+		</div><!--//container-->
+	</section>
+
+	<!-- ******FOOTER****** -->
+	<footer class="footer">
+    <div class="container text-center">
+        <small class="copyright">Bootstrap theme by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+    </div>
+	</footer>
+
+  <!-- Javascript -->
+	<script src="plugins/jquery-1.11.3.min.js"></script>
+	<script src="plugins/jquery.easing.1.3.js"></script>
+	<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+	<script src="plugins/prism/prism.js"></script>
+	<script src="js/main.js"></script>
+
+</body>
+</html>
