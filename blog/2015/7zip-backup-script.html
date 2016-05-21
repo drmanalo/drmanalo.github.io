@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Installing Java 1.8 on Centos</title>
+    <title>7zip Backup Script</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -47,6 +47,16 @@
 											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
 											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
 											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
+											<li class="dropdown">
+							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
+							          <ul class="dropdown-menu">
+							            <li><a href="../../tags/bash.html">bash</a></li>
+							            <li><a href="../../tags/java.html">java</a></li>
+							            <li><a href="../../tags/maven.html">maven</a></li>
+													<li role="separator" class="divider"></li>
+							            <li><a href="../../tags/windows.html">windows</a></li>
+							          </ul>
+							        </li>
 									</ul>
 							</div>
 					</nav>
@@ -55,54 +65,46 @@
 
 	<section class="section promo offset-header">
 		<div class="container">
-			<h1 class="page-header title">Installing Java 1.8 on Centos</h1>
-			<p><em>21 May 2016</em></p>
-			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
-<!-- more --><h3>Downloading java 1.8</h3>
-<pre><code class="language-bash">
-$ cd /opt/
-$ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"
-$ tar xzf jdk-8u91-linux-x64.tar.gz
-</code></pre><h3>Install using alternatives</h3>
-<pre><code class="language-bash">
-$ cd /opt/jdk1.8.0_91/
-$ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
-$ alternatives --config java
+			<h1 class="page-header title">7zip Backup Script</h1>
+			<p><em>10 May 2015</em></p>
+			<p><p>Here is a simple batch script to backup my project folder every 18:30. I wish I could run this in cron but my development machine is running Windows.</p>
+<!-- more -->
+<pre><code class="language-powershell">
+@SETLOCAL
+@ECHO OFF
 
-There are 3 programs that provides 'java'.
+@REM ----- begin backup ------------------------------------------------
+@REM path is handled by mklink done initially
+@REM SET reads whitespaces too!
 
-  Selection    Command
------------------------------------------------
-   1           /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.101-2.6.6.1.el7_2.x86_64/jre/bin/java
-*+ 2           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-0.b14.el7_2.x86_64/jre/bin/java
-   3           /opt/jdk1.8.0_91/bin/java
+SET file=workspace.7z
+SET source=C:\Users\dhonnee.manalo\git\workspace\
 
-Enter to keep the current selection[+], or type selection number: 3
-</code></pre><p>Installing <code>javac</code> and <code>jar</code> as well.</p>
-<pre><code class="language-bash">
-$ alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_91/bin/jar 2
-$ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 2
-$ alternatives --set jar /opt/jdk1.8.0_91/bin/jar
-$ alternatives --set javac /opt/jdk1.8.0_91/bin/javac
-</code></pre><h3>Setting up environment variables</h3><p>The following steps are optional.</p>
-<pre><code class="language-bash">
-export JAVA_HOME=/opt/jdk1.8.0_91
-export JRE_HOME=/opt/jdk1.8.0_91/jre
-export PATH=$PATH:/opt/jdk1.8.0_91/bin:/opt/jdk1.8.0_91/jre/bin
-</code></pre><h3>Verifying your version of java</h3>
-<pre><code class="language-bash">
-$ java -version
-java version "1.8.0_91"
-Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
-Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+@REM ----- 7za merges with old archive
+@REM ----- workaround is to delete first
+
+7za a -t7z %file% %source%
+
+ECHO Compression finished!
+@REM ----- end backup --------------------------------------------------
+
+@REM ----- copy to x:drive ---------------------------------------------
+
+SET destination=\\remote_server\dev\dhon.manalo\workspace\
+
+copy %file% %destination% /Y
+
+ECHO Backup finished!
+
+@REM ------- END backup.bat ------------------
 </code></pre></p>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2015/java8-on-centos7.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2015/java8-on-centos7.html';
+		var disqus_identifier = 'blog/2015/7zip-backup-script.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/7zip-backup-script.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

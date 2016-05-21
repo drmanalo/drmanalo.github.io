@@ -47,6 +47,16 @@
 											<li class="nav-item"><a href="pages/disclaimer.html">Disclaimer</a></li>
 											<li class="nav-item"><a href="archive.html">Archives</a></li>
 											<li class="nav-item"><a href="feed.xml">Feed</a></li>
+											<li class="dropdown">
+							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
+							          <ul class="dropdown-menu">
+							            <li><a href="tags/bash.html">bash</a></li>
+							            <li><a href="tags/java.html">java</a></li>
+							            <li><a href="tags/maven.html">maven</a></li>
+													<li role="separator" class="divider"></li>
+							            <li><a href="tags/windows.html">windows</a></li>
+							          </ul>
+							        </li>
 									</ul>
 							</div>
 					</nav>
@@ -54,41 +64,76 @@
 		</header>
 	<section class="section promo">
 		<div class="container">
-		  			<a href="blog/2015/java8-on-centos7.html"><h1 class="title">Installing Java 1.8 on Centos</h1></a>
+		  			<a href="blog/2016/java8-on-centos7.html"><h1 class="title">Installing Java 1.8 on Centos</h1></a>
 		  			<p class="post-info">
 			  			<i class="fa fa-calendar"></i> 21 May 2016 |
 			  			<i class="fa fa-user"></i> drmanalo
 		  			</p>
 		  			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
 </p>
-						<a class="btn btn-default" href="blog/2015/java8-on-centos7.html">Read More →</a>
+						<a class="btn btn-default" href="blog/2016/java8-on-centos7.html">Read More →</a>
 						<hr>
-		  			<a href="blog/2015/blogging-with-jbake.html"><h1 class="title">Blogging With JBake</h1></a>
+		  			<a href="blog/2016/my-bashrc.html"><h1 class="title">My bashrc</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 08 May 2016 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>This is a backup of my <code>.bashrc</code>. I'm keeping it safe in case I'm rebuilding my machine.</p>
+<pre><code class="language-bash">
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/kodi/.sdkman"
+[[ -s "/home/kodi/.sdkman/bin/sdkman-init.sh" ]] && source "/home/kodi/.sdkman/bin/sdkman-init.sh"
+</code></pre>
+</p>
+						<a class="btn btn-default" href="blog/2016/my-bashrc.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2016/blogging-with-jbake.html"><h1 class="title">Blogging With JBake</h1></a>
 		  			<p class="post-info">
 			  			<i class="fa fa-calendar"></i> 01 May 2016 |
 			  			<i class="fa fa-user"></i> drmanalo
 		  			</p>
 		  			<p><p>I have an existing <strong>Octopress</strong> blog which is probably near its useful days. Octopress which is <strong>Jekyll</strong> underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I'm a <strong>Ruby</strong> guy, I will certainly stick with Octopress or Jekyll. But I'm not, being a Java developer. One of the biggest reason why I'm switching to <code>jbake</code> is being able to run it on JVM. <strong>JBake</strong> is not as mature as Jekyll, it's Github inception was 17th of July 2012.</p>
 </p>
-						<a class="btn btn-default" href="blog/2015/blogging-with-jbake.html">Read More →</a>
+						<a class="btn btn-default" href="blog/2016/blogging-with-jbake.html">Read More →</a>
 						<hr>
-		  			<a href="blog/2015/custom-jsp-tags.html"><h1 class="title">Custom JSP Tags</h1></a>
+		  			<a href="blog/2016/custom-jsp-tags.html"><h1 class="title">Custom JSP Tags</h1></a>
 		  			<p class="post-info">
 			  			<i class="fa fa-calendar"></i> 30 April 2016 |
 			  			<i class="fa fa-user"></i> drmanalo
 		  			</p>
 		  			<p><p>We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.</p><p>There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside <code>javax.servlet.jsp.tagext</code> and then writing your <code>tld</code> Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you're a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.</p><p>The other approach is by writing a tag file that goes to <code>WEB-INF/tags</code> folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html">JSP Tags 5</a>.</p>
 </p>
-						<a class="btn btn-default" href="blog/2015/custom-jsp-tags.html">Read More →</a>
+						<a class="btn btn-default" href="blog/2016/custom-jsp-tags.html">Read More →</a>
 						<hr>
-		  			<a href="blog/2014/adding-local-jar-to-maven.html"><h1 class="title">Adding Local JAR to Maven</h1></a>
+		  			<a href="blog/2015/7zip-backup-script.html"><h1 class="title">7zip Backup Script</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 10 May 2015 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>Here is a simple batch script to backup my project folder every 18:30. I wish I could run this in cron but my development machine is running Windows.</p>
+</p>
+						<a class="btn btn-default" href="blog/2015/7zip-backup-script.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2015/adding-local-jar-to-maven.html"><h1 class="title">Adding Local JAR to Maven</h1></a>
 		  			<p class="post-info">
 			  			<i class="fa fa-calendar"></i> 13 September 2014 |
 			  			<i class="fa fa-user"></i> drmanalo
 		  			</p>
 		  			<p><p>Oracle JDBC is not available from Maven's online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.</p><p>After downloading the JAR, you have to open your console and issue <code>mvn install:install-file</code>. Please refer below for the complete syntax. <strong>-Dfile requires fullpath.</strong></p>
 </p>
-						<a class="btn btn-default" href="blog/2014/adding-local-jar-to-maven.html">Read More →</a>
+						<a class="btn btn-default" href="blog/2015/adding-local-jar-to-maven.html">Read More →</a>
 						<hr>
 
 				<p>Older posts are available in the <a href="/archive.html">archive</a></p>

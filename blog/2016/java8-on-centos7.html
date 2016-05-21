@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Adding Local JAR to Maven</title>
+    <title>Installing Java 1.8 on Centos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -47,6 +47,16 @@
 											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
 											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
 											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
+											<li class="dropdown">
+							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
+							          <ul class="dropdown-menu">
+							            <li><a href="../../tags/bash.html">bash</a></li>
+							            <li><a href="../../tags/java.html">java</a></li>
+							            <li><a href="../../tags/maven.html">maven</a></li>
+													<li role="separator" class="divider"></li>
+							            <li><a href="../../tags/windows.html">windows</a></li>
+							          </ul>
+							        </li>
 									</ul>
 							</div>
 					</nav>
@@ -55,44 +65,54 @@
 
 	<section class="section promo offset-header">
 		<div class="container">
-			<h1 class="page-header title">Adding Local JAR to Maven</h1>
-			<p><em>13 September 2014</em></p>
-			<p><p>Oracle JDBC is not available from Maven's online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.</p><p>After downloading the JAR, you have to open your console and issue <code>mvn install:install-file</code>. Please refer below for the complete syntax. <strong>-Dfile requires fullpath.</strong></p>
-<!-- more --><h3>mvn install</h3>
+			<h1 class="page-header title">Installing Java 1.8 on Centos</h1>
+			<p><em>21 May 2016</em></p>
+			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
+<!-- more --><h3>Downloading java 1.8</h3>
 <pre><code class="language-bash">
-$ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0 -Dpackaging=jar
-[INFO] Scanning for projects...
-[INFO]
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Maven Stub Project (No POM) 1
-[INFO] ------------------------------------------------------------------------
-[INFO]
-[INFO] --- maven-install-plugin:2.4:install-file (default-cli) @ standalone-pom ---
-[INFO] Installing /home/drmanalo/java/ojdbc6.jar to /home/drmanalo/.m2/repository/com/oracle/ojdb6/11.2.0/ojdb6-11.2.0.jar
-[INFO] Installing /tmp/mvninstall6607716975508685322.pom to /home/drmanalo/.m2/repository/com/oracle/ojdb6/11.2.0/ojdb6-11.2.0.pom
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 0.687 s
-[INFO] Finished at: 2014-09-09T15:11:54+01:00
-[INFO] Final Memory: 5M/106M
-[INFO] ------------------------------------------------------------------------
+$ cd /opt/
+$ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"
+$ tar xzf jdk-8u91-linux-x64.tar.gz
+</code></pre><h3>Install using alternatives</h3>
+<pre><code class="language-bash">
+$ cd /opt/jdk1.8.0_91/
+$ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
+$ alternatives --config java
 
-</code></pre><h3>pom.xml</h3><p>Within your POM's dependencies, you need to add the dependency after mvn install.</p>
-<pre><code>&lt;dependency&gt;
-	&lt;groupId&gt;com.oracle&lt;/groupId&gt;
-	&lt;artifactId&gt;ojdbc6&lt;/artifactId&gt;
-	&lt;version&gt;11.2.0&lt;/version&gt;
-&lt;dependency&gt;
+There are 3 programs that provides 'java'.
 
-</code></pre><p>If you have a remote build server, you have to do the <code>mvn install</code> bit to add the dependency knowing you are using different maven local repository. There is another solution posted on <a href="http://blog.valdaris.com/post/custom-jar/" target="_new">this blog</a> but I haven't tried this approach. I'm referring to <strong>Installing the jar by using install-plugin</strong>. Perhaps this is the way to go but for the time being I'm happy with <code>maven install:install-file</code>.</p></p>
+  Selection    Command
+-----------------------------------------------
+   1           /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.101-2.6.6.1.el7_2.x86_64/jre/bin/java
+*+ 2           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-0.b14.el7_2.x86_64/jre/bin/java
+   3           /opt/jdk1.8.0_91/bin/java
+
+Enter to keep the current selection[+], or type selection number: 3
+</code></pre><p>Installing <code>javac</code> and <code>jar</code> as well.</p>
+<pre><code class="language-bash">
+$ alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_91/bin/jar 2
+$ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 2
+$ alternatives --set jar /opt/jdk1.8.0_91/bin/jar
+$ alternatives --set javac /opt/jdk1.8.0_91/bin/javac
+</code></pre><h3>Setting up environment variables</h3><p>The following steps are optional.</p>
+<pre><code class="language-bash">
+export JAVA_HOME=/opt/jdk1.8.0_91
+export JRE_HOME=/opt/jdk1.8.0_91/jre
+export PATH=$PATH:/opt/jdk1.8.0_91/bin:/opt/jdk1.8.0_91/jre/bin
+</code></pre><h3>Verifying your version of java</h3>
+<pre><code class="language-bash">
+$ java -version
+java version "1.8.0_91"
+Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+</code></pre></p>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2014/adding-local-jar-to-maven.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2014/adding-local-jar-to-maven.html';
+		var disqus_identifier = 'blog/2016/java8-on-centos7.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2016/java8-on-centos7.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

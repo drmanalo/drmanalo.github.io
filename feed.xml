@@ -6,14 +6,14 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Sat, 21 May 2016 15:53:10 +0100</pubDate>
-    <lastBuildDate>Sat, 21 May 2016 15:53:10 +0100</lastBuildDate>
+    <pubDate>Sat, 21 May 2016 17:36:43 +0100</pubDate>
+    <lastBuildDate>Sat, 21 May 2016 17:36:43 +0100</lastBuildDate>
 
       <item>
         <title>Installing Java 1.8 on Centos</title>
-        <link>https://drmanalo.github.io/blog/2015/java8-on-centos7.html</link>
+        <link>https://drmanalo.github.io/blog/2016/java8-on-centos7.html</link>
         <pubDate>Sat, 21 May 2016 00:00:00 +0100</pubDate>
-        <guid isPermaLink="false">blog/2015/java8-on-centos7.html</guid>
+        <guid isPermaLink="false">blog/2016/java8-on-centos7.html</guid>
         <description>
   	         &lt;p&gt;We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise &lt;code&gt;nix&lt;/code&gt; experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I&apos;ll probably get one of those Linux Developer Suite.&lt;/p&gt;&lt;p&gt;As an exercise, I&apos;m installing Java 1.8 and hopefully install more &lt;code&gt;dockers&lt;/code&gt; to my CentOS in the near future. A quick Google took me to &lt;a href=&quot;http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/&quot;&gt;techadmin&apos;s blog&lt;/a&gt;.&lt;/p&gt;
 &lt;!-- more --&gt;&lt;h3&gt;Downloading java 1.8&lt;/h3&gt;
@@ -57,10 +57,74 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
   	    </description>
       </item>
       <item>
+        <title>My bashrc</title>
+        <link>https://drmanalo.github.io/blog/2016/my-bashrc.html</link>
+        <pubDate>Sun, 8 May 2016 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2016/my-bashrc.html</guid>
+        <description>
+  	         &lt;p&gt;This is a backup of my &lt;code&gt;.bashrc&lt;/code&gt;. I&apos;m keeping it safe in case I&apos;m rebuilding my machine.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Uncomment the following line if you don&apos;t like systemctl&apos;s auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR=&quot;/home/kodi/.sdkman&quot;
+[[ -s &quot;/home/kodi/.sdkman/bin/sdkman-init.sh&quot; ]] &amp;&amp; source &quot;/home/kodi/.sdkman/bin/sdkman-init.sh&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+# system
+alias shutdown=&apos;sudo shutdown -h now&apos;
+alias reboot=&apos;sudo reboot&apos;
+
+# restarting services
+alias rshttp=&apos;sudo systemctl restart httpd&apos;
+alias rsfw=&apos;sudo systemctl restart firewalld&apos;
+alias rssshd=&apos;sudo systemctl restart sshd&apos;
+
+# folder explorer
+alias la=&apos;ls -lah&apos;
+alias li=&apos;ls -lih&apos;
+alias ld=&apos;ls -lid&apos;
+alias ..=&apos;cd ..&apos;
+alias ...=&apos;cd ../..&apos;
+alias ....=&apos;cd ../../..&apos;
+alias down=&apos;cd ~/Downloads&apos;
+alias docs=&apos;cd ~/Documents&apos;
+alias pics=&apos;cd ~/Pictures&apos;
+alias home=&apos;cd ~/&apos;
+alias www=&apos;cd /var/www/html&apos;
+
+# others
+alias x=&apos;exit&apos;
+alias c=&apos;clear&apos;
+alias vi=&apos;sublime&apos;
+
+# yum
+alias yume=&apos;sudo yum erase&apos;
+alias yumi=&apos;sudo yum install&apos;
+alias yumr=&apos;sudo yum remove&apos;
+alias yumu=&apos;sudo yum update&apos;
+alias yums=&apos;yum search&apos;
+alias yuml=&apos;yum list&apos;
+alias yumc=&apos;sudo yum clean all&apos;
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
         <title>Blogging With JBake</title>
-        <link>https://drmanalo.github.io/blog/2015/blogging-with-jbake.html</link>
+        <link>https://drmanalo.github.io/blog/2016/blogging-with-jbake.html</link>
         <pubDate>Sun, 1 May 2016 00:00:00 +0100</pubDate>
-        <guid isPermaLink="false">blog/2015/blogging-with-jbake.html</guid>
+        <guid isPermaLink="false">blog/2016/blogging-with-jbake.html</guid>
         <description>
   	         &lt;p&gt;I have an existing &lt;strong&gt;Octopress&lt;/strong&gt; blog which is probably near its useful days. Octopress which is &lt;strong&gt;Jekyll&lt;/strong&gt; underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I&apos;m a &lt;strong&gt;Ruby&lt;/strong&gt; guy, I will certainly stick with Octopress or Jekyll. But I&apos;m not, being a Java developer. One of the biggest reason why I&apos;m switching to &lt;code&gt;jbake&lt;/code&gt; is being able to run it on JVM. &lt;strong&gt;JBake&lt;/strong&gt; is not as mature as Jekyll, it&apos;s Github inception was 17th of July 2012.&lt;/p&gt;
 &lt;!-- more --&gt;&lt;h3&gt;Prerequisites&lt;/h3&gt;
@@ -141,9 +205,9 @@ Total time: 14.107 secs
       </item>
       <item>
         <title>Custom JSP Tags</title>
-        <link>https://drmanalo.github.io/blog/2015/custom-jsp-tags.html</link>
+        <link>https://drmanalo.github.io/blog/2016/custom-jsp-tags.html</link>
         <pubDate>Sat, 30 Apr 2016 00:00:00 +0100</pubDate>
-        <guid isPermaLink="false">blog/2015/custom-jsp-tags.html</guid>
+        <guid isPermaLink="false">blog/2016/custom-jsp-tags.html</guid>
         <description>
   	         &lt;p&gt;We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.&lt;/p&gt;&lt;p&gt;There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside &lt;code&gt;javax.servlet.jsp.tagext&lt;/code&gt; and then writing your &lt;code&gt;tld&lt;/code&gt; Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you&apos;re a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.&lt;/p&gt;&lt;p&gt;The other approach is by writing a tag file that goes to &lt;code&gt;WEB-INF/tags&lt;/code&gt; folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here &lt;a href=&quot;http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html&quot;&gt;JSP Tags 5&lt;/a&gt;.&lt;/p&gt;
 &lt;!-- more --&gt;&lt;h3&gt;input.tag&lt;/h3&gt;
@@ -295,10 +359,49 @@ Total time: 14.107 secs
   	    </description>
       </item>
       <item>
+        <title>7zip Backup Script</title>
+        <link>https://drmanalo.github.io/blog/2015/7zip-backup-script.html</link>
+        <pubDate>Sun, 10 May 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/7zip-backup-script.html</guid>
+        <description>
+  	         &lt;p&gt;Here is a simple batch script to backup my project folder every 18:30. I wish I could run this in cron but my development machine is running Windows.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code class=&quot;language-powershell&quot;&gt;
+@SETLOCAL
+@ECHO OFF
+
+@REM ----- begin backup ------------------------------------------------
+@REM path is handled by mklink done initially
+@REM SET reads whitespaces too!
+
+SET file=workspace.7z
+SET source=C:\Users\dhonnee.manalo\git\workspace\
+
+@REM ----- 7za merges with old archive
+@REM ----- workaround is to delete first
+
+7za a -t7z %file% %source%
+
+ECHO Compression finished!
+@REM ----- end backup --------------------------------------------------
+
+@REM ----- copy to x:drive ---------------------------------------------
+
+SET destination=\\remote_server\dev\dhon.manalo\workspace\
+
+copy %file% %destination% /Y
+
+ECHO Backup finished!
+
+@REM ------- END backup.bat ------------------
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
         <title>Adding Local JAR to Maven</title>
-        <link>https://drmanalo.github.io/blog/2014/adding-local-jar-to-maven.html</link>
+        <link>https://drmanalo.github.io/blog/2015/adding-local-jar-to-maven.html</link>
         <pubDate>Sat, 13 Sep 2014 00:00:00 +0100</pubDate>
-        <guid isPermaLink="false">blog/2014/adding-local-jar-to-maven.html</guid>
+        <guid isPermaLink="false">blog/2015/adding-local-jar-to-maven.html</guid>
         <description>
   	         &lt;p&gt;Oracle JDBC is not available from Maven&apos;s online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.&lt;/p&gt;&lt;p&gt;After downloading the JAR, you have to open your console and issue &lt;code&gt;mvn install:install-file&lt;/code&gt;. Please refer below for the complete syntax. &lt;strong&gt;-Dfile requires fullpath.&lt;/strong&gt;&lt;/p&gt;
 &lt;!-- more --&gt;&lt;h3&gt;mvn install&lt;/h3&gt;
