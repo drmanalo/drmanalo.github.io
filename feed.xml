@@ -6,9 +6,56 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Wed, 18 May 2016 00:04:51 +0100</pubDate>
-    <lastBuildDate>Wed, 18 May 2016 00:04:51 +0100</lastBuildDate>
+    <pubDate>Sat, 21 May 2016 15:04:00 +0100</pubDate>
+    <lastBuildDate>Sat, 21 May 2016 15:04:00 +0100</lastBuildDate>
 
+      <item>
+        <title>Installing Java 1.8 on Centos</title>
+        <link>https://drmanalo.github.io/blog/2015/java8-on-centos7.html</link>
+        <pubDate>Sat, 21 May 2016 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/java8-on-centos7.html</guid>
+        <description>
+  	         &lt;p&gt;We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise &lt;code&gt;nix&lt;/code&gt; experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I&apos;ll probably get one of those Linux Developer Suite.&lt;/p&gt;&lt;p&gt;As an exercise, I&apos;m installing Java 1.8 and hopefully install more &lt;code&gt;dockers&lt;/code&gt; to my CentOS in the near future. A quick Google took me to &lt;a href=&quot;http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/&quot;&gt;techadmin&apos;s blog&lt;/a&gt;.&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Downloading java 1.8&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ cd /opt/
+$ wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz&quot;
+$ tar xzf jdk-8u91-linux-x64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Install using alternatives&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ cd /opt/jdk1.8.0_91/
+$ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
+$ alternatives --config java
+
+There are 3 programs that provides &apos;java&apos;.
+
+  Selection    Command
+-----------------------------------------------
+   1           /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.101-2.6.6.1.el7_2.x86_64/jre/bin/java
+*+ 2           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-0.b14.el7_2.x86_64/jre/bin/java
+   3           /opt/jdk1.8.0_91/bin/java
+
+Enter to keep the current selection[+], or type selection number: 3
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Installing &lt;code&gt;javac&lt;/code&gt; and &lt;code&gt;jar&lt;/code&gt; as well.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_91/bin/jar 2
+$ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 2
+$ alternatives --set jar /opt/jdk1.8.0_91/bin/jar
+$ alternatives --set javac /opt/jdk1.8.0_91/bin/javac
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Setting up environment variables&lt;/h3&gt;&lt;p&gt;The following steps are optional.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+export JAVA_HOME=/opt/jdk1.8.0_91
+export JRE_HOME=/opt/jdk1.8.0_91/jre
+export PATH=$PATH:/opt/jdk1.8.0_91/bin:/opt/jdk1.8.0_91/jre/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Verifying your version of java&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ java -version
+java version &quot;1.8.0_91&quot;
+Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
       <item>
         <title>Blogging With JBake</title>
         <link>https://drmanalo.github.io/blog/2015/blogging-with-jbake.html</link>
