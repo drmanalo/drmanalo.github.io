@@ -59,145 +59,150 @@
 			<p><em>30 April 2016</em></p>
 			<p><p>We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.</p><p>There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside <code>javax.servlet.jsp.tagext</code> and then writing your <code>tld</code> Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you're a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.</p><p>The other approach is by writing a tag file that goes to <code>WEB-INF/tags</code> folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html">JSP Tags 5</a>.</p>
 <!-- more --><h3>input.tag</h3>
-<pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@ tag description=&quot;Bootstrap input tag with error, icon and i8n support&quot;%&gt;
-&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
-&lt;%@ taglib prefix=&quot;fn&quot; uri=&quot;http://java.sun.com/jsp/jstl/functions&quot;%&gt;
-&lt;%@ taglib prefix=&quot;form&quot; uri=&quot;http://www.springframework.org/tags/form&quot;%&gt;
-&lt;%@ taglib prefix=&quot;s&quot; uri=&quot;http://www.springframework.org/tags&quot;%&gt;
+<pre><code class="language-java">
+<%@ tag language="java" pageEncoding="UTF-8"%>
+<%@ tag description="Bootstrap input tag with error, icon and i8n support"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-&lt;%@ attribute name=&quot;path&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;cssClass&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;cssStyle&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;label&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;placeholder&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;required&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
-&lt;%@ attribute name=&quot;append&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
-&lt;%@ attribute name=&quot;prepend&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
-&lt;%@ attribute name=&quot;icon&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
+<%@ attribute name="path" required="true" type="java.lang.String"%>
+<%@ attribute name="cssClass" required="false" type="java.lang.String"%>
+<%@ attribute name="cssStyle" required="false" type="java.lang.String"%>
+<%@ attribute name="label" required="false" type="java.lang.String"%>
+<%@ attribute name="placeholder" required="false" type="java.lang.String"%>
+<%@ attribute name="required" required="false" type="java.lang.Boolean"%>
+<%@ attribute name="append" required="false" type="java.lang.Boolean"%>
+<%@ attribute name="prepend" required="false" type="java.lang.Boolean"%>
+<%@ attribute name="icon" required="false" type="java.lang.String"%>
 
-&lt;c:if test=&quot;${ empty label }&quot;&gt;
-    &lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&gt;
+&lt;c:if test="${ empty label }"&gt;
+    &lt;c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" /&gt;
 &lt;/c:if&gt;
-&lt;c:if test=&quot;${ fn:length(icon) gt 1 }&quot;&gt;
-  	&lt;c:set var=&quot;icon&quot; value=&#39;&lt;i class=&quot;${ icon }&quot;&gt;&lt;/i&gt;&#39;/&gt;
+&lt;c:if test="${ fn:length(icon) gt 1 }"&gt;
+  	&lt;c:set var="icon" value='&lt;i class="${ icon }"&gt;&lt;/i&gt;'/&gt;
 &lt;/c:if&gt;
 
-&lt;s:bind path=&quot;${ path }&quot;&gt;
-	&lt;div class=&quot;row form-group ${ status.error ? &#39;error&#39; : &#39;&#39; }&quot;&gt;
-		&lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&gt;
-			&lt;s:message code=&quot;${ label }&quot;/&gt;
-			&lt;c:if test=&quot;${ required }&quot;&gt;
-				&lt;span class=&quot;required&quot;&gt; *&lt;/span&gt;
+&lt;s:bind path="${ path }"&gt;
+	&lt;div class="row form-group ${ status.error ? 'error' : '' }"&gt;
+		&lt;label class="col-sm-2 control-label" for="${ path }"&gt;
+			&lt;s:message code="${ label }"/&gt;
+			&lt;c:if test="${ required }"&gt;
+				&lt;span class="required"&gt; *&lt;/span&gt;
 			&lt;/c:if&gt;
 		&lt;/label&gt;
-		&lt;div class=&quot;col-sm-4&quot;&gt;
+		&lt;div class="col-sm-4"&gt;
 		  	&lt;c:choose&gt;
-				&lt;c:when test=&quot;${ prepend }&quot;&gt;
-					&lt;div class=&quot;input-prepend&quot;&gt;
-		  				&lt;span class=&quot;add-on&quot;&gt;${ icon }&lt;/span&gt;
-						&lt;form:input path=&quot;${ path }&quot; cssClass=&quot;${ empty cssClass ? &#39;input-xlarge&#39; : cssClass }&quot;/&gt;
+				&lt;c:when test="${ prepend }"&gt;
+					&lt;div class="input-prepend"&gt;
+		  				&lt;span class="add-on"&gt;${ icon }&lt;/span&gt;
+						&lt;form:input path="${ path }" cssClass="${ empty cssClass ? 'input-xlarge' : cssClass }"/&gt;
 					&lt;/div&gt;
 				&lt;/c:when&gt;
-				&lt;c:when test=&quot;${ append }&quot;&gt;
-					&lt;div class=&quot;input-append&quot;&gt;
-				  		&lt;form:input path=&quot;${ path }&quot; cssClass=&quot;${ empty cssClass ? &#39;input-xlarge&#39; : cssClass }&quot;/&gt;
-						&lt;span class=&quot;add-on&quot;&gt;${ icon }&lt;/span&gt;
+				&lt;c:when test="${ append }"&gt;
+					&lt;div class="input-append"&gt;
+				  		&lt;form:input path="${ path }" cssClass="${ empty cssClass ? 'input-xlarge' : cssClass }"/&gt;
+						&lt;span class="add-on"&gt;${ icon }&lt;/span&gt;
 					&lt;/div&gt;
 				&lt;/c:when&gt;
 				&lt;c:otherwise&gt;
-					&lt;form:input path=&quot;${ path }&quot; class=&quot;form-control&quot; placeholder=&quot;${ empty placeholder ? label : placeholder }&quot; autocomplete=&quot;off&quot; cssStyle=&quot;${ empty cssStyle ? &#39;&#39; : cssStyle }&quot;/&gt;
+					&lt;form:input path="${ path }" class="form-control" placeholder="${ empty placeholder ? label : placeholder }" autocomplete="off" cssStyle="${ empty cssStyle ? '' : cssStyle }"/&gt;
 				&lt;/c:otherwise&gt;
 			&lt;/c:choose&gt;
-			&lt;c:if test=&quot;${ status.error }&quot;&gt;
-				&lt;form:errors path=&quot;${ path }&quot; cssClass=&quot;text-danger&quot; /&gt;
+			&lt;c:if test="${ status.error }"&gt;
+				&lt;form:errors path="${ path }" cssClass="text-danger" /&gt;
 			&lt;/c:if&gt;
 	  	&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/s:bind&gt;
 </code></pre><h3>calendar.tag</h3>
-<pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@ tag description=&quot;Bootstrap input grouped tag with error, calendar icon and i8n support&quot;%&gt;
-&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
-&lt;%@ taglib prefix=&quot;fn&quot; uri=&quot;http://java.sun.com/jsp/jstl/functions&quot;%&gt;
-&lt;%@ taglib prefix=&quot;form&quot; uri=&quot;http://www.springframework.org/tags/form&quot;%&gt;
-&lt;%@ taglib prefix=&quot;s&quot; uri=&quot;http://www.springframework.org/tags&quot;%&gt;
+<pre><code class="language-html">
+<%@ tag language="java" pageEncoding="UTF-8"%>
+<%@ tag description="Bootstrap input grouped tag with error, calendar icon and i8n support"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-&lt;%@ attribute name=&quot;label&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;path&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;required&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
-&lt;%@ attribute name=&quot;groupId&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;btnTitle&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;icon&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
+<%@ attribute name="label" required="false" type="java.lang.String"%>
+<%@ attribute name="path" required="true" type="java.lang.String"%>
+<%@ attribute name="required" required="false" type="java.lang.Boolean"%>
+<%@ attribute name="groupId" required="false" type="java.lang.String"%>
+<%@ attribute name="btnTitle" required="false" type="java.lang.String"%>
+<%@ attribute name="icon" required="false" type="java.lang.String"%>
 
-&lt;c:if test=&quot;${ empty label }&quot;&gt;
-    &lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&gt;
+&lt;c:if test="${ empty label }"&gt;
+    &lt;c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" /&gt;
 &lt;/c:if&gt;
 
-&lt;s:bind path=&quot;${ path }&quot;&gt;
-	&lt;div class=&quot;row form-group ${ status.error ? &#39;error&#39; : &#39;&#39; }&quot;&gt;
-		&lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&gt;
-			&lt;s:message code=&quot;${ label }&quot;/&gt;
-			&lt;c:if test=&quot;${ required }&quot;&gt;
-				&lt;span class=&quot;required&quot;&gt; *&lt;/span&gt;
+&lt;s:bind path="${ path }"&gt;
+	&lt;div class="row form-group ${ status.error ? 'error' : '' }"&gt;
+		&lt;label class="col-sm-2 control-label" for="${ path }"&gt;
+			&lt;s:message code="${ label }"/&gt;
+			&lt;c:if test="${ required }"&gt;
+				&lt;span class="required"&gt; *&lt;/span&gt;
 			&lt;/c:if&gt;
 		&lt;/label&gt;
-		&lt;div class=&quot;col-sm-4&quot;&gt;
-			&lt;div class=&quot;input-group date&quot; id=&quot;${ empty groupId ? &#39;&#39; : groupId }&quot;&gt;
-				&lt;span class=&quot;input-group-addon btn btn-sm btn-primary&quot;&gt;
-					&lt;span class=&quot;${ icon }&quot; title=&quot;${ empty btnTitle ? &#39;&#39; : btnTitle }&quot;&gt;&lt;/span&gt;
+		&lt;div class="col-sm-4"&gt;
+			&lt;div class="input-group date" id="${ empty groupId ? '' : groupId }"&gt;
+				&lt;span class="input-group-addon btn btn-sm btn-primary"&gt;
+					&lt;span class="${ icon }" title="${ empty btnTitle ? '' : btnTitle }"&gt;&lt;/span&gt;
 				&lt;/span&gt;
-				&lt;form:input path=&quot;${ path }&quot; class=&quot;form-control&quot; autocomplete=&quot;off&quot; cssStyle=&quot;width:180px;&quot; /&gt;
+				&lt;form:input path="${ path }" class="form-control" autocomplete="off" cssStyle="width:180px;" /&gt;
 			&lt;/div&gt;
 		&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/s:bind&gt;		
 </code></pre><h3>textarea.tag</h3>
-<pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@ tag description=&quot;Bootstrap textarea tag with error, icon and i8n support&quot;%&gt;
-&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
-&lt;%@ taglib prefix=&quot;fn&quot; uri=&quot;http://java.sun.com/jsp/jstl/functions&quot;%&gt;
-&lt;%@ taglib prefix=&quot;form&quot; uri=&quot;http://www.springframework.org/tags/form&quot;%&gt;
-&lt;%@ taglib prefix=&quot;s&quot; uri=&quot;http://www.springframework.org/tags&quot;%&gt;
+<pre><code class="language-html">
+<%@ tag language="java" pageEncoding="UTF-8"%>
+<%@ tag description="Bootstrap textarea tag with error, icon and i8n support"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-&lt;%@ attribute name=&quot;label&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;path&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
-&lt;%@ attribute name=&quot;required&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
+<%@ attribute name="label" required="false" type="java.lang.String"%>
+<%@ attribute name="path" required="true" type="java.lang.String"%>
+<%@ attribute name="required" required="false" type="java.lang.Boolean"%>
 
-&lt;c:if test=&quot;${ empty label }&quot;&gt;
-    &lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&gt;
+&lt;c:if test="${ empty label }"&gt;
+    &lt;c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" /&gt;
 &lt;/c:if&gt;
 
-&lt;s:bind path=&quot;${ path }&quot;&gt;
-	&lt;div class=&quot;row form-group ${ status.error ? &#39;error&#39; : &#39;&#39; }&quot;&gt;
-		&lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&gt;
-			&lt;s:message code=&quot;${ label }&quot;/&gt;
-			&lt;c:if test=&quot;${ required }&quot;&gt;
-				&lt;span class=&quot;required&quot;&gt; *&lt;/span&gt;
+&lt;s:bind path="${ path }"&gt;
+	&lt;div class="row form-group ${ status.error ? 'error' : '' }"&gt;
+		&lt;label class="col-sm-2 control-label" for="${ path }"&gt;
+			&lt;s:message code="${ label }"/&gt;
+			&lt;c:if test="${ required }"&gt;
+				&lt;span class="required"&gt; *&lt;/span&gt;
 			&lt;/c:if&gt;
 		&lt;/label&gt;
-		&lt;div class=&quot;col-sm-4&quot;&gt;
-			&lt;form:textarea path=&quot;${ path }&quot; class=&quot;form-control&quot; placeholder=&quot;${ empty placeholder ? label : placeholder }&quot; /&gt;
-			&lt;c:if test=&quot;${ status.error }&quot;&gt;
-				&lt;form:errors path=&quot;${ path }&quot; cssClass=&quot;text-danger&quot; /&gt;
+		&lt;div class="col-sm-4"&gt;
+			&lt;form:textarea path="${ path }" class="form-control" placeholder="${ empty placeholder ? label : placeholder }" /&gt;
+			&lt;c:if test="${ status.error }"&gt;
+				&lt;form:errors path="${ path }" cssClass="text-danger" /&gt;
 			&lt;/c:if&gt;
 		&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/s:bind&gt;
 </code></pre><h3>actions.tag</h3>
-<pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@ tag	description=&quot;Bootstrap cancel, reset and submit buttons without i8n support&quot;%&gt;
-&lt;%@ attribute name=&quot;cancelPath&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
+<pre><code class="language-html">
+<%@ tag language="java" pageEncoding="UTF-8"%>
+<%@ tag	description="Bootstrap cancel, reset and submit buttons without i8n support"%>
+<%@ attribute name="cancelPath" required="true" type="java.lang.String"%>
 
-&lt;div class=&quot;row form-group&quot;&gt;
-	&lt;div class=&quot;col-sm-4 col-sm-offset-2&quot;&gt;
-		&lt;a href=&quot;${ cancelPath }&quot; class=&quot;btn btn-default&quot;&gt;Cancel&lt;/a&gt;
-		&lt;input type=&quot;reset&quot; id=&quot;reset&quot; value=&quot;Reset&quot; class=&quot;btn btn-default&quot; /&gt;
-		&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; class=&quot;btn btn-primary&quot; /&gt;
+&lt;div class="row form-group"&gt;
+	&lt;div class="col-sm-4 col-sm-offset-2"&gt;
+		&lt;a href="${ cancelPath }" class="btn btn-default"&gt;Cancel&lt;/a&gt;
+		&lt;input type="reset" id="reset" value="Reset" class="btn btn-default" /&gt;
+		&lt;input type="submit" value="Submit" class="btn btn-primary" /&gt;
 	&lt;/div&gt;
 &lt;/div&gt;
 </code></pre><h3>Importing the tags</h3><p>Just import it like any other JSP tag</p>
-<pre><code>&lt;%@taglib tagdir=&quot;/WEB-INF/tags&quot; prefix=&quot;bs&quot;%&gt;
+<pre><code class="language-html">
+<%@taglib tagdir="/WEB-INF/tags" prefix="bs"%>
 </code></pre></p>
 
 	<div id="disqus_thread"></div>
