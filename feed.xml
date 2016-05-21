@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Sat, 21 May 2016 17:36:43 +0100</pubDate>
-    <lastBuildDate>Sat, 21 May 2016 17:36:43 +0100</lastBuildDate>
+    <pubDate>Sat, 21 May 2016 22:40:30 +0100</pubDate>
+    <lastBuildDate>Sat, 21 May 2016 22:40:30 +0100</lastBuildDate>
 
       <item>
         <title>Installing Java 1.8 on Centos</title>
@@ -359,6 +359,280 @@ Total time: 14.107 secs
   	    </description>
       </item>
       <item>
+        <title>Tomcat Service Script</title>
+        <link>https://drmanalo.github.io/blog/2015/tomcat-service-script.html</link>
+        <pubDate>Wed, 22 Jul 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/tomcat-service-script.html</guid>
+        <description>
+  	         &lt;p&gt;I copied this startup script from &lt;a href=&quot;https://www.liferay.com/en_GB/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts&quot;&gt;liferay&lt;/a&gt;. You can use this script start and stop your tomcat instance just like any CentOS standard services.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+#!/bin/bash
+#
+# tomcat8 This shell script takes care of starting and stopping tomcat8
+#
+# chkconfig: 234 80 20
+#
+### BEGIN INIT INFO
+# Provides: tomcat8
+# Required-Start: $network $syslog
+# Required-Stop: $network $syslog
+# Description: start and stop tomcat8 Tomcat instance
+### END INIT INFO
+
+TOMCAT_HOME=/usr/local/apache-tomcat-8.0.5
+SHUTDOWN_WAIT=20
+
+export JAVA_HOME=/usr/java/latest
+export JAVA_OPTS=&quot;-XX:+DoEscapeAnalysis \
+        -XX:+UseConcMarkSweepGC \
+        -XX:+CMSClassUnloadingEnabled \
+        -XX:+UseParNewGC \
+        -XX:+PrintGCDetails \
+        -XX:+PrintGCTimeStamps \
+	      -XX:+PrintGCDateStamps \
+        -XX:PermSize=64m \
+        -XX:MaxPermSize=256m \
+        -Xms512m \
+        -Xmx512m&quot;
+export PATH=$JAVA_HOME/bin:$PATH
+
+tomcat_pid() {
+	echo `ps aux | grep $TOMCAT_HOME | grep -v grep | awk &apos;{ print $2 }&apos;`
+}
+
+start() {
+	pid=$(tomcat_pid)
+	if [ -n &quot;$pid&quot; ]
+	then
+		echo &quot;tomcat8 is already running (pid: $pid)&quot;
+	else
+		# Start tomcat
+		echo &quot;Starting tomcat8...&quot;
+		ulimit -n 100000
+		umask 007
+		/bin/sh $TOMCAT_HOME/bin/startup.sh
+	fi
+
+	return 0
+}
+
+stop() {
+	pid=$(tomcat_pid)
+	if [ -n &quot;$pid&quot; ]
+	then
+		echo &quot;Stopping tomcat8...&quot;
+	/bin/sh $TOMCAT_HOME/bin/shutdown.sh
+
+	let kwait=$SHUTDOWN_WAIT
+	count=0;
+	until [ `ps -p $pid | grep -c $pid` = &apos;0&apos; ] || [ $count -gt $kwait ]
+	do
+		echo -n -e &quot;waiting for processes to exit\n&quot;;
+		sleep 1
+		let count=$count+1;
+	done
+
+	if [ $count -gt $kwait ]; then
+		echo -n -e &quot;killing processes which didn&apos;t stop after $SHUTDOWN_WAIT seconds\n&quot;
+		kill -9 $pid
+	fi
+	else
+		echo &quot;tomcat8 is not running&quot;
+	fi
+
+	return 0
+}
+
+case $1 in
+	start)
+		start
+	;;
+	stop)
+		stop
+	;;
+	restart)
+		stop
+		start
+	;;
+	status)
+		pid=$(tomcat_pid)
+		if [ -n &quot;$pid&quot; ]
+		then
+			echo &quot;tomcat8 is running with pid: $pid&quot;
+		else
+			echo &quot;tomcat8 is not running&quot;
+		fi
+	;;
+	*)
+		echo &quot;Usage: $0 {start|stop|restart|status}&quot;
+		exit 1
+	;;
+esac
+
+exit 0
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Start tomcat Automatically&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+# chkconfig --add tomcat8
+# chkconfig tomcat8 on
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Pimping My vim</title>
+        <link>https://drmanalo.github.io/blog/2015/pimping-my-vim.html</link>
+        <pubDate>Sun, 28 Jun 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/pimping-my-vim.html</guid>
+        <description>
+  	         &lt;p&gt;&lt;strong&gt;vim&lt;/strong&gt; is a versatile and powerful text editor for command-line environments. In _*nix_ world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called &lt;code&gt;.vimrc&lt;/code&gt; under your home folder.&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Creating ~/.vimrc&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+set nocompatible
+syntax on
+set mouse=a
+set showmatch
+set autoindent
+set smartindent
+set backspace=2
+set tabstop=4
+set number
+set smarttab
+set shiftwidth=4
+colorscheme torte
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;set nocompatible&lt;/strong&gt; fixes the issue where arrow keys do not function properly on some systems&lt;/p&gt;&lt;p&gt;&lt;strong&gt;syntax on&lt;/strong&gt; enables syntax highlighting for programming languages&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set mouse=a&lt;/strong&gt; allows you to click around the text editor with your mouse to move the cursor&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set showmatch&lt;/strong&gt; highlights matching brackets in programming languages&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set autoindent&lt;/strong&gt; if indented, new lines will also be indented&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set smartindent&lt;/strong&gt; automatically indents lines after opening a bracket in programming languages&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set backspace=2&lt;/strong&gt; makes the backspace key function like it should&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set tabstop=4&lt;/strong&gt; how much space Vim gives to a tab&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set number&lt;/strong&gt; enables line numbering&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set smarttab&lt;/strong&gt; improves tabbing&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set shiftwidth=4&lt;/strong&gt; assists code formatting&lt;/p&gt;&lt;p&gt;&lt;strong&gt;colorscheme torte&lt;/strong&gt; changes the color scheme to your liking. Look in &lt;code&gt;/usr/share/vim/vim73/colors&lt;/code&gt; for options. Folder location varies according to your version of vim.&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Simple Ant Build</title>
+        <link>https://drmanalo.github.io/blog/2015/simple-ant-build.html</link>
+        <pubDate>Mon, 22 Jun 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/simple-ant-build.html</guid>
+        <description>
+  	         &lt;p&gt;This is a simple Ant build script I&apos;m using for my Symfony2 blog. This has the following dependencies:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://phpunit.de/&quot; target=&quot;_new&quot;&gt;PHPUnit&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://pear.php.net/package/PHP_CodeSniffer/&quot; target=&quot;_new&quot;&gt;PHP_CodeSniffer&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/sebastianbergmann/phploc&quot; target=&quot;_new&quot;&gt;PHPLOC&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://pdepend.org/&quot; target=&quot;_new&quot;&gt;PHP_Depend&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://phpmd.org/&quot; target=&quot;_new&quot;&gt;PHPMD&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/sebastianbergmann/phpcpd&quot; target=&quot;_new&quot;&gt;PHPCPD&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://phpdox.de/&quot; target=&quot;_new&quot;&gt;phpDox&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+&amp;lt;project name=&quot;Symblog Project&quot; default=&quot;build&quot;&amp;gt;
+
+	&amp;lt;target name=&quot;build&quot;
+		depends=&quot;clean,prepare,lint,phploc,pdepend,phpunit,assetic,assets,cache&quot;&amp;gt;
+		&amp;lt;zip destfile=&quot;${basedir}/build/target/symblog.zip&quot;&amp;gt;
+			&amp;lt;zipfileset dir=&quot;${basedir}/app&quot; prefix=&quot;app&quot;&amp;gt;
+				&amp;lt;exclude name=&quot;**/DoctrineMigrations/**&quot;/&amp;gt;
+				&amp;lt;exclude name=&quot;**/cache/**&quot;/&amp;gt;
+				&amp;lt;exclude name=&quot;**/logs/**&quot;/&amp;gt;
+				&amp;lt;exclude name=&quot;**/phpunit.*&quot;/&amp;gt;
+			&amp;lt;/zipfileset&amp;gt;
+			&amp;lt;zipfileset dir=&quot;${basedir}/bin&quot; prefix=&quot;bin&quot; /&amp;gt;
+			&amp;lt;zipfileset dir=&quot;${basedir}/src&quot; prefix=&quot;src&quot;&amp;gt;
+				&amp;lt;exclude name=&quot;**/Tests/**&quot;/&amp;gt;
+				&amp;lt;exclude name=&quot;**/DataFixtures/**&quot;/&amp;gt;
+			&amp;lt;/zipfileset&amp;gt;
+			&amp;lt;zipfileset dir=&quot;${basedir}/vendor&quot; prefix=&quot;vendor&quot; /&amp;gt;
+			&amp;lt;zipfileset dir=&quot;${basedir}/web&quot; prefix=&quot;web&quot; /&amp;gt;
+		&amp;lt;/zip&amp;gt;
+		&amp;lt;echo message=&quot;Finished build!&quot; /&amp;gt;
+	&amp;lt;/target&amp;gt;
+
+	&amp;lt;target name=&quot;clean&quot; description=&quot;Cleanup build artifacts&quot;&amp;gt;
+		&amp;lt;delete dir=&quot;${basedir}/build/coverage&quot; /&amp;gt;
+		&amp;lt;delete dir=&quot;${basedir}/build/logs&quot; /&amp;gt;
+		&amp;lt;delete dir=&quot;${basedir}/build/pdepend&quot; /&amp;gt;
+		&amp;lt;delete dir=&quot;${basedir}/build/target&quot; /&amp;gt;
+		&amp;lt;echo message=&quot;Artifacts deleted.&quot; /&amp;gt;
+	&amp;lt;/target&amp;gt;
+
+	&amp;lt;target name=&quot;prepare&quot; depends=&quot;clean&quot; description=&quot;Prepare for build&quot;&amp;gt;
+		&amp;lt;mkdir dir=&quot;${basedir}/build/coverage&quot; /&amp;gt;
+		&amp;lt;mkdir dir=&quot;${basedir}/build/logs&quot; /&amp;gt;
+		&amp;lt;mkdir dir=&quot;${basedir}/build/pdepend&quot; /&amp;gt;
+		&amp;lt;mkdir dir=&quot;${basedir}/build/target&quot; /&amp;gt;
+		&amp;lt;echo message=&quot;Artifacts prepared.&quot; /&amp;gt;
+	&amp;lt;/target&amp;gt;
+
+	&amp;lt;target name=&quot;lint&quot; description=&quot;Perform syntax check of sourcecode files&quot;&amp;gt;
+		&amp;lt;apply executable=&quot;php&quot; failonerror=&quot;true&quot;&amp;gt;
+			&amp;lt;arg value=&quot;-l&quot; /&amp;gt;
+			&amp;lt;fileset dir=&quot;${basedir}/src&quot;&amp;gt;
+				&amp;lt;include name=&quot;**/*.php&quot; /&amp;gt;
+				&amp;lt;modified /&amp;gt;
+			&amp;lt;/fileset&amp;gt;
+			&amp;lt;fileset dir=&quot;${basedir}/src/Drm/BlogBundle/Tests&quot;&amp;gt;
+				&amp;lt;include name=&quot;**/*.php&quot; /&amp;gt;
+				&amp;lt;modified /&amp;gt;
+			&amp;lt;/fileset&amp;gt;
+		&amp;lt;/apply&amp;gt;
+		&amp;lt;echo message=&quot;Syntax checked using lint.&quot; /&amp;gt;
+	&amp;lt;/target&amp;gt;
+
+	&amp;lt;target name=&quot;phploc&quot; description=&quot;Measure project size using PHPLOC&quot;&amp;gt;
+		&amp;lt;exec executable=&quot;phploc&quot;&amp;gt;
+			&amp;lt;arg value=&quot;--count-tests&quot; /&amp;gt;
+			&amp;lt;arg value=&quot;--log-csv&quot; /&amp;gt;
+			&amp;lt;arg value=&quot;${basedir}/build/logs/phploc.csv&quot; /&amp;gt;
+			&amp;lt;arg path=&quot;${basedir}/src&quot; /&amp;gt;
+		&amp;lt;/exec&amp;gt;
+		&amp;lt;echo message=&quot;Project measured using PHPLOC.&quot; /&amp;gt;
+	&amp;lt;/target&amp;gt;
+
+	&amp;lt;target name=&quot;pdepend&quot; description=&quot;Calculate software metrics using PHP_Depend&quot;&amp;gt;
+		&amp;lt;exec executable=&quot;pdepend&quot;&amp;gt;
+			&amp;lt;arg value=&quot;--jdepend-xml=${basedir}/build/logs/jdepend.xml&quot; /&amp;gt;
+			&amp;lt;arg value=&quot;--jdepend-chart=${basedir}/build/pdepend/dependencies.svg&quot; /&amp;gt;
+			&amp;lt;arg
+				value=&quot;--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg&quot; /&amp;gt;
+			&amp;lt;arg path=&quot;${basedir}/src&quot; /&amp;gt;
+		&amp;lt;/exec&amp;gt;
+		&amp;lt;echo message=&quot;Software metrics calculated using PHP-DEPEND.&quot; /&amp;gt;
+	&amp;lt;/target&amp;gt;
+
+	&amp;lt;target name=&quot;phpunit&quot; description=&quot;Run unit tests with code coverage&quot;&amp;gt;
+		&amp;lt;exec executable=&quot;phpunit&quot; failonerror=&quot;true&quot;&amp;gt;
+			&amp;lt;arg value=&quot;-c&quot; /&amp;gt;
+			&amp;lt;arg value=&quot;app/&quot; /&amp;gt;
+			&amp;lt;arg value=&quot;--coverage-html=${basedir}/build/coverage/&quot; /&amp;gt;
+		&amp;lt;/exec&amp;gt;
+	&amp;lt;/target&amp;gt;
+
+	&amp;lt;target name=&quot;assetic&quot; description=&quot;Dump assets&quot;&amp;gt;
+		&amp;lt;exec executable=&quot;${basedir}/app/console&quot;&amp;gt;
+			&amp;lt;arg value=&quot;--env=prod&quot; /&amp;gt;
+			&amp;lt;arg value=&quot;assetic:dump&quot; /&amp;gt;
+		&amp;lt;/exec&amp;gt;
+	&amp;lt;/target&amp;gt;
+
+	&amp;lt;target name=&quot;assets&quot; description=&quot;Install assets&quot;&amp;gt;
+		&amp;lt;exec executable=&quot;${basedir}/app/console&quot;&amp;gt;
+			&amp;lt;arg value=&quot;assets:install&quot; /&amp;gt;
+			&amp;lt;arg value=&quot;--symlink&quot; /&amp;gt;
+			&amp;lt;arg value=&quot;${basedir}/web&quot; /&amp;gt;
+		&amp;lt;/exec&amp;gt;
+		&amp;lt;echo message=&quot;Assets installed using symlink.&quot; /&amp;gt;
+	&amp;lt;/target&amp;gt;
+
+	&amp;lt;target name=&quot;cache&quot; description=&quot;Cleanup cache&quot;&amp;gt;
+		&amp;lt;exec executable=&quot;${basedir}/app/console&quot;&amp;gt;
+			&amp;lt;arg value=&quot;cache:clear&quot; /&amp;gt;
+			&amp;lt;arg value=&quot;--env=prod&quot; /&amp;gt;
+		&amp;lt;/exec&amp;gt;
+		&amp;lt;echo message=&quot;Production cache cleared.&quot; /&amp;gt;
+	&amp;lt;/target&amp;gt;
+
+&amp;lt;/project&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
         <title>7zip Backup Script</title>
         <link>https://drmanalo.github.io/blog/2015/7zip-backup-script.html</link>
         <pubDate>Sun, 10 May 2015 00:00:00 +0100</pubDate>
@@ -432,6 +706,298 @@ $ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=o
 &amp;lt;dependency&amp;gt;
 
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If you have a remote build server, you have to do the &lt;code&gt;mvn install&lt;/code&gt; bit to add the dependency knowing you are using different maven local repository. There is another solution posted on &lt;a href=&quot;http://blog.valdaris.com/post/custom-jar/&quot; target=&quot;_new&quot;&gt;this blog&lt;/a&gt; but I haven&apos;t tried this approach. I&apos;m referring to &lt;strong&gt;Installing the jar by using install-plugin&lt;/strong&gt;. Perhaps this is the way to go but for the time being I&apos;m happy with &lt;code&gt;maven install:install-file&lt;/code&gt;.&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>ASA Packet Tracer</title>
+        <link>https://drmanalo.github.io/blog/2014/asa-packet-tracer.html</link>
+        <pubDate>Sat, 28 Jun 2014 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2014/asa-packet-tracer.html</guid>
+        <description>
+  	         &lt;p&gt;Cisco ASA includes a very nice debugging feature called &lt;code&gt;packet-tracer&lt;/code&gt;. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I&apos;m using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.&lt;/p&gt;&lt;h3&gt;Command syntax&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+packet-tracer input &amp;lt;source interface&amp;gt; &amp;lt;protocol&amp;gt; &amp;lt;source IP&amp;gt; &amp;lt;source port&amp;gt; &amp;lt;destination IP&amp;gt; &amp;lt;destination port&amp;gt; [detailed]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Sample output&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+ASA-5505# packet-tracer input inside tcp x.x.x.x 80 y.y.y.y 80
+
+Phase: 1
+Type: ROUTE-LOOKUP
+Subtype: input
+Result: ALLOW
+
+Phase: 2
+Type: UN-NAT
+Subtype: static
+Result: ALLOW
+
+Phase: 3
+Type: ACCESS-LIST
+Subtype: log
+Result: ALLOW
+
+Phase: 4
+Type: CONN-SETTINGS
+Subtype:
+Result: ALLOW
+
+Phase: 5
+Type: IP-OPTIONS
+Subtype:
+Result: ALLOW
+
+Phase: 6
+Type: NAT
+Subtype:
+Result: ALLOW
+
+Phase: 7
+Type: HOST-LIMIT
+Subtype:
+Result: ALLOW
+
+Phase: 8
+Type: VPN
+Subtype: encrypt
+Result: ALLOW
+
+Phase: 9
+Type: NAT
+Subtype: rpf-check
+Result: ALLOW
+
+Phase: 10
+Type: VPN
+Subtype: ipsec-tunnel-flow
+Result: ALLOW
+
+Phase: 11
+Type: IP-OPTIONS
+Subtype:
+Result: ALLOW
+
+Phase: 12
+Type: FLOW-CREATION
+Subtype:
+Result: ALLOW
+New flow created with id 3256277, packet dispatched to next module
+
+Result:
+input-interface: inside
+input-status: up
+input-line-status: up
+output-interface: outside
+output-status: up
+output-line-status: up
+Action: allow
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>ASA VPN Configuration</title>
+        <link>https://drmanalo.github.io/blog/2014/asa-vpn-config.html</link>
+        <pubDate>Sun, 8 Jun 2014 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2014/asa-vpn-config.html</guid>
+        <description>
+  	         &lt;p&gt;I&apos;m putting here my working VPN configuration for ASA 5505 on ASA Version 8.4(7). All upper case values need changing to suit your business requirements and personal taste. IP addresses are mere examples.&lt;/p&gt;&lt;h3&gt;Network Object Mapping&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+object network OBJ_REMOTE_VPN_ENDPOINT
+ subnet 172.16.0.0 255.240.0.0
+ description OBJ_REMOTE_VPN_ENDPOINT is a label
+
+object network OBJ_INSIDE_SERVER1
+ host 10.100.100.131
+ description OBJ_INSIDE_SERVER1 is a label
+
+object network OBJ_INSIDE_HOST1
+ host 10.100.100.190
+ description OBJ_INSIDE_HOST1 is a label
+
+object network OBJ_NATTED_INSIDE_HOST1
+ host 10.0.7.190
+ description OBJ_NATTED_INSIDE_HOST1 is a label
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Access Control List&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+access-list INSIDE-OUTSIDE extended permit ip object OBJ_NATTED_INSIDE_HOST1 object OBJ_REMOTE_VPN_ENDPOINT
+access-list ACL_VPN_NUMBER1 extended permit ip 10.0.7.176 255.255.255.240 172.16.0.0 255.240.0.0
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Network Address Transalation&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+  nat (inside,outside) source static OBJ_INSIDE_SERVER1 OBJ_NATTED_INSIDE_HOST1 destination
+   static OBJ_REMOTE_VPN_ENDPOINT OBJ_REMOTE_VPN_ENDPOINT description NAT inside host to private IP
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Phase 1 ISAKMP&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+crypto ikev1 policy 10
+ authentication pre-share
+ encryption aes-256
+ hash sha
+ group 2
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Phase 2 IPSEC&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+crypto ipsec ikev1 transform-set AES256_SHA esp-aes-256 esp-sha-hmac
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Group Policy&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+group-policy GPOLICY_NAME internal
+group-policy GPOLICY_NAME attributes
+ vpn-idle-timeout none
+ vpn-session-timeout none
+ vpn-tunnel-protocol ikev1
+
+tunnel-group 8.8.8.8 type ipsec-l2l
+tunnel-group 8.8.8.8 general-attributes
+ default-group-policy GPOLICY_NAME
+tunnel-group 8.8.8.8 ipsec-attributes
+ ikev1 pre-shared-key A_VERY_WEAK_PRE_SHARED_KEY
+ isakmp keepalive disable
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Crypto Map&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+crypto map CMAP_OUTSIDE 11 match address ACL_VPN_NUMBER1
+crypto map CMAP_OUTSIDE 11 set pfs
+crypto map CMAP_OUTSIDE 11 set peer 8.8.8.8
+crypto map CMAP_OUTSIDE 11 set ikev1 transform-set AES256_SHA
+crypto map CMAP_OUTSIDE 11 set security-association lifetime seconds 28800
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>ASA Dialup VPN Configuration</title>
+        <link>https://drmanalo.github.io/blog/2014/asa-vpn-dialup-config.html</link>
+        <pubDate>Sat, 7 Jun 2014 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2014/asa-vpn-dialup-config.html</guid>
+        <description>
+  	         &lt;p&gt;This Cisco dialup VPN configuration worked for ASA 5505 running on version 8.4(7). All upper case letters are labels and should be changed according to your standards and taste. IP addresses are representational.&lt;/p&gt;&lt;h3&gt;Network Object Mapping&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+ object network OBJ_VPN_ENDPOINT1
+ subnet 10.175.0.0 255.255.128.0
+ description OBJ_VPN_ENDPOINT1 is a label
+ &lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;DHCP Pool&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+  ip local pool VPN_DHCP_POOL1 10.0.20.10-10.0.20.14
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Access Control List&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+  access-list ACL_SPLIT_TUNNEL standard permit 10.175.0.0 255.255.128.0
+  access-list OUTSIDE-INSIDE extended permit ip object VPN_DHCP_POOL1 object OBJ_VPN_ENDPOINT1
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Network Address Translation&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+  nat (outside,outside) source static VPN_DHCP_POOL1 VPN_DHCP_POOL1 destination
+    static OBJ_VPN_ENDPOINT1 OBJ_VPN_ENDPOINT1
+    description NAT EXEMPTION FOR VPN CLIENT IPs TO VPN ENDPOINTS
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Crypto Map&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+crypto dynamic-map DYN_CMAP_OUTSIDE 1 set ikev1 transform-set 3DES_SHA
+crypto dynamic-map DYN_CMAP_OUTSIDE 1 set reverse-route
+crypto map CMAP_OUTSIDE 99 ipsec-isakmp dynamic DYN_CMAP_OUTSIDE
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Group Policy&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+group-policy GPOLICY_POLICY1 internal
+group-policy GPOLICY_POLICY1 attributes
+ dns-server value 8.8.8.8
+ vpn-tunnel-protocol ikev1 ikev2
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value ACL_SPLIT_TUNNEL
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Tunnel Group&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+tunnel-group DIALUP_TUNNEL_GROUP type remote-access
+tunnel-group DIALUP_TUNNEL_GROUP general-attributes
+ address-pool VPN_DHCP_POOL1
+ default-group-policy GPOLICY_POLICY1
+tunnel-group DIALUP_TUNNEL_GROUP ipsec-attributes
+ ikev1 pre-shared-key ********
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Dialup Credentials&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+username USERNAME password INSECURE encrypted
+username USERNAME attributes
+ service-type remote-access
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Cisco Dialup VPN Configuration</title>
+        <link>https://drmanalo.github.io/blog/2014/cisco-dialup-vpn-config.html</link>
+        <pubDate>Tue, 13 May 2014 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2014/cisco-dialup-vpn-config.html</guid>
+        <description>
+  	         &lt;p&gt;This is my working Cisco dialup configuration. IP addresses and wildcard masks are fictitious.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+cisco887(config)#crypto isakmp policy 2
+cisco887(config-isakmp)#encryption 3des
+cisco887(config-isakmp)#hash md5
+cisco887(config-isakmp)#authentication pre-share
+cisco887(config-isakmp)#group 2
+cisco887(config-isakmp)#exit
+
+cisco887(config)# aaa new-model
+cisco887(config)# aaa authentication login default local
+cisco887(config)# aaa authentication login vpn_xauth local
+cisco887(config)# aaa authentication login sslvpn local
+cisco887(config)# aaa authorization network vpn_group local
+cisco887(config)# aaa session-id common
+
+cisco887(config)#username &lt;username&gt; password 0 &lt;password&gt;
+
+cisco887(config)#crypto isakmp client configuration group &lt;group name&gt;
+cisco887(config-isakmp-group)#key &lt;password&gt;
+cisco887(config-isakmp-group)#dns 8.8.8.8
+cisco887(config-isakmp-group)#pool &lt;pool name&gt;
+cisco887(config-isakmp-group)#acl 103
+cisco887(config-isakmp-group)#max-users 5
+cisco887(config-isakmp-group)#exit
+
+cisco887(config)#ip local pool &lt;pool name&gt; x.x.x.x x.x.x.x
+
+cisco887(config)#crypto ipsec transform-set &lt;transform-set name&gt; esp-3des esp-sha-hmac
+cisco887(config)#crypto ipsec profile &lt;profile name&gt;
+cisco887(ipsec-profile)#set transform-set &lt;transform-set name&gt;
+cisco887(ipsec-profile)#exit
+
+cisco887(config)#interface virtual-template 1 type tunnel
+cisco887(config-if)#ip unnumbered vlan3
+cisco887(config-if)#tunnel mode ipsec ipv4
+cisco887(config-if)#tunnel protection ipsec profile &lt;profile name&gt;
+cisco887(config-if)#exit
+
+cisco887(config)#crypto isakmp profile &lt;ike-profile name&gt;
+% A profile is deemed incomplete until it has match identity statements
+cisco887(conf-isa-prof)#match identity group &lt;group name&gt;
+cisco887(conf-isa-prof)#client authentication list vpn_xauth
+cisco887(conf-isa-prof)#isakmp authorization list vpn_group
+cisco887(conf-isa-prof)#client configuration address respond
+cisco887(conf-isa-prof)#virtual-template 1
+cisco887(config-if)#exit
+
+cisco887(config)#access-list 103 remark -===VPN Client users===-
+cisco887(config)#access-list 103 permit ip x.x.x.x y.y.y.y host x.x.x.x
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Removing Self-assigned RSA Key</title>
+        <link>https://drmanalo.github.io/blog/2014/remove-self-assigned-rsa-key.html</link>
+        <pubDate>Thu, 1 May 2014 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2014/remove-self-assigned-rsa-key.html</guid>
+        <description>
+  	         &lt;p&gt;When enabling Cisco router&apos;s http server, it automatically generates a self-signed certificate which is good but when you decided to turn off the http server, it will then leave a self-signed certificate making running-config a bit messy. Here are the steps to remove the self-signed certificated if it&apos;s no longer needed.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+cisco887(config)#show crypto key mypubkey rsa
+
+cisco887(config)#no crypto pki trustpoint TP-self-signed-483521904
+% Removing an enrolled trustpoint will destroy all certificates
+ received from the related Certificate Authority.
+
+Are you sure you want to do this? [yes/no]: yes
+% Be sure to ask the CA administrator to revoke your certificates.
+
+cisco887(config)#crypto key zeroize rsa TP-self-signed-483521904
+% Keys to be removed are named named &apos;TP-self-signed-4294967295&apos;.
+
+% All router certs issued using these keys will also be removed.
+
+Do you really want to remove these keys? [yes/no]: yes
+&lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>
   </channel>

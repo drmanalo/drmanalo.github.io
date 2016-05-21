@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Installing Java 1.8 on Centos</title>
+    <title>Cisco Dialup VPN Configuration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -66,54 +66,67 @@
 
 	<section class="section promo offset-header">
 		<div class="container">
-			<h1 class="page-header title">Installing Java 1.8 on Centos</h1>
-			<p><em>21 May 2016</em></p>
-			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
-<!-- more --><h3>Downloading java 1.8</h3>
+			<h1 class="page-header title">Cisco Dialup VPN Configuration</h1>
+			<p><em>13 May 2014</em></p>
+			<p><p>This is my working Cisco dialup configuration. IP addresses and wildcard masks are fictitious.</p>
+<!-- more -->
 <pre><code class="language-bash">
-$ cd /opt/
-$ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"
-$ tar xzf jdk-8u91-linux-x64.tar.gz
-</code></pre><h3>Install using alternatives</h3>
-<pre><code class="language-bash">
-$ cd /opt/jdk1.8.0_91/
-$ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
-$ alternatives --config java
+cisco887(config)#crypto isakmp policy 2
+cisco887(config-isakmp)#encryption 3des
+cisco887(config-isakmp)#hash md5
+cisco887(config-isakmp)#authentication pre-share
+cisco887(config-isakmp)#group 2
+cisco887(config-isakmp)#exit
 
-There are 3 programs that provides 'java'.
+cisco887(config)# aaa new-model
+cisco887(config)# aaa authentication login default local
+cisco887(config)# aaa authentication login vpn_xauth local
+cisco887(config)# aaa authentication login sslvpn local
+cisco887(config)# aaa authorization network vpn_group local
+cisco887(config)# aaa session-id common
 
-  Selection    Command
------------------------------------------------
-   1           /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.101-2.6.6.1.el7_2.x86_64/jre/bin/java
-*+ 2           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-0.b14.el7_2.x86_64/jre/bin/java
-   3           /opt/jdk1.8.0_91/bin/java
+cisco887(config)#username <username> password 0 <password>
 
-Enter to keep the current selection[+], or type selection number: 3
-</code></pre><p>Installing <code>javac</code> and <code>jar</code> as well.</p>
-<pre><code class="language-bash">
-$ alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_91/bin/jar 2
-$ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 2
-$ alternatives --set jar /opt/jdk1.8.0_91/bin/jar
-$ alternatives --set javac /opt/jdk1.8.0_91/bin/javac
-</code></pre><h3>Setting up environment variables</h3><p>The following steps are optional.</p>
-<pre><code class="language-bash">
-export JAVA_HOME=/opt/jdk1.8.0_91
-export JRE_HOME=/opt/jdk1.8.0_91/jre
-export PATH=$PATH:/opt/jdk1.8.0_91/bin:/opt/jdk1.8.0_91/jre/bin
-</code></pre><h3>Verifying your version of java</h3>
-<pre><code class="language-bash">
-$ java -version
-java version "1.8.0_91"
-Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
-Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+cisco887(config)#crypto isakmp client configuration group <group name>
+cisco887(config-isakmp-group)#key <password>
+cisco887(config-isakmp-group)#dns 8.8.8.8
+cisco887(config-isakmp-group)#pool <pool name>
+cisco887(config-isakmp-group)#acl 103
+cisco887(config-isakmp-group)#max-users 5
+cisco887(config-isakmp-group)#exit
+
+cisco887(config)#ip local pool <pool name> x.x.x.x x.x.x.x
+
+cisco887(config)#crypto ipsec transform-set <transform-set name> esp-3des esp-sha-hmac
+cisco887(config)#crypto ipsec profile <profile name>
+cisco887(ipsec-profile)#set transform-set <transform-set name>
+cisco887(ipsec-profile)#exit
+
+cisco887(config)#interface virtual-template 1 type tunnel
+cisco887(config-if)#ip unnumbered vlan3
+cisco887(config-if)#tunnel mode ipsec ipv4
+cisco887(config-if)#tunnel protection ipsec profile <profile name>
+cisco887(config-if)#exit
+
+cisco887(config)#crypto isakmp profile <ike-profile name>
+% A profile is deemed incomplete until it has match identity statements
+cisco887(conf-isa-prof)#match identity group <group name>
+cisco887(conf-isa-prof)#client authentication list vpn_xauth
+cisco887(conf-isa-prof)#isakmp authorization list vpn_group
+cisco887(conf-isa-prof)#client configuration address respond
+cisco887(conf-isa-prof)#virtual-template 1
+cisco887(config-if)#exit
+
+cisco887(config)#access-list 103 remark -===VPN Client users===-
+cisco887(config)#access-list 103 permit ip x.x.x.x y.y.y.y host x.x.x.x
 </code></pre></p>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2016/java8-on-centos7.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2016/java8-on-centos7.html';
+		var disqus_identifier = 'blog/2014/cisco-dialup-vpn-config.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2014/cisco-dialup-vpn-config.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

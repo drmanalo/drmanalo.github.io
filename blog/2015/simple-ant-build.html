@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Simple Ant Build</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../../plugins/prism/prism.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+		<!-- Fixed navbar -->
+				<header class="header" id="header">
+			<div class="container">
+					<h1 class="logo pull-left">
+							<a href="/"><span class="logo-title">dhon.manalo</span></a>
+					</h1>
+					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
+							<div class="navbar-header">
+									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+											<span class="sr-only">Toggle navigation</span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+									</button>
+							</div>
+							<div id="navbar-collapse" class="navbar-collapse collapse">
+									<ul class="nav navbar-nav">
+											<li class="nav-item sr-only active"><a href="/">Home</a></li>
+											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
+											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
+											<li class="dropdown">
+							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
+							          <ul class="dropdown-menu">
+							            <li><a href="../../tags/bash.html">bash</a></li>
+													<li><a href="../../tags/cisco.html">cisco</a></li>
+													<li><a href="../../tags/java.html">java</a></li>
+													<li><a href="../../tags/php.html">php</a></li>
+													<li role="separator" class="divider"></li>
+							            <li><a href="../../tags/windows.html">windows</a></li>
+							          </ul>
+							        </li>
+									</ul>
+							</div>
+					</nav>
+			</div>
+		</header>
+
+	<section class="section promo offset-header">
+		<div class="container">
+			<h1 class="page-header title">Simple Ant Build</h1>
+			<p><em>22 June 2015</em></p>
+			<p><p>This is a simple Ant build script I'm using for my Symfony2 blog. This has the following dependencies:</p>
+<ul>
+  <li><p><a href="http://phpunit.de/" target="_new">PHPUnit</a></p></li>
+  <li><p><a href="http://pear.php.net/package/PHP_CodeSniffer/" target="_new">PHP_CodeSniffer</a></p></li>
+  <li><p><a href="https://github.com/sebastianbergmann/phploc" target="_new">PHPLOC</a></p></li>
+  <li><p><a href="http://pdepend.org/" target="_new">PHP_Depend</a></p></li>
+  <li><p><a href="http://phpmd.org/" target="_new">PHPMD</a></p></li>
+  <li><p><a href="https://github.com/sebastianbergmann/phpcpd" target="_new">PHPCPD</a></p></li>
+  <li><p><a href="http://phpdox.de/" target="_new">phpDox</a></p></li>
+</ul>
+<!-- more -->
+<pre><code class="language-xml">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project name="Symblog Project" default="build"&gt;
+
+	&lt;target name="build"
+		depends="clean,prepare,lint,phploc,pdepend,phpunit,assetic,assets,cache"&gt;
+		&lt;zip destfile="${basedir}/build/target/symblog.zip"&gt;
+			&lt;zipfileset dir="${basedir}/app" prefix="app"&gt;
+				&lt;exclude name="**/DoctrineMigrations/**"/&gt;
+				&lt;exclude name="**/cache/**"/&gt;
+				&lt;exclude name="**/logs/**"/&gt;
+				&lt;exclude name="**/phpunit.*"/&gt;
+			&lt;/zipfileset&gt;
+			&lt;zipfileset dir="${basedir}/bin" prefix="bin" /&gt;
+			&lt;zipfileset dir="${basedir}/src" prefix="src"&gt;
+				&lt;exclude name="**/Tests/**"/&gt;
+				&lt;exclude name="**/DataFixtures/**"/&gt;
+			&lt;/zipfileset&gt;
+			&lt;zipfileset dir="${basedir}/vendor" prefix="vendor" /&gt;
+			&lt;zipfileset dir="${basedir}/web" prefix="web" /&gt;
+		&lt;/zip&gt;
+		&lt;echo message="Finished build!" /&gt;
+	&lt;/target&gt;
+
+	&lt;target name="clean" description="Cleanup build artifacts"&gt;
+		&lt;delete dir="${basedir}/build/coverage" /&gt;
+		&lt;delete dir="${basedir}/build/logs" /&gt;
+		&lt;delete dir="${basedir}/build/pdepend" /&gt;
+		&lt;delete dir="${basedir}/build/target" /&gt;
+		&lt;echo message="Artifacts deleted." /&gt;
+	&lt;/target&gt;
+
+	&lt;target name="prepare" depends="clean" description="Prepare for build"&gt;
+		&lt;mkdir dir="${basedir}/build/coverage" /&gt;
+		&lt;mkdir dir="${basedir}/build/logs" /&gt;
+		&lt;mkdir dir="${basedir}/build/pdepend" /&gt;
+		&lt;mkdir dir="${basedir}/build/target" /&gt;
+		&lt;echo message="Artifacts prepared." /&gt;
+	&lt;/target&gt;
+
+	&lt;target name="lint" description="Perform syntax check of sourcecode files"&gt;
+		&lt;apply executable="php" failonerror="true"&gt;
+			&lt;arg value="-l" /&gt;
+			&lt;fileset dir="${basedir}/src"&gt;
+				&lt;include name="**/*.php" /&gt;
+				&lt;modified /&gt;
+			&lt;/fileset&gt;
+			&lt;fileset dir="${basedir}/src/Drm/BlogBundle/Tests"&gt;
+				&lt;include name="**/*.php" /&gt;
+				&lt;modified /&gt;
+			&lt;/fileset&gt;
+		&lt;/apply&gt;
+		&lt;echo message="Syntax checked using lint." /&gt;
+	&lt;/target&gt;
+
+	&lt;target name="phploc" description="Measure project size using PHPLOC"&gt;
+		&lt;exec executable="phploc"&gt;
+			&lt;arg value="--count-tests" /&gt;
+			&lt;arg value="--log-csv" /&gt;
+			&lt;arg value="${basedir}/build/logs/phploc.csv" /&gt;
+			&lt;arg path="${basedir}/src" /&gt;
+		&lt;/exec&gt;
+		&lt;echo message="Project measured using PHPLOC." /&gt;
+	&lt;/target&gt;
+
+	&lt;target name="pdepend" description="Calculate software metrics using PHP_Depend"&gt;
+		&lt;exec executable="pdepend"&gt;
+			&lt;arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" /&gt;
+			&lt;arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" /&gt;
+			&lt;arg
+				value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" /&gt;
+			&lt;arg path="${basedir}/src" /&gt;
+		&lt;/exec&gt;
+		&lt;echo message="Software metrics calculated using PHP-DEPEND." /&gt;
+	&lt;/target&gt;
+
+	&lt;target name="phpunit" description="Run unit tests with code coverage"&gt;
+		&lt;exec executable="phpunit" failonerror="true"&gt;
+			&lt;arg value="-c" /&gt;
+			&lt;arg value="app/" /&gt;
+			&lt;arg value="--coverage-html=${basedir}/build/coverage/" /&gt;
+		&lt;/exec&gt;
+	&lt;/target&gt;
+
+	&lt;target name="assetic" description="Dump assets"&gt;
+		&lt;exec executable="${basedir}/app/console"&gt;
+			&lt;arg value="--env=prod" /&gt;
+			&lt;arg value="assetic:dump" /&gt;
+		&lt;/exec&gt;
+	&lt;/target&gt;
+
+	&lt;target name="assets" description="Install assets"&gt;
+		&lt;exec executable="${basedir}/app/console"&gt;
+			&lt;arg value="assets:install" /&gt;
+			&lt;arg value="--symlink" /&gt;
+			&lt;arg value="${basedir}/web" /&gt;
+		&lt;/exec&gt;
+		&lt;echo message="Assets installed using symlink." /&gt;
+	&lt;/target&gt;
+
+	&lt;target name="cache" description="Cleanup cache"&gt;
+		&lt;exec executable="${basedir}/app/console"&gt;
+			&lt;arg value="cache:clear" /&gt;
+			&lt;arg value="--env=prod" /&gt;
+		&lt;/exec&gt;
+		&lt;echo message="Production cache cleared." /&gt;
+	&lt;/target&gt;
+
+&lt;/project&gt;
+
+</code></pre></p>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/simple-ant-build.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/simple-ant-build.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+	<script>hljs.initHighlightingOnLoad();</script>
+
+		</div><!--//container-->
+	</section>
+
+	<!-- ******FOOTER****** -->
+	<footer class="footer">
+    <div class="container text-center">
+        <small class="copyright">Mixed by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+    </div>
+	</footer>
+
+  <!-- Javascript -->
+	<script src="../../plugins/jquery-1.11.3.min.js"></script>
+	<script src="../../plugins/jquery.easing.1.3.js"></script>
+	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+	<script src="../../plugins/prism/prism.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

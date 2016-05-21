@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Installing Java 1.8 on Centos</title>
+    <title>Removing Self-assigned RSA Key</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -66,54 +66,34 @@
 
 	<section class="section promo offset-header">
 		<div class="container">
-			<h1 class="page-header title">Installing Java 1.8 on Centos</h1>
-			<p><em>21 May 2016</em></p>
-			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
-<!-- more --><h3>Downloading java 1.8</h3>
+			<h1 class="page-header title">Removing Self-assigned RSA Key</h1>
+			<p><em>01 May 2014</em></p>
+			<p><p>When enabling Cisco router's http server, it automatically generates a self-signed certificate which is good but when you decided to turn off the http server, it will then leave a self-signed certificate making running-config a bit messy. Here are the steps to remove the self-signed certificated if it's no longer needed.</p>
+<!-- more -->
 <pre><code class="language-bash">
-$ cd /opt/
-$ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"
-$ tar xzf jdk-8u91-linux-x64.tar.gz
-</code></pre><h3>Install using alternatives</h3>
-<pre><code class="language-bash">
-$ cd /opt/jdk1.8.0_91/
-$ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
-$ alternatives --config java
+cisco887(config)#show crypto key mypubkey rsa
 
-There are 3 programs that provides 'java'.
+cisco887(config)#no crypto pki trustpoint TP-self-signed-483521904
+% Removing an enrolled trustpoint will destroy all certificates
+ received from the related Certificate Authority.
 
-  Selection    Command
------------------------------------------------
-   1           /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.101-2.6.6.1.el7_2.x86_64/jre/bin/java
-*+ 2           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-0.b14.el7_2.x86_64/jre/bin/java
-   3           /opt/jdk1.8.0_91/bin/java
+Are you sure you want to do this? [yes/no]: yes
+% Be sure to ask the CA administrator to revoke your certificates.
 
-Enter to keep the current selection[+], or type selection number: 3
-</code></pre><p>Installing <code>javac</code> and <code>jar</code> as well.</p>
-<pre><code class="language-bash">
-$ alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_91/bin/jar 2
-$ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 2
-$ alternatives --set jar /opt/jdk1.8.0_91/bin/jar
-$ alternatives --set javac /opt/jdk1.8.0_91/bin/javac
-</code></pre><h3>Setting up environment variables</h3><p>The following steps are optional.</p>
-<pre><code class="language-bash">
-export JAVA_HOME=/opt/jdk1.8.0_91
-export JRE_HOME=/opt/jdk1.8.0_91/jre
-export PATH=$PATH:/opt/jdk1.8.0_91/bin:/opt/jdk1.8.0_91/jre/bin
-</code></pre><h3>Verifying your version of java</h3>
-<pre><code class="language-bash">
-$ java -version
-java version "1.8.0_91"
-Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
-Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+cisco887(config)#crypto key zeroize rsa TP-self-signed-483521904
+% Keys to be removed are named named 'TP-self-signed-4294967295'.
+
+% All router certs issued using these keys will also be removed.
+
+Do you really want to remove these keys? [yes/no]: yes
 </code></pre></p>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2016/java8-on-centos7.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2016/java8-on-centos7.html';
+		var disqus_identifier = 'blog/2014/remove-self-assigned-rsa-key.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2014/remove-self-assigned-rsa-key.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Installing Java 1.8 on Centos</title>
+    <title>Tomcat Service Script</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -66,54 +66,127 @@
 
 	<section class="section promo offset-header">
 		<div class="container">
-			<h1 class="page-header title">Installing Java 1.8 on Centos</h1>
-			<p><em>21 May 2016</em></p>
-			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
-<!-- more --><h3>Downloading java 1.8</h3>
+			<h1 class="page-header title">Tomcat Service Script</h1>
+			<p><em>22 July 2015</em></p>
+			<p><p>I copied this startup script from <a href="https://www.liferay.com/en_GB/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts">liferay</a>. You can use this script start and stop your tomcat instance just like any CentOS standard services.</p>
+<!-- more -->
 <pre><code class="language-bash">
-$ cd /opt/
-$ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"
-$ tar xzf jdk-8u91-linux-x64.tar.gz
-</code></pre><h3>Install using alternatives</h3>
-<pre><code class="language-bash">
-$ cd /opt/jdk1.8.0_91/
-$ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
-$ alternatives --config java
+#!/bin/bash
+#
+# tomcat8 This shell script takes care of starting and stopping tomcat8
+#
+# chkconfig: 234 80 20
+#
+### BEGIN INIT INFO
+# Provides: tomcat8
+# Required-Start: $network $syslog
+# Required-Stop: $network $syslog
+# Description: start and stop tomcat8 Tomcat instance
+### END INIT INFO
 
-There are 3 programs that provides 'java'.
+TOMCAT_HOME=/usr/local/apache-tomcat-8.0.5
+SHUTDOWN_WAIT=20
 
-  Selection    Command
------------------------------------------------
-   1           /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.101-2.6.6.1.el7_2.x86_64/jre/bin/java
-*+ 2           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-0.b14.el7_2.x86_64/jre/bin/java
-   3           /opt/jdk1.8.0_91/bin/java
+export JAVA_HOME=/usr/java/latest
+export JAVA_OPTS="-XX:+DoEscapeAnalysis \
+        -XX:+UseConcMarkSweepGC \
+        -XX:+CMSClassUnloadingEnabled \
+        -XX:+UseParNewGC \
+        -XX:+PrintGCDetails \
+        -XX:+PrintGCTimeStamps \
+	      -XX:+PrintGCDateStamps \
+        -XX:PermSize=64m \
+        -XX:MaxPermSize=256m \
+        -Xms512m \
+        -Xmx512m"
+export PATH=$JAVA_HOME/bin:$PATH
 
-Enter to keep the current selection[+], or type selection number: 3
-</code></pre><p>Installing <code>javac</code> and <code>jar</code> as well.</p>
+tomcat_pid() {
+	echo `ps aux | grep $TOMCAT_HOME | grep -v grep | awk '{ print $2 }'`
+}
+
+start() {
+	pid=$(tomcat_pid)
+	if [ -n "$pid" ]
+	then
+		echo "tomcat8 is already running (pid: $pid)"
+	else
+		# Start tomcat
+		echo "Starting tomcat8..."
+		ulimit -n 100000
+		umask 007
+		/bin/sh $TOMCAT_HOME/bin/startup.sh
+	fi
+
+	return 0
+}
+
+stop() {
+	pid=$(tomcat_pid)
+	if [ -n "$pid" ]
+	then
+		echo "Stopping tomcat8..."
+	/bin/sh $TOMCAT_HOME/bin/shutdown.sh
+
+	let kwait=$SHUTDOWN_WAIT
+	count=0;
+	until [ `ps -p $pid | grep -c $pid` = '0' ] || [ $count -gt $kwait ]
+	do
+		echo -n -e "waiting for processes to exit\n";
+		sleep 1
+		let count=$count+1;
+	done
+
+	if [ $count -gt $kwait ]; then
+		echo -n -e "killing processes which didn't stop after $SHUTDOWN_WAIT seconds\n"
+		kill -9 $pid
+	fi
+	else
+		echo "tomcat8 is not running"
+	fi
+
+	return 0
+}
+
+case $1 in
+	start)
+		start
+	;;
+	stop)
+		stop
+	;;
+	restart)
+		stop
+		start
+	;;
+	status)
+		pid=$(tomcat_pid)
+		if [ -n "$pid" ]
+		then
+			echo "tomcat8 is running with pid: $pid"
+		else
+			echo "tomcat8 is not running"
+		fi
+	;;
+	*)
+		echo "Usage: $0 {start|stop|restart|status}"
+		exit 1
+	;;
+esac
+
+exit 0
+</code></pre><h3>Start tomcat Automatically</h3>
 <pre><code class="language-bash">
-$ alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_91/bin/jar 2
-$ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 2
-$ alternatives --set jar /opt/jdk1.8.0_91/bin/jar
-$ alternatives --set javac /opt/jdk1.8.0_91/bin/javac
-</code></pre><h3>Setting up environment variables</h3><p>The following steps are optional.</p>
-<pre><code class="language-bash">
-export JAVA_HOME=/opt/jdk1.8.0_91
-export JRE_HOME=/opt/jdk1.8.0_91/jre
-export PATH=$PATH:/opt/jdk1.8.0_91/bin:/opt/jdk1.8.0_91/jre/bin
-</code></pre><h3>Verifying your version of java</h3>
-<pre><code class="language-bash">
-$ java -version
-java version "1.8.0_91"
-Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
-Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+# chkconfig --add tomcat8
+# chkconfig tomcat8 on
 </code></pre></p>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2016/java8-on-centos7.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2016/java8-on-centos7.html';
+		var disqus_identifier = 'blog/2015/tomcat-service-script.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/tomcat-service-script.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

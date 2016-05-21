@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Installing Java 1.8 on Centos</title>
+    <title>Pimping My vim</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -66,54 +66,31 @@
 
 	<section class="section promo offset-header">
 		<div class="container">
-			<h1 class="page-header title">Installing Java 1.8 on Centos</h1>
-			<p><em>21 May 2016</em></p>
-			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
-<!-- more --><h3>Downloading java 1.8</h3>
+			<h1 class="page-header title">Pimping My vim</h1>
+			<p><em>28 June 2015</em></p>
+			<p><p><strong>vim</strong> is a versatile and powerful text editor for command-line environments. In _*nix_ world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called <code>.vimrc</code> under your home folder.</p>
+<!-- more --><h3>Creating ~/.vimrc</h3>
 <pre><code class="language-bash">
-$ cd /opt/
-$ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"
-$ tar xzf jdk-8u91-linux-x64.tar.gz
-</code></pre><h3>Install using alternatives</h3>
-<pre><code class="language-bash">
-$ cd /opt/jdk1.8.0_91/
-$ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
-$ alternatives --config java
-
-There are 3 programs that provides 'java'.
-
-  Selection    Command
------------------------------------------------
-   1           /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.101-2.6.6.1.el7_2.x86_64/jre/bin/java
-*+ 2           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-0.b14.el7_2.x86_64/jre/bin/java
-   3           /opt/jdk1.8.0_91/bin/java
-
-Enter to keep the current selection[+], or type selection number: 3
-</code></pre><p>Installing <code>javac</code> and <code>jar</code> as well.</p>
-<pre><code class="language-bash">
-$ alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_91/bin/jar 2
-$ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 2
-$ alternatives --set jar /opt/jdk1.8.0_91/bin/jar
-$ alternatives --set javac /opt/jdk1.8.0_91/bin/javac
-</code></pre><h3>Setting up environment variables</h3><p>The following steps are optional.</p>
-<pre><code class="language-bash">
-export JAVA_HOME=/opt/jdk1.8.0_91
-export JRE_HOME=/opt/jdk1.8.0_91/jre
-export PATH=$PATH:/opt/jdk1.8.0_91/bin:/opt/jdk1.8.0_91/jre/bin
-</code></pre><h3>Verifying your version of java</h3>
-<pre><code class="language-bash">
-$ java -version
-java version "1.8.0_91"
-Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
-Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
-</code></pre></p>
+set nocompatible
+syntax on
+set mouse=a
+set showmatch
+set autoindent
+set smartindent
+set backspace=2
+set tabstop=4
+set number
+set smarttab
+set shiftwidth=4
+colorscheme torte
+</code></pre><p><strong>set nocompatible</strong> fixes the issue where arrow keys do not function properly on some systems</p><p><strong>syntax on</strong> enables syntax highlighting for programming languages</p><p><strong>set mouse=a</strong> allows you to click around the text editor with your mouse to move the cursor</p><p><strong>set showmatch</strong> highlights matching brackets in programming languages</p><p><strong>set autoindent</strong> if indented, new lines will also be indented</p><p><strong>set smartindent</strong> automatically indents lines after opening a bracket in programming languages</p><p><strong>set backspace=2</strong> makes the backspace key function like it should</p><p><strong>set tabstop=4</strong> how much space Vim gives to a tab</p><p><strong>set number</strong> enables line numbering</p><p><strong>set smarttab</strong> improves tabbing</p><p><strong>set shiftwidth=4</strong> assists code formatting</p><p><strong>colorscheme torte</strong> changes the color scheme to your liking. Look in <code>/usr/share/vim/vim73/colors</code> for options. Folder location varies according to your version of vim.</p></p>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2016/java8-on-centos7.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2016/java8-on-centos7.html';
+		var disqus_identifier = 'blog/2015/pimping-my-vim.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/pimping-my-vim.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

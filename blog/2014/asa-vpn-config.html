@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Installing Java 1.8 on Centos</title>
+    <title>ASA VPN Configuration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -66,54 +66,73 @@
 
 	<section class="section promo offset-header">
 		<div class="container">
-			<h1 class="page-header title">Installing Java 1.8 on Centos</h1>
-			<p><em>21 May 2016</em></p>
-			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
-<!-- more --><h3>Downloading java 1.8</h3>
+			<h1 class="page-header title">ASA VPN Configuration</h1>
+			<p><em>08 June 2014</em></p>
+			<p><p>I'm putting here my working VPN configuration for ASA 5505 on ASA Version 8.4(7). All upper case values need changing to suit your business requirements and personal taste. IP addresses are mere examples.</p><h3>Network Object Mapping</h3>
 <pre><code class="language-bash">
-$ cd /opt/
-$ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"
-$ tar xzf jdk-8u91-linux-x64.tar.gz
-</code></pre><h3>Install using alternatives</h3>
-<pre><code class="language-bash">
-$ cd /opt/jdk1.8.0_91/
-$ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
-$ alternatives --config java
+object network OBJ_REMOTE_VPN_ENDPOINT
+ subnet 172.16.0.0 255.240.0.0
+ description OBJ_REMOTE_VPN_ENDPOINT is a label
 
-There are 3 programs that provides 'java'.
+object network OBJ_INSIDE_SERVER1
+ host 10.100.100.131
+ description OBJ_INSIDE_SERVER1 is a label
 
-  Selection    Command
------------------------------------------------
-   1           /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.101-2.6.6.1.el7_2.x86_64/jre/bin/java
-*+ 2           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-0.b14.el7_2.x86_64/jre/bin/java
-   3           /opt/jdk1.8.0_91/bin/java
+object network OBJ_INSIDE_HOST1
+ host 10.100.100.190
+ description OBJ_INSIDE_HOST1 is a label
 
-Enter to keep the current selection[+], or type selection number: 3
-</code></pre><p>Installing <code>javac</code> and <code>jar</code> as well.</p>
+object network OBJ_NATTED_INSIDE_HOST1
+ host 10.0.7.190
+ description OBJ_NATTED_INSIDE_HOST1 is a label
+</code></pre>
+<!-- more --><h3>Access Control List</h3>
 <pre><code class="language-bash">
-$ alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_91/bin/jar 2
-$ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 2
-$ alternatives --set jar /opt/jdk1.8.0_91/bin/jar
-$ alternatives --set javac /opt/jdk1.8.0_91/bin/javac
-</code></pre><h3>Setting up environment variables</h3><p>The following steps are optional.</p>
+access-list INSIDE-OUTSIDE extended permit ip object OBJ_NATTED_INSIDE_HOST1 object OBJ_REMOTE_VPN_ENDPOINT
+access-list ACL_VPN_NUMBER1 extended permit ip 10.0.7.176 255.255.255.240 172.16.0.0 255.240.0.0
+</code></pre><h3>Network Address Transalation</h3>
 <pre><code class="language-bash">
-export JAVA_HOME=/opt/jdk1.8.0_91
-export JRE_HOME=/opt/jdk1.8.0_91/jre
-export PATH=$PATH:/opt/jdk1.8.0_91/bin:/opt/jdk1.8.0_91/jre/bin
-</code></pre><h3>Verifying your version of java</h3>
+  nat (inside,outside) source static OBJ_INSIDE_SERVER1 OBJ_NATTED_INSIDE_HOST1 destination
+   static OBJ_REMOTE_VPN_ENDPOINT OBJ_REMOTE_VPN_ENDPOINT description NAT inside host to private IP
+</code></pre><h3>Phase 1 ISAKMP</h3>
 <pre><code class="language-bash">
-$ java -version
-java version "1.8.0_91"
-Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
-Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+crypto ikev1 policy 10
+ authentication pre-share
+ encryption aes-256
+ hash sha
+ group 2
+</code></pre><h3>Phase 2 IPSEC</h3>
+<pre><code class="language-bash">
+crypto ipsec ikev1 transform-set AES256_SHA esp-aes-256 esp-sha-hmac
+</code></pre><h3>Group Policy</h3>
+<pre><code class="language-bash">
+group-policy GPOLICY_NAME internal
+group-policy GPOLICY_NAME attributes
+ vpn-idle-timeout none
+ vpn-session-timeout none
+ vpn-tunnel-protocol ikev1
+
+tunnel-group 8.8.8.8 type ipsec-l2l
+tunnel-group 8.8.8.8 general-attributes
+ default-group-policy GPOLICY_NAME
+tunnel-group 8.8.8.8 ipsec-attributes
+ ikev1 pre-shared-key A_VERY_WEAK_PRE_SHARED_KEY
+ isakmp keepalive disable
+</code></pre><h3>Crypto Map</h3>
+<pre><code class="language-bash">
+crypto map CMAP_OUTSIDE 11 match address ACL_VPN_NUMBER1
+crypto map CMAP_OUTSIDE 11 set pfs
+crypto map CMAP_OUTSIDE 11 set peer 8.8.8.8
+crypto map CMAP_OUTSIDE 11 set ikev1 transform-set AES256_SHA
+crypto map CMAP_OUTSIDE 11 set security-association lifetime seconds 28800
 </code></pre></p>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2016/java8-on-centos7.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2016/java8-on-centos7.html';
+		var disqus_identifier = 'blog/2014/asa-vpn-config.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2014/asa-vpn-config.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

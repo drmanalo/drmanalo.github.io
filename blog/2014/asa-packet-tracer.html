@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Installing Java 1.8 on Centos</title>
+    <title>ASA Packet Tracer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -66,54 +66,93 @@
 
 	<section class="section promo offset-header">
 		<div class="container">
-			<h1 class="page-header title">Installing Java 1.8 on Centos</h1>
-			<p><em>21 May 2016</em></p>
-			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
-<!-- more --><h3>Downloading java 1.8</h3>
+			<h1 class="page-header title">ASA Packet Tracer</h1>
+			<p><em>28 June 2014</em></p>
+			<p><p>Cisco ASA includes a very nice debugging feature called <code>packet-tracer</code>. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I'm using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.</p><h3>Command syntax</h3>
 <pre><code class="language-bash">
-$ cd /opt/
-$ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"
-$ tar xzf jdk-8u91-linux-x64.tar.gz
-</code></pre><h3>Install using alternatives</h3>
+packet-tracer input &lt;source interface&gt; &lt;protocol&gt; &lt;source IP&gt; &lt;source port&gt; &lt;destination IP&gt; &lt;destination port&gt; [detailed]
+</code></pre>
+<!-- more --><h3>Sample output</h3>
 <pre><code class="language-bash">
-$ cd /opt/jdk1.8.0_91/
-$ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
-$ alternatives --config java
+ASA-5505# packet-tracer input inside tcp x.x.x.x 80 y.y.y.y 80
 
-There are 3 programs that provides 'java'.
+Phase: 1
+Type: ROUTE-LOOKUP
+Subtype: input
+Result: ALLOW
 
-  Selection    Command
------------------------------------------------
-   1           /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.101-2.6.6.1.el7_2.x86_64/jre/bin/java
-*+ 2           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-0.b14.el7_2.x86_64/jre/bin/java
-   3           /opt/jdk1.8.0_91/bin/java
+Phase: 2
+Type: UN-NAT
+Subtype: static
+Result: ALLOW
 
-Enter to keep the current selection[+], or type selection number: 3
-</code></pre><p>Installing <code>javac</code> and <code>jar</code> as well.</p>
-<pre><code class="language-bash">
-$ alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_91/bin/jar 2
-$ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 2
-$ alternatives --set jar /opt/jdk1.8.0_91/bin/jar
-$ alternatives --set javac /opt/jdk1.8.0_91/bin/javac
-</code></pre><h3>Setting up environment variables</h3><p>The following steps are optional.</p>
-<pre><code class="language-bash">
-export JAVA_HOME=/opt/jdk1.8.0_91
-export JRE_HOME=/opt/jdk1.8.0_91/jre
-export PATH=$PATH:/opt/jdk1.8.0_91/bin:/opt/jdk1.8.0_91/jre/bin
-</code></pre><h3>Verifying your version of java</h3>
-<pre><code class="language-bash">
-$ java -version
-java version "1.8.0_91"
-Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
-Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+Phase: 3
+Type: ACCESS-LIST
+Subtype: log
+Result: ALLOW
+
+Phase: 4
+Type: CONN-SETTINGS
+Subtype:
+Result: ALLOW
+
+Phase: 5
+Type: IP-OPTIONS
+Subtype:
+Result: ALLOW
+
+Phase: 6
+Type: NAT
+Subtype:
+Result: ALLOW
+
+Phase: 7
+Type: HOST-LIMIT
+Subtype:
+Result: ALLOW
+
+Phase: 8
+Type: VPN
+Subtype: encrypt
+Result: ALLOW
+
+Phase: 9
+Type: NAT
+Subtype: rpf-check
+Result: ALLOW
+
+Phase: 10
+Type: VPN
+Subtype: ipsec-tunnel-flow
+Result: ALLOW
+
+Phase: 11
+Type: IP-OPTIONS
+Subtype:
+Result: ALLOW
+
+Phase: 12
+Type: FLOW-CREATION
+Subtype:
+Result: ALLOW
+New flow created with id 3256277, packet dispatched to next module
+
+Result:
+input-interface: inside
+input-status: up
+input-line-status: up
+output-interface: outside
+output-status: up
+output-line-status: up
+Action: allow
 </code></pre></p>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2016/java8-on-centos7.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2016/java8-on-centos7.html';
+		var disqus_identifier = 'blog/2014/asa-packet-tracer.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2014/asa-packet-tracer.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

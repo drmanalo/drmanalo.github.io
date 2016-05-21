@@ -51,8 +51,9 @@
 							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
 							          <ul class="dropdown-menu">
 							            <li><a href="tags/bash.html">bash</a></li>
-							            <li><a href="tags/java.html">java</a></li>
-							            <li><a href="tags/maven.html">maven</a></li>
+													<li><a href="tags/cisco.html">cisco</a></li>
+													<li><a href="tags/java.html">java</a></li>
+													<li><a href="tags/php.html">php</a></li>
 													<li role="separator" class="divider"></li>
 							            <li><a href="tags/windows.html">windows</a></li>
 							          </ul>
@@ -117,6 +118,42 @@ export SDKMAN_DIR="/home/kodi/.sdkman"
 </p>
 						<a class="btn btn-default" href="blog/2016/custom-jsp-tags.html">Read More →</a>
 						<hr>
+		  			<a href="blog/2015/tomcat-service-script.html"><h1 class="title">Tomcat Service Script</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 22 July 2015 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>I copied this startup script from <a href="https://www.liferay.com/en_GB/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts">liferay</a>. You can use this script start and stop your tomcat instance just like any CentOS standard services.</p>
+</p>
+						<a class="btn btn-default" href="blog/2015/tomcat-service-script.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2015/pimping-my-vim.html"><h1 class="title">Pimping My vim</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 28 June 2015 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p><strong>vim</strong> is a versatile and powerful text editor for command-line environments. In _*nix_ world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called <code>.vimrc</code> under your home folder.</p>
+</p>
+						<a class="btn btn-default" href="blog/2015/pimping-my-vim.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2015/simple-ant-build.html"><h1 class="title">Simple Ant Build</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 22 June 2015 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>This is a simple Ant build script I'm using for my Symfony2 blog. This has the following dependencies:</p>
+<ul>
+  <li><p><a href="http://phpunit.de/" target="_new">PHPUnit</a></p></li>
+  <li><p><a href="http://pear.php.net/package/PHP_CodeSniffer/" target="_new">PHP_CodeSniffer</a></p></li>
+  <li><p><a href="https://github.com/sebastianbergmann/phploc" target="_new">PHPLOC</a></p></li>
+  <li><p><a href="http://pdepend.org/" target="_new">PHP_Depend</a></p></li>
+  <li><p><a href="http://phpmd.org/" target="_new">PHPMD</a></p></li>
+  <li><p><a href="https://github.com/sebastianbergmann/phpcpd" target="_new">PHPCPD</a></p></li>
+  <li><p><a href="http://phpdox.de/" target="_new">phpDox</a></p></li>
+</ul>
+</p>
+						<a class="btn btn-default" href="blog/2015/simple-ant-build.html">Read More →</a>
+						<hr>
 		  			<a href="blog/2015/7zip-backup-script.html"><h1 class="title">7zip Backup Script</h1></a>
 		  			<p class="post-info">
 			  			<i class="fa fa-calendar"></i> 10 May 2015 |
@@ -134,6 +171,76 @@ export SDKMAN_DIR="/home/kodi/.sdkman"
 		  			<p><p>Oracle JDBC is not available from Maven's online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.</p><p>After downloading the JAR, you have to open your console and issue <code>mvn install:install-file</code>. Please refer below for the complete syntax. <strong>-Dfile requires fullpath.</strong></p>
 </p>
 						<a class="btn btn-default" href="blog/2015/adding-local-jar-to-maven.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2014/asa-packet-tracer.html"><h1 class="title">ASA Packet Tracer</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 28 June 2014 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>Cisco ASA includes a very nice debugging feature called <code>packet-tracer</code>. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I'm using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.</p><h3>Command syntax</h3>
+<pre><code class="language-bash">
+packet-tracer input &lt;source interface&gt; &lt;protocol&gt; &lt;source IP&gt; &lt;source port&gt; &lt;destination IP&gt; &lt;destination port&gt; [detailed]
+</code></pre>
+</p>
+						<a class="btn btn-default" href="blog/2014/asa-packet-tracer.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2014/asa-vpn-config.html"><h1 class="title">ASA VPN Configuration</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 08 June 2014 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>I'm putting here my working VPN configuration for ASA 5505 on ASA Version 8.4(7). All upper case values need changing to suit your business requirements and personal taste. IP addresses are mere examples.</p><h3>Network Object Mapping</h3>
+<pre><code class="language-bash">
+object network OBJ_REMOTE_VPN_ENDPOINT
+ subnet 172.16.0.0 255.240.0.0
+ description OBJ_REMOTE_VPN_ENDPOINT is a label
+
+object network OBJ_INSIDE_SERVER1
+ host 10.100.100.131
+ description OBJ_INSIDE_SERVER1 is a label
+
+object network OBJ_INSIDE_HOST1
+ host 10.100.100.190
+ description OBJ_INSIDE_HOST1 is a label
+
+object network OBJ_NATTED_INSIDE_HOST1
+ host 10.0.7.190
+ description OBJ_NATTED_INSIDE_HOST1 is a label
+</code></pre>
+</p>
+						<a class="btn btn-default" href="blog/2014/asa-vpn-config.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2014/asa-vpn-dialup-config.html"><h1 class="title">ASA Dialup VPN Configuration</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 07 June 2014 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>This Cisco dialup VPN configuration worked for ASA 5505 running on version 8.4(7). All upper case letters are labels and should be changed according to your standards and taste. IP addresses are representational.</p><h3>Network Object Mapping</h3>
+<pre><code class="language-bash">
+ object network OBJ_VPN_ENDPOINT1
+ subnet 10.175.0.0 255.255.128.0
+ description OBJ_VPN_ENDPOINT1 is a label
+ </code></pre>
+</p>
+						<a class="btn btn-default" href="blog/2014/asa-vpn-dialup-config.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2014/cisco-dialup-vpn-config.html"><h1 class="title">Cisco Dialup VPN Configuration</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 13 May 2014 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>This is my working Cisco dialup configuration. IP addresses and wildcard masks are fictitious.</p>
+</p>
+						<a class="btn btn-default" href="blog/2014/cisco-dialup-vpn-config.html">Read More →</a>
+						<hr>
+		  			<a href="blog/2014/remove-self-assigned-rsa-key.html"><h1 class="title">Removing Self-assigned RSA Key</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 01 May 2014 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>When enabling Cisco router's http server, it automatically generates a self-signed certificate which is good but when you decided to turn off the http server, it will then leave a self-signed certificate making running-config a bit messy. Here are the steps to remove the self-signed certificated if it's no longer needed.</p>
+</p>
+						<a class="btn btn-default" href="blog/2014/remove-self-assigned-rsa-key.html">Read More →</a>
 						<hr>
 
 				<p>Older posts are available in the <a href="/archive.html">archive</a></p>
@@ -153,7 +260,7 @@ export SDKMAN_DIR="/home/kodi/.sdkman"
 	<!-- ******FOOTER****** -->
 	<footer class="footer">
     <div class="container text-center">
-        <small class="copyright">Bootstrap theme by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+        <small class="copyright">Mixed by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
     </div>
 	</footer>
 
