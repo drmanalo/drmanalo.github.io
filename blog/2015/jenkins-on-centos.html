@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Jenkins on CentOS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../../plugins/prism/prism.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+		<!-- Fixed navbar -->
+				<header class="header" id="header">
+			<div class="container">
+					<h1 class="logo pull-left">
+							<a href="/"><span class="logo-title">dhon.manalo</span></a>
+					</h1>
+					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
+							<div class="navbar-header">
+									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+											<span class="sr-only">Toggle navigation</span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+									</button>
+							</div>
+							<div id="navbar-collapse" class="navbar-collapse collapse">
+									<ul class="nav navbar-nav">
+											<li class="nav-item sr-only active"><a href="/">Home</a></li>
+											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
+											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
+											<li class="dropdown">
+							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
+							          <ul class="dropdown-menu">
+							            <li><a href="../../tags/bash.html">bash</a></li>
+													<li><a href="../../tags/cisco.html">cisco</a></li>
+													<li><a href="../../tags/java.html">java</a></li>
+													<li><a href="../../tags/php.html">php</a></li>
+													<li role="separator" class="divider"></li>
+							            <li><a href="../../tags/windows.html">windows</a></li>
+							          </ul>
+							        </li>
+									</ul>
+							</div>
+					</nav>
+			</div>
+		</header>
+
+	<section class="section promo offset-header">
+		<div class="container">
+			<h1 class="page-header title">Jenkins on CentOS</h1>
+			<p><em>13 October 2015</em></p>
+			<p><p>Jenkins is an opensource and probably the most popular continuous integration tool in the Java community. There are many plugins out there available to make your coding life easier. It supports almost all version control systems and can run all your Maven or Ant tasks.</p><p>To install and configure Jenkins on CentOS, we have to first make sure that Java is installed on your machine. If not, please refer to this post from <a href="http://www.if-not-true-then-false.com/2010/install-sun-oracle-java-jdk-jre-7-on-fedora-centos-red-hat-rhel/comment-page-2">if-not-true-then-false.com</a></p><h3>Add Jenkins to your repository</h3>
+<pre><code class="language-bash">
+$ sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+Resolving pkg.jenkins-ci.org (pkg.jenkins-ci.org)... 199.193.196.24
+Connecting to pkg.jenkins-ci.org (pkg.jenkins-ci.org)|199.193.196.24|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 75 [text/plain]
+Saving to: â€˜/etc/yum.repos.d/jenkins.repoâ€™
+$ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
+</code></pre>
+<!-- more --><h3>Install jenkins</h3>
+<pre><code class="language-bash">
+$ sudo yum install jenkins
+Resolving Dependencies
+--> Running transaction check
+---> Package jenkins.noarch 0:1.586-1.1 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+================================================================================
+ Package           Arch             Version             Repository         Size
+================================================================================
+Installing:
+ jenkins           noarch           1.586-1.1           jenkins            59 M
+
+Transaction Summary
+================================================================================
+Install  1 Package
+
+Total download size: 59 M
+Installed size: 65 M
+Is this ok [y/d/N]: y
+Downloading packages:
+jenkins-1.586-1.1.noarch.rpm                               |  59 MB   00:34     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+Warning: RPMDB altered outside of yum.
+  Installing : jenkins-1.586-1.1.noarch                                     1/1
+  Verifying  : jenkins-1.586-1.1.noarch                                     1/1
+
+Installed:
+  jenkins.noarch 0:1.586-1.1                                                    
+
+Complete!
+</code></pre><h3>To start jenkins on boot</h3>
+<pre><code class="language-bash">
+$ sudo chkconfig jenkins on
+$ sudo systemctl start jenkins
+$ sudo netstat -tnlp | grep 8080
+tcp6       0      0 :::8080			:::*		LISTEN
+</code></pre><h3>To change jenkins default port</h3><p>To change jenkins default port, you need to edit <code>/etc/sysconfig/jenkins</code> and look for <strong>JENKINS_PORT=8080</strong>. Change 8080 into your desired port number. Make sure it is available and not taken by any other application such as Tomcat.</p>
+<pre><code class="language-bash">
+## Type:        integer(0:65535)
+## Default:     8080
+## ServiceRestart: jenkins
+#
+# Port Jenkins is listening on.
+# Set to -1 to disable
+#
+JENKINS_PORT="8081"
+</code></pre><h3>Proxying jenkins</h3><p>To proxy jenkins using httpd, you will need a URL prefix to replace its existing web root context (/). To do this, edit <code>/etc/sysconfig/jenkins</code> and look for <strong>JENKINS_ARGS</strong> then add <code>--prefix=/jenkins</code></p>
+<pre><code class="language-bash">
+## Type:        string
+## Default:     ""
+## ServiceRestart: jenkins
+#
+# Pass arbitrary arguments to Jenkins.
+# Full option list: java -jar jenkins.war --help
+#
+JENKINS_ARGS="--prefix=/jenkins"
+</code></pre><p>Under <code>/etc/httpd/conf.d</code> create a file called <code>jenkins.conf</code> and type this contents</p>
+<pre><code class="language-xml">
+&lt;VirtualHost *:80&gt;
+  ServerName centos7
+
+  ProxyRequests Off
+  ProxyPreserveHost On
+
+  &lt;Proxy http://localhost:8081/*&gt;
+    Order deny,allow
+    Allow from all
+  &lt;/Proxy&gt;
+
+  ProxyPass /jenkins http://localhost:8081/jenkins
+  ProxyPassReverse /jenkins http://localhost:8081/jenkins
+&lt;/VirtualHost&gt;
+</code></pre><p>Restart jenkins and httpd. After which, jenkins should be available on <a href="http://centos7/jenkins">http://centos7/jenkins</a></p>
+<pre><code class="language-bash">
+$ sudo systemctl restart httpd
+$ sudo systemctl restart jenkins
+</code></pre></p>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/jenkins-on-centos.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/jenkins-on-centos.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+	<script>hljs.initHighlightingOnLoad();</script>
+
+		</div><!--//container-->
+	</section>
+
+	<!-- ******FOOTER****** -->
+	<footer class="footer">
+    <div class="container text-center">
+        <small class="copyright">Mixed by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+    </div>
+	</footer>
+
+  <!-- Javascript -->
+	<script src="../../plugins/jquery-1.11.3.min.js"></script>
+	<script src="../../plugins/jquery.easing.1.3.js"></script>
+	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+	<script src="../../plugins/prism/prism.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

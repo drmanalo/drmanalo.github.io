@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Sat, 21 May 2016 22:59:32 +0100</pubDate>
-    <lastBuildDate>Sat, 21 May 2016 22:59:32 +0100</lastBuildDate>
+    <pubDate>Sun, 22 May 2016 00:27:02 +0100</pubDate>
+    <lastBuildDate>Sun, 22 May 2016 00:27:02 +0100</lastBuildDate>
 
       <item>
         <title>Installing Java 1.8 on Centos</title>
@@ -355,6 +355,108 @@ Total time: 14.107 secs
 &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Importing the tags&lt;/h3&gt;&lt;p&gt;Just import it like any other JSP tag&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;
 &lt;%@taglib tagdir=&quot;/WEB-INF/tags&quot; prefix=&quot;bs&quot;%&gt;
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Jenkins on CentOS</title>
+        <link>https://drmanalo.github.io/blog/2015/jenkins-on-centos.html</link>
+        <pubDate>Tue, 13 Oct 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/jenkins-on-centos.html</guid>
+        <description>
+  	         &lt;p&gt;Jenkins is an opensource and probably the most popular continuous integration tool in the Java community. There are many plugins out there available to make your coding life easier. It supports almost all version control systems and can run all your Maven or Ant tasks.&lt;/p&gt;&lt;p&gt;To install and configure Jenkins on CentOS, we have to first make sure that Java is installed on your machine. If not, please refer to this post from &lt;a href=&quot;http://www.if-not-true-then-false.com/2010/install-sun-oracle-java-jdk-jre-7-on-fedora-centos-red-hat-rhel/comment-page-2&quot;&gt;if-not-true-then-false.com&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;Add Jenkins to your repository&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+Resolving pkg.jenkins-ci.org (pkg.jenkins-ci.org)... 199.193.196.24
+Connecting to pkg.jenkins-ci.org (pkg.jenkins-ci.org)|199.193.196.24|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 75 [text/plain]
+Saving to: â€˜/etc/yum.repos.d/jenkins.repoâ€™
+$ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Install jenkins&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ sudo yum install jenkins
+Resolving Dependencies
+--&gt; Running transaction check
+---&gt; Package jenkins.noarch 0:1.586-1.1 will be installed
+--&gt; Finished Dependency Resolution
+
+Dependencies Resolved
+
+================================================================================
+ Package           Arch             Version             Repository         Size
+================================================================================
+Installing:
+ jenkins           noarch           1.586-1.1           jenkins            59 M
+
+Transaction Summary
+================================================================================
+Install  1 Package
+
+Total download size: 59 M
+Installed size: 65 M
+Is this ok [y/d/N]: y
+Downloading packages:
+jenkins-1.586-1.1.noarch.rpm                               |  59 MB   00:34     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+Warning: RPMDB altered outside of yum.
+  Installing : jenkins-1.586-1.1.noarch                                     1/1
+  Verifying  : jenkins-1.586-1.1.noarch                                     1/1
+
+Installed:
+  jenkins.noarch 0:1.586-1.1                                                    
+
+Complete!
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;To start jenkins on boot&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ sudo chkconfig jenkins on
+$ sudo systemctl start jenkins
+$ sudo netstat -tnlp | grep 8080
+tcp6       0      0 :::8080			:::*		LISTEN
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;To change jenkins default port&lt;/h3&gt;&lt;p&gt;To change jenkins default port, you need to edit &lt;code&gt;/etc/sysconfig/jenkins&lt;/code&gt; and look for &lt;strong&gt;JENKINS_PORT=8080&lt;/strong&gt;. Change 8080 into your desired port number. Make sure it is available and not taken by any other application such as Tomcat.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+## Type:        integer(0:65535)
+## Default:     8080
+## ServiceRestart: jenkins
+#
+# Port Jenkins is listening on.
+# Set to -1 to disable
+#
+JENKINS_PORT=&quot;8081&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Proxying jenkins&lt;/h3&gt;&lt;p&gt;To proxy jenkins using httpd, you will need a URL prefix to replace its existing web root context (/). To do this, edit &lt;code&gt;/etc/sysconfig/jenkins&lt;/code&gt; and look for &lt;strong&gt;JENKINS_ARGS&lt;/strong&gt; then add &lt;code&gt;--prefix=/jenkins&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+## Type:        string
+## Default:     &quot;&quot;
+## ServiceRestart: jenkins
+#
+# Pass arbitrary arguments to Jenkins.
+# Full option list: java -jar jenkins.war --help
+#
+JENKINS_ARGS=&quot;--prefix=/jenkins&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Under &lt;code&gt;/etc/httpd/conf.d&lt;/code&gt; create a file called &lt;code&gt;jenkins.conf&lt;/code&gt; and type this contents&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&amp;lt;VirtualHost *:80&amp;gt;
+  ServerName centos7
+
+  ProxyRequests Off
+  ProxyPreserveHost On
+
+  &amp;lt;Proxy http://localhost:8081/*&amp;gt;
+    Order deny,allow
+    Allow from all
+  &amp;lt;/Proxy&amp;gt;
+
+  ProxyPass /jenkins http://localhost:8081/jenkins
+  ProxyPassReverse /jenkins http://localhost:8081/jenkins
+&amp;lt;/VirtualHost&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Restart jenkins and httpd. After which, jenkins should be available on &lt;a href=&quot;http://centos7/jenkins&quot;&gt;http://centos7/jenkins&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ sudo systemctl restart httpd
+$ sudo systemctl restart jenkins
 &lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>

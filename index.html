@@ -118,6 +118,24 @@ export SDKMAN_DIR="/home/kodi/.sdkman"
 </p>
 						<a class="btn btn-default" href="blog/2016/custom-jsp-tags.html">Read More →</a>
 						<hr>
+		  			<a href="blog/2015/jenkins-on-centos.html"><h1 class="title">Jenkins on CentOS</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 13 October 2015 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>Jenkins is an opensource and probably the most popular continuous integration tool in the Java community. There are many plugins out there available to make your coding life easier. It supports almost all version control systems and can run all your Maven or Ant tasks.</p><p>To install and configure Jenkins on CentOS, we have to first make sure that Java is installed on your machine. If not, please refer to this post from <a href="http://www.if-not-true-then-false.com/2010/install-sun-oracle-java-jdk-jre-7-on-fedora-centos-red-hat-rhel/comment-page-2">if-not-true-then-false.com</a></p><h3>Add Jenkins to your repository</h3>
+<pre><code class="language-bash">
+$ sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+Resolving pkg.jenkins-ci.org (pkg.jenkins-ci.org)... 199.193.196.24
+Connecting to pkg.jenkins-ci.org (pkg.jenkins-ci.org)|199.193.196.24|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 75 [text/plain]
+Saving to: â€˜/etc/yum.repos.d/jenkins.repoâ€™
+$ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
+</code></pre>
+</p>
+						<a class="btn btn-default" href="blog/2015/jenkins-on-centos.html">Read More →</a>
+						<hr>
 		  			<a href="blog/2015/tomcat-service-script.html"><h1 class="title">Tomcat Service Script</h1></a>
 		  			<p class="post-info">
 			  			<i class="fa fa-calendar"></i> 22 July 2015 |
