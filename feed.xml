@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Sat, 21 May 2016 22:40:30 +0100</pubDate>
-    <lastBuildDate>Sat, 21 May 2016 22:40:30 +0100</lastBuildDate>
+    <pubDate>Sat, 21 May 2016 22:59:32 +0100</pubDate>
+    <lastBuildDate>Sat, 21 May 2016 22:59:32 +0100</lastBuildDate>
 
       <item>
         <title>Installing Java 1.8 on Centos</title>
@@ -668,6 +668,74 @@ copy %file% %destination% /Y
 ECHO Backup finished!
 
 @REM ------- END backup.bat ------------------
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Changing Centos7 runlevel</title>
+        <link>https://drmanalo.github.io/blog/2015/change-centos-runlevel.html</link>
+        <pubDate>Fri, 17 Oct 2014 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/change-centos-runlevel.html</guid>
+        <description>
+  	         &lt;p&gt;I installed Centos7 as minimal for a basic LAMP server but then I decided to switch to Gnome instead of pure command line environment. If you&apos;re interested how I did it, &lt;strong&gt;groupinstall&lt;/strong&gt; has the perfect recipe.&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/images/centos7.png&quot; alt=&quot;Centos7&quot;&quot;/&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ yum groupinstall &quot;GNOME Desktop&quot; &quot;Graphical Administration Tools&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;p&gt;Runlevel used to be on &lt;code&gt;etc/inittab&lt;/code&gt; but if you will look at its content now, it suggests you have to use a different route to change it.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+# inittab is no longer used when using systemd.
+#
+# ADDING CONFIGURATION HERE WILL HAVE NO EFFECT ON YOUR SYSTEM.
+#
+# Ctrl-Alt-Delete is handled by /etc/systemd/system/ctrl-alt-del.target
+#
+# systemd uses &apos;targets&apos; instead of runlevels. By default, there are two main targets:
+#
+# multi-user.target: analogous to runlevel 3
+# graphical.target: analogous to runlevel 5
+#
+# To set a default target, run:
+#
+# ln -sf /lib/systemd/system/&lt;target name&gt;.target /etc/systemd/system/default.target
+#
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Default runlevel can be set either by using the &lt;code&gt;systemctl&lt;/code&gt; or making the symbolic link of runlevel targets the default file. I prefer the first method so here it is.&lt;/p&gt;&lt;h3&gt;Using systemctl&lt;/h3&gt;&lt;p&gt;You have to check the available targets first.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ sudo systemctl list-units --type=target --all
+UNIT                   LOAD   ACTIVE   SUB    DESCRIPTION
+basic.target           loaded active   active Basic System
+cryptsetup.target      loaded active   active Encrypted Volumes
+emergency.target       loaded inactive dead   Emergency Mode
+final.target           loaded inactive dead   Final Step
+getty.target           loaded active   active Login Prompts
+graphical.target       loaded inactive dead   Graphical Interface
+local-fs-pre.target    loaded active   active Local File Systems (Pre)
+local-fs.target        loaded active   active Local File Systems
+multi-user.target      loaded active   active Multi-User System
+network-online.target  loaded inactive dead   Network is Online
+network.target         loaded active   active Network
+nfs.target             loaded active   active Network File System Server
+nss-lookup.target      loaded inactive dead   Host and Network Name Lookups
+nss-user-lookup.target loaded inactive dead   User and Group Name Lookups
+paths.target           loaded active   active Paths
+remote-fs-pre.target   loaded inactive dead   Remote File Systems (Pre)
+remote-fs.target       loaded active   active Remote File Systems
+rescue.target          loaded inactive dead   Rescue Mode
+shutdown.target        loaded inactive dead   Shutdown
+slices.target          loaded active   active Slices
+sockets.target         loaded active   active Sockets
+sound.target           loaded active   active Sound Card
+swap.target            loaded active   active Swap
+sysinit.target         loaded active   active System Initialization
+syslog.target          not-found inactive dead   syslog.target
+time-sync.target       loaded inactive dead   System Time Synchronized
+timers.target          loaded active   active Timers
+umount.target          loaded inactive dead   Unmount All Filesystems
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then do the actual change.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ sudo system set-default graphical.target
+# confirm that runlevel 5 is set
+$ sudo systemctl get-default
+graphical.target
 &lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Changing Centos7 runlevel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../../plugins/prism/prism.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+		<!-- Fixed navbar -->
+				<header class="header" id="header">
+			<div class="container">
+					<h1 class="logo pull-left">
+							<a href="/"><span class="logo-title">dhon.manalo</span></a>
+					</h1>
+					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
+							<div class="navbar-header">
+									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+											<span class="sr-only">Toggle navigation</span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+									</button>
+							</div>
+							<div id="navbar-collapse" class="navbar-collapse collapse">
+									<ul class="nav navbar-nav">
+											<li class="nav-item sr-only active"><a href="/">Home</a></li>
+											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
+											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
+											<li class="dropdown">
+							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
+							          <ul class="dropdown-menu">
+							            <li><a href="../../tags/bash.html">bash</a></li>
+													<li><a href="../../tags/cisco.html">cisco</a></li>
+													<li><a href="../../tags/java.html">java</a></li>
+													<li><a href="../../tags/php.html">php</a></li>
+													<li role="separator" class="divider"></li>
+							            <li><a href="../../tags/windows.html">windows</a></li>
+							          </ul>
+							        </li>
+									</ul>
+							</div>
+					</nav>
+			</div>
+		</header>
+
+	<section class="section promo offset-header">
+		<div class="container">
+			<h1 class="page-header title">Changing Centos7 runlevel</h1>
+			<p><em>17 October 2014</em></p>
+			<p><p>I installed Centos7 as minimal for a basic LAMP server but then I decided to switch to Gnome instead of pure command line environment. If you're interested how I did it, <strong>groupinstall</strong> has the perfect recipe.</p><p><img src="/images/centos7.png" alt="Centos7""/></p>
+<pre><code class="language-bash">
+$ yum groupinstall "GNOME Desktop" "Graphical Administration Tools"
+</code></pre>
+<!-- more --><p>Runlevel used to be on <code>etc/inittab</code> but if you will look at its content now, it suggests you have to use a different route to change it.</p>
+<pre><code class="language-bash">
+# inittab is no longer used when using systemd.
+#
+# ADDING CONFIGURATION HERE WILL HAVE NO EFFECT ON YOUR SYSTEM.
+#
+# Ctrl-Alt-Delete is handled by /etc/systemd/system/ctrl-alt-del.target
+#
+# systemd uses 'targets' instead of runlevels. By default, there are two main targets:
+#
+# multi-user.target: analogous to runlevel 3
+# graphical.target: analogous to runlevel 5
+#
+# To set a default target, run:
+#
+# ln -sf /lib/systemd/system/<target name>.target /etc/systemd/system/default.target
+#
+</code></pre><p>Default runlevel can be set either by using the <code>systemctl</code> or making the symbolic link of runlevel targets the default file. I prefer the first method so here it is.</p><h3>Using systemctl</h3><p>You have to check the available targets first.</p>
+<pre><code class="language-bash">
+$ sudo systemctl list-units --type=target --all
+UNIT                   LOAD   ACTIVE   SUB    DESCRIPTION
+basic.target           loaded active   active Basic System
+cryptsetup.target      loaded active   active Encrypted Volumes
+emergency.target       loaded inactive dead   Emergency Mode
+final.target           loaded inactive dead   Final Step
+getty.target           loaded active   active Login Prompts
+graphical.target       loaded inactive dead   Graphical Interface
+local-fs-pre.target    loaded active   active Local File Systems (Pre)
+local-fs.target        loaded active   active Local File Systems
+multi-user.target      loaded active   active Multi-User System
+network-online.target  loaded inactive dead   Network is Online
+network.target         loaded active   active Network
+nfs.target             loaded active   active Network File System Server
+nss-lookup.target      loaded inactive dead   Host and Network Name Lookups
+nss-user-lookup.target loaded inactive dead   User and Group Name Lookups
+paths.target           loaded active   active Paths
+remote-fs-pre.target   loaded inactive dead   Remote File Systems (Pre)
+remote-fs.target       loaded active   active Remote File Systems
+rescue.target          loaded inactive dead   Rescue Mode
+shutdown.target        loaded inactive dead   Shutdown
+slices.target          loaded active   active Slices
+sockets.target         loaded active   active Sockets
+sound.target           loaded active   active Sound Card
+swap.target            loaded active   active Swap
+sysinit.target         loaded active   active System Initialization
+syslog.target          not-found inactive dead   syslog.target
+time-sync.target       loaded inactive dead   System Time Synchronized
+timers.target          loaded active   active Timers
+umount.target          loaded inactive dead   Unmount All Filesystems
+</code></pre><p>Then do the actual change.</p>
+<pre><code class="language-bash">
+$ sudo system set-default graphical.target
+# confirm that runlevel 5 is set
+$ sudo systemctl get-default
+graphical.target
+</code></pre></p>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/change-centos-runlevel.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/change-centos-runlevel.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+	<script>hljs.initHighlightingOnLoad();</script>
+
+		</div><!--//container-->
+	</section>
+
+	<!-- ******FOOTER****** -->
+	<footer class="footer">
+    <div class="container text-center">
+        <small class="copyright">Mixed by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+    </div>
+	</footer>
+
+  <!-- Javascript -->
+	<script src="../../plugins/jquery-1.11.3.min.js"></script>
+	<script src="../../plugins/jquery.easing.1.3.js"></script>
+	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+	<script src="../../plugins/prism/prism.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>
