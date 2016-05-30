@@ -6,9 +6,111 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Sun, 22 May 2016 00:27:02 +0100</pubDate>
-    <lastBuildDate>Sun, 22 May 2016 00:27:02 +0100</lastBuildDate>
+    <pubDate>Mon, 30 May 2016 16:50:44 +0100</pubDate>
+    <lastBuildDate>Mon, 30 May 2016 16:50:44 +0100</lastBuildDate>
 
+      <item>
+        <title>Pimping CentOS7</title>
+        <link>https://drmanalo.github.io/blog/2016/pimping-centos7.html</link>
+        <pubDate>Sat, 4 Jun 2016 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2016/pimping-centos7.html</guid>
+        <description>
+  	         &lt;p&gt;Before you are able to tweak your CentOS installation, you will need additional yum repositories.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+# yum install epel-release
+# rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+# rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+# rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+# yum update
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Fancy icons&lt;/h3&gt;&lt;p&gt;Download and extract &lt;a href=&quot;/downloads/Super-Flat-Remix-master.zip&quot;&gt;Super Flat Remix GNOME icons&lt;/a&gt;. After extracting, move folder &lt;code&gt;Super Flat Remix&lt;/code&gt; into your &lt;code&gt;~/.icons&lt;/code&gt; folder.&lt;/p&gt;&lt;h3&gt;Fancy themes&lt;/h3&gt;&lt;p&gt;Download and extract &lt;a href=&quot;/downloads/175666-OSX-Arc-White.zip&quot;&gt;OSX Arc White theme&lt;/a&gt;. After extracting, move folder &lt;code&gt;OSX-Arc-White&lt;/code&gt; into your &lt;code&gt;~/.themes&lt;/code&gt; folder.&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Fancy fonts&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
+&amp;lt;!DOCTYPE fontconfig SYSTEM &quot;fonts.dtd&quot;&amp;gt;
+    &amp;lt;fontconfig&amp;gt;
+     &amp;lt;match target=&quot;font&quot;&amp;gt;
+      &amp;lt;edit mode=&quot;assign&quot; name=&quot;hinting&quot; &amp;gt;
+       &amp;lt;bool&amp;gt;true&amp;lt;/bool&amp;gt;
+      &amp;lt;/edit&amp;gt;
+     &amp;lt;/match&amp;gt;
+     &amp;lt;match target=&quot;font&quot; &amp;gt;
+      &amp;lt;edit mode=&quot;assign&quot; name=&quot;autohint&quot; &amp;gt;
+       &amp;lt;bool&amp;gt;true&amp;lt;/bool&amp;gt;
+      &amp;lt;/edit&amp;gt;
+     &amp;lt;/match&amp;gt;
+     &amp;lt;match target=&quot;font&quot;&amp;gt;
+      &amp;lt;edit mode=&quot;assign&quot; name=&quot;hintstyle&quot; &amp;gt;
+      &amp;lt;const&amp;gt;hintslight&amp;lt;/const&amp;gt;
+      &amp;lt;/edit&amp;gt;
+     &amp;lt;/match&amp;gt;
+     &amp;lt;match target=&quot;font&quot;&amp;gt;
+      &amp;lt;edit mode=&quot;assign&quot; name=&quot;rgba&quot; &amp;gt;
+       &amp;lt;const&amp;gt;rgb&amp;lt;/const&amp;gt;
+      &amp;lt;/edit&amp;gt;
+     &amp;lt;/match&amp;gt;
+     &amp;lt;match target=&quot;font&quot;&amp;gt;
+      &amp;lt;edit mode=&quot;assign&quot; name=&quot;antialias&quot; &amp;gt;
+       &amp;lt;bool&amp;gt;true&amp;lt;/bool&amp;gt;
+      &amp;lt;/edit&amp;gt;
+     &amp;lt;/match&amp;gt;
+     &amp;lt;match target=&quot;font&quot;&amp;gt;
+       &amp;lt;edit mode=&quot;assign&quot; name=&quot;lcdfilter&quot;&amp;gt;
+       &amp;lt;const&amp;gt;lcddefault&amp;lt;/const&amp;gt;
+       &amp;lt;/edit&amp;gt;
+     &amp;lt;/match&amp;gt;
+    &amp;lt;/fontconfig&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Logout and log back in then apply this &lt;img src=&quot;/images/font-settings.png&quot; alt=&quot;Custom font setting&quot;&quot;/&gt;.&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Adding Windows Loader To grub2</title>
+        <link>https://drmanalo.github.io/blog/2016/adding-windows-loader-to-grub2.html</link>
+        <pubDate>Mon, 30 May 2016 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2016/adding-windows-loader-to-grub2.html</guid>
+        <description>
+  	         &lt;p&gt;I recently switched from ElementaryOS to CentOS. The install process went smoothly despite an initial issue while using a bootable SD card. I cannot detail the issue here but Google suggested using a DVD rather than SD card or any USB drive. Everything are working perfectly except I cannot go back to my Windows. It&apos;s embarassing to admit that we are using Windows for our open-source development but this is the reality. So when I&apos;m away from work and testing things out, I&apos;m rebooting to my CentOS and switch to Windows when I&apos;m at work.&lt;/p&gt;&lt;p&gt;This is not grub2 specific issue by the way, grub2 should be able to add the loader but it has no knowledge of how to read &lt;strong&gt;ntfs&lt;/strong&gt; partitions. The solution is install &lt;code&gt;ntfs-3g&lt;/code&gt; and rebuild grub2 after.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ yum info ntfs-3g
+Installed Packages
+Name        : ntfs-3g
+Arch        : x86_64
+Epoch       : 2
+Version     : 2016.2.22
+Release     : 1.el7
+Size        : 659 k
+Repo        : installed
+From repo   : epel
+Summary     : Linux NTFS userspace driver
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Updating grub2&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+# grub2-mkconfig -o /boot/grub2/grub.cfg
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-3.10.0-327.18.2.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-327.18.2.el7.x86_64.img
+Found linux image: /boot/vmlinuz-3.10.0-123.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-123.el7.x86_64.img
+Found linux image: /boot/vmlinuz-0-rescue-058c8d86e1464d46b2ae177e34dac6a4
+Found initrd image: /boot/initramfs-0-rescue-058c8d86e1464d46b2ae177e34dac6a4.img
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+Found Windows 7 (loader) on /dev/sda2
+done
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Not sure about the ERROR sil but I rebooted and have &lt;strong&gt;Windows 7 (loader) on /dev/sda2&lt;/strong&gt; at the bottom of my grub.&lt;/p&gt;
+  	    </description>
+      </item>
       <item>
         <title>Installing Java 1.8 on Centos</title>
         <link>https://drmanalo.github.io/blog/2016/java8-on-centos7.html</link>

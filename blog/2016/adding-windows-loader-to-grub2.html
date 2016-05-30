@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Adding Windows Loader To grub2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../../plugins/prism/prism.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+		<!-- Fixed navbar -->
+				<header class="header" id="header">
+			<div class="container">
+					<h1 class="logo pull-left">
+							<a href="/"><span class="logo-title">dhon.manalo</span></a>
+					</h1>
+					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
+							<div class="navbar-header">
+									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+											<span class="sr-only">Toggle navigation</span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+									</button>
+							</div>
+							<div id="navbar-collapse" class="navbar-collapse collapse">
+									<ul class="nav navbar-nav">
+											<li class="nav-item sr-only active"><a href="/">Home</a></li>
+											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
+											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
+											<li class="dropdown">
+							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
+							          <ul class="dropdown-menu">
+							            <li><a href="../../tags/bash.html">bash</a></li>
+													<li><a href="../../tags/cisco.html">cisco</a></li>
+													<li><a href="../../tags/java.html">java</a></li>
+													<li><a href="../../tags/php.html">php</a></li>
+													<li role="separator" class="divider"></li>
+							            <li><a href="../../tags/windows.html">windows</a></li>
+							          </ul>
+							        </li>
+									</ul>
+							</div>
+					</nav>
+			</div>
+		</header>
+
+	<section class="section promo offset-header">
+		<div class="container">
+			<h1 class="page-header title">Adding Windows Loader To grub2</h1>
+			<p><em>30 May 2016</em></p>
+			<p><p>I recently switched from ElementaryOS to CentOS. The install process went smoothly despite an initial issue while using a bootable SD card. I cannot detail the issue here but Google suggested using a DVD rather than SD card or any USB drive. Everything are working perfectly except I cannot go back to my Windows. It's embarassing to admit that we are using Windows for our open-source development but this is the reality. So when I'm away from work and testing things out, I'm rebooting to my CentOS and switch to Windows when I'm at work.</p><p>This is not grub2 specific issue by the way, grub2 should be able to add the loader but it has no knowledge of how to read <strong>ntfs</strong> partitions. The solution is install <code>ntfs-3g</code> and rebuild grub2 after.</p>
+<pre><code class="language-bash">
+$ yum info ntfs-3g
+Installed Packages
+Name        : ntfs-3g
+Arch        : x86_64
+Epoch       : 2
+Version     : 2016.2.22
+Release     : 1.el7
+Size        : 659 k
+Repo        : installed
+From repo   : epel
+Summary     : Linux NTFS userspace driver
+</code></pre>
+<!-- more --><h3>Updating grub2</h3>
+<pre><code class="language-bash">
+# grub2-mkconfig -o /boot/grub2/grub.cfg
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-3.10.0-327.18.2.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-327.18.2.el7.x86_64.img
+Found linux image: /boot/vmlinuz-3.10.0-123.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-123.el7.x86_64.img
+Found linux image: /boot/vmlinuz-0-rescue-058c8d86e1464d46b2ae177e34dac6a4
+Found initrd image: /boot/initramfs-0-rescue-058c8d86e1464d46b2ae177e34dac6a4.img
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
+ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
+Found Windows 7 (loader) on /dev/sda2
+done
+</code></pre><p>Not sure about the ERROR sil but I rebooted and have <strong>Windows 7 (loader) on /dev/sda2</strong> at the bottom of my grub.</p></p>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2016/adding-windows-loader-to-grub2.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2016/adding-windows-loader-to-grub2.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+	<script>hljs.initHighlightingOnLoad();</script>
+
+		</div><!--//container-->
+	</section>
+
+	<!-- ******FOOTER****** -->
+	<footer class="footer">
+    <div class="container text-center">
+        <small class="copyright">Mixed by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+    </div>
+	</footer>
+
+  <!-- Javascript -->
+	<script src="../../plugins/jquery-1.11.3.min.js"></script>
+	<script src="../../plugins/jquery.easing.1.3.js"></script>
+	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+	<script src="../../plugins/prism/prism.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>
