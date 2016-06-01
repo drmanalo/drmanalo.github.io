@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Mon, 30 May 2016 16:50:44 +0100</pubDate>
-    <lastBuildDate>Mon, 30 May 2016 16:50:44 +0100</lastBuildDate>
+    <pubDate>Wed, 1 Jun 2016 22:19:50 +0100</pubDate>
+    <lastBuildDate>Wed, 1 Jun 2016 22:19:50 +0100</lastBuildDate>
 
       <item>
         <title>Pimping CentOS7</title>
@@ -458,6 +458,76 @@ Total time: 14.107 secs
 &lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;
 &lt;%@taglib tagdir=&quot;/WEB-INF/tags&quot; prefix=&quot;bs&quot;%&gt;
 &lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Poorman&apos;s Mac</title>
+        <link>https://drmanalo.github.io/blog/2014/poormans.mac.html</link>
+        <pubDate>Sun, 27 Dec 2015 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2014/poormans.mac.html</guid>
+        <description>
+  	         &lt;p&gt;After testing elementary OS using VirtualBox, I am finally installing it to my desktop. Not that I don&apos;t like CentOS anymore but it will help me on my job to totally embrace Ubuntu.&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/images/elementary_info.png&quot; alt=&quot;Elementary OS Information&quot;&quot;/&gt;&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Post Installation Apps&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ apt-get install vim
+$ apt-get install sublime-text
+$ apt-get install git-core
+$ apt-get install subversion
+
+$ apt-get install firefox
+$ apt-get install chromium-browser
+$ apt-get install gstreamer0.10-fluendo
+$ apt-get install flashplugin-installer
+
+$ add-apt-repository ppa:mpstark/elementary-tweaks-daily
+$ apt-add-repository ppa:numix/ppa
+$ apt-get update
+$ apt-get install numix-icon-theme-circle
+$ apt-get install elementary-tweaks
+
+$ apt-get install transmission
+$ apt-get install vlc
+$ apt-get install skype
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;PHP Specific&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ add-apt-repository ppa:ondrej/php5
+$ apt-get update
+$ apt-get install mysql-server mysql-workbench
+$ apt-get install php5 php5-mysql
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Ruby Specific&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ apt-get install python-software-properties
+$ apt-add-repository ppa:brightbox/ruby-ng
+$ apt-get update
+$ apt-get install ruby2.2
+$ apt-get install sqlite3
+$ apt-get install ruby-switch
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;aliases&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+# folder explorer
+alias la=&apos;ls -lah&apos;
+alias li=&apos;ls -lih&apos;
+alias ld=&apos;ls -lid&apos;
+alias ..=&apos;cd ..&apos;
+alias ...=&apos;cd ../..&apos;
+alias ....=&apos;cd ../../..&apos;
+alias down=&apos;cd ~/Downloads&apos;
+alias docs=&apos;cd ~/Documents&apos;
+alias pics=&apos;cd ~/Pictures&apos;
+alias home=&apos;cd ~/&apos;
+alias www=&apos;cd /var/www&apos;
+
+#aptitude
+alias agi=&apos;sudo apt-get install&apos;
+alias aga=&apos;sudo apt-get autoremove&apos;
+alias ags=&apos;sudo apt-cache search&apos;
+alias agu=&apos;sudo apt-get update&apos;
+alias agr=&apos;sudo apt-get upgrade&apos;
+
+# others
+alias x=&apos;exit&apos;
+alias c=&apos;clear&apos;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Screenshots&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/images/elementary1.png&quot; alt=&quot;Elementary OS screenshot1&quot;&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/images/elementary2.png&quot; alt=&quot;Elementary OS screenshot2&quot;&quot;/&gt;&lt;/p&gt;
   	    </description>
       </item>
       <item>

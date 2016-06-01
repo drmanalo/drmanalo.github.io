@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>7zip Backup Script</title>
+    <title>Poorman&apos;s Mac</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -66,46 +66,77 @@
 
 	<section class="section promo offset-header">
 		<div class="container">
-			<h1 class="page-header title">7zip Backup Script</h1>
-			<p><em>10 May 2015</em></p>
-			<p><p>Here is a simple batch script to backup my project folder every 18:30. I wish I could run this in cron but my development machine is running Windows.</p>
-<!-- more -->
-<pre><code class="language-powershell">
-@SETLOCAL
-@ECHO OFF
+			<h1 class="page-header title">Poorman's Mac</h1>
+			<p><em>27 December 2015</em></p>
+			<p><p>After testing elementary OS using VirtualBox, I am finally installing it to my desktop. Not that I don't like CentOS anymore but it will help me on my job to totally embrace Ubuntu.</p><p><img src="/images/elementary_info.png" alt="Elementary OS Information""/></p>
+<!-- more --><h3>Post Installation Apps</h3>
+<pre><code class="language-bash">
+$ apt-get install vim
+$ apt-get install sublime-text
+$ apt-get install git-core
+$ apt-get install subversion
 
-@REM ----- begin backup ------------------------------------------------
-@REM path is handled by mklink done initially
-@REM SET reads whitespaces too!
+$ apt-get install firefox
+$ apt-get install chromium-browser
+$ apt-get install gstreamer0.10-fluendo
+$ apt-get install flashplugin-installer
 
-SET file=workspace.7z
-SET source=C:\Users\dhonnee.manalo\git\workspace\
+$ add-apt-repository ppa:mpstark/elementary-tweaks-daily
+$ apt-add-repository ppa:numix/ppa
+$ apt-get update
+$ apt-get install numix-icon-theme-circle
+$ apt-get install elementary-tweaks
 
-@REM ----- 7za merges with old archive
-@REM ----- workaround is to delete first
+$ apt-get install transmission
+$ apt-get install vlc
+$ apt-get install skype
+</code></pre><h3>PHP Specific</h3>
+<pre><code class="language-bash">
+$ add-apt-repository ppa:ondrej/php5
+$ apt-get update
+$ apt-get install mysql-server mysql-workbench
+$ apt-get install php5 php5-mysql
+</code></pre><h3>Ruby Specific</h3>
+<pre><code class="language-bash">
+$ apt-get install python-software-properties
+$ apt-add-repository ppa:brightbox/ruby-ng
+$ apt-get update
+$ apt-get install ruby2.2
+$ apt-get install sqlite3
+$ apt-get install ruby-switch
+</code></pre><h3>aliases</h3>
+<pre><code class="language-bash">
+# folder explorer
+alias la='ls -lah'
+alias li='ls -lih'
+alias ld='ls -lid'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias down='cd ~/Downloads'
+alias docs='cd ~/Documents'
+alias pics='cd ~/Pictures'
+alias home='cd ~/'
+alias www='cd /var/www'
 
-7za a -t7z %file% %source%
+#aptitude
+alias agi='sudo apt-get install'
+alias aga='sudo apt-get autoremove'
+alias ags='sudo apt-cache search'
+alias agu='sudo apt-get update'
+alias agr='sudo apt-get upgrade'
 
-ECHO Compression finished!
-@REM ----- end backup --------------------------------------------------
-
-@REM ----- copy to x:drive ---------------------------------------------
-
-SET destination=\\remote_server\dev\dhon.manalo\workspace\
-
-copy %file% %destination% /Y
-
-ECHO Backup finished!
-
-@REM ------- END backup.bat ------------------
-</code></pre></p>
+# others
+alias x='exit'
+alias c='clear'
+</code></pre><h3>Screenshots</h3><p><img src="/images/elementary1.png" alt="Elementary OS screenshot1""/></p><p><img src="/images/elementary2.png" alt="Elementary OS screenshot2""/></p></p>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2015/7zip-backup-script.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2015/7zip-backup-script.html';
+		var disqus_identifier = 'blog/2014/poormans.mac.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2014/poormans.mac.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {
