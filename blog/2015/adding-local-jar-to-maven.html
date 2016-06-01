@@ -88,14 +88,13 @@ $ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=o
 [INFO] Finished at: 2014-09-09T15:11:54+01:00
 [INFO] Final Memory: 5M/106M
 [INFO] ------------------------------------------------------------------------
-
 </code></pre><h3>pom.xml</h3><p>Within your POM's dependencies, you need to add the dependency after mvn install.</p>
-<pre><code>&lt;dependency&gt;
-	&lt;groupId&gt;com.oracle&lt;/groupId&gt;
-	&lt;artifactId&gt;ojdbc6&lt;/artifactId&gt;
-	&lt;version&gt;11.2.0&lt;/version&gt;
-&lt;dependency&gt;
-
+<pre><code class="language-xml">
+<dependency>
+	<groupId>com.oracle</groupId>
+	<artifactId>ojdbc6</artifactId>
+	<version>11.2.0</version>
+<dependency>
 </code></pre><p>If you have a remote build server, you have to do the <code>mvn install</code> bit to add the dependency knowing you are using different maven local repository. There is another solution posted on <a href="http://blog.valdaris.com/post/custom-jar/" target="_new">this blog</a> but I haven't tried this approach. I'm referring to <strong>Installing the jar by using install-plugin</strong>. Perhaps this is the way to go but for the time being I'm happy with <code>maven install:install-file</code>.</p></p>
 
 	<div id="disqus_thread"></div>

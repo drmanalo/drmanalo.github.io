@@ -88,45 +88,45 @@
 <%@ attribute name="prepend" required="false" type="java.lang.Boolean"%>
 <%@ attribute name="icon" required="false" type="java.lang.String"%>
 
-&lt;c:if test="${ empty label }"&gt;
-    &lt;c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" /&gt;
-&lt;/c:if&gt;
-&lt;c:if test="${ fn:length(icon) gt 1 }"&gt;
-  	&lt;c:set var="icon" value='&lt;i class="${ icon }"&gt;&lt;/i&gt;'/&gt;
-&lt;/c:if&gt;
+<c:if test="${ empty label }">
+    <c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" />
+</c:if>
+<c:if test="${ fn:length(icon) gt 1 }">
+  	<c:set var="icon" value='<i class="${ icon }"></i>'/>
+</c:if>
 
-&lt;s:bind path="${ path }"&gt;
-	&lt;div class="row form-group ${ status.error ? 'error' : '' }"&gt;
-		&lt;label class="col-sm-2 control-label" for="${ path }"&gt;
-			&lt;s:message code="${ label }"/&gt;
-			&lt;c:if test="${ required }"&gt;
-				&lt;span class="required"&gt; *&lt;/span&gt;
-			&lt;/c:if&gt;
-		&lt;/label&gt;
-		&lt;div class="col-sm-4"&gt;
-		  	&lt;c:choose&gt;
-				&lt;c:when test="${ prepend }"&gt;
-					&lt;div class="input-prepend"&gt;
-		  				&lt;span class="add-on"&gt;${ icon }&lt;/span&gt;
-						&lt;form:input path="${ path }" cssClass="${ empty cssClass ? 'input-xlarge' : cssClass }"/&gt;
-					&lt;/div&gt;
-				&lt;/c:when&gt;
-				&lt;c:when test="${ append }"&gt;
-					&lt;div class="input-append"&gt;
-				  		&lt;form:input path="${ path }" cssClass="${ empty cssClass ? 'input-xlarge' : cssClass }"/&gt;
-						&lt;span class="add-on"&gt;${ icon }&lt;/span&gt;
-					&lt;/div&gt;
-				&lt;/c:when&gt;
-				&lt;c:otherwise&gt;
-					&lt;form:input path="${ path }" class="form-control" placeholder="${ empty placeholder ? label : placeholder }" autocomplete="off" cssStyle="${ empty cssStyle ? '' : cssStyle }"/&gt;
-				&lt;/c:otherwise&gt;
-			&lt;/c:choose&gt;
-			&lt;c:if test="${ status.error }"&gt;
-				&lt;form:errors path="${ path }" cssClass="text-danger" /&gt;
-			&lt;/c:if&gt;
-	  	&lt;/div&gt;
-	&lt;/div&gt;
-&lt;/s:bind&gt;
+<s:bind path="${ path }">
+	<div class="row form-group ${ status.error ? 'error' : '' }">
+		<label class="col-sm-2 control-label" for="${ path }">
+			<s:message code="${ label }"/>
+			<c:if test="${ required }">
+				<span class="required"> *</span>
+			</c:if>
+		</label>
+		<div class="col-sm-4">
+		  	<c:choose>
+				<c:when test="${ prepend }">
+					<div class="input-prepend">
+		  				<span class="add-on">${ icon }</span>
+						<form:input path="${ path }" cssClass="${ empty cssClass ? 'input-xlarge' : cssClass }"/>
+					</div>
+				</c:when>
+				<c:when test="${ append }">
+					<div class="input-append">
+				  		<form:input path="${ path }" cssClass="${ empty cssClass ? 'input-xlarge' : cssClass }"/>
+						<span class="add-on">${ icon }</span>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<form:input path="${ path }" class="form-control" placeholder="${ empty placeholder ? label : placeholder }" autocomplete="off" cssStyle="${ empty cssStyle ? '' : cssStyle }"/>
+				</c:otherwise>
+			</c:choose>
+			<c:if test="${ status.error }">
+				<form:errors path="${ path }" cssClass="text-danger" />
+			</c:if>
+	  	</div>
+	</div>
+</s:bind>
 </code></pre><h3>calendar.tag</h3>
 <pre><code class="language-html">
 <%@ tag language="java" pageEncoding="UTF-8"%>
@@ -143,30 +143,30 @@
 <%@ attribute name="btnTitle" required="false" type="java.lang.String"%>
 <%@ attribute name="icon" required="false" type="java.lang.String"%>
 
-&lt;c:if test="${ empty label }"&gt;
-    &lt;c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" /&gt;
-&lt;/c:if&gt;
+<c:if test="${ empty label }">
+    <c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" />
+</c:if>
 
-&lt;s:bind path="${ path }"&gt;
-	&lt;div class="row form-group ${ status.error ? 'error' : '' }"&gt;
-		&lt;label class="col-sm-2 control-label" for="${ path }"&gt;
-			&lt;s:message code="${ label }"/&gt;
-			&lt;c:if test="${ required }"&gt;
-				&lt;span class="required"&gt; *&lt;/span&gt;
-			&lt;/c:if&gt;
-		&lt;/label&gt;
-		&lt;div class="col-sm-4"&gt;
-			&lt;div class="input-group date" id="${ empty groupId ? '' : groupId }"&gt;
-				&lt;span class="input-group-addon btn btn-sm btn-primary"&gt;
-					&lt;span class="${ icon }" title="${ empty btnTitle ? '' : btnTitle }"&gt;&lt;/span&gt;
-				&lt;/span&gt;
-				&lt;form:input path="${ path }" class="form-control" autocomplete="off" cssStyle="width:180px;" /&gt;
-			&lt;/div&gt;
-		&lt;/div&gt;
-	&lt;/div&gt;
-&lt;/s:bind&gt;		
+<s:bind path="${ path }">
+	<div class="row form-group ${ status.error ? 'error' : '' }">
+		<label class="col-sm-2 control-label" for="${ path }">
+			<s:message code="${ label }"/>
+			<c:if test="${ required }">
+				<span class="required"> *</span>
+			</c:if>
+		</label>
+		<div class="col-sm-4">
+			<div class="input-group date" id="${ empty groupId ? '' : groupId }">
+				<span class="input-group-addon btn btn-sm btn-primary">
+					<span class="${ icon }" title="${ empty btnTitle ? '' : btnTitle }"></span>
+				</span>
+				<form:input path="${ path }" class="form-control" autocomplete="off" cssStyle="width:180px;" />
+			</div>
+		</div>
+	</div>
+</s:bind>		
 </code></pre><h3>textarea.tag</h3>
-<pre><code class="language-html">
+<pre><code class="language-markup">
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ tag description="Bootstrap textarea tag with error, icon and i8n support"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -178,39 +178,39 @@
 <%@ attribute name="path" required="true" type="java.lang.String"%>
 <%@ attribute name="required" required="false" type="java.lang.Boolean"%>
 
-&lt;c:if test="${ empty label }"&gt;
-    &lt;c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" /&gt;
-&lt;/c:if&gt;
+<c:if test="${ empty label }">
+    <c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" />
+</c:if>
 
-&lt;s:bind path="${ path }"&gt;
-	&lt;div class="row form-group ${ status.error ? 'error' : '' }"&gt;
-		&lt;label class="col-sm-2 control-label" for="${ path }"&gt;
-			&lt;s:message code="${ label }"/&gt;
-			&lt;c:if test="${ required }"&gt;
-				&lt;span class="required"&gt; *&lt;/span&gt;
-			&lt;/c:if&gt;
-		&lt;/label&gt;
-		&lt;div class="col-sm-4"&gt;
-			&lt;form:textarea path="${ path }" class="form-control" placeholder="${ empty placeholder ? label : placeholder }" /&gt;
-			&lt;c:if test="${ status.error }"&gt;
-				&lt;form:errors path="${ path }" cssClass="text-danger" /&gt;
-			&lt;/c:if&gt;
-		&lt;/div&gt;
-	&lt;/div&gt;
-&lt;/s:bind&gt;
+<s:bind path="${ path }">
+	<div class="row form-group ${ status.error ? 'error' : '' }">
+		<label class="col-sm-2 control-label" for="${ path }">
+			<s:message code="${ label }"/>
+			<c:if test="${ required }">
+				<span class="required"> *</span>
+			</c:if>
+		</label>
+		<div class="col-sm-4">
+			<form:textarea path="${ path }" class="form-control" placeholder="${ empty placeholder ? label : placeholder }" />
+			<c:if test="${ status.error }">
+				<form:errors path="${ path }" cssClass="text-danger" />
+			</c:if>
+		</div>
+	</div>
+</s:bind>
 </code></pre><h3>actions.tag</h3>
 <pre><code class="language-html">
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ tag	description="Bootstrap cancel, reset and submit buttons without i8n support"%>
 <%@ attribute name="cancelPath" required="true" type="java.lang.String"%>
 
-&lt;div class="row form-group"&gt;
-	&lt;div class="col-sm-4 col-sm-offset-2"&gt;
-		&lt;a href="${ cancelPath }" class="btn btn-default"&gt;Cancel&lt;/a&gt;
-		&lt;input type="reset" id="reset" value="Reset" class="btn btn-default" /&gt;
-		&lt;input type="submit" value="Submit" class="btn btn-primary" /&gt;
-	&lt;/div&gt;
-&lt;/div&gt;
+<div class="row form-group">
+	<div class="col-sm-4 col-sm-offset-2">
+		<a href="${ cancelPath }" class="btn btn-default">Cancel</a>
+		<input type="reset" id="reset" value="Reset" class="btn btn-default" />
+		<input type="submit" value="Submit" class="btn btn-primary" />
+	</div>
+</div>
 </code></pre><h3>Importing the tags</h3><p>Just import it like any other JSP tag</p>
 <pre><code class="language-html">
 <%@taglib tagdir="/WEB-INF/tags" prefix="bs"%>

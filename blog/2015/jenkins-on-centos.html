@@ -143,20 +143,20 @@ JENKINS_PORT="8081"
 JENKINS_ARGS="--prefix=/jenkins"
 </code></pre><p>Under <code>/etc/httpd/conf.d</code> create a file called <code>jenkins.conf</code> and type this contents</p>
 <pre><code class="language-xml">
-&lt;VirtualHost *:80&gt;
+<VirtualHost *:80>
   ServerName centos7
 
   ProxyRequests Off
   ProxyPreserveHost On
 
-  &lt;Proxy http://localhost:8081/*&gt;
+  <Proxy http://localhost:8081/*>
     Order deny,allow
     Allow from all
-  &lt;/Proxy&gt;
+  </Proxy>
 
   ProxyPass /jenkins http://localhost:8081/jenkins
   ProxyPassReverse /jenkins http://localhost:8081/jenkins
-&lt;/VirtualHost&gt;
+</VirtualHost>
 </code></pre><p>Restart jenkins and httpd. After which, jenkins should be available on <a href="http://centos7/jenkins">http://centos7/jenkins</a></p>
 <pre><code class="language-bash">
 $ sudo systemctl restart httpd

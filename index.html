@@ -249,6 +249,47 @@ $ yum groupinstall "GNOME Desktop" "Graphical Administration Tools"
 </p>
 						<a class="btn btn-default" href="blog/2015/adding-local-jar-to-maven.html">Read More →</a>
 						<hr class="spacer"/>
+		  			<a href="blog/2014/spring-standalone-project.html"><h1 class="title">Spring standalone Project</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 27 August 2014 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>Creating a Spring standalone application is a challenge to me without using Spring Boot. I used to have <code>web.xml</code> to bootstrap my application but being standalone left me thinking which XML or configuration file will bootstrap it.</p><p>I'm prototyping <code>maven-archetype-generate</code> and will add Spring dependencies later on hoping I will achieve my goal.</p><h3>mvn archetype:generate</h3>
+<pre><code class="language-bash">
+$ mvn archetype:generate -DgroupId=com.manalo.rabbitmq -DartifactId=rabbitmq -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] >>> maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom >>>
+[INFO]
+[INFO] <<< maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom <<<
+[INFO]
+[INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Batch mode
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.0
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: com.manalo.rabbitmq
+[INFO] Parameter: packageName, Value: com.manalo.rabbitmq
+[INFO] Parameter: package, Value: com.manalo.rabbitmq
+[INFO] Parameter: artifactId, Value: rabbitmq
+[INFO] Parameter: basedir, Value: /home/drmanalo/workspace
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: /home/drmanalo/workspace/rabbitmq
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1:54.171s
+[INFO] Finished at: Wed Aug 26 19:34:57 BST 2014
+[INFO] Final Memory: 14M/150M
+[INFO] ------------------------------------------------------------------------
+</code></pre>
+</p>
+						<a class="btn btn-default" href="blog/2014/spring-standalone-project.html">Read More →</a>
+						<hr class="spacer"/>
 		  			<a href="blog/2014/asa-packet-tracer.html"><h1 class="title">ASA Packet Tracer</h1></a>
 		  			<p class="post-info">
 			  			<i class="fa fa-calendar"></i> 28 June 2014 |
@@ -256,7 +297,7 @@ $ yum groupinstall "GNOME Desktop" "Graphical Administration Tools"
 		  			</p>
 		  			<p><p>Cisco ASA includes a very nice debugging feature called <code>packet-tracer</code>. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I'm using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.</p><h3>Command syntax</h3>
 <pre><code class="language-bash">
-packet-tracer input &lt;source interface&gt; &lt;protocol&gt; &lt;source IP&gt; &lt;source port&gt; &lt;destination IP&gt; &lt;destination port&gt; [detailed]
+packet-tracer input <source interface> <protocol> <source IP> <source port> <destination IP> <destination port> [detailed]
 </code></pre>
 </p>
 						<a class="btn btn-default" href="blog/2014/asa-packet-tracer.html">Read More →</a>

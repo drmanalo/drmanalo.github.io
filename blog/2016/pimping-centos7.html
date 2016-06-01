@@ -77,41 +77,41 @@
 # yum update
 </code></pre><h3>Fancy icons</h3><p>Download and extract <a href="/downloads/Super-Flat-Remix-master.zip">Super Flat Remix GNOME icons</a>. After extracting, move folder <code>Super Flat Remix</code> into your <code>~/.icons</code> folder.</p><h3>Fancy themes</h3><p>Download and extract <a href="/downloads/175666-OSX-Arc-White.zip">OSX Arc White theme</a>. After extracting, move folder <code>OSX-Arc-White</code> into your <code>~/.themes</code> folder.</p>
 <!-- more --><h3>Fancy fonts</h3>
-<pre><code class="language-xml">
-&lt;?xml version="1.0"?&gt;
-&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
-    &lt;fontconfig&gt;
-     &lt;match target="font"&gt;
-      &lt;edit mode="assign" name="hinting" &gt;
-       &lt;bool&gt;true&lt;/bool&gt;
-      &lt;/edit&gt;
-     &lt;/match&gt;
-     &lt;match target="font" &gt;
-      &lt;edit mode="assign" name="autohint" &gt;
-       &lt;bool&gt;true&lt;/bool&gt;
-      &lt;/edit&gt;
-     &lt;/match&gt;
-     &lt;match target="font"&gt;
-      &lt;edit mode="assign" name="hintstyle" &gt;
-      &lt;const&gt;hintslight&lt;/const&gt;
-      &lt;/edit&gt;
-     &lt;/match&gt;
-     &lt;match target="font"&gt;
-      &lt;edit mode="assign" name="rgba" &gt;
-       &lt;const&gt;rgb&lt;/const&gt;
-      &lt;/edit&gt;
-     &lt;/match&gt;
-     &lt;match target="font"&gt;
-      &lt;edit mode="assign" name="antialias" &gt;
-       &lt;bool&gt;true&lt;/bool&gt;
-      &lt;/edit&gt;
-     &lt;/match&gt;
-     &lt;match target="font"&gt;
-       &lt;edit mode="assign" name="lcdfilter"&gt;
-       &lt;const&gt;lcddefault&lt;/const&gt;
-       &lt;/edit&gt;
-     &lt;/match&gt;
-    &lt;/fontconfig&gt;
+<pre><code class="language-markup">
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <fontconfig>
+     <match target="font">
+      <edit mode="assign" name="hinting" >
+       <bool>true</bool>
+      </edit>
+     </match>
+     <match target="font" >
+      <edit mode="assign" name="autohint" >
+       <bool>true</bool>
+      </edit>
+     </match>
+     <match target="font">
+      <edit mode="assign" name="hintstyle" >
+      <const>hintslight</const>
+      </edit>
+     </match>
+     <match target="font">
+      <edit mode="assign" name="rgba" >
+       <const>rgb</const>
+      </edit>
+     </match>
+     <match target="font">
+      <edit mode="assign" name="antialias" >
+       <bool>true</bool>
+      </edit>
+     </match>
+     <match target="font">
+       <edit mode="assign" name="lcdfilter">
+       <const>lcddefault</const>
+       </edit>
+     </match>
+    </fontconfig>
 </code></pre><p>Logout and log back in then apply this <img src="/images/font-settings.png" alt="Custom font setting""/>.</p></p>
 
 	<div id="disqus_thread"></div>

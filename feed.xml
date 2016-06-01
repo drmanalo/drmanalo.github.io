@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Wed, 1 Jun 2016 22:19:50 +0100</pubDate>
-    <lastBuildDate>Wed, 1 Jun 2016 22:19:50 +0100</lastBuildDate>
+    <pubDate>Wed, 1 Jun 2016 23:21:31 +0100</pubDate>
+    <lastBuildDate>Wed, 1 Jun 2016 23:21:31 +0100</lastBuildDate>
 
       <item>
         <title>Pimping CentOS7</title>
@@ -24,41 +24,41 @@
 # yum update
 &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Fancy icons&lt;/h3&gt;&lt;p&gt;Download and extract &lt;a href=&quot;/downloads/Super-Flat-Remix-master.zip&quot;&gt;Super Flat Remix GNOME icons&lt;/a&gt;. After extracting, move folder &lt;code&gt;Super Flat Remix&lt;/code&gt; into your &lt;code&gt;~/.icons&lt;/code&gt; folder.&lt;/p&gt;&lt;h3&gt;Fancy themes&lt;/h3&gt;&lt;p&gt;Download and extract &lt;a href=&quot;/downloads/175666-OSX-Arc-White.zip&quot;&gt;OSX Arc White theme&lt;/a&gt;. After extracting, move folder &lt;code&gt;OSX-Arc-White&lt;/code&gt; into your &lt;code&gt;~/.themes&lt;/code&gt; folder.&lt;/p&gt;
 &lt;!-- more --&gt;&lt;h3&gt;Fancy fonts&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
-&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
-&amp;lt;!DOCTYPE fontconfig SYSTEM &quot;fonts.dtd&quot;&amp;gt;
-    &amp;lt;fontconfig&amp;gt;
-     &amp;lt;match target=&quot;font&quot;&amp;gt;
-      &amp;lt;edit mode=&quot;assign&quot; name=&quot;hinting&quot; &amp;gt;
-       &amp;lt;bool&amp;gt;true&amp;lt;/bool&amp;gt;
-      &amp;lt;/edit&amp;gt;
-     &amp;lt;/match&amp;gt;
-     &amp;lt;match target=&quot;font&quot; &amp;gt;
-      &amp;lt;edit mode=&quot;assign&quot; name=&quot;autohint&quot; &amp;gt;
-       &amp;lt;bool&amp;gt;true&amp;lt;/bool&amp;gt;
-      &amp;lt;/edit&amp;gt;
-     &amp;lt;/match&amp;gt;
-     &amp;lt;match target=&quot;font&quot;&amp;gt;
-      &amp;lt;edit mode=&quot;assign&quot; name=&quot;hintstyle&quot; &amp;gt;
-      &amp;lt;const&amp;gt;hintslight&amp;lt;/const&amp;gt;
-      &amp;lt;/edit&amp;gt;
-     &amp;lt;/match&amp;gt;
-     &amp;lt;match target=&quot;font&quot;&amp;gt;
-      &amp;lt;edit mode=&quot;assign&quot; name=&quot;rgba&quot; &amp;gt;
-       &amp;lt;const&amp;gt;rgb&amp;lt;/const&amp;gt;
-      &amp;lt;/edit&amp;gt;
-     &amp;lt;/match&amp;gt;
-     &amp;lt;match target=&quot;font&quot;&amp;gt;
-      &amp;lt;edit mode=&quot;assign&quot; name=&quot;antialias&quot; &amp;gt;
-       &amp;lt;bool&amp;gt;true&amp;lt;/bool&amp;gt;
-      &amp;lt;/edit&amp;gt;
-     &amp;lt;/match&amp;gt;
-     &amp;lt;match target=&quot;font&quot;&amp;gt;
-       &amp;lt;edit mode=&quot;assign&quot; name=&quot;lcdfilter&quot;&amp;gt;
-       &amp;lt;const&amp;gt;lcddefault&amp;lt;/const&amp;gt;
-       &amp;lt;/edit&amp;gt;
-     &amp;lt;/match&amp;gt;
-    &amp;lt;/fontconfig&amp;gt;
+&lt;pre&gt;&lt;code class=&quot;language-markup&quot;&gt;
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE fontconfig SYSTEM &quot;fonts.dtd&quot;&gt;
+    &lt;fontconfig&gt;
+     &lt;match target=&quot;font&quot;&gt;
+      &lt;edit mode=&quot;assign&quot; name=&quot;hinting&quot; &gt;
+       &lt;bool&gt;true&lt;/bool&gt;
+      &lt;/edit&gt;
+     &lt;/match&gt;
+     &lt;match target=&quot;font&quot; &gt;
+      &lt;edit mode=&quot;assign&quot; name=&quot;autohint&quot; &gt;
+       &lt;bool&gt;true&lt;/bool&gt;
+      &lt;/edit&gt;
+     &lt;/match&gt;
+     &lt;match target=&quot;font&quot;&gt;
+      &lt;edit mode=&quot;assign&quot; name=&quot;hintstyle&quot; &gt;
+      &lt;const&gt;hintslight&lt;/const&gt;
+      &lt;/edit&gt;
+     &lt;/match&gt;
+     &lt;match target=&quot;font&quot;&gt;
+      &lt;edit mode=&quot;assign&quot; name=&quot;rgba&quot; &gt;
+       &lt;const&gt;rgb&lt;/const&gt;
+      &lt;/edit&gt;
+     &lt;/match&gt;
+     &lt;match target=&quot;font&quot;&gt;
+      &lt;edit mode=&quot;assign&quot; name=&quot;antialias&quot; &gt;
+       &lt;bool&gt;true&lt;/bool&gt;
+      &lt;/edit&gt;
+     &lt;/match&gt;
+     &lt;match target=&quot;font&quot;&gt;
+       &lt;edit mode=&quot;assign&quot; name=&quot;lcdfilter&quot;&gt;
+       &lt;const&gt;lcddefault&lt;/const&gt;
+       &lt;/edit&gt;
+     &lt;/match&gt;
+    &lt;/fontconfig&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Logout and log back in then apply this &lt;img src=&quot;/images/font-settings.png&quot; alt=&quot;Custom font setting&quot;&quot;/&gt;.&lt;/p&gt;
   	    </description>
       </item>
@@ -331,45 +331,45 @@ Total time: 14.107 secs
 &lt;%@ attribute name=&quot;prepend&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
 &lt;%@ attribute name=&quot;icon&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
 
-&amp;lt;c:if test=&quot;${ empty label }&quot;&amp;gt;
-    &amp;lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&amp;gt;
-&amp;lt;/c:if&amp;gt;
-&amp;lt;c:if test=&quot;${ fn:length(icon) gt 1 }&quot;&amp;gt;
-  	&amp;lt;c:set var=&quot;icon&quot; value=&apos;&amp;lt;i class=&quot;${ icon }&quot;&amp;gt;&amp;lt;/i&amp;gt;&apos;/&amp;gt;
-&amp;lt;/c:if&amp;gt;
+&lt;c:if test=&quot;${ empty label }&quot;&gt;
+    &lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&gt;
+&lt;/c:if&gt;
+&lt;c:if test=&quot;${ fn:length(icon) gt 1 }&quot;&gt;
+  	&lt;c:set var=&quot;icon&quot; value=&apos;&lt;i class=&quot;${ icon }&quot;&gt;&lt;/i&gt;&apos;/&gt;
+&lt;/c:if&gt;
 
-&amp;lt;s:bind path=&quot;${ path }&quot;&amp;gt;
-	&amp;lt;div class=&quot;row form-group ${ status.error ? &apos;error&apos; : &apos;&apos; }&quot;&amp;gt;
-		&amp;lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&amp;gt;
-			&amp;lt;s:message code=&quot;${ label }&quot;/&amp;gt;
-			&amp;lt;c:if test=&quot;${ required }&quot;&amp;gt;
-				&amp;lt;span class=&quot;required&quot;&amp;gt; *&amp;lt;/span&amp;gt;
-			&amp;lt;/c:if&amp;gt;
-		&amp;lt;/label&amp;gt;
-		&amp;lt;div class=&quot;col-sm-4&quot;&amp;gt;
-		  	&amp;lt;c:choose&amp;gt;
-				&amp;lt;c:when test=&quot;${ prepend }&quot;&amp;gt;
-					&amp;lt;div class=&quot;input-prepend&quot;&amp;gt;
-		  				&amp;lt;span class=&quot;add-on&quot;&amp;gt;${ icon }&amp;lt;/span&amp;gt;
-						&amp;lt;form:input path=&quot;${ path }&quot; cssClass=&quot;${ empty cssClass ? &apos;input-xlarge&apos; : cssClass }&quot;/&amp;gt;
-					&amp;lt;/div&amp;gt;
-				&amp;lt;/c:when&amp;gt;
-				&amp;lt;c:when test=&quot;${ append }&quot;&amp;gt;
-					&amp;lt;div class=&quot;input-append&quot;&amp;gt;
-				  		&amp;lt;form:input path=&quot;${ path }&quot; cssClass=&quot;${ empty cssClass ? &apos;input-xlarge&apos; : cssClass }&quot;/&amp;gt;
-						&amp;lt;span class=&quot;add-on&quot;&amp;gt;${ icon }&amp;lt;/span&amp;gt;
-					&amp;lt;/div&amp;gt;
-				&amp;lt;/c:when&amp;gt;
-				&amp;lt;c:otherwise&amp;gt;
-					&amp;lt;form:input path=&quot;${ path }&quot; class=&quot;form-control&quot; placeholder=&quot;${ empty placeholder ? label : placeholder }&quot; autocomplete=&quot;off&quot; cssStyle=&quot;${ empty cssStyle ? &apos;&apos; : cssStyle }&quot;/&amp;gt;
-				&amp;lt;/c:otherwise&amp;gt;
-			&amp;lt;/c:choose&amp;gt;
-			&amp;lt;c:if test=&quot;${ status.error }&quot;&amp;gt;
-				&amp;lt;form:errors path=&quot;${ path }&quot; cssClass=&quot;text-danger&quot; /&amp;gt;
-			&amp;lt;/c:if&amp;gt;
-	  	&amp;lt;/div&amp;gt;
-	&amp;lt;/div&amp;gt;
-&amp;lt;/s:bind&amp;gt;
+&lt;s:bind path=&quot;${ path }&quot;&gt;
+	&lt;div class=&quot;row form-group ${ status.error ? &apos;error&apos; : &apos;&apos; }&quot;&gt;
+		&lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&gt;
+			&lt;s:message code=&quot;${ label }&quot;/&gt;
+			&lt;c:if test=&quot;${ required }&quot;&gt;
+				&lt;span class=&quot;required&quot;&gt; *&lt;/span&gt;
+			&lt;/c:if&gt;
+		&lt;/label&gt;
+		&lt;div class=&quot;col-sm-4&quot;&gt;
+		  	&lt;c:choose&gt;
+				&lt;c:when test=&quot;${ prepend }&quot;&gt;
+					&lt;div class=&quot;input-prepend&quot;&gt;
+		  				&lt;span class=&quot;add-on&quot;&gt;${ icon }&lt;/span&gt;
+						&lt;form:input path=&quot;${ path }&quot; cssClass=&quot;${ empty cssClass ? &apos;input-xlarge&apos; : cssClass }&quot;/&gt;
+					&lt;/div&gt;
+				&lt;/c:when&gt;
+				&lt;c:when test=&quot;${ append }&quot;&gt;
+					&lt;div class=&quot;input-append&quot;&gt;
+				  		&lt;form:input path=&quot;${ path }&quot; cssClass=&quot;${ empty cssClass ? &apos;input-xlarge&apos; : cssClass }&quot;/&gt;
+						&lt;span class=&quot;add-on&quot;&gt;${ icon }&lt;/span&gt;
+					&lt;/div&gt;
+				&lt;/c:when&gt;
+				&lt;c:otherwise&gt;
+					&lt;form:input path=&quot;${ path }&quot; class=&quot;form-control&quot; placeholder=&quot;${ empty placeholder ? label : placeholder }&quot; autocomplete=&quot;off&quot; cssStyle=&quot;${ empty cssStyle ? &apos;&apos; : cssStyle }&quot;/&gt;
+				&lt;/c:otherwise&gt;
+			&lt;/c:choose&gt;
+			&lt;c:if test=&quot;${ status.error }&quot;&gt;
+				&lt;form:errors path=&quot;${ path }&quot; cssClass=&quot;text-danger&quot; /&gt;
+			&lt;/c:if&gt;
+	  	&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/s:bind&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;calendar.tag&lt;/h3&gt;
 &lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;
 &lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
@@ -386,30 +386,30 @@ Total time: 14.107 secs
 &lt;%@ attribute name=&quot;btnTitle&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
 &lt;%@ attribute name=&quot;icon&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
 
-&amp;lt;c:if test=&quot;${ empty label }&quot;&amp;gt;
-    &amp;lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&amp;gt;
-&amp;lt;/c:if&amp;gt;
+&lt;c:if test=&quot;${ empty label }&quot;&gt;
+    &lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&gt;
+&lt;/c:if&gt;
 
-&amp;lt;s:bind path=&quot;${ path }&quot;&amp;gt;
-	&amp;lt;div class=&quot;row form-group ${ status.error ? &apos;error&apos; : &apos;&apos; }&quot;&amp;gt;
-		&amp;lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&amp;gt;
-			&amp;lt;s:message code=&quot;${ label }&quot;/&amp;gt;
-			&amp;lt;c:if test=&quot;${ required }&quot;&amp;gt;
-				&amp;lt;span class=&quot;required&quot;&amp;gt; *&amp;lt;/span&amp;gt;
-			&amp;lt;/c:if&amp;gt;
-		&amp;lt;/label&amp;gt;
-		&amp;lt;div class=&quot;col-sm-4&quot;&amp;gt;
-			&amp;lt;div class=&quot;input-group date&quot; id=&quot;${ empty groupId ? &apos;&apos; : groupId }&quot;&amp;gt;
-				&amp;lt;span class=&quot;input-group-addon btn btn-sm btn-primary&quot;&amp;gt;
-					&amp;lt;span class=&quot;${ icon }&quot; title=&quot;${ empty btnTitle ? &apos;&apos; : btnTitle }&quot;&amp;gt;&amp;lt;/span&amp;gt;
-				&amp;lt;/span&amp;gt;
-				&amp;lt;form:input path=&quot;${ path }&quot; class=&quot;form-control&quot; autocomplete=&quot;off&quot; cssStyle=&quot;width:180px;&quot; /&amp;gt;
-			&amp;lt;/div&amp;gt;
-		&amp;lt;/div&amp;gt;
-	&amp;lt;/div&amp;gt;
-&amp;lt;/s:bind&amp;gt;		
+&lt;s:bind path=&quot;${ path }&quot;&gt;
+	&lt;div class=&quot;row form-group ${ status.error ? &apos;error&apos; : &apos;&apos; }&quot;&gt;
+		&lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&gt;
+			&lt;s:message code=&quot;${ label }&quot;/&gt;
+			&lt;c:if test=&quot;${ required }&quot;&gt;
+				&lt;span class=&quot;required&quot;&gt; *&lt;/span&gt;
+			&lt;/c:if&gt;
+		&lt;/label&gt;
+		&lt;div class=&quot;col-sm-4&quot;&gt;
+			&lt;div class=&quot;input-group date&quot; id=&quot;${ empty groupId ? &apos;&apos; : groupId }&quot;&gt;
+				&lt;span class=&quot;input-group-addon btn btn-sm btn-primary&quot;&gt;
+					&lt;span class=&quot;${ icon }&quot; title=&quot;${ empty btnTitle ? &apos;&apos; : btnTitle }&quot;&gt;&lt;/span&gt;
+				&lt;/span&gt;
+				&lt;form:input path=&quot;${ path }&quot; class=&quot;form-control&quot; autocomplete=&quot;off&quot; cssStyle=&quot;width:180px;&quot; /&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/s:bind&gt;		
 &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;textarea.tag&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;
+&lt;pre&gt;&lt;code class=&quot;language-markup&quot;&gt;
 &lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
 &lt;%@ tag description=&quot;Bootstrap textarea tag with error, icon and i8n support&quot;%&gt;
 &lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
@@ -421,39 +421,39 @@ Total time: 14.107 secs
 &lt;%@ attribute name=&quot;path&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
 &lt;%@ attribute name=&quot;required&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
 
-&amp;lt;c:if test=&quot;${ empty label }&quot;&amp;gt;
-    &amp;lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&amp;gt;
-&amp;lt;/c:if&amp;gt;
+&lt;c:if test=&quot;${ empty label }&quot;&gt;
+    &lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&gt;
+&lt;/c:if&gt;
 
-&amp;lt;s:bind path=&quot;${ path }&quot;&amp;gt;
-	&amp;lt;div class=&quot;row form-group ${ status.error ? &apos;error&apos; : &apos;&apos; }&quot;&amp;gt;
-		&amp;lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&amp;gt;
-			&amp;lt;s:message code=&quot;${ label }&quot;/&amp;gt;
-			&amp;lt;c:if test=&quot;${ required }&quot;&amp;gt;
-				&amp;lt;span class=&quot;required&quot;&amp;gt; *&amp;lt;/span&amp;gt;
-			&amp;lt;/c:if&amp;gt;
-		&amp;lt;/label&amp;gt;
-		&amp;lt;div class=&quot;col-sm-4&quot;&amp;gt;
-			&amp;lt;form:textarea path=&quot;${ path }&quot; class=&quot;form-control&quot; placeholder=&quot;${ empty placeholder ? label : placeholder }&quot; /&amp;gt;
-			&amp;lt;c:if test=&quot;${ status.error }&quot;&amp;gt;
-				&amp;lt;form:errors path=&quot;${ path }&quot; cssClass=&quot;text-danger&quot; /&amp;gt;
-			&amp;lt;/c:if&amp;gt;
-		&amp;lt;/div&amp;gt;
-	&amp;lt;/div&amp;gt;
-&amp;lt;/s:bind&amp;gt;
+&lt;s:bind path=&quot;${ path }&quot;&gt;
+	&lt;div class=&quot;row form-group ${ status.error ? &apos;error&apos; : &apos;&apos; }&quot;&gt;
+		&lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&gt;
+			&lt;s:message code=&quot;${ label }&quot;/&gt;
+			&lt;c:if test=&quot;${ required }&quot;&gt;
+				&lt;span class=&quot;required&quot;&gt; *&lt;/span&gt;
+			&lt;/c:if&gt;
+		&lt;/label&gt;
+		&lt;div class=&quot;col-sm-4&quot;&gt;
+			&lt;form:textarea path=&quot;${ path }&quot; class=&quot;form-control&quot; placeholder=&quot;${ empty placeholder ? label : placeholder }&quot; /&gt;
+			&lt;c:if test=&quot;${ status.error }&quot;&gt;
+				&lt;form:errors path=&quot;${ path }&quot; cssClass=&quot;text-danger&quot; /&gt;
+			&lt;/c:if&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/s:bind&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;actions.tag&lt;/h3&gt;
 &lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;
 &lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
 &lt;%@ tag	description=&quot;Bootstrap cancel, reset and submit buttons without i8n support&quot;%&gt;
 &lt;%@ attribute name=&quot;cancelPath&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
 
-&amp;lt;div class=&quot;row form-group&quot;&amp;gt;
-	&amp;lt;div class=&quot;col-sm-4 col-sm-offset-2&quot;&amp;gt;
-		&amp;lt;a href=&quot;${ cancelPath }&quot; class=&quot;btn btn-default&quot;&amp;gt;Cancel&amp;lt;/a&amp;gt;
-		&amp;lt;input type=&quot;reset&quot; id=&quot;reset&quot; value=&quot;Reset&quot; class=&quot;btn btn-default&quot; /&amp;gt;
-		&amp;lt;input type=&quot;submit&quot; value=&quot;Submit&quot; class=&quot;btn btn-primary&quot; /&amp;gt;
-	&amp;lt;/div&amp;gt;
-&amp;lt;/div&amp;gt;
+&lt;div class=&quot;row form-group&quot;&gt;
+	&lt;div class=&quot;col-sm-4 col-sm-offset-2&quot;&gt;
+		&lt;a href=&quot;${ cancelPath }&quot; class=&quot;btn btn-default&quot;&gt;Cancel&lt;/a&gt;
+		&lt;input type=&quot;reset&quot; id=&quot;reset&quot; value=&quot;Reset&quot; class=&quot;btn btn-default&quot; /&gt;
+		&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; class=&quot;btn btn-primary&quot; /&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Importing the tags&lt;/h3&gt;&lt;p&gt;Just import it like any other JSP tag&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;
 &lt;%@taglib tagdir=&quot;/WEB-INF/tags&quot; prefix=&quot;bs&quot;%&gt;
@@ -517,7 +517,7 @@ alias pics=&apos;cd ~/Pictures&apos;
 alias home=&apos;cd ~/&apos;
 alias www=&apos;cd /var/www&apos;
 
-#aptitude
+# aptitude
 alias agi=&apos;sudo apt-get install&apos;
 alias aga=&apos;sudo apt-get autoremove&apos;
 alias ags=&apos;sudo apt-cache search&apos;
@@ -611,20 +611,20 @@ JENKINS_PORT=&quot;8081&quot;
 JENKINS_ARGS=&quot;--prefix=/jenkins&quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Under &lt;code&gt;/etc/httpd/conf.d&lt;/code&gt; create a file called &lt;code&gt;jenkins.conf&lt;/code&gt; and type this contents&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
-&amp;lt;VirtualHost *:80&amp;gt;
+&lt;VirtualHost *:80&gt;
   ServerName centos7
 
   ProxyRequests Off
   ProxyPreserveHost On
 
-  &amp;lt;Proxy http://localhost:8081/*&amp;gt;
+  &lt;Proxy http://localhost:8081/*&gt;
     Order deny,allow
     Allow from all
-  &amp;lt;/Proxy&amp;gt;
+  &lt;/Proxy&gt;
 
   ProxyPass /jenkins http://localhost:8081/jenkins
   ProxyPassReverse /jenkins http://localhost:8081/jenkins
-&amp;lt;/VirtualHost&amp;gt;
+&lt;/VirtualHost&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Restart jenkins and httpd. After which, jenkins should be available on &lt;a href=&quot;http://centos7/jenkins&quot;&gt;http://centos7/jenkins&lt;/a&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
 $ sudo systemctl restart httpd
@@ -794,114 +794,114 @@ colorscheme torte
 &lt;/ul&gt;
 &lt;!-- more --&gt;
 &lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
-&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
-&amp;lt;project name=&quot;Symblog Project&quot; default=&quot;build&quot;&amp;gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project name=&quot;Symblog Project&quot; default=&quot;build&quot;&gt;
 
-	&amp;lt;target name=&quot;build&quot;
-		depends=&quot;clean,prepare,lint,phploc,pdepend,phpunit,assetic,assets,cache&quot;&amp;gt;
-		&amp;lt;zip destfile=&quot;${basedir}/build/target/symblog.zip&quot;&amp;gt;
-			&amp;lt;zipfileset dir=&quot;${basedir}/app&quot; prefix=&quot;app&quot;&amp;gt;
-				&amp;lt;exclude name=&quot;**/DoctrineMigrations/**&quot;/&amp;gt;
-				&amp;lt;exclude name=&quot;**/cache/**&quot;/&amp;gt;
-				&amp;lt;exclude name=&quot;**/logs/**&quot;/&amp;gt;
-				&amp;lt;exclude name=&quot;**/phpunit.*&quot;/&amp;gt;
-			&amp;lt;/zipfileset&amp;gt;
-			&amp;lt;zipfileset dir=&quot;${basedir}/bin&quot; prefix=&quot;bin&quot; /&amp;gt;
-			&amp;lt;zipfileset dir=&quot;${basedir}/src&quot; prefix=&quot;src&quot;&amp;gt;
-				&amp;lt;exclude name=&quot;**/Tests/**&quot;/&amp;gt;
-				&amp;lt;exclude name=&quot;**/DataFixtures/**&quot;/&amp;gt;
-			&amp;lt;/zipfileset&amp;gt;
-			&amp;lt;zipfileset dir=&quot;${basedir}/vendor&quot; prefix=&quot;vendor&quot; /&amp;gt;
-			&amp;lt;zipfileset dir=&quot;${basedir}/web&quot; prefix=&quot;web&quot; /&amp;gt;
-		&amp;lt;/zip&amp;gt;
-		&amp;lt;echo message=&quot;Finished build!&quot; /&amp;gt;
-	&amp;lt;/target&amp;gt;
+	&lt;target name=&quot;build&quot;
+		depends=&quot;clean,prepare,lint,phploc,pdepend,phpunit,assetic,assets,cache&quot;&gt;
+		&lt;zip destfile=&quot;${basedir}/build/target/symblog.zip&quot;&gt;
+			&lt;zipfileset dir=&quot;${basedir}/app&quot; prefix=&quot;app&quot;&gt;
+				&lt;exclude name=&quot;**/DoctrineMigrations/**&quot;/&gt;
+				&lt;exclude name=&quot;**/cache/**&quot;/&gt;
+				&lt;exclude name=&quot;**/logs/**&quot;/&gt;
+				&lt;exclude name=&quot;**/phpunit.*&quot;/&gt;
+			&lt;/zipfileset&gt;
+			&lt;zipfileset dir=&quot;${basedir}/bin&quot; prefix=&quot;bin&quot; /&gt;
+			&lt;zipfileset dir=&quot;${basedir}/src&quot; prefix=&quot;src&quot;&gt;
+				&lt;exclude name=&quot;**/Tests/**&quot;/&gt;
+				&lt;exclude name=&quot;**/DataFixtures/**&quot;/&gt;
+			&lt;/zipfileset&gt;
+			&lt;zipfileset dir=&quot;${basedir}/vendor&quot; prefix=&quot;vendor&quot; /&gt;
+			&lt;zipfileset dir=&quot;${basedir}/web&quot; prefix=&quot;web&quot; /&gt;
+		&lt;/zip&gt;
+		&lt;echo message=&quot;Finished build!&quot; /&gt;
+	&lt;/target&gt;
 
-	&amp;lt;target name=&quot;clean&quot; description=&quot;Cleanup build artifacts&quot;&amp;gt;
-		&amp;lt;delete dir=&quot;${basedir}/build/coverage&quot; /&amp;gt;
-		&amp;lt;delete dir=&quot;${basedir}/build/logs&quot; /&amp;gt;
-		&amp;lt;delete dir=&quot;${basedir}/build/pdepend&quot; /&amp;gt;
-		&amp;lt;delete dir=&quot;${basedir}/build/target&quot; /&amp;gt;
-		&amp;lt;echo message=&quot;Artifacts deleted.&quot; /&amp;gt;
-	&amp;lt;/target&amp;gt;
+	&lt;target name=&quot;clean&quot; description=&quot;Cleanup build artifacts&quot;&gt;
+		&lt;delete dir=&quot;${basedir}/build/coverage&quot; /&gt;
+		&lt;delete dir=&quot;${basedir}/build/logs&quot; /&gt;
+		&lt;delete dir=&quot;${basedir}/build/pdepend&quot; /&gt;
+		&lt;delete dir=&quot;${basedir}/build/target&quot; /&gt;
+		&lt;echo message=&quot;Artifacts deleted.&quot; /&gt;
+	&lt;/target&gt;
 
-	&amp;lt;target name=&quot;prepare&quot; depends=&quot;clean&quot; description=&quot;Prepare for build&quot;&amp;gt;
-		&amp;lt;mkdir dir=&quot;${basedir}/build/coverage&quot; /&amp;gt;
-		&amp;lt;mkdir dir=&quot;${basedir}/build/logs&quot; /&amp;gt;
-		&amp;lt;mkdir dir=&quot;${basedir}/build/pdepend&quot; /&amp;gt;
-		&amp;lt;mkdir dir=&quot;${basedir}/build/target&quot; /&amp;gt;
-		&amp;lt;echo message=&quot;Artifacts prepared.&quot; /&amp;gt;
-	&amp;lt;/target&amp;gt;
+	&lt;target name=&quot;prepare&quot; depends=&quot;clean&quot; description=&quot;Prepare for build&quot;&gt;
+		&lt;mkdir dir=&quot;${basedir}/build/coverage&quot; /&gt;
+		&lt;mkdir dir=&quot;${basedir}/build/logs&quot; /&gt;
+		&lt;mkdir dir=&quot;${basedir}/build/pdepend&quot; /&gt;
+		&lt;mkdir dir=&quot;${basedir}/build/target&quot; /&gt;
+		&lt;echo message=&quot;Artifacts prepared.&quot; /&gt;
+	&lt;/target&gt;
 
-	&amp;lt;target name=&quot;lint&quot; description=&quot;Perform syntax check of sourcecode files&quot;&amp;gt;
-		&amp;lt;apply executable=&quot;php&quot; failonerror=&quot;true&quot;&amp;gt;
-			&amp;lt;arg value=&quot;-l&quot; /&amp;gt;
-			&amp;lt;fileset dir=&quot;${basedir}/src&quot;&amp;gt;
-				&amp;lt;include name=&quot;**/*.php&quot; /&amp;gt;
-				&amp;lt;modified /&amp;gt;
-			&amp;lt;/fileset&amp;gt;
-			&amp;lt;fileset dir=&quot;${basedir}/src/Drm/BlogBundle/Tests&quot;&amp;gt;
-				&amp;lt;include name=&quot;**/*.php&quot; /&amp;gt;
-				&amp;lt;modified /&amp;gt;
-			&amp;lt;/fileset&amp;gt;
-		&amp;lt;/apply&amp;gt;
-		&amp;lt;echo message=&quot;Syntax checked using lint.&quot; /&amp;gt;
-	&amp;lt;/target&amp;gt;
+	&lt;target name=&quot;lint&quot; description=&quot;Perform syntax check of sourcecode files&quot;&gt;
+		&lt;apply executable=&quot;php&quot; failonerror=&quot;true&quot;&gt;
+			&lt;arg value=&quot;-l&quot; /&gt;
+			&lt;fileset dir=&quot;${basedir}/src&quot;&gt;
+				&lt;include name=&quot;**/*.php&quot; /&gt;
+				&lt;modified /&gt;
+			&lt;/fileset&gt;
+			&lt;fileset dir=&quot;${basedir}/src/Drm/BlogBundle/Tests&quot;&gt;
+				&lt;include name=&quot;**/*.php&quot; /&gt;
+				&lt;modified /&gt;
+			&lt;/fileset&gt;
+		&lt;/apply&gt;
+		&lt;echo message=&quot;Syntax checked using lint.&quot; /&gt;
+	&lt;/target&gt;
 
-	&amp;lt;target name=&quot;phploc&quot; description=&quot;Measure project size using PHPLOC&quot;&amp;gt;
-		&amp;lt;exec executable=&quot;phploc&quot;&amp;gt;
-			&amp;lt;arg value=&quot;--count-tests&quot; /&amp;gt;
-			&amp;lt;arg value=&quot;--log-csv&quot; /&amp;gt;
-			&amp;lt;arg value=&quot;${basedir}/build/logs/phploc.csv&quot; /&amp;gt;
-			&amp;lt;arg path=&quot;${basedir}/src&quot; /&amp;gt;
-		&amp;lt;/exec&amp;gt;
-		&amp;lt;echo message=&quot;Project measured using PHPLOC.&quot; /&amp;gt;
-	&amp;lt;/target&amp;gt;
+	&lt;target name=&quot;phploc&quot; description=&quot;Measure project size using PHPLOC&quot;&gt;
+		&lt;exec executable=&quot;phploc&quot;&gt;
+			&lt;arg value=&quot;--count-tests&quot; /&gt;
+			&lt;arg value=&quot;--log-csv&quot; /&gt;
+			&lt;arg value=&quot;${basedir}/build/logs/phploc.csv&quot; /&gt;
+			&lt;arg path=&quot;${basedir}/src&quot; /&gt;
+		&lt;/exec&gt;
+		&lt;echo message=&quot;Project measured using PHPLOC.&quot; /&gt;
+	&lt;/target&gt;
 
-	&amp;lt;target name=&quot;pdepend&quot; description=&quot;Calculate software metrics using PHP_Depend&quot;&amp;gt;
-		&amp;lt;exec executable=&quot;pdepend&quot;&amp;gt;
-			&amp;lt;arg value=&quot;--jdepend-xml=${basedir}/build/logs/jdepend.xml&quot; /&amp;gt;
-			&amp;lt;arg value=&quot;--jdepend-chart=${basedir}/build/pdepend/dependencies.svg&quot; /&amp;gt;
-			&amp;lt;arg
-				value=&quot;--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg&quot; /&amp;gt;
-			&amp;lt;arg path=&quot;${basedir}/src&quot; /&amp;gt;
-		&amp;lt;/exec&amp;gt;
-		&amp;lt;echo message=&quot;Software metrics calculated using PHP-DEPEND.&quot; /&amp;gt;
-	&amp;lt;/target&amp;gt;
+	&lt;target name=&quot;pdepend&quot; description=&quot;Calculate software metrics using PHP_Depend&quot;&gt;
+		&lt;exec executable=&quot;pdepend&quot;&gt;
+			&lt;arg value=&quot;--jdepend-xml=${basedir}/build/logs/jdepend.xml&quot; /&gt;
+			&lt;arg value=&quot;--jdepend-chart=${basedir}/build/pdepend/dependencies.svg&quot; /&gt;
+			&lt;arg
+				value=&quot;--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg&quot; /&gt;
+			&lt;arg path=&quot;${basedir}/src&quot; /&gt;
+		&lt;/exec&gt;
+		&lt;echo message=&quot;Software metrics calculated using PHP-DEPEND.&quot; /&gt;
+	&lt;/target&gt;
 
-	&amp;lt;target name=&quot;phpunit&quot; description=&quot;Run unit tests with code coverage&quot;&amp;gt;
-		&amp;lt;exec executable=&quot;phpunit&quot; failonerror=&quot;true&quot;&amp;gt;
-			&amp;lt;arg value=&quot;-c&quot; /&amp;gt;
-			&amp;lt;arg value=&quot;app/&quot; /&amp;gt;
-			&amp;lt;arg value=&quot;--coverage-html=${basedir}/build/coverage/&quot; /&amp;gt;
-		&amp;lt;/exec&amp;gt;
-	&amp;lt;/target&amp;gt;
+	&lt;target name=&quot;phpunit&quot; description=&quot;Run unit tests with code coverage&quot;&gt;
+		&lt;exec executable=&quot;phpunit&quot; failonerror=&quot;true&quot;&gt;
+			&lt;arg value=&quot;-c&quot; /&gt;
+			&lt;arg value=&quot;app/&quot; /&gt;
+			&lt;arg value=&quot;--coverage-html=${basedir}/build/coverage/&quot; /&gt;
+		&lt;/exec&gt;
+	&lt;/target&gt;
 
-	&amp;lt;target name=&quot;assetic&quot; description=&quot;Dump assets&quot;&amp;gt;
-		&amp;lt;exec executable=&quot;${basedir}/app/console&quot;&amp;gt;
-			&amp;lt;arg value=&quot;--env=prod&quot; /&amp;gt;
-			&amp;lt;arg value=&quot;assetic:dump&quot; /&amp;gt;
-		&amp;lt;/exec&amp;gt;
-	&amp;lt;/target&amp;gt;
+	&lt;target name=&quot;assetic&quot; description=&quot;Dump assets&quot;&gt;
+		&lt;exec executable=&quot;${basedir}/app/console&quot;&gt;
+			&lt;arg value=&quot;--env=prod&quot; /&gt;
+			&lt;arg value=&quot;assetic:dump&quot; /&gt;
+		&lt;/exec&gt;
+	&lt;/target&gt;
 
-	&amp;lt;target name=&quot;assets&quot; description=&quot;Install assets&quot;&amp;gt;
-		&amp;lt;exec executable=&quot;${basedir}/app/console&quot;&amp;gt;
-			&amp;lt;arg value=&quot;assets:install&quot; /&amp;gt;
-			&amp;lt;arg value=&quot;--symlink&quot; /&amp;gt;
-			&amp;lt;arg value=&quot;${basedir}/web&quot; /&amp;gt;
-		&amp;lt;/exec&amp;gt;
-		&amp;lt;echo message=&quot;Assets installed using symlink.&quot; /&amp;gt;
-	&amp;lt;/target&amp;gt;
+	&lt;target name=&quot;assets&quot; description=&quot;Install assets&quot;&gt;
+		&lt;exec executable=&quot;${basedir}/app/console&quot;&gt;
+			&lt;arg value=&quot;assets:install&quot; /&gt;
+			&lt;arg value=&quot;--symlink&quot; /&gt;
+			&lt;arg value=&quot;${basedir}/web&quot; /&gt;
+		&lt;/exec&gt;
+		&lt;echo message=&quot;Assets installed using symlink.&quot; /&gt;
+	&lt;/target&gt;
 
-	&amp;lt;target name=&quot;cache&quot; description=&quot;Cleanup cache&quot;&amp;gt;
-		&amp;lt;exec executable=&quot;${basedir}/app/console&quot;&amp;gt;
-			&amp;lt;arg value=&quot;cache:clear&quot; /&amp;gt;
-			&amp;lt;arg value=&quot;--env=prod&quot; /&amp;gt;
-		&amp;lt;/exec&amp;gt;
-		&amp;lt;echo message=&quot;Production cache cleared.&quot; /&amp;gt;
-	&amp;lt;/target&amp;gt;
+	&lt;target name=&quot;cache&quot; description=&quot;Cleanup cache&quot;&gt;
+		&lt;exec executable=&quot;${basedir}/app/console&quot;&gt;
+			&lt;arg value=&quot;cache:clear&quot; /&gt;
+			&lt;arg value=&quot;--env=prod&quot; /&gt;
+		&lt;/exec&gt;
+		&lt;echo message=&quot;Production cache cleared.&quot; /&gt;
+	&lt;/target&gt;
 
-&amp;lt;/project&amp;gt;
+&lt;/project&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
   	    </description>
@@ -1039,15 +1039,277 @@ $ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=o
 [INFO] Finished at: 2014-09-09T15:11:54+01:00
 [INFO] Final Memory: 5M/106M
 [INFO] ------------------------------------------------------------------------
-
 &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;pom.xml&lt;/h3&gt;&lt;p&gt;Within your POM&apos;s dependencies, you need to add the dependency after mvn install.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
-	&amp;lt;groupId&amp;gt;com.oracle&amp;lt;/groupId&amp;gt;
-	&amp;lt;artifactId&amp;gt;ojdbc6&amp;lt;/artifactId&amp;gt;
-	&amp;lt;version&amp;gt;11.2.0&amp;lt;/version&amp;gt;
-&amp;lt;dependency&amp;gt;
-
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&lt;dependency&gt;
+	&lt;groupId&gt;com.oracle&lt;/groupId&gt;
+	&lt;artifactId&gt;ojdbc6&lt;/artifactId&gt;
+	&lt;version&gt;11.2.0&lt;/version&gt;
+&lt;dependency&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If you have a remote build server, you have to do the &lt;code&gt;mvn install&lt;/code&gt; bit to add the dependency knowing you are using different maven local repository. There is another solution posted on &lt;a href=&quot;http://blog.valdaris.com/post/custom-jar/&quot; target=&quot;_new&quot;&gt;this blog&lt;/a&gt; but I haven&apos;t tried this approach. I&apos;m referring to &lt;strong&gt;Installing the jar by using install-plugin&lt;/strong&gt;. Perhaps this is the way to go but for the time being I&apos;m happy with &lt;code&gt;maven install:install-file&lt;/code&gt;.&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Spring standalone Project</title>
+        <link>https://drmanalo.github.io/blog/2014/spring-standalone-project.html</link>
+        <pubDate>Wed, 27 Aug 2014 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2014/spring-standalone-project.html</guid>
+        <description>
+  	         &lt;p&gt;Creating a Spring standalone application is a challenge to me without using Spring Boot. I used to have &lt;code&gt;web.xml&lt;/code&gt; to bootstrap my application but being standalone left me thinking which XML or configuration file will bootstrap it.&lt;/p&gt;&lt;p&gt;I&apos;m prototyping &lt;code&gt;maven-archetype-generate&lt;/code&gt; and will add Spring dependencies later on hoping I will achieve my goal.&lt;/p&gt;&lt;h3&gt;mvn archetype:generate&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ mvn archetype:generate -DgroupId=com.manalo.rabbitmq -DartifactId=rabbitmq -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] &gt;&gt;&gt; maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom &gt;&gt;&gt;
+[INFO]
+[INFO] &lt;&lt;&lt; maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom &lt;&lt;&lt;
+[INFO]
+[INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Batch mode
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.0
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: com.manalo.rabbitmq
+[INFO] Parameter: packageName, Value: com.manalo.rabbitmq
+[INFO] Parameter: package, Value: com.manalo.rabbitmq
+[INFO] Parameter: artifactId, Value: rabbitmq
+[INFO] Parameter: basedir, Value: /home/drmanalo/workspace
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: /home/drmanalo/workspace/rabbitmq
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1:54.171s
+[INFO] Finished at: Wed Aug 26 19:34:57 BST 2014
+[INFO] Final Memory: 14M/150M
+[INFO] ------------------------------------------------------------------------
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;mvn eclipse:eclipse&lt;/h3&gt;&lt;p&gt;I guess we all need a decent IDE to edit our Java codes therefore run &lt;code&gt;mvn eclipse:eclipse&lt;/code&gt; within the root folder where &lt;code&gt;pom.xml&lt;/code&gt; resides to download all the dependencies and prepare an importable Eclipse project. You can use &lt;code&gt;mvn eclipse:clean&lt;/code&gt; if you decided not to use Eclipse IDE any longer.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ mvn eclipse:eclipse
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building rabbitmq 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] &gt;&gt;&gt; maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq &gt;&gt;&gt;
+[INFO]
+[INFO] &lt;&lt;&lt; maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq &lt;&lt;&lt;
+[INFO]
+[INFO] --- maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq ---
+[INFO] Using Eclipse Workspace: /home/drmanalo/workspace
+[INFO] Adding default classpath container: org.eclipse.jdt.launching.JRE_CONTAINER
+[INFO] Not writing settings - defaults suffice
+[INFO] Wrote Eclipse project for &quot;rabbitmq&quot; to /home/drmanalo/workspace/rabbitmq.
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.194s
+[INFO] Finished at: Wed Aug 26 19:37:19 BST 2014
+[INFO] Final Memory: 9M/150M
+[INFO] ------------------------------------------------------------------------
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Updated pom.xml&lt;/h3&gt;&lt;p&gt;The dependency &lt;code&gt;spring-context&lt;/code&gt; defines the actual Spring Injection Container and has a small number of dependencies: &lt;code&gt;spring-core&lt;/code&gt;, &lt;code&gt;spring-expression&lt;/code&gt;, &lt;code&gt;spring-aop&lt;/code&gt; and &lt;code&gt;spring-beans&lt;/code&gt;. These augment the container by enabling support for some of the core Spring technologies:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;the Core Spring utilities&lt;/li&gt;
+  &lt;li&gt;the Spring Expression Language (SpEL)&lt;/li&gt;
+  &lt;li&gt;the Aspect Oriented Programming support&lt;/li&gt;
+  &lt;li&gt;and the JavaBeans mechanism.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+	xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+	&lt;groupId&gt;com.manalo.rabbitmq&lt;/groupId&gt;
+	&lt;artifactId&gt;rabbitmq&lt;/artifactId&gt;
+	&lt;packaging&gt;jar&lt;/packaging&gt;
+	&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+	&lt;name&gt;rabbitmq&lt;/name&gt;
+	&lt;url&gt;http://maven.apache.org&lt;/url&gt;
+	&lt;properties&gt;
+		&lt;spring.version&gt;3.2.4.RELEASE&lt;/spring.version&gt;
+	&lt;/properties&gt;
+	&lt;dependencies&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;junit&lt;/groupId&gt;
+			&lt;artifactId&gt;junit&lt;/artifactId&gt;
+			&lt;version&gt;3.8.1&lt;/version&gt;
+			&lt;scope&gt;test&lt;/scope&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+	&lt;/dependencies&gt;
+&lt;/project&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;After updating your &lt;code&gt;pom.xml&lt;/code&gt;, run &lt;code&gt;mvn compile&lt;/code&gt; to download Spring dependencies.&lt;/p&gt;&lt;h3&gt;App.java&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;
+package com.manalo.rabbitmq;
+
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class App {
+
+	public static void main(String[] args) {
+
+		AbstractApplicationContext context = new ClassPathXmlApplicationContext(
+				&quot;spring-config.xml&quot;);
+
+		HelloWorld hello = context.getBean(HelloWorld.class);
+		hello.printHello();
+
+		context.close();
+
+	}
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;spring-config.xml&lt;/h3&gt;&lt;p&gt;You will notice the above code is loading &lt;code&gt;spring-config.xml&lt;/code&gt; so we need to create this file.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd&quot;&gt;
+
+	&lt;bean id=&quot;helloBean&quot; class=&quot;com.manalo.rabbitmq.HelloWorld&quot;&gt;
+		&lt;property name=&quot;name&quot; value=&quot;Dhonnee&quot; /&gt;
+	&lt;/bean&gt;
+
+&lt;/beans&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;HelloWorld.java&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;
+package com.manalo.rabbitmq;
+
+public class HelloWorld {
+
+	private String name;
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void printHello() {
+		System.out.println(&quot;Hello &quot; + name + &quot;!&quot;);
+	}
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;mvn exec:java&lt;/h3&gt;&lt;p&gt;You can use maven to test your main class but you will need to edit &lt;code&gt;pom.xml&lt;/code&gt; to execute a certain goal.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+            &lt;artifactId&gt;exec-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;1.3.2&lt;/version&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;java&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+            &lt;configuration&gt;
+                &lt;mainClass&gt;com.manalo.rabbitmq.App&lt;/mainClass&gt;
+            &lt;/configuration&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;After editing &lt;code&gt;pom.xml&lt;/code&gt;, you can now run &lt;code&gt;mvn exec:java&lt;/code&gt; and it will execute the nominated mainClass.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ mvn exec:java
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building rabbitmq 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- exec-maven-plugin:1.3.2:java (default-cli) @ rabbitmq ---
+INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@52d9ce81: defining beans [helloBean]; root of factory hierarchy
+Hello Dhonnee!
+Aug 27, 2014 10:07:11 PM org.springframework.context.support.AbstractApplicationContext doClose
+INFO: Closing org.springframework.context.support.ClassPathXmlApplicationContext@8894f9e: startup date [Wed Aug 27 22:07:11 BST 2014]; root of context hierarchy
+Aug 27, 2014 10:07:11 PM org.springframework.beans.factory.support.DefaultSingletonBeanRegistry destroySingletons
+INFO: Destroying singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@52d9ce81: defining beans [helloBean]; root of factory hierarchy
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.142s
+[INFO] Finished at: Wed Aug 27 22:07:11 BST 2014
+[INFO] Final Memory: 9M/213M
+[INFO] ------------------------------------------------------------------------
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;mvn compile&lt;/h3&gt;&lt;p&gt;If you want to run &lt;code&gt;mvn compile&lt;/code&gt; to update dependencies, you will fail due to missing plugin. Edit &lt;code&gt;pom.xml&lt;/code&gt; again to add these lines within &lt;code&gt;&amp;lt;plugins&amp;gt;&lt;/code&gt;. This also fixed my Eclipse being funny whenever I&apos;m doing &lt;code&gt;Maven -&amp;gt; Update Project&lt;/code&gt;. The issue is it reverts back my JRE System Library to J2SE-1.5.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+    &lt;version&gt;2.3.2&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;source&gt;1.7&lt;/source&gt;
+        &lt;target&gt;1.7&lt;/target&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;mvn package&lt;/h3&gt;&lt;p&gt;If you want to have a runnable jar, you can use Eclipse&apos;s Export -&amp;gt; Java -&amp;gt; Runnable JAR file to achieve this. But if you&apos;re like me who love console, you might want to issue &lt;code&gt;mvn package&lt;/code&gt; or even &lt;code&gt;mvn install&lt;/code&gt; therefore you will have to edit your &lt;code&gt;pom.xml&lt;/code&gt; again.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&lt;pluginRepositories&gt;
+    &lt;pluginRepository&gt;
+        &lt;id&gt;onejar-maven-plugin.googlecode.com&lt;/id&gt;
+        &lt;url&gt;http://onejar-maven-plugin.googlecode.com/svn/mavenrepo&lt;/url&gt;
+    &lt;/pluginRepository&gt;
+&lt;/pluginRepositories&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then whithin &lt;code&gt;&amp;lt;plugins&amp;gt;&lt;/code&gt;, insert these lines too.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&lt;plugin&gt;
+    &lt;groupId&gt;org.dstovall&lt;/groupId&gt;
+    &lt;artifactId&gt;onejar-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;1.3.0&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;configuration&gt;
+                &lt;mainClass&gt;com.manalo.rabbitmq.App&lt;/mainClass&gt;
+            &lt;/configuration&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;one-jar&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You can now package your mvn project into a runnable jar using &lt;code&gt;mvn package&lt;/code&gt;. First it will download all the onejar dependencies but you should see &lt;strong&gt;BUILD SUCCESS&lt;/strong&gt; at the very end of your console.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ mvn package
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building rabbitmq 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:2.3:resources (default-resources) @ rabbitmq ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource
+================= some output texts were removed =============================
+[INFO] Using One-Jar to create a single-file distribution
+[INFO] Implementation Version: 1.0-SNAPSHOT
+[INFO] Using One-Jar version: 0.96
+[INFO] More info on One-Jar: http://one-jar.sourceforge.net/
+[INFO] License for One-Jar:  http://one-jar.sourceforge.net/one-jar-license.txt
+[INFO] One-Jar file: /home/drmanalo/workspace/rabbitmq/target/rabbitmq-1.0-SNAPSHOT.one-jar.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 13.904s
+[INFO] Finished at: Fri Aug 27 22:54:19 BST 2014
+[INFO] Final Memory: 11M/150M
+[INFO] ------------------------------------------------------------------------
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Compliments to &lt;a  href=&quot;http://www.jayway.com/2009/03/22/executable-jar-with-onejar-maven-plugin&quot; target=&quot;_new&quot;&gt;jayway.com&lt;/a&gt; for onejar.&lt;/p&gt;&lt;h3&gt;Downloadable resources&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/downloads/rabbitmq-1.0-SNAPSHOT.one-jar.jar&quot;&gt;Download runnable jar&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/downloads/rabbitmq.zip&quot;&gt;Download source&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
   	    </description>
       </item>
       <item>
@@ -1058,7 +1320,7 @@ $ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=o
         <description>
   	         &lt;p&gt;Cisco ASA includes a very nice debugging feature called &lt;code&gt;packet-tracer&lt;/code&gt;. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I&apos;m using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.&lt;/p&gt;&lt;h3&gt;Command syntax&lt;/h3&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
-packet-tracer input &amp;lt;source interface&amp;gt; &amp;lt;protocol&amp;gt; &amp;lt;source IP&amp;gt; &amp;lt;source port&amp;gt; &amp;lt;destination IP&amp;gt; &amp;lt;destination port&amp;gt; [detailed]
+packet-tracer input &lt;source interface&gt; &lt;protocol&gt; &lt;source IP&gt; &lt;source port&gt; &lt;destination IP&gt; &lt;destination port&gt; [detailed]
 &lt;/code&gt;&lt;/pre&gt;
 &lt;!-- more --&gt;&lt;h3&gt;Sample output&lt;/h3&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Spring standalone Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../../plugins/prism/prism.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+		<!-- Fixed navbar -->
+				<header class="header" id="header">
+			<div class="container">
+					<h1 class="logo pull-left">
+							<a href="/"><span class="logo-title">dhon.manalo</span></a>
+					</h1>
+					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
+							<div class="navbar-header">
+									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+											<span class="sr-only">Toggle navigation</span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+									</button>
+							</div>
+							<div id="navbar-collapse" class="navbar-collapse collapse">
+									<ul class="nav navbar-nav">
+											<li class="nav-item sr-only active"><a href="/">Home</a></li>
+											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
+											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
+											<li class="dropdown">
+							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
+							          <ul class="dropdown-menu">
+							            <li><a href="../../tags/bash.html">bash</a></li>
+													<li><a href="../../tags/cisco.html">cisco</a></li>
+													<li><a href="../../tags/java.html">java</a></li>
+													<li><a href="../../tags/php.html">php</a></li>
+													<li role="separator" class="divider"></li>
+							            <li><a href="../../tags/windows.html">windows</a></li>
+							          </ul>
+							        </li>
+									</ul>
+							</div>
+					</nav>
+			</div>
+		</header>
+
+	<section class="section promo offset-header">
+		<div class="container">
+			<h1 class="page-header title">Spring standalone Project</h1>
+			<p><em>27 August 2014</em></p>
+			<p><p>Creating a Spring standalone application is a challenge to me without using Spring Boot. I used to have <code>web.xml</code> to bootstrap my application but being standalone left me thinking which XML or configuration file will bootstrap it.</p><p>I'm prototyping <code>maven-archetype-generate</code> and will add Spring dependencies later on hoping I will achieve my goal.</p><h3>mvn archetype:generate</h3>
+<pre><code class="language-bash">
+$ mvn archetype:generate -DgroupId=com.manalo.rabbitmq -DartifactId=rabbitmq -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] >>> maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom >>>
+[INFO]
+[INFO] <<< maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom <<<
+[INFO]
+[INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Batch mode
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.0
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: com.manalo.rabbitmq
+[INFO] Parameter: packageName, Value: com.manalo.rabbitmq
+[INFO] Parameter: package, Value: com.manalo.rabbitmq
+[INFO] Parameter: artifactId, Value: rabbitmq
+[INFO] Parameter: basedir, Value: /home/drmanalo/workspace
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: /home/drmanalo/workspace/rabbitmq
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1:54.171s
+[INFO] Finished at: Wed Aug 26 19:34:57 BST 2014
+[INFO] Final Memory: 14M/150M
+[INFO] ------------------------------------------------------------------------
+</code></pre>
+<!-- more --><h3>mvn eclipse:eclipse</h3><p>I guess we all need a decent IDE to edit our Java codes therefore run <code>mvn eclipse:eclipse</code> within the root folder where <code>pom.xml</code> resides to download all the dependencies and prepare an importable Eclipse project. You can use <code>mvn eclipse:clean</code> if you decided not to use Eclipse IDE any longer.</p>
+<pre><code class="language-bash">
+$ mvn eclipse:eclipse
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building rabbitmq 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] >>> maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq >>>
+[INFO]
+[INFO] <<< maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq <<<
+[INFO]
+[INFO] --- maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq ---
+[INFO] Using Eclipse Workspace: /home/drmanalo/workspace
+[INFO] Adding default classpath container: org.eclipse.jdt.launching.JRE_CONTAINER
+[INFO] Not writing settings - defaults suffice
+[INFO] Wrote Eclipse project for "rabbitmq" to /home/drmanalo/workspace/rabbitmq.
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.194s
+[INFO] Finished at: Wed Aug 26 19:37:19 BST 2014
+[INFO] Final Memory: 9M/150M
+[INFO] ------------------------------------------------------------------------
+</code></pre><h3>Updated pom.xml</h3><p>The dependency <code>spring-context</code> defines the actual Spring Injection Container and has a small number of dependencies: <code>spring-core</code>, <code>spring-expression</code>, <code>spring-aop</code> and <code>spring-beans</code>. These augment the container by enabling support for some of the core Spring technologies:</p>
+<ul>
+  <li>the Core Spring utilities</li>
+  <li>the Spring Expression Language (SpEL)</li>
+  <li>the Aspect Oriented Programming support</li>
+  <li>and the JavaBeans mechanism.</li>
+</ul>
+<pre><code class="language-xml">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.manalo.rabbitmq</groupId>
+	<artifactId>rabbitmq</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>rabbitmq</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<spring.version>3.2.4.RELEASE</spring.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+	</dependencies>
+</project>
+</code></pre><p>After updating your <code>pom.xml</code>, run <code>mvn compile</code> to download Spring dependencies.</p><h3>App.java</h3>
+<pre><code class="language-java">
+package com.manalo.rabbitmq;
+
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class App {
+
+	public static void main(String[] args) {
+
+		AbstractApplicationContext context = new ClassPathXmlApplicationContext(
+				"spring-config.xml");
+
+		HelloWorld hello = context.getBean(HelloWorld.class);
+		hello.printHello();
+
+		context.close();
+
+	}
+
+}
+</code></pre><h3>spring-config.xml</h3><p>You will notice the above code is loading <code>spring-config.xml</code> so we need to create this file.</p>
+<pre><code class="language-xml">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="helloBean" class="com.manalo.rabbitmq.HelloWorld">
+		<property name="name" value="Dhonnee" />
+	</bean>
+
+</beans>
+</code></pre><h3>HelloWorld.java</h3>
+<pre><code class="language-java">
+package com.manalo.rabbitmq;
+
+public class HelloWorld {
+
+	private String name;
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void printHello() {
+		System.out.println("Hello " + name + "!");
+	}
+
+}
+</code></pre><h3>mvn exec:java</h3><p>You can use maven to test your main class but you will need to edit <code>pom.xml</code> to execute a certain goal.</p>
+<pre><code class="language-xml">
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.3.2</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>java</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <mainClass>com.manalo.rabbitmq.App</mainClass>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+</code></pre><p>After editing <code>pom.xml</code>, you can now run <code>mvn exec:java</code> and it will execute the nominated mainClass.</p>
+<pre><code class="language-bash">
+$ mvn exec:java
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building rabbitmq 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- exec-maven-plugin:1.3.2:java (default-cli) @ rabbitmq ---
+INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@52d9ce81: defining beans [helloBean]; root of factory hierarchy
+Hello Dhonnee!
+Aug 27, 2014 10:07:11 PM org.springframework.context.support.AbstractApplicationContext doClose
+INFO: Closing org.springframework.context.support.ClassPathXmlApplicationContext@8894f9e: startup date [Wed Aug 27 22:07:11 BST 2014]; root of context hierarchy
+Aug 27, 2014 10:07:11 PM org.springframework.beans.factory.support.DefaultSingletonBeanRegistry destroySingletons
+INFO: Destroying singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@52d9ce81: defining beans [helloBean]; root of factory hierarchy
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.142s
+[INFO] Finished at: Wed Aug 27 22:07:11 BST 2014
+[INFO] Final Memory: 9M/213M
+[INFO] ------------------------------------------------------------------------
+</code></pre><h3>mvn compile</h3><p>If you want to run <code>mvn compile</code> to update dependencies, you will fail due to missing plugin. Edit <code>pom.xml</code> again to add these lines within <code>&lt;plugins&gt;</code>. This also fixed my Eclipse being funny whenever I'm doing <code>Maven -&gt; Update Project</code>. The issue is it reverts back my JRE System Library to J2SE-1.5.</p>
+<pre><code class="language-xml">
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>2.3.2</version>
+    <configuration>
+        <source>1.7</source>
+        <target>1.7</target>
+    </configuration>
+</plugin>
+</code></pre><h3>mvn package</h3><p>If you want to have a runnable jar, you can use Eclipse's Export -&gt; Java -&gt; Runnable JAR file to achieve this. But if you're like me who love console, you might want to issue <code>mvn package</code> or even <code>mvn install</code> therefore you will have to edit your <code>pom.xml</code> again.</p>
+<pre><code class="language-xml">
+<pluginRepositories>
+    <pluginRepository>
+        <id>onejar-maven-plugin.googlecode.com</id>
+        <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+    </pluginRepository>
+</pluginRepositories>
+</code></pre><p>Then whithin <code>&lt;plugins&gt;</code>, insert these lines too.</p>
+<pre><code class="language-xml">
+<plugin>
+    <groupId>org.dstovall</groupId>
+    <artifactId>onejar-maven-plugin</artifactId>
+    <version>1.3.0</version>
+    <executions>
+        <execution>
+            <configuration>
+                <mainClass>com.manalo.rabbitmq.App</mainClass>
+            </configuration>
+            <goals>
+                <goal>one-jar</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+</code></pre><p>You can now package your mvn project into a runnable jar using <code>mvn package</code>. First it will download all the onejar dependencies but you should see <strong>BUILD SUCCESS</strong> at the very end of your console.</p>
+<pre><code class="language-bash">
+$ mvn package
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building rabbitmq 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:2.3:resources (default-resources) @ rabbitmq ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource
+================= some output texts were removed =============================
+[INFO] Using One-Jar to create a single-file distribution
+[INFO] Implementation Version: 1.0-SNAPSHOT
+[INFO] Using One-Jar version: 0.96
+[INFO] More info on One-Jar: http://one-jar.sourceforge.net/
+[INFO] License for One-Jar:  http://one-jar.sourceforge.net/one-jar-license.txt
+[INFO] One-Jar file: /home/drmanalo/workspace/rabbitmq/target/rabbitmq-1.0-SNAPSHOT.one-jar.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 13.904s
+[INFO] Finished at: Fri Aug 27 22:54:19 BST 2014
+[INFO] Final Memory: 11M/150M
+[INFO] ------------------------------------------------------------------------
+</code></pre><p>Compliments to <a  href="http://www.jayway.com/2009/03/22/executable-jar-with-onejar-maven-plugin" target="_new">jayway.com</a> for onejar.</p><h3>Downloadable resources</h3>
+<ul>
+  <li><a href="/downloads/rabbitmq-1.0-SNAPSHOT.one-jar.jar">Download runnable jar</a></li>
+  <li><a href="/downloads/rabbitmq.zip">Download source</a></li>
+</ul></p>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2014/spring-standalone-project.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2014/spring-standalone-project.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+	<script>hljs.initHighlightingOnLoad();</script>
+
+		</div><!--//container-->
+	</section>
+
+	<!-- ******FOOTER****** -->
+	<footer class="footer">
+    <div class="container text-center">
+        <small class="copyright">Mixed by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+    </div>
+	</footer>
+
+  <!-- Javascript -->
+	<script src="../../plugins/jquery-1.11.3.min.js"></script>
+	<script src="../../plugins/jquery.easing.1.3.js"></script>
+	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+	<script src="../../plugins/prism/prism.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>
