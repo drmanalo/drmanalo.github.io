@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Wed, 1 Jun 2016 23:21:31 +0100</pubDate>
-    <lastBuildDate>Wed, 1 Jun 2016 23:21:31 +0100</lastBuildDate>
+    <pubDate>Thu, 2 Jun 2016 08:34:28 +0100</pubDate>
+    <lastBuildDate>Thu, 2 Jun 2016 08:34:28 +0100</lastBuildDate>
 
       <item>
         <title>Pimping CentOS7</title>
@@ -23,42 +23,22 @@
 # rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
 # yum update
 &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Fancy icons&lt;/h3&gt;&lt;p&gt;Download and extract &lt;a href=&quot;/downloads/Super-Flat-Remix-master.zip&quot;&gt;Super Flat Remix GNOME icons&lt;/a&gt;. After extracting, move folder &lt;code&gt;Super Flat Remix&lt;/code&gt; into your &lt;code&gt;~/.icons&lt;/code&gt; folder.&lt;/p&gt;&lt;h3&gt;Fancy themes&lt;/h3&gt;&lt;p&gt;Download and extract &lt;a href=&quot;/downloads/175666-OSX-Arc-White.zip&quot;&gt;OSX Arc White theme&lt;/a&gt;. After extracting, move folder &lt;code&gt;OSX-Arc-White&lt;/code&gt; into your &lt;code&gt;~/.themes&lt;/code&gt; folder.&lt;/p&gt;
-&lt;!-- more --&gt;&lt;h3&gt;Fancy fonts&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;language-markup&quot;&gt;
-&lt;?xml version=&quot;1.0&quot;?&gt;
-&lt;!DOCTYPE fontconfig SYSTEM &quot;fonts.dtd&quot;&gt;
-    &lt;fontconfig&gt;
-     &lt;match target=&quot;font&quot;&gt;
-      &lt;edit mode=&quot;assign&quot; name=&quot;hinting&quot; &gt;
-       &lt;bool&gt;true&lt;/bool&gt;
-      &lt;/edit&gt;
-     &lt;/match&gt;
-     &lt;match target=&quot;font&quot; &gt;
-      &lt;edit mode=&quot;assign&quot; name=&quot;autohint&quot; &gt;
-       &lt;bool&gt;true&lt;/bool&gt;
-      &lt;/edit&gt;
-     &lt;/match&gt;
-     &lt;match target=&quot;font&quot;&gt;
-      &lt;edit mode=&quot;assign&quot; name=&quot;hintstyle&quot; &gt;
-      &lt;const&gt;hintslight&lt;/const&gt;
-      &lt;/edit&gt;
-     &lt;/match&gt;
-     &lt;match target=&quot;font&quot;&gt;
-      &lt;edit mode=&quot;assign&quot; name=&quot;rgba&quot; &gt;
-       &lt;const&gt;rgb&lt;/const&gt;
-      &lt;/edit&gt;
-     &lt;/match&gt;
-     &lt;match target=&quot;font&quot;&gt;
-      &lt;edit mode=&quot;assign&quot; name=&quot;antialias&quot; &gt;
-       &lt;bool&gt;true&lt;/bool&gt;
-      &lt;/edit&gt;
-     &lt;/match&gt;
-     &lt;match target=&quot;font&quot;&gt;
-       &lt;edit mode=&quot;assign&quot; name=&quot;lcdfilter&quot;&gt;
-       &lt;const&gt;lcddefault&lt;/const&gt;
-       &lt;/edit&gt;
-     &lt;/match&gt;
-    &lt;/fontconfig&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Fancy fonts&lt;/h3&gt;&lt;p&gt;Edit &lt;code&gt;/usr/share/gnome-shell/theme/gnome-shell.css&lt;/code&gt;. The following CSS elements do exist so please search first then apply the tweak.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-css&quot;&gt;
+stage {
+    font-family: Roboto Condensed, sans-serif;
+    font-size: 11pt;
+    color: white;
+}
+.screen-shield-clock-time {
+    font-family: Open Sans Light Condensed, sans-serif;
+    font-size: 90pt;
+    text-shadow: 0px 2px 2px rgba(0,0,0,0.4);
+}
+.screen-shield-clock-date {
+    font-family: Open Sans Light Condensed, sans-serif;
+    font-size: 45pt;
+}
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Logout and log back in then apply this &lt;img src=&quot;/images/font-settings.png&quot; alt=&quot;Custom font setting&quot;&quot;/&gt;.&lt;/p&gt;
   	    </description>
       </item>
@@ -178,9 +158,12 @@ fi
 
 # User specific aliases and functions
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR=&quot;/home/kodi/.sdkman&quot;
 [[ -s &quot;/home/kodi/.sdkman/bin/sdkman-init.sh&quot; ]] &amp;&amp; source &quot;/home/kodi/.sdkman/bin/sdkman-init.sh&quot;
+
+# Strong red prompt
+export PS1=&quot;\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;!-- more --&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
@@ -1050,7 +1033,512 @@ $ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=o
   	    </description>
       </item>
       <item>
-        <title>Spring standalone Project</title>
+        <title>Spring Persistence with Hibernate</title>
+        <link>https://drmanalo.github.io/blog/2014/spring-hibernate.html</link>
+        <pubDate>Wed, 3 Sep 2014 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2014/spring-hibernate.html</guid>
+        <description>
+  	         &lt;p&gt;After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I&apos;m going to use H2 to avoid 3rd party database dependency.&lt;/p&gt;&lt;p&gt;Just like my previous post, I&apos;m going to use &lt;code&gt;maven-archetype-generate&lt;/code&gt; and will add Spring dependencies later on.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ mvn archetype:generate -DgroupId=com.manalo.prototype -DartifactId=persistence -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom
+[INFO]
+[INFO] maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom
+[INFO]
+[INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Batch mode
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.0
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: com.manalo.prototype
+[INFO] Parameter: packageName, Value: com.manalo.prototype
+[INFO] Parameter: package, Value: com.manalo.prototype
+[INFO] Parameter: artifactId, Value: persistence
+[INFO] Parameter: basedir, Value: /home/drmanalo/workspace
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: /home/drmanalo/workspace/persistence
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 52.401s
+[INFO] Finished at: Thu Sep 04 23:17:16 BST 2014
+[INFO] Final Memory: 14M/150M
+[INFO] ------------------------------------------------------------------------
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;mvn eclipse:eclipse&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+$ mvn eclipse:eclipse
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building persistence 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] maven-eclipse-plugin:2.9:eclipse (default-cli) @ persistence
+[INFO]
+[INFO] maven-eclipse-plugin:2.9:eclipse (default-cli) @ persistence
+[INFO]
+[INFO] --- maven-eclipse-plugin:2.9:eclipse (default-cli) @ persistence ---
+[INFO] Using Eclipse Workspace: /home/drmanalo/workspace
+[INFO] Adding default classpath container: org.eclipse.jdt.launching.JRE_CONTAINER
+[INFO] Not writing settings - defaults suffice
+[INFO] Wrote Eclipse project for &quot;persistence&quot; to /home/drmanalo/workspace/persistence.
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.325s
+[INFO] Finished at: Thu Sep 04 23:23:07 BST 2014
+[INFO] Final Memory: 9M/150M
+[INFO] ------------------------------------------------------------------------
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;pom.xml&lt;/h3&gt;&lt;p&gt;Here&apos;s my complete &lt;code&gt;pom.xml&lt;/code&gt; with added dependencies apart from Spring persistence.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+	xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+
+	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+	&lt;groupId&gt;com.manalo.prototype&lt;/groupId&gt;
+	&lt;artifactId&gt;persistence&lt;/artifactId&gt;
+	&lt;packaging&gt;jar&lt;/packaging&gt;
+	&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+	&lt;name&gt;persistence&lt;/name&gt;
+	&lt;url&gt;http://maven.apache.org&lt;/url&gt;
+
+	&lt;properties&gt;
+		&lt;spring.version&gt;3.2.0.RELEASE&lt;/spring.version&gt;
+		&lt;hibernate.version&gt;4.1.9.Final&lt;/hibernate.version&gt;
+	&lt;/properties&gt;
+
+	&lt;dependencies&gt;
+		&lt;!-- Database --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;com.h2database&lt;/groupId&gt;
+			&lt;artifactId&gt;h2&lt;/artifactId&gt;
+			&lt;version&gt;1.3.173&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+			&lt;artifactId&gt;commons-dbcp2&lt;/artifactId&gt;
+			&lt;version&gt;2.0.1&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;!-- Hibernate --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.hibernate&lt;/groupId&gt;
+			&lt;artifactId&gt;hibernate-core&lt;/artifactId&gt;
+			&lt;version&gt;${hibernate.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;!-- Logging --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;log4j&lt;/groupId&gt;
+			&lt;artifactId&gt;log4j&lt;/artifactId&gt;
+			&lt;version&gt;1.2.17&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;!-- Spring --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-orm&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;javax.persistence&lt;/groupId&gt;
+			&lt;artifactId&gt;persistence-api&lt;/artifactId&gt;
+			&lt;version&gt;1.0&lt;/version&gt;
+		&lt;/dependency&gt;
+	&lt;/dependencies&gt;
+
+	&lt;pluginRepositories&gt;
+		&lt;pluginRepository&gt;
+			&lt;id&gt;onejar-maven-plugin.googlecode.com&lt;/id&gt;
+			&lt;url&gt;http://onejar-maven-plugin.googlecode.com/svn/mavenrepo&lt;/url&gt;
+		&lt;/pluginRepository&gt;
+	&lt;/pluginRepositories&gt;
+
+	&lt;build&gt;
+		&lt;plugins&gt;
+			&lt;plugin&gt;
+				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+				&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+				&lt;version&gt;2.3.2&lt;/version&gt;
+				&lt;configuration&gt;
+					&lt;source&gt;1.7&lt;/source&gt;
+					&lt;target&gt;1.7&lt;/target&gt;
+				&lt;/configuration&gt;
+			&lt;/plugin&gt;
+			&lt;plugin&gt;
+				&lt;groupId&gt;org.dstovall&lt;/groupId&gt;
+				&lt;artifactId&gt;onejar-maven-plugin&lt;/artifactId&gt;
+				&lt;version&gt;1.3.0&lt;/version&gt;
+				&lt;executions&gt;
+					&lt;execution&gt;
+						&lt;configuration&gt;
+							&lt;mainClass&gt;com.manalo.rabbitmq.App&lt;/mainClass&gt;
+						&lt;/configuration&gt;
+						&lt;goals&gt;
+							&lt;goal&gt;one-jar&lt;/goal&gt;
+						&lt;/goals&gt;
+					&lt;/execution&gt;
+				&lt;/executions&gt;
+			&lt;/plugin&gt;
+		&lt;/plugins&gt;
+	&lt;/build&gt;
+
+&lt;/project&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Spring Configurations&lt;/h3&gt;&lt;p&gt;This contains database connection, connection pooling and Hibernate configurations. I defined the packages where Spring should look for its beans using &lt;strong&gt;context:component-scan&lt;/strong&gt; elements.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+	xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
+	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd&quot;&gt;
+
+	&lt;tx:annotation-driven /&gt;
+
+	&lt;context:component-scan base-package=&quot;com.manalo.dao&quot; /&gt;
+	&lt;context:component-scan base-package=&quot;com.manalo.service&quot; /&gt;
+
+	&lt;!-- Load application properties --&gt;
+	&lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+		&lt;property name=&quot;locations&quot;&gt;
+			&lt;list&gt;
+				&lt;value&gt;classpath:application.properties&lt;/value&gt;
+			&lt;/list&gt;
+		&lt;/property&gt;
+	&lt;/bean&gt;
+
+	&lt;!-- DB connection --&gt;
+	&lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp2.BasicDataSource&quot;
+		destroy-method=&quot;close&quot;&gt;
+		&lt;property name=&quot;driverClassName&quot; value=&quot;${db.driver}&quot; /&gt;
+		&lt;property name=&quot;url&quot; value=&quot;${db.url}&quot; /&gt;
+		&lt;property name=&quot;username&quot; value=&quot;${db.user}&quot; /&gt;
+		&lt;property name=&quot;password&quot; value=&quot;${db.pass}&quot; /&gt;
+	&lt;/bean&gt;
+
+	&lt;!-- Hibernate configuration --&gt;
+	&lt;bean id=&quot;sessionFactory&quot;
+		class=&quot;org.springframework.orm.hibernate4.LocalSessionFactoryBean&quot; &gt;
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+		&lt;property name=&quot;hibernateProperties&quot;&gt;
+			&lt;props&gt;
+				&lt;prop key=&quot;hibernate.dialect&quot;&gt;org.hibernate.dialect.MySQLDialect&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.show_sql&quot;&gt;${hibernate.show_sql}&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.hbm2ddl.auto&quot;&gt;${hibernate.hbm2ddl.auto}&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.cache.use_second_level_cache&quot;&gt;false&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.cache.use_query_cache&quot;&gt;false&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.generate_statistics&quot;&gt;false&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.cache.use_structured_entries&quot;&gt;false&lt;/prop&gt;
+			&lt;/props&gt;
+		&lt;/property&gt;
+		&lt;property name=&quot;packagesToScan&quot; value=&quot;com.manalo.domain&quot; /&gt;
+	&lt;/bean&gt;
+
+	&lt;!-- Transaction manager --&gt;
+	&lt;bean id=&quot;transactionManager&quot;
+		class=&quot;org.springframework.orm.hibernate4.HibernateTransactionManager&quot;&gt;
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+		&lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot; /&gt;
+	&lt;/bean&gt;
+
+&lt;/beans&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;application.properties&lt;/h3&gt;&lt;p&gt;I put this under &lt;code&gt;src/main/resources&lt;/code&gt; which has to be added in your classpath in order for &lt;code&gt;PropertyPlaceholderConfigurer&lt;/code&gt; to find it.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;
+# Embedded H2 database
+db.driver=org.h2.Driver
+db.user=testuser
+db.pass=password
+db.host=localhost
+db.port=3336
+db.name=test
+db.vendor=h2
+db.schemaname=PUBLIC
+db.url=jdbc:h2:mem:${db.name};MODE=MySQL;USER=${db.user};PASSWORD=${db.pass};DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=10000;INIT=create schema if not exists test\
+
+# Connection pool
+db.pool.acquireincrement=1
+db.pool.minpoolsize=1
+db.pool.maxpoolsize=20
+db.pool.maxidletime=14400
+
+# Hibernate (ORM)
+hibernate.hbm2ddl.auto=create
+hibernate.show_sql=true
+hibernate.dialect=org.hibernate.dialect.MySQLDialect
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;log4j.properties&lt;/h3&gt;&lt;p&gt;As this is part of &lt;em&gt;convention over configuration&lt;/em&gt;, you have to name this file as &lt;code&gt;log4j.properties&lt;/code&gt; and should also be within your classpath.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;
+# Root logger
+log4j.rootLogger=INFO, file
+log4j.logger.com.manalo=DEBUG, stdout
+log4j.logger.org.springframework=INFO, stdout
+log4j.logger.org.hibernate=INFO, stdout
+
+# Direct application log messages to a file
+log4j.appender.file=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.file.File=./logs/manalo.log
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.file.layout.ConversionPattern=%d{ABSOLUTE} %5p [%15.15t] %c - %m%n
+
+# Direct log messages to stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target=System.out
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %5p %c{1}:%L - %m%n
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Database Config&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+	xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+	xmlns:jdbc=&quot;http://www.springframework.org/schema/jdbc&quot;
+	xsi:schemaLocation=&quot;
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/jdbc
+       http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd&quot;&gt;
+
+	&lt;!-- Use a web browser to access http://localhost:11111 to view H2 console
+		that allows db queries to be run and be viewed. Parameters url, username
+		and password should be same as JDBC connection. e.g. jdbc:h2:mem:test, testuser,
+		password --&gt;
+	&lt;bean id=&quot;org.h2.tools.Server-WebServer&quot; class=&quot;org.h2.tools.Server&quot;
+		factory-method=&quot;createWebServer&quot; depends-on=&quot;dataSource&quot; init-method=&quot;start&quot;
+		lazy-init=&quot;false&quot;&gt;
+		&lt;constructor-arg value=&quot;-web,-webPort,11111&quot; /&gt;
+	&lt;/bean&gt;
+
+	&lt;jdbc:initialize-database data-source=&quot;dataSource&quot;&gt;
+		&lt;jdbc:script location=&quot;classpath:/initialise.sql&quot;&gt;&lt;/jdbc:script&gt;
+	&lt;/jdbc:initialize-database&gt;
+
+&lt;/beans&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;initialise.sql&lt;/h3&gt;&lt;p&gt;You will notice this file is being loaded using &lt;code&gt;jdbc:script&lt;/code&gt; element.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;
+CREATE TABLE user (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  	username VARCHAR (32) NOT NULL,
+  	password VARCHAR (255) NOT NULL,
+  	UNIQUE (USERNAME)
+);
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Domain Object&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;
+package com.manalo.domain;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table
+public class User {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(nullable = false)
+	private int id;
+
+	@Column(nullable = false)
+	private String username;
+
+	@Column(nullable = false)
+	private String password;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Data Access Component&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;
+package com.manalo.dao;
+
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.manalo.domain.User;
+
+@Repository
+public class UserDao {
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public Session getSession() {
+		return sessionFactory.getCurrentSession();
+	}
+
+	public Integer addUser(User user) {
+		return (Integer) getSession().save(user);
+	}
+
+	public User getUserByUserName(String username) {
+
+		String hql = &quot;from User where username = :username&quot;;
+
+		Query query = getSession().createQuery(hql);
+		query.setString(&quot;username&quot;, username);
+
+		return (User) query.uniqueResult();
+	}
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;User&gt; getUsers() {
+		Criteria criteria = getSession().createCriteria(User.class);
+		return criteria.list();
+	}
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Service Layer&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;
+package com.manalo.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.manalo.dao.UserDao;
+import com.manalo.domain.User;
+
+@Service
+@Transactional
+public class UserManager {
+
+	@Autowired
+	private UserDao userDao;
+
+	public int addUser(User user) {
+		return userDao.addUser(user);
+	}
+
+	public User getUserByUserName(String username) {
+		return userDao.getUserByUserName(username);
+	}
+
+	public List&lt;User&gt; getUsers() {
+		return userDao.getUsers();
+	}
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;App.java&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;
+package com.manalo.prototype;
+
+import java.util.List;
+
+import org.springframework.context.support.AbstractXmlApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.manalo.domain.User;
+import com.manalo.service.UserManager;
+
+public class App {
+
+	public static void main(String[] args) {
+
+		/**
+		 * Order of xml files to be loaded is important
+		 */
+		final String[] CONFIG_FILES = { &quot;database-init.xml&quot;, &quot;spring-core.xml&quot; };
+
+		AbstractXmlApplicationContext context = new ClassPathXmlApplicationContext(CONFIG_FILES);
+
+		UserManager userManager = context.getBean(UserManager.class);
+
+		User user = new User();
+
+		user.setUsername(&quot;drmanalo&quot;);
+		user.setPassword(&quot;secret&quot;);
+
+		userManager.addUser(user);
+
+		user = userManager.getUserByUserName(&quot;drmanalo&quot;);
+
+		System.out.println(&quot;Id:       &quot; + user.getId());
+		System.out.println(&quot;Username: &quot; + user.getUsername());
+		System.out.println(&quot;Password: &quot; + user.getPassword());
+
+		List&lt;User&gt; users = userManager.getUsers();
+
+		System.out.println(&quot;Number of users: &quot; + users.size());
+
+		context.close();
+
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Running the application&lt;/h3&gt;&lt;p&gt;Within Eclipse, right-click App.java -&amp;gt; Run As -&amp;gt; Java Application. You should see this within Eclipse&apos;s console. There are extra noises since log4j is doing its job.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+Hibernate: drop table if exists User
+Hibernate: create table User (id integer not null auto_increment, password varchar(255) not null, username varchar(255) not null, primary key (id))
+23:06:01,825  INFO SchemaExport:405 - HHH000230: Schema export complete
+Hibernate: insert into User (password, username) values (?, ?)
+Hibernate: select user0_.id as id0_, user0_.password as password0_, user0_.username as username0_ from User user0_ where user0_.username=?
+Id:       1
+Username: drmanalo
+Password: secret
+Hibernate: select this_.id as id0_0_, this_.password as password0_0_, this_.username as username0_0_ from User this_
+Number of users: 1
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;/downloads/persistence.zip&quot;&gt;Download source&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Spring Standalone Project</title>
         <link>https://drmanalo.github.io/blog/2014/spring-standalone-project.html</link>
         <pubDate>Wed, 27 Aug 2014 00:00:00 +0100</pubDate>
         <guid isPermaLink="false">blog/2014/spring-standalone-project.html</guid>
@@ -1064,9 +1552,9 @@ $ mvn archetype:generate -DgroupId=com.manalo.rabbitmq -DartifactId=rabbitmq -Da
 [INFO] Building Maven Stub Project (No POM) 1
 [INFO] ------------------------------------------------------------------------
 [INFO]
-[INFO] &gt;&gt;&gt; maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom &gt;&gt;&gt;
+[INFO] maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom
 [INFO]
-[INFO] &lt;&lt;&lt; maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom &lt;&lt;&lt;
+[INFO] maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom
 [INFO]
 [INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
 [INFO] Generating project in Batch mode
@@ -1097,9 +1585,9 @@ $ mvn eclipse:eclipse
 [INFO] Building rabbitmq 1.0-SNAPSHOT
 [INFO] ------------------------------------------------------------------------
 [INFO]
-[INFO] &gt;&gt;&gt; maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq &gt;&gt;&gt;
+[INFO] maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq
 [INFO]
-[INFO] &lt;&lt;&lt; maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq &lt;&lt;&lt;
+[INFO] maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq
 [INFO]
 [INFO] --- maven-eclipse-plugin:2.9:eclipse (default-cli) @ rabbitmq ---
 [INFO] Using Eclipse Workspace: /home/drmanalo/workspace

@@ -82,9 +82,12 @@ fi
 
 # User specific aliases and functions
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/kodi/.sdkman"
 [[ -s "/home/kodi/.sdkman/bin/sdkman-init.sh" ]] && source "/home/kodi/.sdkman/bin/sdkman-init.sh"
+
+# Strong red prompt
+export PS1="\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]"
 </code></pre>
 <!-- more -->
 <pre><code class="language-bash">
@@ -149,7 +152,7 @@ alias yumc='sudo yum clean all'
 	<!-- ******FOOTER****** -->
 	<footer class="footer">
     <div class="container text-center">
-        <small class="copyright">Mixed by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+        <small class="copyright">Mixed by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="https://jbake.org">JBake v2.4.0</a></small>
     </div>
 	</footer>
 

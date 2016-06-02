@@ -131,9 +131,12 @@ fi
 
 # User specific aliases and functions
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/kodi/.sdkman"
 [[ -s "/home/kodi/.sdkman/bin/sdkman-init.sh" ]] && source "/home/kodi/.sdkman/bin/sdkman-init.sh"
+
+# Strong red prompt
+export PS1="\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]"
 </code></pre>
 </p>
 						<a class="btn btn-default" href="blog/2016/my-bashrc.html">Read More →</a>
@@ -249,7 +252,48 @@ $ yum groupinstall "GNOME Desktop" "Graphical Administration Tools"
 </p>
 						<a class="btn btn-default" href="blog/2015/adding-local-jar-to-maven.html">Read More →</a>
 						<hr class="spacer"/>
-		  			<a href="blog/2014/spring-standalone-project.html"><h1 class="title">Spring standalone Project</h1></a>
+		  			<a href="blog/2014/spring-hibernate.html"><h1 class="title">Spring Persistence with Hibernate</h1></a>
+		  			<p class="post-info">
+			  			<i class="fa fa-calendar"></i> 03 September 2014 |
+			  			<i class="fa fa-user"></i> drmanalo
+		  			</p>
+		  			<p><p>After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I'm going to use H2 to avoid 3rd party database dependency.</p><p>Just like my previous post, I'm going to use <code>maven-archetype-generate</code> and will add Spring dependencies later on.</p>
+<pre><code class="language-bash">
+$ mvn archetype:generate -DgroupId=com.manalo.prototype -DartifactId=persistence -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom
+[INFO]
+[INFO] maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom
+[INFO]
+[INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Batch mode
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.0
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: com.manalo.prototype
+[INFO] Parameter: packageName, Value: com.manalo.prototype
+[INFO] Parameter: package, Value: com.manalo.prototype
+[INFO] Parameter: artifactId, Value: persistence
+[INFO] Parameter: basedir, Value: /home/drmanalo/workspace
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: /home/drmanalo/workspace/persistence
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 52.401s
+[INFO] Finished at: Thu Sep 04 23:17:16 BST 2014
+[INFO] Final Memory: 14M/150M
+[INFO] ------------------------------------------------------------------------
+</code></pre>
+</p>
+						<a class="btn btn-default" href="blog/2014/spring-hibernate.html">Read More →</a>
+						<hr class="spacer"/>
+		  			<a href="blog/2014/spring-standalone-project.html"><h1 class="title">Spring Standalone Project</h1></a>
 		  			<p class="post-info">
 			  			<i class="fa fa-calendar"></i> 27 August 2014 |
 			  			<i class="fa fa-user"></i> drmanalo
@@ -263,9 +307,9 @@ $ mvn archetype:generate -DgroupId=com.manalo.rabbitmq -DartifactId=rabbitmq -Da
 [INFO] Building Maven Stub Project (No POM) 1
 [INFO] ------------------------------------------------------------------------
 [INFO]
-[INFO] >>> maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom >>>
+[INFO] maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom
 [INFO]
-[INFO] <<< maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom <<<
+[INFO] maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom
 [INFO]
 [INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
 [INFO] Generating project in Batch mode
@@ -378,7 +422,7 @@ object network OBJ_NATTED_INSIDE_HOST1
 	<!-- ******FOOTER****** -->
 	<footer class="footer">
     <div class="container text-center">
-        <small class="copyright">Mixed by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="http://jbake.org">JBake v2.4.0</a></small>
+        <small class="copyright">Mixed by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="https://jbake.org">JBake v2.4.0</a></small>
     </div>
 	</footer>
 

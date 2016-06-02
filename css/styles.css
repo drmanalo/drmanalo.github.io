@@ -90,6 +90,7 @@ a.btn-cta-secondary:hover,
 }
 pre code {
   font-size: 14px;
+  margin-top: 0;
 }
 /* ======= Header ======= */
 .header {
