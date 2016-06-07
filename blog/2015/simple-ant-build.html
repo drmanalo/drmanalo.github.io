@@ -10,63 +10,48 @@
     <meta name="generator" content="JBake">
 
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="../../plugins/prism/prism.css">
-    <!-- Theme CSS -->
-    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
-		<!-- Fixed navbar -->
-				<header class="header" id="header">
-			<div class="container">
-					<h1 class="logo pull-left">
-							<a href="/"><span class="logo-title">dhon.manalo</span></a>
-					</h1>
-					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
-							<div class="navbar-header">
-									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
-											<span class="sr-only">Toggle navigation</span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-									</button>
-							</div>
-							<div id="navbar-collapse" class="navbar-collapse collapse">
-									<ul class="nav navbar-nav">
-											<li class="nav-item sr-only active"><a href="/">Home</a></li>
-											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
-											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
-											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
-											<li class="dropdown">
-							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
-							          <ul class="dropdown-menu">
-							            <li><a href="../../tags/bash.html">bash</a></li>
-													<li><a href="../../tags/cisco.html">cisco</a></li>
-													<li><a href="../../tags/java.html">java</a></li>
-													<li><a href="../../tags/php.html">php</a></li>
-													<li role="separator" class="divider"></li>
-							            <li><a href="../../tags/windows.html">windows</a></li>
-							          </ul>
-							        </li>
-									</ul>
-							</div>
-					</nav>
-			</div>
-		</header>
+<body class="theme-base-01">
 
-	<section class="section promo offset-header">
-		<div class="container">
-			<h1 class="page-header title">Simple Ant Build</h1>
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Simple Ant Build</h1>
 			<p><em>22 June 2015</em></p>
 			<p><p>This is a simple Ant build script I'm using for my Symfony2 blog. This has the following dependencies:</p>
 <ul>
@@ -79,117 +64,117 @@
   <li><p><a href="http://phpdox.de/" target="_new">phpDox</a></p></li>
 </ul>
 <!-- more -->
-<pre><code class="language-xml">
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="Symblog Project" default="build">
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project name=&quot;Symblog Project&quot; default=&quot;build&quot;&gt;
 
-	<target name="build"
-		depends="clean,prepare,lint,phploc,pdepend,phpunit,assetic,assets,cache">
-		<zip destfile="${basedir}/build/target/symblog.zip">
-			<zipfileset dir="${basedir}/app" prefix="app">
-				<exclude name="**/DoctrineMigrations/**"/>
-				<exclude name="**/cache/**"/>
-				<exclude name="**/logs/**"/>
-				<exclude name="**/phpunit.*"/>
-			</zipfileset>
-			<zipfileset dir="${basedir}/bin" prefix="bin" />
-			<zipfileset dir="${basedir}/src" prefix="src">
-				<exclude name="**/Tests/**"/>
-				<exclude name="**/DataFixtures/**"/>
-			</zipfileset>
-			<zipfileset dir="${basedir}/vendor" prefix="vendor" />
-			<zipfileset dir="${basedir}/web" prefix="web" />
-		</zip>
-		<echo message="Finished build!" />
-	</target>
+	&lt;target name=&quot;build&quot;
+		depends=&quot;clean,prepare,lint,phploc,pdepend,phpunit,assetic,assets,cache&quot;&gt;
+		&lt;zip destfile=&quot;${basedir}/build/target/symblog.zip&quot;&gt;
+			&lt;zipfileset dir=&quot;${basedir}/app&quot; prefix=&quot;app&quot;&gt;
+				&lt;exclude name=&quot;**/DoctrineMigrations/**&quot;/&gt;
+				&lt;exclude name=&quot;**/cache/**&quot;/&gt;
+				&lt;exclude name=&quot;**/logs/**&quot;/&gt;
+				&lt;exclude name=&quot;**/phpunit.*&quot;/&gt;
+			&lt;/zipfileset&gt;
+			&lt;zipfileset dir=&quot;${basedir}/bin&quot; prefix=&quot;bin&quot; /&gt;
+			&lt;zipfileset dir=&quot;${basedir}/src&quot; prefix=&quot;src&quot;&gt;
+				&lt;exclude name=&quot;**/Tests/**&quot;/&gt;
+				&lt;exclude name=&quot;**/DataFixtures/**&quot;/&gt;
+			&lt;/zipfileset&gt;
+			&lt;zipfileset dir=&quot;${basedir}/vendor&quot; prefix=&quot;vendor&quot; /&gt;
+			&lt;zipfileset dir=&quot;${basedir}/web&quot; prefix=&quot;web&quot; /&gt;
+		&lt;/zip&gt;
+		&lt;echo message=&quot;Finished build!&quot; /&gt;
+	&lt;/target&gt;
 
-	<target name="clean" description="Cleanup build artifacts">
-		<delete dir="${basedir}/build/coverage" />
-		<delete dir="${basedir}/build/logs" />
-		<delete dir="${basedir}/build/pdepend" />
-		<delete dir="${basedir}/build/target" />
-		<echo message="Artifacts deleted." />
-	</target>
+	&lt;target name=&quot;clean&quot; description=&quot;Cleanup build artifacts&quot;&gt;
+		&lt;delete dir=&quot;${basedir}/build/coverage&quot; /&gt;
+		&lt;delete dir=&quot;${basedir}/build/logs&quot; /&gt;
+		&lt;delete dir=&quot;${basedir}/build/pdepend&quot; /&gt;
+		&lt;delete dir=&quot;${basedir}/build/target&quot; /&gt;
+		&lt;echo message=&quot;Artifacts deleted.&quot; /&gt;
+	&lt;/target&gt;
 
-	<target name="prepare" depends="clean" description="Prepare for build">
-		<mkdir dir="${basedir}/build/coverage" />
-		<mkdir dir="${basedir}/build/logs" />
-		<mkdir dir="${basedir}/build/pdepend" />
-		<mkdir dir="${basedir}/build/target" />
-		<echo message="Artifacts prepared." />
-	</target>
+	&lt;target name=&quot;prepare&quot; depends=&quot;clean&quot; description=&quot;Prepare for build&quot;&gt;
+		&lt;mkdir dir=&quot;${basedir}/build/coverage&quot; /&gt;
+		&lt;mkdir dir=&quot;${basedir}/build/logs&quot; /&gt;
+		&lt;mkdir dir=&quot;${basedir}/build/pdepend&quot; /&gt;
+		&lt;mkdir dir=&quot;${basedir}/build/target&quot; /&gt;
+		&lt;echo message=&quot;Artifacts prepared.&quot; /&gt;
+	&lt;/target&gt;
 
-	<target name="lint" description="Perform syntax check of sourcecode files">
-		<apply executable="php" failonerror="true">
-			<arg value="-l" />
-			<fileset dir="${basedir}/src">
-				<include name="**/*.php" />
-				<modified />
-			</fileset>
-			<fileset dir="${basedir}/src/Drm/BlogBundle/Tests">
-				<include name="**/*.php" />
-				<modified />
-			</fileset>
-		</apply>
-		<echo message="Syntax checked using lint." />
-	</target>
+	&lt;target name=&quot;lint&quot; description=&quot;Perform syntax check of sourcecode files&quot;&gt;
+		&lt;apply executable=&quot;php&quot; failonerror=&quot;true&quot;&gt;
+			&lt;arg value=&quot;-l&quot; /&gt;
+			&lt;fileset dir=&quot;${basedir}/src&quot;&gt;
+				&lt;include name=&quot;**/*.php&quot; /&gt;
+				&lt;modified /&gt;
+			&lt;/fileset&gt;
+			&lt;fileset dir=&quot;${basedir}/src/Drm/BlogBundle/Tests&quot;&gt;
+				&lt;include name=&quot;**/*.php&quot; /&gt;
+				&lt;modified /&gt;
+			&lt;/fileset&gt;
+		&lt;/apply&gt;
+		&lt;echo message=&quot;Syntax checked using lint.&quot; /&gt;
+	&lt;/target&gt;
 
-	<target name="phploc" description="Measure project size using PHPLOC">
-		<exec executable="phploc">
-			<arg value="--count-tests" />
-			<arg value="--log-csv" />
-			<arg value="${basedir}/build/logs/phploc.csv" />
-			<arg path="${basedir}/src" />
-		</exec>
-		<echo message="Project measured using PHPLOC." />
-	</target>
+	&lt;target name=&quot;phploc&quot; description=&quot;Measure project size using PHPLOC&quot;&gt;
+		&lt;exec executable=&quot;phploc&quot;&gt;
+			&lt;arg value=&quot;--count-tests&quot; /&gt;
+			&lt;arg value=&quot;--log-csv&quot; /&gt;
+			&lt;arg value=&quot;${basedir}/build/logs/phploc.csv&quot; /&gt;
+			&lt;arg path=&quot;${basedir}/src&quot; /&gt;
+		&lt;/exec&gt;
+		&lt;echo message=&quot;Project measured using PHPLOC.&quot; /&gt;
+	&lt;/target&gt;
 
-	<target name="pdepend" description="Calculate software metrics using PHP_Depend">
-		<exec executable="pdepend">
-			<arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
-			<arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
-			<arg
-				value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
-			<arg path="${basedir}/src" />
-		</exec>
-		<echo message="Software metrics calculated using PHP-DEPEND." />
-	</target>
+	&lt;target name=&quot;pdepend&quot; description=&quot;Calculate software metrics using PHP_Depend&quot;&gt;
+		&lt;exec executable=&quot;pdepend&quot;&gt;
+			&lt;arg value=&quot;--jdepend-xml=${basedir}/build/logs/jdepend.xml&quot; /&gt;
+			&lt;arg value=&quot;--jdepend-chart=${basedir}/build/pdepend/dependencies.svg&quot; /&gt;
+			&lt;arg
+				value=&quot;--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg&quot; /&gt;
+			&lt;arg path=&quot;${basedir}/src&quot; /&gt;
+		&lt;/exec&gt;
+		&lt;echo message=&quot;Software metrics calculated using PHP-DEPEND.&quot; /&gt;
+	&lt;/target&gt;
 
-	<target name="phpunit" description="Run unit tests with code coverage">
-		<exec executable="phpunit" failonerror="true">
-			<arg value="-c" />
-			<arg value="app/" />
-			<arg value="--coverage-html=${basedir}/build/coverage/" />
-		</exec>
-	</target>
+	&lt;target name=&quot;phpunit&quot; description=&quot;Run unit tests with code coverage&quot;&gt;
+		&lt;exec executable=&quot;phpunit&quot; failonerror=&quot;true&quot;&gt;
+			&lt;arg value=&quot;-c&quot; /&gt;
+			&lt;arg value=&quot;app/&quot; /&gt;
+			&lt;arg value=&quot;--coverage-html=${basedir}/build/coverage/&quot; /&gt;
+		&lt;/exec&gt;
+	&lt;/target&gt;
 
-	<target name="assetic" description="Dump assets">
-		<exec executable="${basedir}/app/console">
-			<arg value="--env=prod" />
-			<arg value="assetic:dump" />
-		</exec>
-	</target>
+	&lt;target name=&quot;assetic&quot; description=&quot;Dump assets&quot;&gt;
+		&lt;exec executable=&quot;${basedir}/app/console&quot;&gt;
+			&lt;arg value=&quot;--env=prod&quot; /&gt;
+			&lt;arg value=&quot;assetic:dump&quot; /&gt;
+		&lt;/exec&gt;
+	&lt;/target&gt;
 
-	<target name="assets" description="Install assets">
-		<exec executable="${basedir}/app/console">
-			<arg value="assets:install" />
-			<arg value="--symlink" />
-			<arg value="${basedir}/web" />
-		</exec>
-		<echo message="Assets installed using symlink." />
-	</target>
+	&lt;target name=&quot;assets&quot; description=&quot;Install assets&quot;&gt;
+		&lt;exec executable=&quot;${basedir}/app/console&quot;&gt;
+			&lt;arg value=&quot;assets:install&quot; /&gt;
+			&lt;arg value=&quot;--symlink&quot; /&gt;
+			&lt;arg value=&quot;${basedir}/web&quot; /&gt;
+		&lt;/exec&gt;
+		&lt;echo message=&quot;Assets installed using symlink.&quot; /&gt;
+	&lt;/target&gt;
 
-	<target name="cache" description="Cleanup cache">
-		<exec executable="${basedir}/app/console">
-			<arg value="cache:clear" />
-			<arg value="--env=prod" />
-		</exec>
-		<echo message="Production cache cleared." />
-	</target>
+	&lt;target name=&quot;cache&quot; description=&quot;Cleanup cache&quot;&gt;
+		&lt;exec executable=&quot;${basedir}/app/console&quot;&gt;
+			&lt;arg value=&quot;cache:clear&quot; /&gt;
+			&lt;arg value=&quot;--env=prod&quot; /&gt;
+		&lt;/exec&gt;
+		&lt;echo message=&quot;Production cache cleared.&quot; /&gt;
+	&lt;/target&gt;
 
-</project>
-
+&lt;/project&gt;
 </code></pre></p>
+		</div>
+	</div>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
@@ -207,24 +192,11 @@
 	</script>
 	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
-
-		</div><!--//container-->
-	</section>
-
-	<!-- ******FOOTER****** -->
-	<footer class="footer">
-    <div class="container text-center">
-        <small class="copyright">Mixed by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="https://jbake.org">JBake v2.4.0</a></small>
-    </div>
-	</footer>
-
-  <!-- Javascript -->
-	<script src="../../plugins/jquery-1.11.3.min.js"></script>
-	<script src="../../plugins/jquery.easing.1.3.js"></script>
-	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
-	<script src="../../plugins/prism/prism.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
 	<script src="../../js/main.js"></script>
 
 </body>

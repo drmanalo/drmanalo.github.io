@@ -10,67 +10,51 @@
     <meta name="generator" content="JBake">
 
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="../../plugins/prism/prism.css">
-    <!-- Theme CSS -->
-    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
-		<!-- Fixed navbar -->
-				<header class="header" id="header">
-			<div class="container">
-					<h1 class="logo pull-left">
-							<a href="/"><span class="logo-title">dhon.manalo</span></a>
-					</h1>
-					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
-							<div class="navbar-header">
-									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
-											<span class="sr-only">Toggle navigation</span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-									</button>
-							</div>
-							<div id="navbar-collapse" class="navbar-collapse collapse">
-									<ul class="nav navbar-nav">
-											<li class="nav-item sr-only active"><a href="/">Home</a></li>
-											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
-											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
-											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
-											<li class="dropdown">
-							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
-							          <ul class="dropdown-menu">
-							            <li><a href="../../tags/bash.html">bash</a></li>
-													<li><a href="../../tags/cisco.html">cisco</a></li>
-													<li><a href="../../tags/java.html">java</a></li>
-													<li><a href="../../tags/php.html">php</a></li>
-													<li role="separator" class="divider"></li>
-							            <li><a href="../../tags/windows.html">windows</a></li>
-							          </ul>
-							        </li>
-									</ul>
-							</div>
-					</nav>
-			</div>
-		</header>
+<body class="theme-base-01">
 
-	<section class="section promo offset-header">
-		<div class="container">
-			<h1 class="page-header title">Spring Persistence with Hibernate</h1>
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Spring Persistence with Hibernate</h1>
 			<p><em>03 September 2014</em></p>
 			<p><p>After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I'm going to use H2 to avoid 3rd party database dependency.</p><p>Just like my previous post, I'm going to use <code>maven-archetype-generate</code> and will add Spring dependencies later on.</p>
-<pre><code class="language-bash">
-$ mvn archetype:generate -DgroupId=com.manalo.prototype -DartifactId=persistence -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+<pre><code>$ mvn archetype:generate -DgroupId=com.manalo.prototype -DartifactId=persistence -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ------------------------------------------------------------------------
@@ -102,8 +86,7 @@ $ mvn archetype:generate -DgroupId=com.manalo.prototype -DartifactId=persistence
 [INFO] ------------------------------------------------------------------------
 </code></pre>
 <!-- more --><h3>mvn eclipse:eclipse</h3>
-<pre><code class="language-bash">
-$ mvn eclipse:eclipse
+<pre><code>$ mvn eclipse:eclipse
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ------------------------------------------------------------------------
@@ -118,7 +101,7 @@ $ mvn eclipse:eclipse
 [INFO] Using Eclipse Workspace: /home/drmanalo/workspace
 [INFO] Adding default classpath container: org.eclipse.jdt.launching.JRE_CONTAINER
 [INFO] Not writing settings - defaults suffice
-[INFO] Wrote Eclipse project for "persistence" to /home/drmanalo/workspace/persistence.
+[INFO] Wrote Eclipse project for &quot;persistence&quot; to /home/drmanalo/workspace/persistence.
 [INFO]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
@@ -128,177 +111,174 @@ $ mvn eclipse:eclipse
 [INFO] Final Memory: 9M/150M
 [INFO] ------------------------------------------------------------------------
 </code></pre><h3>pom.xml</h3><p>Here's my complete <code>pom.xml</code> with added dependencies apart from Spring persistence.</p>
-<pre><code class="language-xml">
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<pre><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+	xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.manalo.prototype</groupId>
-	<artifactId>persistence</artifactId>
-	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
-	<name>persistence</name>
-	<url>http://maven.apache.org</url>
+	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+	&lt;groupId&gt;com.manalo.prototype&lt;/groupId&gt;
+	&lt;artifactId&gt;persistence&lt;/artifactId&gt;
+	&lt;packaging&gt;jar&lt;/packaging&gt;
+	&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+	&lt;name&gt;persistence&lt;/name&gt;
+	&lt;url&gt;http://maven.apache.org&lt;/url&gt;
 
-	<properties>
-		<spring.version>3.2.0.RELEASE</spring.version>
-		<hibernate.version>4.1.9.Final</hibernate.version>
-	</properties>
+	&lt;properties&gt;
+		&lt;spring.version&gt;3.2.0.RELEASE&lt;/spring.version&gt;
+		&lt;hibernate.version&gt;4.1.9.Final&lt;/hibernate.version&gt;
+	&lt;/properties&gt;
 
-	<dependencies>
-		<!-- Database -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.3.173</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-dbcp2</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-		<!-- Hibernate -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-		<!-- Logging -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<!-- Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>persistence-api</artifactId>
-			<version>1.0</version>
-		</dependency>
-	</dependencies>
+	&lt;dependencies&gt;
+		&lt;!-- Database --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;com.h2database&lt;/groupId&gt;
+			&lt;artifactId&gt;h2&lt;/artifactId&gt;
+			&lt;version&gt;1.3.173&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+			&lt;artifactId&gt;commons-dbcp2&lt;/artifactId&gt;
+			&lt;version&gt;2.0.1&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;!-- Hibernate --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.hibernate&lt;/groupId&gt;
+			&lt;artifactId&gt;hibernate-core&lt;/artifactId&gt;
+			&lt;version&gt;${hibernate.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;!-- Logging --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;log4j&lt;/groupId&gt;
+			&lt;artifactId&gt;log4j&lt;/artifactId&gt;
+			&lt;version&gt;1.2.17&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;!-- Spring --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-orm&lt;/artifactId&gt;
+			&lt;version&gt;${spring.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;javax.persistence&lt;/groupId&gt;
+			&lt;artifactId&gt;persistence-api&lt;/artifactId&gt;
+			&lt;version&gt;1.0&lt;/version&gt;
+		&lt;/dependency&gt;
+	&lt;/dependencies&gt;
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>onejar-maven-plugin.googlecode.com</id>
-			<url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
-		</pluginRepository>
-	</pluginRepositories>
+	&lt;pluginRepositories&gt;
+		&lt;pluginRepository&gt;
+			&lt;id&gt;onejar-maven-plugin.googlecode.com&lt;/id&gt;
+			&lt;url&gt;http://onejar-maven-plugin.googlecode.com/svn/mavenrepo&lt;/url&gt;
+		&lt;/pluginRepository&gt;
+	&lt;/pluginRepositories&gt;
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.dstovall</groupId>
-				<artifactId>onejar-maven-plugin</artifactId>
-				<version>1.3.0</version>
-				<executions>
-					<execution>
-						<configuration>
-							<mainClass>com.manalo.rabbitmq.App</mainClass>
-						</configuration>
-						<goals>
-							<goal>one-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+	&lt;build&gt;
+		&lt;plugins&gt;
+			&lt;plugin&gt;
+				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+				&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+				&lt;version&gt;2.3.2&lt;/version&gt;
+				&lt;configuration&gt;
+					&lt;source&gt;1.7&lt;/source&gt;
+					&lt;target&gt;1.7&lt;/target&gt;
+				&lt;/configuration&gt;
+			&lt;/plugin&gt;
+			&lt;plugin&gt;
+				&lt;groupId&gt;org.dstovall&lt;/groupId&gt;
+				&lt;artifactId&gt;onejar-maven-plugin&lt;/artifactId&gt;
+				&lt;version&gt;1.3.0&lt;/version&gt;
+				&lt;executions&gt;
+					&lt;execution&gt;
+						&lt;configuration&gt;
+							&lt;mainClass&gt;com.manalo.rabbitmq.App&lt;/mainClass&gt;
+						&lt;/configuration&gt;
+						&lt;goals&gt;
+							&lt;goal&gt;one-jar&lt;/goal&gt;
+						&lt;/goals&gt;
+					&lt;/execution&gt;
+				&lt;/executions&gt;
+			&lt;/plugin&gt;
+		&lt;/plugins&gt;
+	&lt;/build&gt;
 
-</project>
+&lt;/project&gt;
 </code></pre><h3>Spring Configurations</h3><p>This contains database connection, connection pooling and Hibernate configurations. I defined the packages where Spring should look for its beans using <strong>context:component-scan</strong> elements.</p>
-<pre><code class="language-xml">
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+	xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
+	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-3.0.xsd
     http://www.springframework.org/schema/tx
-    http://www.springframework.org/schema/tx/spring-tx.xsd">
+    http://www.springframework.org/schema/tx/spring-tx.xsd&quot;&gt;
 
-	<tx:annotation-driven />
+	&lt;tx:annotation-driven /&gt;
 
-	<context:component-scan base-package="com.manalo.dao" />
-	<context:component-scan base-package="com.manalo.service" />
+	&lt;context:component-scan base-package=&quot;com.manalo.dao&quot; /&gt;
+	&lt;context:component-scan base-package=&quot;com.manalo.service&quot; /&gt;
 
-	<!-- Load application properties -->
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath:application.properties</value>
-			</list>
-		</property>
-	</bean>
+	&lt;!-- Load application properties --&gt;
+	&lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+		&lt;property name=&quot;locations&quot;&gt;
+			&lt;list&gt;
+				&lt;value&gt;classpath:application.properties&lt;/value&gt;
+			&lt;/list&gt;
+		&lt;/property&gt;
+	&lt;/bean&gt;
 
-	<!-- DB connection -->
-	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
-		destroy-method="close">
-		<property name="driverClassName" value="${db.driver}" />
-		<property name="url" value="${db.url}" />
-		<property name="username" value="${db.user}" />
-		<property name="password" value="${db.pass}" />
-	</bean>
+	&lt;!-- DB connection --&gt;
+	&lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp2.BasicDataSource&quot;
+		destroy-method=&quot;close&quot;&gt;
+		&lt;property name=&quot;driverClassName&quot; value=&quot;${db.driver}&quot; /&gt;
+		&lt;property name=&quot;url&quot; value=&quot;${db.url}&quot; /&gt;
+		&lt;property name=&quot;username&quot; value=&quot;${db.user}&quot; /&gt;
+		&lt;property name=&quot;password&quot; value=&quot;${db.pass}&quot; /&gt;
+	&lt;/bean&gt;
 
-	<!-- Hibernate configuration -->
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >
-		<property name="dataSource" ref="dataSource" />
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-				<prop key="hibernate.cache.use_second_level_cache">false</prop>
-				<prop key="hibernate.cache.use_query_cache">false</prop>
-				<prop key="hibernate.generate_statistics">false</prop>
-				<prop key="hibernate.cache.use_structured_entries">false</prop>
-			</props>
-		</property>
-		<property name="packagesToScan" value="com.manalo.domain" />
-	</bean>
+	&lt;!-- Hibernate configuration --&gt;
+	&lt;bean id=&quot;sessionFactory&quot;
+		class=&quot;org.springframework.orm.hibernate4.LocalSessionFactoryBean&quot; &gt;
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+		&lt;property name=&quot;hibernateProperties&quot;&gt;
+			&lt;props&gt;
+				&lt;prop key=&quot;hibernate.dialect&quot;&gt;org.hibernate.dialect.MySQLDialect&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.show_sql&quot;&gt;${hibernate.show_sql}&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.hbm2ddl.auto&quot;&gt;${hibernate.hbm2ddl.auto}&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.cache.use_second_level_cache&quot;&gt;false&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.cache.use_query_cache&quot;&gt;false&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.generate_statistics&quot;&gt;false&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.cache.use_structured_entries&quot;&gt;false&lt;/prop&gt;
+			&lt;/props&gt;
+		&lt;/property&gt;
+		&lt;property name=&quot;packagesToScan&quot; value=&quot;com.manalo.domain&quot; /&gt;
+	&lt;/bean&gt;
 
-	<!-- Transaction manager -->
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+	&lt;!-- Transaction manager --&gt;
+	&lt;bean id=&quot;transactionManager&quot;
+		class=&quot;org.springframework.orm.hibernate4.HibernateTransactionManager&quot;&gt;
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+		&lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot; /&gt;
+	&lt;/bean&gt;
 
-</beans>
+&lt;/beans&gt;
 </code></pre><h3>application.properties</h3><p>I put this under <code>src/main/resources</code> which has to be added in your classpath in order for <code>PropertyPlaceholderConfigurer</code> to find it.</p>
-<pre><code class="language-yaml">
-# Embedded H2 database
+<pre><code># Embedded H2 database
 db.driver=org.h2.Driver
 db.user=testuser
 db.pass=password
@@ -320,8 +300,7 @@ hibernate.hbm2ddl.auto=create
 hibernate.show_sql=true
 hibernate.dialect=org.hibernate.dialect.MySQLDialect
 </code></pre><h3>log4j.properties</h3><p>As this is part of <em>convention over configuration</em>, you have to name this file as <code>log4j.properties</code> and should also be within your classpath.</p>
-<pre><code class="language-yaml">
-# Root logger
+<pre><code># Root logger
 log4j.rootLogger=INFO, file
 log4j.logger.com.manalo=DEBUG, stdout
 log4j.logger.org.springframework=INFO, stdout
@@ -339,46 +318,43 @@ log4j.appender.stdout.Target=System.out
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %5p %c{1}:%L - %m%n
 </code></pre><h3>Database Config</h3>
-<pre><code class="language-xml">
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-	xsi:schemaLocation="
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+	xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+	xmlns:jdbc=&quot;http://www.springframework.org/schema/jdbc&quot;
+	xsi:schemaLocation=&quot;
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
        http://www.springframework.org/schema/jdbc
-       http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
+       http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd&quot;&gt;
 
-	<!-- Use a web browser to access http://localhost:11111 to view H2 console
+	&lt;!-- Use a web browser to access http://localhost:11111 to view H2 console
 		that allows db queries to be run and be viewed. Parameters url, username
 		and password should be same as JDBC connection. e.g. jdbc:h2:mem:test, testuser,
-		password -->
-	<bean id="org.h2.tools.Server-WebServer" class="org.h2.tools.Server"
-		factory-method="createWebServer" depends-on="dataSource" init-method="start"
-		lazy-init="false">
-		<constructor-arg value="-web,-webPort,11111" />
-	</bean>
+		password --&gt;
+	&lt;bean id=&quot;org.h2.tools.Server-WebServer&quot; class=&quot;org.h2.tools.Server&quot;
+		factory-method=&quot;createWebServer&quot; depends-on=&quot;dataSource&quot; init-method=&quot;start&quot;
+		lazy-init=&quot;false&quot;&gt;
+		&lt;constructor-arg value=&quot;-web,-webPort,11111&quot; /&gt;
+	&lt;/bean&gt;
 
-	<jdbc:initialize-database data-source="dataSource">
-		<jdbc:script location="classpath:/initialise.sql"></jdbc:script>
-	</jdbc:initialize-database>
+	&lt;jdbc:initialize-database data-source=&quot;dataSource&quot;&gt;
+		&lt;jdbc:script location=&quot;classpath:/initialise.sql&quot;&gt;&lt;/jdbc:script&gt;
+	&lt;/jdbc:initialize-database&gt;
 
-</beans>
+&lt;/beans&gt;
 </code></pre><h3>initialise.sql</h3><p>You will notice this file is being loaded using <code>jdbc:script</code> element.</p>
-<pre><code class="language-sql">
-CREATE TABLE user (
+<pre><code>CREATE TABLE user (
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   	username VARCHAR (32) NOT NULL,
   	password VARCHAR (255) NOT NULL,
   	UNIQUE (USERNAME)
 );
 </code></pre><h3>Domain Object</h3>
-<pre><code class="language-java">
-package com.manalo.domain;
+<pre><code>package com.manalo.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -428,8 +404,7 @@ public class User {
 
 }
 </code></pre><h3>Data Access Component</h3>
-<pre><code class="language-java">
-package com.manalo.dao;
+<pre><code>package com.manalo.dao;
 
 import java.util.List;
 
@@ -458,24 +433,23 @@ public class UserDao {
 
 	public User getUserByUserName(String username) {
 
-		String hql = "from User where username = :username";
+		String hql = &quot;from User where username = :username&quot;;
 
 		Query query = getSession().createQuery(hql);
-		query.setString("username", username);
+		query.setString(&quot;username&quot;, username);
 
 		return (User) query.uniqueResult();
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<User> getUsers() {
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;User&gt; getUsers() {
 		Criteria criteria = getSession().createCriteria(User.class);
 		return criteria.list();
 	}
 
 }
 </code></pre><h3>Service Layer</h3>
-<pre><code class="language-java">
-package com.manalo.service;
+<pre><code>package com.manalo.service;
 
 import java.util.List;
 
@@ -501,14 +475,13 @@ public class UserManager {
 		return userDao.getUserByUserName(username);
 	}
 
-	public List<User> getUsers() {
+	public List&lt;User&gt; getUsers() {
 		return userDao.getUsers();
 	}
 
 }
 </code></pre><h3>App.java</h3>
-<pre><code class="language-java">
-package com.manalo.prototype;
+<pre><code>package com.manalo.prototype;
 
 import java.util.List;
 
@@ -525,7 +498,7 @@ public class App {
 		/**
 		 * Order of xml files to be loaded is important
 		 */
-		final String[] CONFIG_FILES = { "database-init.xml", "spring-core.xml" };
+		final String[] CONFIG_FILES = { &quot;database-init.xml&quot;, &quot;spring-core.xml&quot; };
 
 		AbstractXmlApplicationContext context = new ClassPathXmlApplicationContext(CONFIG_FILES);
 
@@ -533,28 +506,27 @@ public class App {
 
 		User user = new User();
 
-		user.setUsername("drmanalo");
-		user.setPassword("secret");
+		user.setUsername(&quot;drmanalo&quot;);
+		user.setPassword(&quot;secret&quot;);
 
 		userManager.addUser(user);
 
-		user = userManager.getUserByUserName("drmanalo");
+		user = userManager.getUserByUserName(&quot;drmanalo&quot;);
 
-		System.out.println("Id:       " + user.getId());
-		System.out.println("Username: " + user.getUsername());
-		System.out.println("Password: " + user.getPassword());
+		System.out.println(&quot;Id:       &quot; + user.getId());
+		System.out.println(&quot;Username: &quot; + user.getUsername());
+		System.out.println(&quot;Password: &quot; + user.getPassword());
 
-		List<User> users = userManager.getUsers();
+		List&lt;User&gt; users = userManager.getUsers();
 
-		System.out.println("Number of users: " + users.size());
+		System.out.println(&quot;Number of users: &quot; + users.size());
 
 		context.close();
 
 	}
 }
 </code></pre><h3>Running the application</h3><p>Within Eclipse, right-click App.java -&gt; Run As -&gt; Java Application. You should see this within Eclipse's console. There are extra noises since log4j is doing its job.</p>
-<pre><code class="language-bash">
-Hibernate: drop table if exists User
+<pre><code>Hibernate: drop table if exists User
 Hibernate: create table User (id integer not null auto_increment, password varchar(255) not null, username varchar(255) not null, primary key (id))
 23:06:01,825  INFO SchemaExport:405 - HHH000230: Schema export complete
 Hibernate: insert into User (password, username) values (?, ?)
@@ -565,6 +537,8 @@ Password: secret
 Hibernate: select this_.id as id0_0_, this_.password as password0_0_, this_.username as username0_0_ from User this_
 Number of users: 1
 </code></pre><p><strong><a href="/downloads/persistence.zip">Download source</a></strong></p></p>
+		</div>
+	</div>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
@@ -582,24 +556,11 @@ Number of users: 1
 	</script>
 	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
-
-		</div><!--//container-->
-	</section>
-
-	<!-- ******FOOTER****** -->
-	<footer class="footer">
-    <div class="container text-center">
-        <small class="copyright">Mixed by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="https://jbake.org">JBake v2.4.0</a></small>
-    </div>
-	</footer>
-
-  <!-- Javascript -->
-	<script src="../../plugins/jquery-1.11.3.min.js"></script>
-	<script src="../../plugins/jquery.easing.1.3.js"></script>
-	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
-	<script src="../../plugins/prism/prism.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
 	<script src="../../js/main.js"></script>
 
 </body>

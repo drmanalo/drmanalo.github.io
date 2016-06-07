@@ -54,8 +54,7 @@
 			<h1>Changing Centos7 runlevel</h1>
 			<p><em>17 October 2014</em></p>
 			<p><p>I installed Centos7 as minimal for a basic LAMP server but then I decided to switch to Gnome instead of pure command line environment. If you're interested how I did it, <strong>groupinstall</strong> has the perfect recipe.</p><p><img src="/images/centos7.png" alt="Centos7""/></p>
-<pre><code class="language-bash">
-$ yum groupinstall "GNOME Desktop" "Graphical Administration Tools"
+<pre><code>$ yum groupinstall &quot;GNOME Desktop&quot; &quot;Graphical Administration Tools&quot;
 </code></pre>
 <!-- more --><p>Runlevel used to be on <code>etc/inittab</code> but if you will look at its content now, it suggests you have to use a different route to change it.</p>
 <pre><code># inittab is no longer used when using systemd.
@@ -117,8 +116,8 @@ graphical.target
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2015/change-centos-runlevel.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2015/change-centos-runlevel.html';
+		var disqus_identifier = 'blog/2014/change-centos-runlevel.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2014/change-centos-runlevel.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

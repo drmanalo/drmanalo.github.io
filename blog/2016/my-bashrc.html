@@ -10,123 +10,108 @@
     <meta name="generator" content="JBake">
 
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="../../plugins/prism/prism.css">
-    <!-- Theme CSS -->
-    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
-		<!-- Fixed navbar -->
-				<header class="header" id="header">
-			<div class="container">
-					<h1 class="logo pull-left">
-							<a href="/"><span class="logo-title">dhon.manalo</span></a>
-					</h1>
-					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
-							<div class="navbar-header">
-									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
-											<span class="sr-only">Toggle navigation</span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-									</button>
-							</div>
-							<div id="navbar-collapse" class="navbar-collapse collapse">
-									<ul class="nav navbar-nav">
-											<li class="nav-item sr-only active"><a href="/">Home</a></li>
-											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
-											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
-											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
-											<li class="dropdown">
-							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
-							          <ul class="dropdown-menu">
-							            <li><a href="../../tags/bash.html">bash</a></li>
-													<li><a href="../../tags/cisco.html">cisco</a></li>
-													<li><a href="../../tags/java.html">java</a></li>
-													<li><a href="../../tags/php.html">php</a></li>
-													<li role="separator" class="divider"></li>
-							            <li><a href="../../tags/windows.html">windows</a></li>
-							          </ul>
-							        </li>
-									</ul>
-							</div>
-					</nav>
-			</div>
-		</header>
+<body class="theme-base-01">
 
-	<section class="section promo offset-header">
-		<div class="container">
-			<h1 class="page-header title">My bashrc</h1>
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>My bashrc</h1>
 			<p><em>08 May 2016</em></p>
 			<p><p>This is a backup of my <code>.bashrc</code>. I'm keeping it safe in case I'm rebuilding my machine.</p>
-<pre><code class="language-bash">
-# .bashrc
+<pre><code># .bashrc
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# Uncomment the following line if you don&#39;t like systemctl&#39;s auto-paging feature:
 # export SYSTEMD_PAGER=
 
 # User specific aliases and functions
 
 # THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/kodi/.sdkman"
-[[ -s "/home/kodi/.sdkman/bin/sdkman-init.sh" ]] && source "/home/kodi/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR=&quot;/home/kodi/.sdkman&quot;
+[[ -s &quot;/home/kodi/.sdkman/bin/sdkman-init.sh&quot; ]] &amp;&amp; source &quot;/home/kodi/.sdkman/bin/sdkman-init.sh&quot;
 
 # Strong red prompt
-export PS1="\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]"
+export PS1=&quot;\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]&quot;
 </code></pre>
 <!-- more -->
-<pre><code class="language-bash">
-# system
-alias shutdown='sudo shutdown -h now'
-alias reboot='sudo reboot'
+<pre><code># system
+alias shutdown=&#39;sudo shutdown -h now&#39;
+alias reboot=&#39;sudo reboot&#39;
 
 # restarting services
-alias rshttp='sudo systemctl restart httpd'
-alias rsfw='sudo systemctl restart firewalld'
-alias rssshd='sudo systemctl restart sshd'
+alias rshttp=&#39;sudo systemctl restart httpd&#39;
+alias rsfw=&#39;sudo systemctl restart firewalld&#39;
+alias rssshd=&#39;sudo systemctl restart sshd&#39;
 
 # folder explorer
-alias la='ls -lah'
-alias li='ls -lih'
-alias ld='ls -lid'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias down='cd ~/Downloads'
-alias docs='cd ~/Documents'
-alias pics='cd ~/Pictures'
-alias home='cd ~/'
-alias www='cd /var/www/html'
+alias la=&#39;ls -lah&#39;
+alias li=&#39;ls -lih&#39;
+alias ld=&#39;ls -lid&#39;
+alias ..=&#39;cd ..&#39;
+alias ...=&#39;cd ../..&#39;
+alias ....=&#39;cd ../../..&#39;
+alias down=&#39;cd ~/Downloads&#39;
+alias docs=&#39;cd ~/Documents&#39;
+alias pics=&#39;cd ~/Pictures&#39;
+alias home=&#39;cd ~/&#39;
+alias www=&#39;cd /var/www/html&#39;
 
 # others
-alias x='exit'
-alias c='clear'
-alias vi='sublime'
+alias x=&#39;exit&#39;
+alias c=&#39;clear&#39;
+alias vi=&#39;sublime&#39;
 
 # yum
-alias yume='sudo yum erase'
-alias yumi='sudo yum install'
-alias yumr='sudo yum remove'
-alias yumu='sudo yum update'
-alias yums='yum search'
-alias yuml='yum list'
-alias yumc='sudo yum clean all'
+alias yume=&#39;sudo yum erase&#39;
+alias yumi=&#39;sudo yum install&#39;
+alias yumr=&#39;sudo yum remove&#39;
+alias yumu=&#39;sudo yum update&#39;
+alias yums=&#39;yum search&#39;
+alias yuml=&#39;yum list&#39;
+alias yumc=&#39;sudo yum clean all&#39;
 </code></pre></p>
+		</div>
+	</div>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
@@ -144,24 +129,11 @@ alias yumc='sudo yum clean all'
 	</script>
 	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
-
-		</div><!--//container-->
-	</section>
-
-	<!-- ******FOOTER****** -->
-	<footer class="footer">
-    <div class="container text-center">
-        <small class="copyright">Mixed by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="https://jbake.org">JBake v2.4.0</a></small>
-    </div>
-	</footer>
-
-  <!-- Javascript -->
-	<script src="../../plugins/jquery-1.11.3.min.js"></script>
-	<script src="../../plugins/jquery.easing.1.3.js"></script>
-	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
-	<script src="../../plugins/prism/prism.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
 	<script src="../../js/main.js"></script>
 
 </body>

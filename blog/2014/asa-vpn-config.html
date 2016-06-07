@@ -10,67 +10,51 @@
     <meta name="generator" content="JBake">
 
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="../../plugins/prism/prism.css">
-    <!-- Theme CSS -->
-    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
-		<!-- Fixed navbar -->
-				<header class="header" id="header">
-			<div class="container">
-					<h1 class="logo pull-left">
-							<a href="/"><span class="logo-title">dhon.manalo</span></a>
-					</h1>
-					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
-							<div class="navbar-header">
-									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
-											<span class="sr-only">Toggle navigation</span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-									</button>
-							</div>
-							<div id="navbar-collapse" class="navbar-collapse collapse">
-									<ul class="nav navbar-nav">
-											<li class="nav-item sr-only active"><a href="/">Home</a></li>
-											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
-											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
-											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
-											<li class="dropdown">
-							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
-							          <ul class="dropdown-menu">
-							            <li><a href="../../tags/bash.html">bash</a></li>
-													<li><a href="../../tags/cisco.html">cisco</a></li>
-													<li><a href="../../tags/java.html">java</a></li>
-													<li><a href="../../tags/php.html">php</a></li>
-													<li role="separator" class="divider"></li>
-							            <li><a href="../../tags/windows.html">windows</a></li>
-							          </ul>
-							        </li>
-									</ul>
-							</div>
-					</nav>
-			</div>
-		</header>
+<body class="theme-base-01">
 
-	<section class="section promo offset-header">
-		<div class="container">
-			<h1 class="page-header title">ASA VPN Configuration</h1>
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>ASA VPN Configuration</h1>
 			<p><em>08 June 2014</em></p>
 			<p><p>I'm putting here my working VPN configuration for ASA 5505 on ASA Version 8.4(7). All upper case values need changing to suit your business requirements and personal taste. IP addresses are mere examples.</p><h3>Network Object Mapping</h3>
-<pre><code class="language-bash">
-object network OBJ_REMOTE_VPN_ENDPOINT
+<pre><code>object network OBJ_REMOTE_VPN_ENDPOINT
  subnet 172.16.0.0 255.240.0.0
  description OBJ_REMOTE_VPN_ENDPOINT is a label
 
@@ -87,26 +71,21 @@ object network OBJ_NATTED_INSIDE_HOST1
  description OBJ_NATTED_INSIDE_HOST1 is a label
 </code></pre>
 <!-- more --><h3>Access Control List</h3>
-<pre><code class="language-bash">
-access-list INSIDE-OUTSIDE extended permit ip object OBJ_NATTED_INSIDE_HOST1 object OBJ_REMOTE_VPN_ENDPOINT
+<pre><code>access-list INSIDE-OUTSIDE extended permit ip object OBJ_NATTED_INSIDE_HOST1 object OBJ_REMOTE_VPN_ENDPOINT
 access-list ACL_VPN_NUMBER1 extended permit ip 10.0.7.176 255.255.255.240 172.16.0.0 255.240.0.0
 </code></pre><h3>Network Address Transalation</h3>
-<pre><code class="language-bash">
-  nat (inside,outside) source static OBJ_INSIDE_SERVER1 OBJ_NATTED_INSIDE_HOST1 destination
+<pre><code>  nat (inside,outside) source static OBJ_INSIDE_SERVER1 OBJ_NATTED_INSIDE_HOST1 destination
    static OBJ_REMOTE_VPN_ENDPOINT OBJ_REMOTE_VPN_ENDPOINT description NAT inside host to private IP
 </code></pre><h3>Phase 1 ISAKMP</h3>
-<pre><code class="language-bash">
-crypto ikev1 policy 10
+<pre><code>crypto ikev1 policy 10
  authentication pre-share
  encryption aes-256
  hash sha
  group 2
 </code></pre><h3>Phase 2 IPSEC</h3>
-<pre><code class="language-bash">
-crypto ipsec ikev1 transform-set AES256_SHA esp-aes-256 esp-sha-hmac
+<pre><code>crypto ipsec ikev1 transform-set AES256_SHA esp-aes-256 esp-sha-hmac
 </code></pre><h3>Group Policy</h3>
-<pre><code class="language-bash">
-group-policy GPOLICY_NAME internal
+<pre><code>group-policy GPOLICY_NAME internal
 group-policy GPOLICY_NAME attributes
  vpn-idle-timeout none
  vpn-session-timeout none
@@ -119,13 +98,14 @@ tunnel-group 8.8.8.8 ipsec-attributes
  ikev1 pre-shared-key A_VERY_WEAK_PRE_SHARED_KEY
  isakmp keepalive disable
 </code></pre><h3>Crypto Map</h3>
-<pre><code class="language-bash">
-crypto map CMAP_OUTSIDE 11 match address ACL_VPN_NUMBER1
+<pre><code>crypto map CMAP_OUTSIDE 11 match address ACL_VPN_NUMBER1
 crypto map CMAP_OUTSIDE 11 set pfs
 crypto map CMAP_OUTSIDE 11 set peer 8.8.8.8
 crypto map CMAP_OUTSIDE 11 set ikev1 transform-set AES256_SHA
 crypto map CMAP_OUTSIDE 11 set security-association lifetime seconds 28800
 </code></pre></p>
+		</div>
+	</div>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
@@ -143,24 +123,11 @@ crypto map CMAP_OUTSIDE 11 set security-association lifetime seconds 28800
 	</script>
 	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
-
-		</div><!--//container-->
-	</section>
-
-	<!-- ******FOOTER****** -->
-	<footer class="footer">
-    <div class="container text-center">
-        <small class="copyright">Mixed by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="https://jbake.org">JBake v2.4.0</a></small>
-    </div>
-	</footer>
-
-  <!-- Javascript -->
-	<script src="../../plugins/jquery-1.11.3.min.js"></script>
-	<script src="../../plugins/jquery.easing.1.3.js"></script>
-	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
-	<script src="../../plugins/prism/prism.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
 	<script src="../../js/main.js"></script>
 
 </body>

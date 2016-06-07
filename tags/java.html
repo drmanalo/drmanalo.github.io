@@ -10,104 +10,76 @@
     <meta name="generator" content="JBake">
 
     <link rel="icon" type="image/png" href="../favicon.png">
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="../plugins/prism/prism.css">
-    <!-- Theme CSS -->
-    <link id="theme-style" rel="stylesheet" href="../css/styles.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/poole.css">
+    <link rel="stylesheet" href="../css/syntax.css">
+    <link rel="stylesheet" href="../css/hyde.css">
+    <link rel="stylesheet" href="../css/jpages.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
-		<!-- Fixed navbar -->
-				<header class="header" id="header">
-			<div class="container">
-					<h1 class="logo pull-left">
-							<a href="/"><span class="logo-title">dhon.manalo</span></a>
-					</h1>
-					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
-							<div class="navbar-header">
-									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
-											<span class="sr-only">Toggle navigation</span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-									</button>
-							</div>
-							<div id="navbar-collapse" class="navbar-collapse collapse">
-									<ul class="nav navbar-nav">
-											<li class="nav-item sr-only active"><a href="/">Home</a></li>
-											<li class="nav-item"><a href="../pages/disclaimer.html">Disclaimer</a></li>
-											<li class="nav-item"><a href="../archive.html">Archives</a></li>
-											<li class="nav-item"><a href="../feed.xml">Feed</a></li>
-											<li class="dropdown">
-							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
-							          <ul class="dropdown-menu">
-							            <li><a href="../tags/bash.html">bash</a></li>
-													<li><a href="../tags/cisco.html">cisco</a></li>
-													<li><a href="../tags/java.html">java</a></li>
-													<li><a href="../tags/php.html">php</a></li>
-													<li role="separator" class="divider"></li>
-							            <li><a href="../tags/windows.html">windows</a></li>
-							          </ul>
-							        </li>
-									</ul>
-							</div>
-					</nav>
-			</div>
-		</header>
+<body class="theme-base-01">
 
-	<section class="section promo offset-header">
-		<div class="container">
-			<h1 class="page-header title">Tag: java</h1>
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
 
-		<!--<ul>-->
-				<h4>May 2016</h4>
-				<ul>
-				<li>21 - <a href="../blog/2016/java8-on-centos7.html">Installing Java 1.8 on Centos</a></li>
-				<li>01 - <a href="../blog/2016/blogging-with-jbake.html">Blogging With JBake</a></li>
-				</ul>
-				<h4>April 2016</h4>
-				<ul>
-				<li>30 - <a href="../blog/2016/custom-jsp-tags.html">Custom JSP Tags</a></li>
-				</ul>
-				<h4>October 2015</h4>
-				<ul>
-				<li>13 - <a href="../blog/2015/jenkins-on-centos.html">Jenkins on CentOS</a></li>
-				</ul>
-				<h4>September 2014</h4>
-				<ul>
-				<li>13 - <a href="../blog/2015/adding-local-jar-to-maven.html">Adding Local JAR to Maven</a></li>
-				<li>03 - <a href="../blog/2014/spring-hibernate.html">Spring Persistence with Hibernate</a></li>
-				</ul>
-				<h4>August 2014</h4>
-				<ul>
-				<li>27 - <a href="../blog/2014/spring-standalone-project.html">Spring Standalone Project</a></li>
-	</ul>
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
 
-		</div><!--//container-->
-	</section>
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../archive.html">Archives</a></li>
+          <li><a href="../feed.xml">Feed</a></li>
+        </ul>
 
-	<!-- ******FOOTER****** -->
-	<footer class="footer">
-    <div class="container text-center">
-        <small class="copyright">Mixed by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="https://jbake.org">JBake v2.4.0</a></small>
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
     </div>
-	</footer>
 
-  <!-- Javascript -->
-	<script src="../plugins/jquery-1.11.3.min.js"></script>
-	<script src="../plugins/jquery.easing.1.3.js"></script>
-	<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
-	<script src="../plugins/prism/prism.js"></script>
+	<div class="content container">
+		<h1 class="post-title">Tag: java</h1>
+		<h4>May 2016</h4>
+		<ul>
+			<li>21 - <a href="../blog/2016/java8-on-centos7.html">Installing Java 1.8 on Centos</a></li>
+			<li>01 - <a href="../blog/2016/blogging-with-jbake.html">Blogging With JBake</a></li>
+		</ul>
+		<h4>April 2016</h4>
+		<ul>
+			<li>30 - <a href="../blog/2016/custom-jsp-tags.html">Custom JSP Tags</a></li>
+		</ul>
+		<h4>October 2015</h4>
+		<ul>
+			<li>13 - <a href="../blog/2015/jenkins-on-centos.html">Jenkins on CentOS</a></li>
+		</ul>
+		<h4>September 2014</h4>
+		<ul>
+			<li>13 - <a href="../blog/2014/adding-local-jar-to-maven.html">Adding Local JAR to Maven</a></li>
+			<li>03 - <a href="../blog/2014/spring-hibernate.html">Spring Persistence with Hibernate</a></li>
+		</ul>
+		<h4>August 2014</h4>
+		<ul>
+			<li>27 - <a href="../blog/2014/spring-standalone-project.html">Spring Standalone Project</a></li>
+		</ul>
+	</div>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../js/jpages.js"></script>
 	<script src="../js/main.js"></script>
 
 </body>

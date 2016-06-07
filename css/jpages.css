@@ -1,0 +1,42 @@
+.pagination {
+	margin: 15px 8px;
+}
+
+.pagination a {
+	font-size: 20px;
+	cursor: pointer;
+	margin: 0 5px;
+  padding: 8px 16px;
+  background-color: #fff;
+}
+
+.pagination a:hover {
+	background-color: #000507;
+	color: #fff;
+}
+
+.pagination a.jp-current, a.jp-current:hover {
+	color: #000;
+  text-decoration: none;
+}
+
+.pagination a.jp-disabled, a.jp-disabled:hover {
+	color: #bbb;
+}
+
+.pagination a.jp-current, a.jp-current:hover,
+.pagination a.jp-disabled, a.jp-disabled:hover {
+	cursor: default;
+	background: #eee;
+}
+
+.pagination span { margin: 0 5px; }
+
+ul#posts {
+  list-style: none;
+  padding-left: 0;
+}
+
+div.centre {
+  text-align: center;
+}

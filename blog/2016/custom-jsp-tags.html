@@ -10,211 +10,193 @@
     <meta name="generator" content="JBake">
 
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="../../plugins/prism/prism.css">
-    <!-- Theme CSS -->
-    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
-		<!-- Fixed navbar -->
-				<header class="header" id="header">
-			<div class="container">
-					<h1 class="logo pull-left">
-							<a href="/"><span class="logo-title">dhon.manalo</span></a>
-					</h1>
-					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
-							<div class="navbar-header">
-									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
-											<span class="sr-only">Toggle navigation</span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-									</button>
-							</div>
-							<div id="navbar-collapse" class="navbar-collapse collapse">
-									<ul class="nav navbar-nav">
-											<li class="nav-item sr-only active"><a href="/">Home</a></li>
-											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
-											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
-											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
-											<li class="dropdown">
-							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
-							          <ul class="dropdown-menu">
-							            <li><a href="../../tags/bash.html">bash</a></li>
-													<li><a href="../../tags/cisco.html">cisco</a></li>
-													<li><a href="../../tags/java.html">java</a></li>
-													<li><a href="../../tags/php.html">php</a></li>
-													<li role="separator" class="divider"></li>
-							            <li><a href="../../tags/windows.html">windows</a></li>
-							          </ul>
-							        </li>
-									</ul>
-							</div>
-					</nav>
-			</div>
-		</header>
+<body class="theme-base-01">
 
-	<section class="section promo offset-header">
-		<div class="container">
-			<h1 class="page-header title">Custom JSP Tags</h1>
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Custom JSP Tags</h1>
 			<p><em>30 April 2016</em></p>
 			<p><p>We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.</p><p>There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside <code>javax.servlet.jsp.tagext</code> and then writing your <code>tld</code> Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you're a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.</p><p>The other approach is by writing a tag file that goes to <code>WEB-INF/tags</code> folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html">JSP Tags 5</a>.</p>
 <!-- more --><h3>input.tag</h3>
-<pre><code class="language-java">
-<%@ tag language="java" pageEncoding="UTF-8"%>
-<%@ tag description="Bootstrap input tag with error, icon and i8n support"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ tag description=&quot;Bootstrap input tag with error, icon and i8n support&quot;%&gt;
+&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
+&lt;%@ taglib prefix=&quot;fn&quot; uri=&quot;http://java.sun.com/jsp/jstl/functions&quot;%&gt;
+&lt;%@ taglib prefix=&quot;form&quot; uri=&quot;http://www.springframework.org/tags/form&quot;%&gt;
+&lt;%@ taglib prefix=&quot;s&quot; uri=&quot;http://www.springframework.org/tags&quot;%&gt;
 
-<%@ attribute name="path" required="true" type="java.lang.String"%>
-<%@ attribute name="cssClass" required="false" type="java.lang.String"%>
-<%@ attribute name="cssStyle" required="false" type="java.lang.String"%>
-<%@ attribute name="label" required="false" type="java.lang.String"%>
-<%@ attribute name="placeholder" required="false" type="java.lang.String"%>
-<%@ attribute name="required" required="false" type="java.lang.Boolean"%>
-<%@ attribute name="append" required="false" type="java.lang.Boolean"%>
-<%@ attribute name="prepend" required="false" type="java.lang.Boolean"%>
-<%@ attribute name="icon" required="false" type="java.lang.String"%>
+&lt;%@ attribute name=&quot;path&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;cssClass&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;cssStyle&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;label&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;placeholder&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;required&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
+&lt;%@ attribute name=&quot;append&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
+&lt;%@ attribute name=&quot;prepend&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
+&lt;%@ attribute name=&quot;icon&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
 
-<c:if test="${ empty label }">
-    <c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" />
-</c:if>
-<c:if test="${ fn:length(icon) gt 1 }">
-  	<c:set var="icon" value='<i class="${ icon }"></i>'/>
-</c:if>
+&lt;c:if test=&quot;${ empty label }&quot;&gt;
+    &lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&gt;
+&lt;/c:if&gt;
+&lt;c:if test=&quot;${ fn:length(icon) gt 1 }&quot;&gt;
+  	&lt;c:set var=&quot;icon&quot; value=&#39;&lt;i class=&quot;${ icon }&quot;&gt;&lt;/i&gt;&#39;/&gt;
+&lt;/c:if&gt;
 
-<s:bind path="${ path }">
-	<div class="row form-group ${ status.error ? 'error' : '' }">
-		<label class="col-sm-2 control-label" for="${ path }">
-			<s:message code="${ label }"/>
-			<c:if test="${ required }">
-				<span class="required"> *</span>
-			</c:if>
-		</label>
-		<div class="col-sm-4">
-		  	<c:choose>
-				<c:when test="${ prepend }">
-					<div class="input-prepend">
-		  				<span class="add-on">${ icon }</span>
-						<form:input path="${ path }" cssClass="${ empty cssClass ? 'input-xlarge' : cssClass }"/>
-					</div>
-				</c:when>
-				<c:when test="${ append }">
-					<div class="input-append">
-				  		<form:input path="${ path }" cssClass="${ empty cssClass ? 'input-xlarge' : cssClass }"/>
-						<span class="add-on">${ icon }</span>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<form:input path="${ path }" class="form-control" placeholder="${ empty placeholder ? label : placeholder }" autocomplete="off" cssStyle="${ empty cssStyle ? '' : cssStyle }"/>
-				</c:otherwise>
-			</c:choose>
-			<c:if test="${ status.error }">
-				<form:errors path="${ path }" cssClass="text-danger" />
-			</c:if>
-	  	</div>
-	</div>
-</s:bind>
+&lt;s:bind path=&quot;${ path }&quot;&gt;
+	&lt;div class=&quot;row form-group ${ status.error ? &#39;error&#39; : &#39;&#39; }&quot;&gt;
+		&lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&gt;
+			&lt;s:message code=&quot;${ label }&quot;/&gt;
+			&lt;c:if test=&quot;${ required }&quot;&gt;
+				&lt;span class=&quot;required&quot;&gt; *&lt;/span&gt;
+			&lt;/c:if&gt;
+		&lt;/label&gt;
+		&lt;div class=&quot;col-sm-4&quot;&gt;
+		  	&lt;c:choose&gt;
+				&lt;c:when test=&quot;${ prepend }&quot;&gt;
+					&lt;div class=&quot;input-prepend&quot;&gt;
+		  				&lt;span class=&quot;add-on&quot;&gt;${ icon }&lt;/span&gt;
+						&lt;form:input path=&quot;${ path }&quot; cssClass=&quot;${ empty cssClass ? &#39;input-xlarge&#39; : cssClass }&quot;/&gt;
+					&lt;/div&gt;
+				&lt;/c:when&gt;
+				&lt;c:when test=&quot;${ append }&quot;&gt;
+					&lt;div class=&quot;input-append&quot;&gt;
+				  		&lt;form:input path=&quot;${ path }&quot; cssClass=&quot;${ empty cssClass ? &#39;input-xlarge&#39; : cssClass }&quot;/&gt;
+						&lt;span class=&quot;add-on&quot;&gt;${ icon }&lt;/span&gt;
+					&lt;/div&gt;
+				&lt;/c:when&gt;
+				&lt;c:otherwise&gt;
+					&lt;form:input path=&quot;${ path }&quot; class=&quot;form-control&quot; placeholder=&quot;${ empty placeholder ? label : placeholder }&quot; autocomplete=&quot;off&quot; cssStyle=&quot;${ empty cssStyle ? &#39;&#39; : cssStyle }&quot;/&gt;
+				&lt;/c:otherwise&gt;
+			&lt;/c:choose&gt;
+			&lt;c:if test=&quot;${ status.error }&quot;&gt;
+				&lt;form:errors path=&quot;${ path }&quot; cssClass=&quot;text-danger&quot; /&gt;
+			&lt;/c:if&gt;
+	  	&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/s:bind&gt;
 </code></pre><h3>calendar.tag</h3>
-<pre><code class="language-html">
-<%@ tag language="java" pageEncoding="UTF-8"%>
-<%@ tag description="Bootstrap input grouped tag with error, calendar icon and i8n support"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ tag description=&quot;Bootstrap input grouped tag with error, calendar icon and i8n support&quot;%&gt;
+&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
+&lt;%@ taglib prefix=&quot;fn&quot; uri=&quot;http://java.sun.com/jsp/jstl/functions&quot;%&gt;
+&lt;%@ taglib prefix=&quot;form&quot; uri=&quot;http://www.springframework.org/tags/form&quot;%&gt;
+&lt;%@ taglib prefix=&quot;s&quot; uri=&quot;http://www.springframework.org/tags&quot;%&gt;
 
-<%@ attribute name="label" required="false" type="java.lang.String"%>
-<%@ attribute name="path" required="true" type="java.lang.String"%>
-<%@ attribute name="required" required="false" type="java.lang.Boolean"%>
-<%@ attribute name="groupId" required="false" type="java.lang.String"%>
-<%@ attribute name="btnTitle" required="false" type="java.lang.String"%>
-<%@ attribute name="icon" required="false" type="java.lang.String"%>
+&lt;%@ attribute name=&quot;label&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;path&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;required&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
+&lt;%@ attribute name=&quot;groupId&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;btnTitle&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;icon&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
 
-<c:if test="${ empty label }">
-    <c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" />
-</c:if>
+&lt;c:if test=&quot;${ empty label }&quot;&gt;
+    &lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&gt;
+&lt;/c:if&gt;
 
-<s:bind path="${ path }">
-	<div class="row form-group ${ status.error ? 'error' : '' }">
-		<label class="col-sm-2 control-label" for="${ path }">
-			<s:message code="${ label }"/>
-			<c:if test="${ required }">
-				<span class="required"> *</span>
-			</c:if>
-		</label>
-		<div class="col-sm-4">
-			<div class="input-group date" id="${ empty groupId ? '' : groupId }">
-				<span class="input-group-addon btn btn-sm btn-primary">
-					<span class="${ icon }" title="${ empty btnTitle ? '' : btnTitle }"></span>
-				</span>
-				<form:input path="${ path }" class="form-control" autocomplete="off" cssStyle="width:180px;" />
-			</div>
-		</div>
-	</div>
-</s:bind>		
+&lt;s:bind path=&quot;${ path }&quot;&gt;
+	&lt;div class=&quot;row form-group ${ status.error ? &#39;error&#39; : &#39;&#39; }&quot;&gt;
+		&lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&gt;
+			&lt;s:message code=&quot;${ label }&quot;/&gt;
+			&lt;c:if test=&quot;${ required }&quot;&gt;
+				&lt;span class=&quot;required&quot;&gt; *&lt;/span&gt;
+			&lt;/c:if&gt;
+		&lt;/label&gt;
+		&lt;div class=&quot;col-sm-4&quot;&gt;
+			&lt;div class=&quot;input-group date&quot; id=&quot;${ empty groupId ? &#39;&#39; : groupId }&quot;&gt;
+				&lt;span class=&quot;input-group-addon btn btn-sm btn-primary&quot;&gt;
+					&lt;span class=&quot;${ icon }&quot; title=&quot;${ empty btnTitle ? &#39;&#39; : btnTitle }&quot;&gt;&lt;/span&gt;
+				&lt;/span&gt;
+				&lt;form:input path=&quot;${ path }&quot; class=&quot;form-control&quot; autocomplete=&quot;off&quot; cssStyle=&quot;width:180px;&quot; /&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/s:bind&gt;		
 </code></pre><h3>textarea.tag</h3>
-<pre><code class="language-markup">
-<%@ tag language="java" pageEncoding="UTF-8"%>
-<%@ tag description="Bootstrap textarea tag with error, icon and i8n support"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ tag description=&quot;Bootstrap textarea tag with error, icon and i8n support&quot;%&gt;
+&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
+&lt;%@ taglib prefix=&quot;fn&quot; uri=&quot;http://java.sun.com/jsp/jstl/functions&quot;%&gt;
+&lt;%@ taglib prefix=&quot;form&quot; uri=&quot;http://www.springframework.org/tags/form&quot;%&gt;
+&lt;%@ taglib prefix=&quot;s&quot; uri=&quot;http://www.springframework.org/tags&quot;%&gt;
 
-<%@ attribute name="label" required="false" type="java.lang.String"%>
-<%@ attribute name="path" required="true" type="java.lang.String"%>
-<%@ attribute name="required" required="false" type="java.lang.Boolean"%>
+&lt;%@ attribute name=&quot;label&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;path&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
+&lt;%@ attribute name=&quot;required&quot; required=&quot;false&quot; type=&quot;java.lang.Boolean&quot;%&gt;
 
-<c:if test="${ empty label }">
-    <c:set var="label" value="${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }" />
-</c:if>
+&lt;c:if test=&quot;${ empty label }&quot;&gt;
+    &lt;c:set var=&quot;label&quot; value=&quot;${ fn:toUpperCase(fn:substring(path, 0, 1)) }${ fn:toLowerCase(fn:substring(path, 1,fn:length(path))) }&quot; /&gt;
+&lt;/c:if&gt;
 
-<s:bind path="${ path }">
-	<div class="row form-group ${ status.error ? 'error' : '' }">
-		<label class="col-sm-2 control-label" for="${ path }">
-			<s:message code="${ label }"/>
-			<c:if test="${ required }">
-				<span class="required"> *</span>
-			</c:if>
-		</label>
-		<div class="col-sm-4">
-			<form:textarea path="${ path }" class="form-control" placeholder="${ empty placeholder ? label : placeholder }" />
-			<c:if test="${ status.error }">
-				<form:errors path="${ path }" cssClass="text-danger" />
-			</c:if>
+&lt;s:bind path=&quot;${ path }&quot;&gt;
+	&lt;div class=&quot;row form-group ${ status.error ? &#39;error&#39; : &#39;&#39; }&quot;&gt;
+		&lt;label class=&quot;col-sm-2 control-label&quot; for=&quot;${ path }&quot;&gt;
+			&lt;s:message code=&quot;${ label }&quot;/&gt;
+			&lt;c:if test=&quot;${ required }&quot;&gt;
+				&lt;span class=&quot;required&quot;&gt; *&lt;/span&gt;
+			&lt;/c:if&gt;
+		&lt;/label&gt;
+		&lt;div class=&quot;col-sm-4&quot;&gt;
+			&lt;form:textarea path=&quot;${ path }&quot; class=&quot;form-control&quot; placeholder=&quot;${ empty placeholder ? label : placeholder }&quot; /&gt;
+			&lt;c:if test=&quot;${ status.error }&quot;&gt;
+				&lt;form:errors path=&quot;${ path }&quot; cssClass=&quot;text-danger&quot; /&gt;
+			&lt;/c:if&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/s:bind&gt;
+</code></pre><h3>actions.tag</h3>
+<pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ tag	description=&quot;Bootstrap cancel, reset and submit buttons without i8n support&quot;%&gt;
+&lt;%@ attribute name=&quot;cancelPath&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
+
+&lt;div class=&quot;row form-group&quot;&gt;
+	&lt;div class=&quot;col-sm-4 col-sm-offset-2&quot;&gt;
+		&lt;a href=&quot;${ cancelPath }&quot; class=&quot;btn btn-default&quot;&gt;Cancel&lt;/a&gt;
+		&lt;input type=&quot;reset&quot; id=&quot;reset&quot; value=&quot;Reset&quot; class=&quot;btn btn-default&quot; /&gt;
+		&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; class=&quot;btn btn-primary&quot; /&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+</code></pre><h3>Importing the tags</h3>
+<pre><code>&lt;%@taglib tagdir=&quot;/WEB-INF/tags&quot; prefix=&quot;bs&quot;%&gt;
+</code></pre></p>
 		</div>
 	</div>
-</s:bind>
-</code></pre><h3>actions.tag</h3>
-<pre><code class="language-html">
-<%@ tag language="java" pageEncoding="UTF-8"%>
-<%@ tag	description="Bootstrap cancel, reset and submit buttons without i8n support"%>
-<%@ attribute name="cancelPath" required="true" type="java.lang.String"%>
-
-<div class="row form-group">
-	<div class="col-sm-4 col-sm-offset-2">
-		<a href="${ cancelPath }" class="btn btn-default">Cancel</a>
-		<input type="reset" id="reset" value="Reset" class="btn btn-default" />
-		<input type="submit" value="Submit" class="btn btn-primary" />
-	</div>
-</div>
-</code></pre><h3>Importing the tags</h3><p>Just import it like any other JSP tag</p>
-<pre><code class="language-html">
-<%@taglib tagdir="/WEB-INF/tags" prefix="bs"%>
-</code></pre></p>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
@@ -232,24 +214,11 @@
 	</script>
 	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
-
-		</div><!--//container-->
-	</section>
-
-	<!-- ******FOOTER****** -->
-	<footer class="footer">
-    <div class="container text-center">
-        <small class="copyright">Mixed by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="https://jbake.org">JBake v2.4.0</a></small>
-    </div>
-	</footer>
-
-  <!-- Javascript -->
-	<script src="../../plugins/jquery-1.11.3.min.js"></script>
-	<script src="../../plugins/jquery.easing.1.3.js"></script>
-	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
-	<script src="../../plugins/prism/prism.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
 	<script src="../../js/main.js"></script>
 
 </body>

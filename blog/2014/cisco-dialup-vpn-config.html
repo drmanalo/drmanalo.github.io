@@ -10,68 +10,52 @@
     <meta name="generator" content="JBake">
 
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="../../plugins/prism/prism.css">
-    <!-- Theme CSS -->
-    <link id="theme-style" rel="stylesheet" href="../../css/styles.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
-		<!-- Fixed navbar -->
-				<header class="header" id="header">
-			<div class="container">
-					<h1 class="logo pull-left">
-							<a href="/"><span class="logo-title">dhon.manalo</span></a>
-					</h1>
-					<nav role="navigation" class="main-nav navbar-right" id="main-nav">
-							<div class="navbar-header">
-									<button data-target="#navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
-											<span class="sr-only">Toggle navigation</span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-											<span class="icon-bar"></span>
-									</button>
-							</div>
-							<div id="navbar-collapse" class="navbar-collapse collapse">
-									<ul class="nav navbar-nav">
-											<li class="nav-item sr-only active"><a href="/">Home</a></li>
-											<li class="nav-item"><a href="../../pages/disclaimer.html">Disclaimer</a></li>
-											<li class="nav-item"><a href="../../archive.html">Archives</a></li>
-											<li class="nav-item"><a href="../../feed.xml">Feed</a></li>
-											<li class="dropdown">
-							          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tags <span class="caret"></span></a>
-							          <ul class="dropdown-menu">
-							            <li><a href="../../tags/bash.html">bash</a></li>
-													<li><a href="../../tags/cisco.html">cisco</a></li>
-													<li><a href="../../tags/java.html">java</a></li>
-													<li><a href="../../tags/php.html">php</a></li>
-													<li role="separator" class="divider"></li>
-							            <li><a href="../../tags/windows.html">windows</a></li>
-							          </ul>
-							        </li>
-									</ul>
-							</div>
-					</nav>
-			</div>
-		</header>
+<body class="theme-base-01">
 
-	<section class="section promo offset-header">
-		<div class="container">
-			<h1 class="page-header title">Cisco Dialup VPN Configuration</h1>
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Cisco Dialup VPN Configuration</h1>
 			<p><em>13 May 2014</em></p>
 			<p><p>This is my working Cisco dialup configuration. IP addresses and wildcard masks are fictitious.</p>
 <!-- more -->
-<pre><code class="language-bash">
-cisco887(config)#crypto isakmp policy 2
+<pre><code>cisco887(config)#crypto isakmp policy 2
 cisco887(config-isakmp)#encryption 3des
 cisco887(config-isakmp)#hash md5
 cisco887(config-isakmp)#authentication pre-share
@@ -85,32 +69,32 @@ cisco887(config)# aaa authentication login sslvpn local
 cisco887(config)# aaa authorization network vpn_group local
 cisco887(config)# aaa session-id common
 
-cisco887(config)#username <username> password 0 <password>
+cisco887(config)#username &lt;username&gt; password 0 &lt;password&gt;
 
-cisco887(config)#crypto isakmp client configuration group <group name>
-cisco887(config-isakmp-group)#key <password>
+cisco887(config)#crypto isakmp client configuration group &lt;group name&gt;
+cisco887(config-isakmp-group)#key &lt;password&gt;
 cisco887(config-isakmp-group)#dns 8.8.8.8
-cisco887(config-isakmp-group)#pool <pool name>
+cisco887(config-isakmp-group)#pool &lt;pool name&gt;
 cisco887(config-isakmp-group)#acl 103
 cisco887(config-isakmp-group)#max-users 5
 cisco887(config-isakmp-group)#exit
 
-cisco887(config)#ip local pool <pool name> x.x.x.x x.x.x.x
+cisco887(config)#ip local pool &lt;pool name&gt; x.x.x.x x.x.x.x
 
-cisco887(config)#crypto ipsec transform-set <transform-set name> esp-3des esp-sha-hmac
-cisco887(config)#crypto ipsec profile <profile name>
-cisco887(ipsec-profile)#set transform-set <transform-set name>
+cisco887(config)#crypto ipsec transform-set &lt;transform-set name&gt; esp-3des esp-sha-hmac
+cisco887(config)#crypto ipsec profile &lt;profile name&gt;
+cisco887(ipsec-profile)#set transform-set &lt;transform-set name&gt;
 cisco887(ipsec-profile)#exit
 
 cisco887(config)#interface virtual-template 1 type tunnel
 cisco887(config-if)#ip unnumbered vlan3
 cisco887(config-if)#tunnel mode ipsec ipv4
-cisco887(config-if)#tunnel protection ipsec profile <profile name>
+cisco887(config-if)#tunnel protection ipsec profile &lt;profile name&gt;
 cisco887(config-if)#exit
 
-cisco887(config)#crypto isakmp profile <ike-profile name>
+cisco887(config)#crypto isakmp profile &lt;ike-profile name&gt;
 % A profile is deemed incomplete until it has match identity statements
-cisco887(conf-isa-prof)#match identity group <group name>
+cisco887(conf-isa-prof)#match identity group &lt;group name&gt;
 cisco887(conf-isa-prof)#client authentication list vpn_xauth
 cisco887(conf-isa-prof)#isakmp authorization list vpn_group
 cisco887(conf-isa-prof)#client configuration address respond
@@ -120,6 +104,8 @@ cisco887(config-if)#exit
 cisco887(config)#access-list 103 remark -===VPN Client users===-
 cisco887(config)#access-list 103 permit ip x.x.x.x y.y.y.y host x.x.x.x
 </code></pre></p>
+		</div>
+	</div>
 
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
@@ -137,24 +123,11 @@ cisco887(config)#access-list 103 permit ip x.x.x.x y.y.y.y host x.x.x.x
 	</script>
 	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
-
-		</div><!--//container-->
-	</section>
-
-	<!-- ******FOOTER****** -->
-	<footer class="footer">
-    <div class="container text-center">
-        <small class="copyright">Mixed by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> | Baked with <a href="https://jbake.org">JBake v2.4.0</a></small>
-    </div>
-	</footer>
-
-  <!-- Javascript -->
-	<script src="../../plugins/jquery-1.11.3.min.js"></script>
-	<script src="../../plugins/jquery.easing.1.3.js"></script>
-	<script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../../plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
-	<script src="../../plugins/prism/prism.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
 	<script src="../../js/main.js"></script>
 
 </body>
