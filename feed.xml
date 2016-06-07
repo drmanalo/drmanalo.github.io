@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Tue, 7 Jun 2016 09:08:01 +0100</pubDate>
-    <lastBuildDate>Tue, 7 Jun 2016 09:08:01 +0100</lastBuildDate>
+    <pubDate>Tue, 7 Jun 2016 21:48:44 +0100</pubDate>
+    <lastBuildDate>Tue, 7 Jun 2016 21:48:44 +0100</lastBuildDate>
 
       <item>
         <title>Pimping CentOS 7</title>
@@ -883,6 +883,196 @@ ECHO Backup finished!
 
 @REM ------- END backup.bat ------------------
 &lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>applicationContext.xml and dispatcher-servlet.xml</title>
+        <link>https://drmanalo.github.io/blog/2015/application-context-and-dispatcher-servlet.html</link>
+        <pubDate>Sat, 18 Apr 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/application-context-and-dispatcher-servlet.html</guid>
+        <description>
+  	         &lt;p&gt;I was trying to improve an existing Spring project to be able to inject Hibernate&apos;s SessionFactory but get confused where to put my Hibernate XML configuration. I initially put it within &lt;code&gt;&amp;lt;context-param/&amp;gt;&lt;/code&gt; but was surprised Spring is not creating my sessionFactory bean. Then I tried it under &lt;code&gt;&amp;lt;init-param/&amp;gt;&lt;/code&gt; but the result is the same, there&apos;s no sessionFactory bean. I tried putting my Hibernate configuration on both locations and it worked. I still don&apos;t understand why hence I asked my friend Google.&lt;/p&gt;&lt;p&gt;I found this post from &lt;a href=&quot;http://www.jroller.com/latenightdev/entry/spring_mvc_context_loading&quot;&gt;Late Night Developer&lt;/a&gt; which helped me understand why there are two places for my custom XML configurations.&lt;/p&gt;
+&lt;blockquote&gt;The most important thing to understand is that there are 2 layers of application contexts, and they each have default XML files to load beans from.&lt;/blockquote&gt;
+&lt;!--more--&gt;&lt;h3&gt;Root Application Context&lt;/h3&gt;&lt;p&gt;The Root application context is created when you specify a ContextLoaderListener in your web.xml file. It allows you to define beans that will be available to all the servlet contexts. If you don&apos;t specify a listener, then there will be no Root context which is also valid. Here&apos;s how you define the ContextLoaderListener in the web.xml file.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;web-app xmlns=&amp;quot;http://java.sun.com/xml/ns/javaee&amp;quot;
+        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:schemaLocation=&amp;quot;http://java.sun.com/xml/ns/javaee
+                            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&amp;quot;&amp;gt;
+
+		&amp;lt;!-- Configurations for the root application context (parent context) --&amp;gt;
+		&amp;lt;listener&amp;gt;
+		    &amp;lt;listener-class&amp;gt;org.springframework.web.context.ContextLoaderListener&amp;lt;/listener-class&amp;gt;
+		&amp;lt;/listener&amp;gt;
+
+&amp;lt;/web-app&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;By default, the listener loads beans from the file &lt;code&gt;/WEB-INF/applicationContext.xml&lt;/code&gt;. To specify an alternative file, use the contextConfigLocation context parameter in the web.xml file. In an instance,&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;web-app&amp;gt;
+    ...
+    &amp;lt;context-param&amp;gt;
+		    &amp;lt;param-name&amp;gt;contextConfigLocation&amp;lt;/param-name&amp;gt;
+		    &amp;lt;param-value&amp;gt;
+		        /WEB-INF/spring/jdbc/spring-jdbc.xml
+		        /WEB-INF/spring/security/spring-security-context.xml
+		    &amp;lt;/param-value&amp;gt;
+		&amp;lt;/context-param&amp;gt;
+&amp;lt;/web-app&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Servlet Application Context&lt;/h3&gt;&lt;p&gt;Each Spring DispatcherServlet defined in the web.xml file gets its own application context. If there is a Root application context (i.e. if a ContextLoaderListener is defined), then that will be the parent of the servlet context and the beans will be available for use in the servlet context. By default, DispatcherServlet loads beans from the file &lt;code&gt;/WEB-INF/&amp;lt;servlet-name&amp;gt;-servlet&lt;/code&gt;.xml which is widely named as dispatcher.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;web-app xmlns=&amp;quot;http://java.sun.com/xml/ns/javaee&amp;quot;
+        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:schemaLocation=&amp;quot;http://java.sun.com/xml/ns/javaee
+                            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&amp;quot;&amp;gt;
+
+		&amp;lt;!-- Configurations for the DispatcherServlet application context (child context) --&amp;gt;
+    &amp;lt;servlet&amp;gt;
+        &amp;lt;servlet-name&amp;gt;spring-mvc&amp;lt;/servlet-name&amp;gt;
+        &amp;lt;servlet-class&amp;gt;org.springframework.web.servlet.DispatcherServlet&amp;lt;/servlet-class&amp;gt;
+    &amp;lt;/servlet&amp;gt;
+
+&amp;lt;/web-app&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To change the name of the XML bean file that the servlet loads, you can use the namespace initialisation parameter, but be careful as the servlet assumes that the file is in WEB-INF, and ends in .xml, so you don&apos;t put those as part of the parameter value. This is inconsistent with the other file specifications already mentioned, which are relative to the wep app base. In an instance,&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;web-app&amp;gt;
+    ...
+    &amp;lt;servlet&amp;gt;
+        &amp;lt;servlet-name&amp;gt;spring-mvc&amp;lt;/servlet-name&amp;gt;
+        &amp;lt;servlet-class&amp;gt;org.springframework.web.servlet.DispatcherServlet&amp;lt;/servlet-class&amp;gt;
+        &amp;lt;init-param&amp;gt;
+            &amp;lt;param-name&amp;gt;contextConfigLocation&amp;lt;/param-name&amp;gt;
+            &amp;lt;param-value&amp;gt;
+                /WEB-INF/spring/mvc/spring-mvc-servlet.xml
+            &amp;lt;/param-value&amp;gt;
+        &amp;lt;/init-param&amp;gt;
+    &amp;lt;/servlet&amp;gt;
+&amp;lt;/web-app&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Expression-based Access with FreeMarker</title>
+        <link>https://drmanalo.github.io/blog/2015/freemarker-expression-based-access.html</link>
+        <pubDate>Sun, 5 Apr 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/freemarker-expression-based-access.html</guid>
+        <description>
+  	         &lt;p&gt;Spring Security 3.0 introduced the ability to use Spring EL expressions as an authorisation mechanism. Expression-based access control is built on the same architecture but allows complicated boolean logic to be encapsulated in a single expression. This comes handy when you want to secure a Controller method or even the entire Controller. JSP has native support for this feature using&lt;/p&gt;&lt;p&gt;&lt;code&gt;&amp;lt;%@ taglib prefix=&amp;quot;sec&amp;quot; uri=&amp;quot;http://www.springframework.org/security/tags&amp;quot; %&amp;gt;&lt;/code&gt;&lt;/p&gt;&lt;p&gt;FreeMarker don&apos;t so you need to do more than just importing a tag library.&lt;/p&gt;
+&lt;!-- more --&gt;&lt;p&gt;I followed this article here &lt;a href=&quot;http://timtang.me/blog/2012/11/16/use-spring-security-tags-in-freemaker&quot;&gt;tech talk&lt;/a&gt;, very simple yet precise!&lt;/p&gt;&lt;h3&gt;Add JspTagLibs&lt;/h3&gt;&lt;p&gt;Consider the first line of the snippet.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;#assign security=JspTaglibs[&amp;quot;/WEB-INF/security.tld&amp;quot;]/&amp;gt;
+&amp;lt;#include &amp;quot;/user/logout.ftl&amp;quot;/&amp;gt;
+&amp;lt;#macro navigation&amp;gt;
+	&amp;lt;div class=&amp;quot;masthead clearfix&amp;quot;&amp;gt;
+    	&amp;lt;div class=&amp;quot;inner&amp;quot;&amp;gt;
+      		&amp;lt;h3 class=&amp;quot;masthead-brand&amp;quot;&amp;gt;&amp;lt;@spring.message &amp;quot;prototype&amp;quot;/&amp;gt;&amp;lt;/h3&amp;gt;
+      		&amp;lt;nav&amp;gt;
+        		&amp;lt;ul class=&amp;quot;nav masthead-nav&amp;quot;&amp;gt;
+					&amp;lt;#if Session[&amp;quot;SPRING_SECURITY_CONTEXT&amp;quot;]?exists&amp;gt;
+						&amp;lt;li&amp;gt;&amp;lt;@logout/&amp;gt;&amp;lt;/li&amp;gt;
+          				&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;home&amp;quot;&amp;gt;&amp;lt;@spring.message &amp;quot;home&amp;quot;/&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt; 				
+						&amp;lt;#assign authorities = Session[&amp;quot;SPRING_SECURITY_CONTEXT&amp;quot;].authentication.authorities /&amp;gt;
+						&amp;lt;#if authorities?seq_contains(&amp;quot;ROLE_ADMIN&amp;quot;)&amp;gt;
+							&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;listUsers&amp;quot;&amp;gt;&amp;lt;@spring.message &amp;quot;users&amp;quot;/&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+						&amp;lt;/#if&amp;gt;
+	          		&amp;lt;/#if&amp;gt;
+        		&amp;lt;/ul&amp;gt;
+      		&amp;lt;/nav&amp;gt;
+    	&amp;lt;/div&amp;gt;
+  	&amp;lt;/div&amp;gt;
+&amp;lt;/#macro&amp;gt;  
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;It&apos;s a shame I cannot use &lt;code&gt;&amp;lt;security:authorize access=&amp;quot;hasRole(&amp;#39;ROLE_ADMIN&amp;#39;)&amp;quot;&amp;gt;&lt;/code&gt; but the end result is the same, you will gain authorisation to specified pages.&lt;/p&gt;&lt;h3&gt;Copy security.tld&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;p&gt;Open your &lt;code&gt;spring-security-taglibs-x.x.x.RELEASE.jar&lt;/code&gt;.&lt;br/&gt;This is one of the jars inside &lt;code&gt;.m2/repository/org/springframework/security/spring-security-taglibs&lt;/code&gt; if you are using maven.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;Copy &lt;code&gt;security.tld&lt;/code&gt; from &lt;code&gt;META-INF&lt;/code&gt; folder.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;Paste it into your &lt;code&gt;src/main/webapp/WEB-INF&lt;/code&gt; folder.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;h3&gt;Check your POM&lt;/h3&gt;&lt;p&gt;Make sure you have &lt;code&gt;spring-security-taglibs&lt;/code&gt; dependency.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;org.springframework.security&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;spring-security-web&amp;lt;/artifactId&amp;gt;
+	&amp;lt;version&amp;gt;${spring.security.version}&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;org.springframework.security&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;spring-security-taglibs&amp;lt;/artifactId&amp;gt;
+	&amp;lt;version&amp;gt;${spring.security.version}&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;org.springframework.security&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;spring-security-config&amp;lt;/artifactId&amp;gt;
+	&amp;lt;version&amp;gt;${spring.security.version}&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Check your Spring Security @Configuration&lt;/h3&gt;&lt;p&gt;If you are extending &lt;code&gt;WebSecurityConfigurerAdapter&lt;/code&gt; and overriding configure to create your own AuthenticationManagerBuilder, you will have BeanCreationException.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;#39;methodSecurityInterceptor&amp;#39; defined in class path resource [org/springframework/security/config/annotation/method/configuration/GlobalMethodSecurityConfiguration.class]: Invocation of init method failed; nested exception is java.lang.IllegalArgumentException: An AuthenticationManager is required
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The solution is documented in &lt;a href=&quot;http://docs.spring.io/autorepo/docs/spring-security/3.2.5.RELEASE/apidocs/org/springframework/security/config/annotation/web/configuration/WebSecurityConfigurerAdapter.html&quot;&gt;Spring Security docs&lt;/a&gt;. You can check my own configuration on &lt;a href=&quot;https://github.com/drmanalo/springmvc/blob/master/src/main/java/com/manalo/prototype/config/WebSecurityConfiguration.java&quot;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;public AuthenticationManager authenticationManagerBean() throws Exception
+
+Override this method to expose the AuthenticationManager from configure(AuthenticationManagerBuilder) to be exposed as a Bean. For example:
+
+ @Bean(name name=&amp;quot;myAuthenticationManager&amp;quot;)
+ @Override
+ public AuthenticationManager authenticationManagerBean() throws Exception {
+     return super.authenticationManagerBean();
+ }
+
+Returns:
+    the AuthenticationManager
+Throws:
+    Exception
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Finally, annotate your @Controller&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;@PreAuthorize(&amp;quot;hasRole(&amp;#39;ROLE_ADMIN&amp;#39;)&amp;quot;)
+@RequestMapping(value = &amp;quot;listUsers&amp;quot;, method = RequestMethod.GET)
+public ModelAndView listUsers() {
+
+	ModelAndView mav = new ModelAndView();
+	mav.addObject(&amp;quot;users&amp;quot;, userService.list());
+	mav.setViewName(ControllerConstant.USER_LIST);
+
+	return mav;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;a href=&quot;http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/guides&quot;&gt;Spring Security 3.2.5 Guide&lt;/a&gt;&lt;br/&gt;&lt;a href=&quot;http://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html&quot;&gt;Spring EL Documentation&lt;/a&gt;&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Spring Form Binding with FreeMarker</title>
+        <link>https://drmanalo.github.io/blog/2015/spring-form-binding-with-freemarker.html</link>
+        <pubDate>Wed, 4 Mar 2015 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2015/spring-form-binding-with-freemarker.html</guid>
+        <description>
+  	         &lt;p&gt;I was using FreeMarker with my previous project as my email templating engine but for now I&apos;m using it for all my views. I will show here the macros that bind a Spring form.&lt;/p&gt;&lt;p&gt;One might wonder why I&apos;m leaving JSP but the whole truth is I&apos;m typing less with FreeMarker. I read this post from &lt;a href=&quot;http://blog.stackhunter.com/2014/01/17/10-reasons-to-replace-your-jsps-with-freemarker-templates/&quot;&gt;stackhunter.com&lt;/a&gt; and among the 10 reasons mentioned I like these:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;No Classloading PermGen Issues&lt;/li&gt;
+  &lt;li&gt;JSON Support&lt;/li&gt;
+  &lt;li&gt;Not Just for the Web&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Importing Spring&lt;/h3&gt;&lt;p&gt;&lt;code&gt;&amp;lt;#import &amp;quot;/spring.ftl&amp;quot; as spring/&amp;gt;&lt;/code&gt; is the import statement to be able to use &lt;code&gt;&amp;lt;@spring&amp;gt;&lt;/code&gt; within the view.&lt;/p&gt;&lt;h3&gt;Binding your modelAttribute or command&lt;/h3&gt;&lt;p&gt;&lt;code&gt;&amp;lt;@spring.bind &amp;quot;form&amp;quot;/&amp;gt;&lt;/code&gt; where form is the key to the mapped object exposed by your controller. You can pass the&lt;br/&gt;binded form in your HTTP post within your controller using &lt;code&gt;@ModelAttribute&lt;/code&gt; or &lt;code&gt;@Command&lt;/code&gt;. Nested fields can be&lt;br/&gt;used to access an object within binded form such as &lt;strong&gt;form.object.property&lt;/strong&gt;.&lt;/p&gt;
+&lt;table style=&quot;border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; &quot; summary=&quot;Table of macro definitions&quot;&gt;&lt;colgroup&gt;&lt;col align=&quot;left&quot;&gt;&lt;col&gt;&lt;col&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th align=&quot;center&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;macro&lt;/th&gt;&lt;th align=&quot;center&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;VTL definition&lt;/th&gt;&lt;th align=&quot;center&quot; style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;FTL definition&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;message&lt;/strong&gt;&lt;/span&gt; (output a string from a resource bundle based on the code parameter)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springMessage($code)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.message
+code/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;messageText&lt;/strong&gt;&lt;/span&gt; (output a string from a resource bundle based on the code parameter, falling back to the value of the default parameter)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springMessageText($code
+$text)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.messageText code,
+text/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;url&lt;/strong&gt;&lt;/span&gt; (prefix a relative URL with the application&apos;s context root)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springUrl($relativeUrl)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.url
+relativeUrl/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formInput&lt;/strong&gt;&lt;/span&gt; (standard input field for gathering user input)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormInput($path
+$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formInput path, attributes,
+fieldType/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formHiddenInput *&lt;/strong&gt;&lt;/span&gt;
+(hidden input field for submitting non-user input)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormHiddenInput($path
+$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formHiddenInput path,
+attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formPasswordInput&lt;/strong&gt;&lt;/span&gt; *
+(standard input field for gathering passwords. Note that no value will ever be populated in fields of this type)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormPasswordInput($path
+$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formPasswordInput path,
+attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formTextarea&lt;/strong&gt;&lt;/span&gt; (large text field for gathering long, freeform text input)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormTextarea($path
+$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formTextarea path,
+attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formSingleSelect&lt;/strong&gt;&lt;/span&gt; (drop
+down box of options allowing a single required value to be selected)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormSingleSelect( $path $options
+$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formSingleSelect path, options,
+attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formMultiSelect&lt;/strong&gt;&lt;/span&gt; (a list box of options allowing the user to select 0 or more
+values)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormMultiSelect($path $options
+$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formMultiSelect path, options,
+attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formRadioButtons&lt;/strong&gt;&lt;/span&gt; (a set of radio buttons allowing a single selection to be made
+from the available choices)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormRadioButtons($path $options
+$separator $attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formRadioButtons path, options
+separator, attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formCheckboxes&lt;/strong&gt;&lt;/span&gt; (a set of checkboxes allowing 0 or more values to be
+selected)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormCheckboxes($path $options
+$separator $attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formCheckboxes path, options,
+separator, attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formCheckbox&lt;/strong&gt;&lt;/span&gt; (a single checkbox)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormCheckbox($path
+$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formCheckbox path,
+attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;showErrors&lt;/strong&gt;&lt;/span&gt; (simplify display of validation errors for the bound field)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springShowErrors($separator
+$classOrStyle)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;&quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.showErrors separator,
+classOrStyle/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;strong&gt;Source:&lt;/strong&gt; &lt;a href=&quot;http://docs.spring.io/autorepo/docs/spring/3.2.x/spring-framework-reference/html/view.html&quot;&gt;docs.spring.io&lt;/a&gt;&lt;/p&gt;
   	    </description>
       </item>
       <item>

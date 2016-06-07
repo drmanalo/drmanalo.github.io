@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Spring Form Binding with FreeMarker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Spring Form Binding with FreeMarker</h1>
+			<p><em>04 March 2015</em></p>
+			<p><p>I was using FreeMarker with my previous project as my email templating engine but for now I'm using it for all my views. I will show here the macros that bind a Spring form.</p><p>One might wonder why I'm leaving JSP but the whole truth is I'm typing less with FreeMarker. I read this post from <a href="http://blog.stackhunter.com/2014/01/17/10-reasons-to-replace-your-jsps-with-freemarker-templates/">stackhunter.com</a> and among the 10 reasons mentioned I like these:</p>
+<ul>
+  <li>No Classloading PermGen Issues</li>
+  <li>JSON Support</li>
+  <li>Not Just for the Web</li>
+</ul>
+<!-- more --><h3>Importing Spring</h3><p><code>&lt;#import &quot;/spring.ftl&quot; as spring/&gt;</code> is the import statement to be able to use <code>&lt;@spring&gt;</code> within the view.</p><h3>Binding your modelAttribute or command</h3><p><code>&lt;@spring.bind &quot;form&quot;/&gt;</code> where form is the key to the mapped object exposed by your controller. You can pass the<br/>binded form in your HTTP post within your controller using <code>@ModelAttribute</code> or <code>@Command</code>. Nested fields can be<br/>used to access an object within binded form such as <strong>form.object.property</strong>.</p>
+<table style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; " summary="Table of macro definitions"><colgroup><col align="left"><col><col></colgroup><thead><tr><th align="center" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; ">macro</th><th align="center" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; ">VTL definition</th><th align="center" style="border-bottom: 0.5pt solid ; ">FTL definition</th></tr></thead><tbody><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>message</strong></span> (output a string from a resource bundle based on the code parameter)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springMessage($code)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.message
+code/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>messageText</strong></span> (output a string from a resource bundle based on the code parameter, falling back to the value of the default parameter)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springMessageText($code
+$text)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.messageText code,
+text/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>url</strong></span> (prefix a relative URL with the application's context root)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springUrl($relativeUrl)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.url
+relativeUrl/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>formInput</strong></span> (standard input field for gathering user input)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springFormInput($path
+$attributes)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.formInput path, attributes,
+fieldType/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>formHiddenInput *</strong></span>
+(hidden input field for submitting non-user input)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springFormHiddenInput($path
+$attributes)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.formHiddenInput path,
+attributes/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>formPasswordInput</strong></span> *
+(standard input field for gathering passwords. Note that no value will ever be populated in fields of this type)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springFormPasswordInput($path
+$attributes)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.formPasswordInput path,
+attributes/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>formTextarea</strong></span> (large text field for gathering long, freeform text input)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springFormTextarea($path
+$attributes)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.formTextarea path,
+attributes/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>formSingleSelect</strong></span> (drop
+down box of options allowing a single required value to be selected)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springFormSingleSelect( $path $options
+$attributes)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.formSingleSelect path, options,
+attributes/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>formMultiSelect</strong></span> (a list box of options allowing the user to select 0 or more
+values)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springFormMultiSelect($path $options
+$attributes)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.formMultiSelect path, options,
+attributes/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>formRadioButtons</strong></span> (a set of radio buttons allowing a single selection to be made
+from the available choices)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springFormRadioButtons($path $options
+$separator $attributes)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.formRadioButtons path, options
+separator, attributes/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>formCheckboxes</strong></span> (a set of checkboxes allowing 0 or more values to be
+selected)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springFormCheckboxes($path $options
+$separator $attributes)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.formCheckboxes path, options,
+separator, attributes/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><span class="bold"><strong>formCheckbox</strong></span> (a single checkbox)</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; "><code class="literal">#springFormCheckbox($path
+$attributes)</code></td><td style="border-bottom: 0.5pt solid ; "><code class="literal">&lt;@spring.formCheckbox path,
+attributes/&gt;</code></td></tr><tr><td align="left" style="border-right: 0.5pt solid ; "><span class="bold"><strong>showErrors</strong></span> (simplify display of validation errors for the bound field)</td><td style="border-right: 0.5pt solid ; "><code class="literal">#springShowErrors($separator
+$classOrStyle)</code></td><td style=""><code class="literal">&lt;@spring.showErrors separator,
+classOrStyle/&gt;</code></td></tr></tbody></table><p><strong>Source:</strong> <a href="http://docs.spring.io/autorepo/docs/spring/3.2.x/spring-framework-reference/html/view.html">docs.spring.io</a></p></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/spring-form-binding-with-freemarker.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/spring-form-binding-with-freemarker.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

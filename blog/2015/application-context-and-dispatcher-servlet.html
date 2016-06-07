@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>applicationContext.xml and dispatcher-servlet.xml</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>applicationContext.xml and dispatcher-servlet.xml</h1>
+			<p><em>18 April 2015</em></p>
+			<p><p>I was trying to improve an existing Spring project to be able to inject Hibernate's SessionFactory but get confused where to put my Hibernate XML configuration. I initially put it within <code>&lt;context-param/&gt;</code> but was surprised Spring is not creating my sessionFactory bean. Then I tried it under <code>&lt;init-param/&gt;</code> but the result is the same, there's no sessionFactory bean. I tried putting my Hibernate configuration on both locations and it worked. I still don't understand why hence I asked my friend Google.</p><p>I found this post from <a href="http://www.jroller.com/latenightdev/entry/spring_mvc_context_loading">Late Night Developer</a> which helped me understand why there are two places for my custom XML configurations.</p>
+<blockquote>The most important thing to understand is that there are 2 layers of application contexts, and they each have default XML files to load beans from.</blockquote>
+<!--more--><h3>Root Application Context</h3><p>The Root application context is created when you specify a ContextLoaderListener in your web.xml file. It allows you to define beans that will be available to all the servlet contexts. If you don't specify a listener, then there will be no Root context which is also valid. Here's how you define the ContextLoaderListener in the web.xml file.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
+        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee
+                            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot;&gt;
+
+		&lt;!-- Configurations for the root application context (parent context) --&gt;
+		&lt;listener&gt;
+		    &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
+		&lt;/listener&gt;
+
+&lt;/web-app&gt;
+</code></pre><p>By default, the listener loads beans from the file <code>/WEB-INF/applicationContext.xml</code>. To specify an alternative file, use the contextConfigLocation context parameter in the web.xml file. In an instance,</p>
+<pre><code>&lt;web-app&gt;
+    ...
+    &lt;context-param&gt;
+		    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+		    &lt;param-value&gt;
+		        /WEB-INF/spring/jdbc/spring-jdbc.xml
+		        /WEB-INF/spring/security/spring-security-context.xml
+		    &lt;/param-value&gt;
+		&lt;/context-param&gt;
+&lt;/web-app&gt;
+</code></pre><h3>Servlet Application Context</h3><p>Each Spring DispatcherServlet defined in the web.xml file gets its own application context. If there is a Root application context (i.e. if a ContextLoaderListener is defined), then that will be the parent of the servlet context and the beans will be available for use in the servlet context. By default, DispatcherServlet loads beans from the file <code>/WEB-INF/&lt;servlet-name&gt;-servlet</code>.xml which is widely named as dispatcher.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
+        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee
+                            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot;&gt;
+
+		&lt;!-- Configurations for the DispatcherServlet application context (child context) --&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;spring-mvc&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+&lt;/web-app&gt;
+</code></pre><p>To change the name of the XML bean file that the servlet loads, you can use the namespace initialisation parameter, but be careful as the servlet assumes that the file is in WEB-INF, and ends in .xml, so you don't put those as part of the parameter value. This is inconsistent with the other file specifications already mentioned, which are relative to the wep app base. In an instance,</p>
+<pre><code>&lt;web-app&gt;
+    ...
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;spring-mvc&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+            &lt;param-value&gt;
+                /WEB-INF/spring/mvc/spring-mvc-servlet.xml
+            &lt;/param-value&gt;
+        &lt;/init-param&gt;
+    &lt;/servlet&gt;
+&lt;/web-app&gt;
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/application-context-and-dispatcher-servlet.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/application-context-and-dispatcher-servlet.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

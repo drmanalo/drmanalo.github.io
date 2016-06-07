@@ -49,10 +49,11 @@
       </div>
     </div>
  	<div class="content container">
-    	<div class="posts">
-							<a href="blog/2016/pimping-centos7.html"><h1 class="post-title">Pimping CentOS 7</h1></a>
-							<span class="post-date">04 June 2016</span>
-							<p>Before you are able to tweak your CentOS installation, you will need additional yum repositories.</p>
+    	<ul id="posts">
+					<li>
+								<a href="blog/2016/pimping-centos7.html"><h1 class="post-title">Pimping CentOS 7</h1></a>
+								<span class="post-date">04 June 2016</span>
+								<p>Before you are able to tweak your CentOS installation, you will need additional yum repositories.</p>
 <pre><code># yum install epel-release
 # rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 # rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
@@ -60,11 +61,13 @@
 # yum update
 </code></pre><h3>Fancy icons</h3><p>Download and extract <a href="/downloads/Super-Flat-Remix-master.zip">Super Flat Remix GNOME icons</a>. After extracting, move folder <code>Super Flat Remix</code> into your <code>~/.icons</code> folder.</p><h3>Fancy themes</h3><p>Download and extract <a href="/downloads/175666-OSX-Arc-White.zip">OSX Arc White theme</a>. After extracting, move folder <code>OSX-Arc-White</code> into your <code>~/.themes</code> folder.</p>
 
-							<a class="btn btn-default" href="blog/2016/pimping-centos7.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2016/adding-windows-loader-to-grub2.html"><h1 class="post-title">Adding Windows Loader To grub2</h1></a>
-							<span class="post-date">30 May 2016</span>
-							<p>I recently switched from ElementaryOS to CentOS. The install process went smoothly despite an initial issue while using a bootable SD card. I cannot detail the issue here but Google suggested using a DVD rather than SD card or any USB drive. Everything are working perfectly except I cannot go back to my Windows. It's embarassing to admit that we are using Windows for our open-source development but this is the reality. So when I'm away from work and testing things out, I'm rebooting to my CentOS and switch to Windows when I'm at work.</p><p>This is not grub2 specific issue by the way, grub2 should be able to add the loader but it has no knowledge of how to read <strong>ntfs</strong> partitions. The solution is install <code>ntfs-3g</code> and rebuild grub2 after.</p>
+								<a class="btn btn-default" href="blog/2016/pimping-centos7.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2016/adding-windows-loader-to-grub2.html"><h1 class="post-title">Adding Windows Loader To grub2</h1></a>
+								<span class="post-date">30 May 2016</span>
+								<p>I recently switched from ElementaryOS to CentOS. The install process went smoothly despite an initial issue while using a bootable SD card. I cannot detail the issue here but Google suggested using a DVD rather than SD card or any USB drive. Everything are working perfectly except I cannot go back to my Windows. It's embarassing to admit that we are using Windows for our open-source development but this is the reality. So when I'm away from work and testing things out, I'm rebooting to my CentOS and switch to Windows when I'm at work.</p><p>This is not grub2 specific issue by the way, grub2 should be able to add the loader but it has no knowledge of how to read <strong>ntfs</strong> partitions. The solution is install <code>ntfs-3g</code> and rebuild grub2 after.</p>
 <pre><code>$ yum info ntfs-3g
 Installed Packages
 Name        : ntfs-3g
@@ -78,17 +81,21 @@ From repo   : epel
 Summary     : Linux NTFS userspace driver
 </code></pre>
 
-							<a class="btn btn-default" href="blog/2016/adding-windows-loader-to-grub2.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2016/java8-on-centos7.html"><h1 class="post-title">Installing Java 1.8 on Centos</h1></a>
-							<span class="post-date">21 May 2016</span>
-							<p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
+								<a class="btn btn-default" href="blog/2016/adding-windows-loader-to-grub2.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2016/java8-on-centos7.html"><h1 class="post-title">Installing Java 1.8 on Centos</h1></a>
+								<span class="post-date">21 May 2016</span>
+								<p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
 
-							<a class="btn btn-default" href="blog/2016/java8-on-centos7.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2016/my-bashrc.html"><h1 class="post-title">My bashrc</h1></a>
-							<span class="post-date">08 May 2016</span>
-							<p>This is a backup of my <code>.bashrc</code>. I'm keeping it safe in case I'm rebuilding my machine.</p>
+								<a class="btn btn-default" href="blog/2016/java8-on-centos7.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2016/my-bashrc.html"><h1 class="post-title">My bashrc</h1></a>
+								<span class="post-date">08 May 2016</span>
+								<p>This is a backup of my <code>.bashrc</code>. I'm keeping it safe in case I'm rebuilding my machine.</p>
 <pre><code># .bashrc
 
 # Source global definitions
@@ -109,29 +116,37 @@ export SDKMAN_DIR=&quot;/home/kodi/.sdkman&quot;
 export PS1=&quot;\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]&quot;
 </code></pre>
 
-							<a class="btn btn-default" href="blog/2016/my-bashrc.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2016/blogging-with-jbake.html"><h1 class="post-title">Blogging With JBake</h1></a>
-							<span class="post-date">01 May 2016</span>
-							<p>I have an existing <strong>Octopress</strong> blog which is probably near its useful days. Octopress which is <strong>Jekyll</strong> underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I'm a <strong>Ruby</strong> guy, I will certainly stick with Octopress or Jekyll. But I'm not, being a Java developer. One of the biggest reason why I'm switching to <code>jbake</code> is being able to run it on JVM. <strong>JBake</strong> is not as mature as Jekyll, it's Github inception was 17th of July 2012.</p>
+								<a class="btn btn-default" href="blog/2016/my-bashrc.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2016/blogging-with-jbake.html"><h1 class="post-title">Blogging With JBake</h1></a>
+								<span class="post-date">01 May 2016</span>
+								<p>I have an existing <strong>Octopress</strong> blog which is probably near its useful days. Octopress which is <strong>Jekyll</strong> underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I'm a <strong>Ruby</strong> guy, I will certainly stick with Octopress or Jekyll. But I'm not, being a Java developer. One of the biggest reason why I'm switching to <code>jbake</code> is being able to run it on JVM. <strong>JBake</strong> is not as mature as Jekyll, it's Github inception was 17th of July 2012.</p>
 
-							<a class="btn btn-default" href="blog/2016/blogging-with-jbake.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2016/custom-jsp-tags.html"><h1 class="post-title">Custom JSP Tags</h1></a>
-							<span class="post-date">30 April 2016</span>
-							<p>We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.</p><p>There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside <code>javax.servlet.jsp.tagext</code> and then writing your <code>tld</code> Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you're a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.</p><p>The other approach is by writing a tag file that goes to <code>WEB-INF/tags</code> folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html">JSP Tags 5</a>.</p>
+								<a class="btn btn-default" href="blog/2016/blogging-with-jbake.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2016/custom-jsp-tags.html"><h1 class="post-title">Custom JSP Tags</h1></a>
+								<span class="post-date">30 April 2016</span>
+								<p>We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.</p><p>There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside <code>javax.servlet.jsp.tagext</code> and then writing your <code>tld</code> Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you're a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.</p><p>The other approach is by writing a tag file that goes to <code>WEB-INF/tags</code> folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html">JSP Tags 5</a>.</p>
 
-							<a class="btn btn-default" href="blog/2016/custom-jsp-tags.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2015/poormans.mac.html"><h1 class="post-title">Poorman's Mac</h1></a>
-							<span class="post-date">27 December 2015</span>
-							<p>After testing elementary OS using VirtualBox, I am finally installing it to my desktop. Not that I don't like CentOS anymore but it will help me on my job to totally embrace Ubuntu.</p><p><img src="/images/elementary_info.png" alt="Elementary OS Information""/></p>
+								<a class="btn btn-default" href="blog/2016/custom-jsp-tags.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/poormans.mac.html"><h1 class="post-title">Poorman's Mac</h1></a>
+								<span class="post-date">27 December 2015</span>
+								<p>After testing elementary OS using VirtualBox, I am finally installing it to my desktop. Not that I don't like CentOS anymore but it will help me on my job to totally embrace Ubuntu.</p><p><img src="/images/elementary_info.png" alt="Elementary OS Information""/></p>
 
-							<a class="btn btn-default" href="blog/2015/poormans.mac.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2015/jenkins-on-centos.html"><h1 class="post-title">Jenkins on CentOS</h1></a>
-							<span class="post-date">13 October 2015</span>
-							<p>Jenkins is an opensource and probably the most popular continuous integration tool in the Java community. There are many plugins out there available to make your coding life easier. It supports almost all version control systems and can run all your Maven or Ant tasks.</p><p>To install and configure Jenkins on CentOS, we have to first make sure that Java is installed on your machine. If not, please refer to this post from <a href="http://www.if-not-true-then-false.com/2010/install-sun-oracle-java-jdk-jre-7-on-fedora-centos-red-hat-rhel/comment-page-2">if-not-true-then-false.com</a></p><h3>Add Jenkins to your repository</h3>
+								<a class="btn btn-default" href="blog/2015/poormans.mac.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/jenkins-on-centos.html"><h1 class="post-title">Jenkins on CentOS</h1></a>
+								<span class="post-date">13 October 2015</span>
+								<p>Jenkins is an opensource and probably the most popular continuous integration tool in the Java community. There are many plugins out there available to make your coding life easier. It supports almost all version control systems and can run all your Maven or Ant tasks.</p><p>To install and configure Jenkins on CentOS, we have to first make sure that Java is installed on your machine. If not, please refer to this post from <a href="http://www.if-not-true-then-false.com/2010/install-sun-oracle-java-jdk-jre-7-on-fedora-centos-red-hat-rhel/comment-page-2">if-not-true-then-false.com</a></p><h3>Add Jenkins to your repository</h3>
 <pre><code>$ sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
 Resolving pkg.jenkins-ci.org (pkg.jenkins-ci.org)... 199.193.196.24
 Connecting to pkg.jenkins-ci.org (pkg.jenkins-ci.org)|199.193.196.24|:80... connected.
@@ -141,23 +156,29 @@ Saving to: â€˜/etc/yum.repos.d/jenkins.repoâ€™
 $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 </code></pre>
 
-							<a class="btn btn-default" href="blog/2015/jenkins-on-centos.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2015/tomcat-service-script.html"><h1 class="post-title">Tomcat Service Script</h1></a>
-							<span class="post-date">22 July 2015</span>
-							<p>I copied this startup script from <a href="https://www.liferay.com/en_GB/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts">liferay</a>. You can use this script start and stop your tomcat instance just like any CentOS standard services.</p>
+								<a class="btn btn-default" href="blog/2015/jenkins-on-centos.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/tomcat-service-script.html"><h1 class="post-title">Tomcat Service Script</h1></a>
+								<span class="post-date">22 July 2015</span>
+								<p>I copied this startup script from <a href="https://www.liferay.com/en_GB/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts">liferay</a>. You can use this script start and stop your tomcat instance just like any CentOS standard services.</p>
 
-							<a class="btn btn-default" href="blog/2015/tomcat-service-script.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2015/pimping-my-vim.html"><h1 class="post-title">Pimping My vim</h1></a>
-							<span class="post-date">28 June 2015</span>
-							<p><strong>vim</strong> is a versatile and powerful text editor for command-line environments. In _*nix_ world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called <code>.vimrc</code> under your home folder.</p>
+								<a class="btn btn-default" href="blog/2015/tomcat-service-script.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/pimping-my-vim.html"><h1 class="post-title">Pimping My vim</h1></a>
+								<span class="post-date">28 June 2015</span>
+								<p><strong>vim</strong> is a versatile and powerful text editor for command-line environments. In _*nix_ world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called <code>.vimrc</code> under your home folder.</p>
 
-							<a class="btn btn-default" href="blog/2015/pimping-my-vim.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2015/simple-ant-build.html"><h1 class="post-title">Simple Ant Build</h1></a>
-							<span class="post-date">22 June 2015</span>
-							<p>This is a simple Ant build script I'm using for my Symfony2 blog. This has the following dependencies:</p>
+								<a class="btn btn-default" href="blog/2015/pimping-my-vim.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/simple-ant-build.html"><h1 class="post-title">Simple Ant Build</h1></a>
+								<span class="post-date">22 June 2015</span>
+								<p>This is a simple Ant build script I'm using for my Symfony2 blog. This has the following dependencies:</p>
 <ul>
   <li><p><a href="http://phpunit.de/" target="_new">PHPUnit</a></p></li>
   <li><p><a href="http://pear.php.net/package/PHP_CodeSniffer/" target="_new">PHP_CodeSniffer</a></p></li>
@@ -168,31 +189,121 @@ $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
   <li><p><a href="http://phpdox.de/" target="_new">phpDox</a></p></li>
 </ul>
 
-							<a class="btn btn-default" href="blog/2015/simple-ant-build.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2015/7zip-backup-script.html"><h1 class="post-title">7zip Backup Script</h1></a>
-							<span class="post-date">10 May 2015</span>
-							<p>Here is a simple batch script to backup my project folder every 18:30. I wish I could run this in cron but my development machine is running Windows.</p>
+								<a class="btn btn-default" href="blog/2015/simple-ant-build.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/7zip-backup-script.html"><h1 class="post-title">7zip Backup Script</h1></a>
+								<span class="post-date">10 May 2015</span>
+								<p>Here is a simple batch script to backup my project folder every 18:30. I wish I could run this in cron but my development machine is running Windows.</p>
 
-							<a class="btn btn-default" href="blog/2015/7zip-backup-script.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2014/change-centos-runlevel.html"><h1 class="post-title">Changing Centos7 runlevel</h1></a>
-							<span class="post-date">17 October 2014</span>
-							<p>I installed Centos7 as minimal for a basic LAMP server but then I decided to switch to Gnome instead of pure command line environment. If you're interested how I did it, <strong>groupinstall</strong> has the perfect recipe.</p><p><img src="/images/centos7.png" alt="Centos7""/></p>
+								<a class="btn btn-default" href="blog/2015/7zip-backup-script.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/application-context-and-dispatcher-servlet.html"><h1 class="post-title">applicationContext.xml and dispatcher-servlet.xml</h1></a>
+								<span class="post-date">18 April 2015</span>
+								<p>I was trying to improve an existing Spring project to be able to inject Hibernate's SessionFactory but get confused where to put my Hibernate XML configuration. I initially put it within <code>&lt;context-param/&gt;</code> but was surprised Spring is not creating my sessionFactory bean. Then I tried it under <code>&lt;init-param/&gt;</code> but the result is the same, there's no sessionFactory bean. I tried putting my Hibernate configuration on both locations and it worked. I still don't understand why hence I asked my friend Google.</p><p>I found this post from <a href="http://www.jroller.com/latenightdev/entry/spring_mvc_context_loading">Late Night Developer</a> which helped me understand why there are two places for my custom XML configurations.</p>
+<blockquote>The most important thing to understand is that there are 2 layers of application contexts, and they each have default XML files to load beans from.</blockquote>
+<!--more--><h3>Root Application Context</h3><p>The Root application context is created when you specify a ContextLoaderListener in your web.xml file. It allows you to define beans that will be available to all the servlet contexts. If you don't specify a listener, then there will be no Root context which is also valid. Here's how you define the ContextLoaderListener in the web.xml file.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
+        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee
+                            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot;&gt;
+
+		&lt;!-- Configurations for the root application context (parent context) --&gt;
+		&lt;listener&gt;
+		    &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
+		&lt;/listener&gt;
+
+&lt;/web-app&gt;
+</code></pre><p>By default, the listener loads beans from the file <code>/WEB-INF/applicationContext.xml</code>. To specify an alternative file, use the contextConfigLocation context parameter in the web.xml file. In an instance,</p>
+<pre><code>&lt;web-app&gt;
+    ...
+    &lt;context-param&gt;
+		    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+		    &lt;param-value&gt;
+		        /WEB-INF/spring/jdbc/spring-jdbc.xml
+		        /WEB-INF/spring/security/spring-security-context.xml
+		    &lt;/param-value&gt;
+		&lt;/context-param&gt;
+&lt;/web-app&gt;
+</code></pre><h3>Servlet Application Context</h3><p>Each Spring DispatcherServlet defined in the web.xml file gets its own application context. If there is a Root application context (i.e. if a ContextLoaderListener is defined), then that will be the parent of the servlet context and the beans will be available for use in the servlet context. By default, DispatcherServlet loads beans from the file <code>/WEB-INF/&lt;servlet-name&gt;-servlet</code>.xml which is widely named as dispatcher.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
+        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee
+                            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot;&gt;
+
+		&lt;!-- Configurations for the DispatcherServlet application context (child context) --&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;spring-mvc&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+&lt;/web-app&gt;
+</code></pre><p>To change the name of the XML bean file that the servlet loads, you can use the namespace initialisation parameter, but be careful as the servlet assumes that the file is in WEB-INF, and ends in .xml, so you don't put those as part of the parameter value. This is inconsistent with the other file specifications already mentioned, which are relative to the wep app base. In an instance,</p>
+<pre><code>&lt;web-app&gt;
+    ...
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;spring-mvc&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+            &lt;param-value&gt;
+                /WEB-INF/spring/mvc/spring-mvc-servlet.xml
+            &lt;/param-value&gt;
+        &lt;/init-param&gt;
+    &lt;/servlet&gt;
+&lt;/web-app&gt;
+</code></pre>
+								<a class="btn btn-default" href="blog/2015/application-context-and-dispatcher-servlet.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/freemarker-expression-based-access.html"><h1 class="post-title">Expression-based Access with FreeMarker</h1></a>
+								<span class="post-date">05 April 2015</span>
+								<p>Spring Security 3.0 introduced the ability to use Spring EL expressions as an authorisation mechanism. Expression-based access control is built on the same architecture but allows complicated boolean logic to be encapsulated in a single expression. This comes handy when you want to secure a Controller method or even the entire Controller. JSP has native support for this feature using</p><p><code>&lt;%@ taglib prefix=&quot;sec&quot; uri=&quot;http://www.springframework.org/security/tags&quot; %&gt;</code></p><p>FreeMarker don't so you need to do more than just importing a tag library.</p>
+
+								<a class="btn btn-default" href="blog/2015/freemarker-expression-based-access.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/spring-form-binding-with-freemarker.html"><h1 class="post-title">Spring Form Binding with FreeMarker</h1></a>
+								<span class="post-date">04 March 2015</span>
+								<p>I was using FreeMarker with my previous project as my email templating engine but for now I'm using it for all my views. I will show here the macros that bind a Spring form.</p><p>One might wonder why I'm leaving JSP but the whole truth is I'm typing less with FreeMarker. I read this post from <a href="http://blog.stackhunter.com/2014/01/17/10-reasons-to-replace-your-jsps-with-freemarker-templates/">stackhunter.com</a> and among the 10 reasons mentioned I like these:</p>
+<ul>
+  <li>No Classloading PermGen Issues</li>
+  <li>JSON Support</li>
+  <li>Not Just for the Web</li>
+</ul>
+
+								<a class="btn btn-default" href="blog/2015/spring-form-binding-with-freemarker.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2014/change-centos-runlevel.html"><h1 class="post-title">Changing Centos7 runlevel</h1></a>
+								<span class="post-date">17 October 2014</span>
+								<p>I installed Centos7 as minimal for a basic LAMP server but then I decided to switch to Gnome instead of pure command line environment. If you're interested how I did it, <strong>groupinstall</strong> has the perfect recipe.</p><p><img src="/images/centos7.png" alt="Centos7""/></p>
 <pre><code>$ yum groupinstall &quot;GNOME Desktop&quot; &quot;Graphical Administration Tools&quot;
 </code></pre>
 
-							<a class="btn btn-default" href="blog/2014/change-centos-runlevel.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2014/adding-local-jar-to-maven.html"><h1 class="post-title">Adding Local JAR to Maven</h1></a>
-							<span class="post-date">13 September 2014</span>
-							<p>Oracle JDBC is not available from Maven's online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.</p><p>After downloading the JAR, you have to open your console and issue <code>mvn install:install-file</code>. Please refer below for the complete syntax. <strong>-Dfile requires fullpath.</strong></p>
+								<a class="btn btn-default" href="blog/2014/change-centos-runlevel.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2014/adding-local-jar-to-maven.html"><h1 class="post-title">Adding Local JAR to Maven</h1></a>
+								<span class="post-date">13 September 2014</span>
+								<p>Oracle JDBC is not available from Maven's online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.</p><p>After downloading the JAR, you have to open your console and issue <code>mvn install:install-file</code>. Please refer below for the complete syntax. <strong>-Dfile requires fullpath.</strong></p>
 
-							<a class="btn btn-default" href="blog/2014/adding-local-jar-to-maven.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2014/spring-hibernate.html"><h1 class="post-title">Spring Persistence with Hibernate</h1></a>
-							<span class="post-date">03 September 2014</span>
-							<p>After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I'm going to use H2 to avoid 3rd party database dependency.</p><p>Just like my previous post, I'm going to use <code>maven-archetype-generate</code> and will add Spring dependencies later on.</p>
+								<a class="btn btn-default" href="blog/2014/adding-local-jar-to-maven.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2014/spring-hibernate.html"><h1 class="post-title">Spring Persistence with Hibernate</h1></a>
+								<span class="post-date">03 September 2014</span>
+								<p>After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I'm going to use H2 to avoid 3rd party database dependency.</p><p>Just like my previous post, I'm going to use <code>maven-archetype-generate</code> and will add Spring dependencies later on.</p>
 <pre><code>$ mvn archetype:generate -DgroupId=com.manalo.prototype -DartifactId=persistence -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 [INFO] Scanning for projects...
 [INFO]
@@ -225,11 +336,13 @@ $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 [INFO] ------------------------------------------------------------------------
 </code></pre>
 
-							<a class="btn btn-default" href="blog/2014/spring-hibernate.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2014/spring-standalone-project.html"><h1 class="post-title">Spring Standalone Project</h1></a>
-							<span class="post-date">27 August 2014</span>
-							<p>Creating a Spring standalone application is a challenge to me without using Spring Boot. I used to have <code>web.xml</code> to bootstrap my application but being standalone left me thinking which XML or configuration file will bootstrap it.</p><p>I'm prototyping <code>maven-archetype-generate</code> and will add Spring dependencies later on hoping I will achieve my goal.</p><h3>mvn archetype:generate</h3>
+								<a class="btn btn-default" href="blog/2014/spring-hibernate.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2014/spring-standalone-project.html"><h1 class="post-title">Spring Standalone Project</h1></a>
+								<span class="post-date">27 August 2014</span>
+								<p>Creating a Spring standalone application is a challenge to me without using Spring Boot. I used to have <code>web.xml</code> to bootstrap my application but being standalone left me thinking which XML or configuration file will bootstrap it.</p><p>I'm prototyping <code>maven-archetype-generate</code> and will add Spring dependencies later on hoping I will achieve my goal.</p><h3>mvn archetype:generate</h3>
 <pre><code>$ mvn archetype:generate -DgroupId=com.manalo.rabbitmq -DartifactId=rabbitmq -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 [INFO] Scanning for projects...
 [INFO]
@@ -262,19 +375,23 @@ $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 [INFO] ------------------------------------------------------------------------
 </code></pre>
 
-							<a class="btn btn-default" href="blog/2014/spring-standalone-project.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2014/asa-packet-tracer.html"><h1 class="post-title">ASA Packet Tracer</h1></a>
-							<span class="post-date">28 June 2014</span>
-							<p>Cisco ASA includes a very nice debugging feature called <code>packet-tracer</code>. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I'm using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.</p><h3>Command syntax</h3>
+								<a class="btn btn-default" href="blog/2014/spring-standalone-project.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2014/asa-packet-tracer.html"><h1 class="post-title">ASA Packet Tracer</h1></a>
+								<span class="post-date">28 June 2014</span>
+								<p>Cisco ASA includes a very nice debugging feature called <code>packet-tracer</code>. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I'm using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.</p><h3>Command syntax</h3>
 <pre><code>packet-tracer input &lt;source interface&gt; &lt;protocol&gt; &lt;source IP&gt; &lt;source port&gt; &lt;destination IP&gt; &lt;destination port&gt; [detailed]
 </code></pre>
 
-							<a class="btn btn-default" href="blog/2014/asa-packet-tracer.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2014/asa-vpn-config.html"><h1 class="post-title">ASA VPN Configuration</h1></a>
-							<span class="post-date">08 June 2014</span>
-							<p>I'm putting here my working VPN configuration for ASA 5505 on ASA Version 8.4(7). All upper case values need changing to suit your business requirements and personal taste. IP addresses are mere examples.</p><h3>Network Object Mapping</h3>
+								<a class="btn btn-default" href="blog/2014/asa-packet-tracer.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2014/asa-vpn-config.html"><h1 class="post-title">ASA VPN Configuration</h1></a>
+								<span class="post-date">08 June 2014</span>
+								<p>I'm putting here my working VPN configuration for ASA 5505 on ASA Version 8.4(7). All upper case values need changing to suit your business requirements and personal taste. IP addresses are mere examples.</p><h3>Network Object Mapping</h3>
 <pre><code>object network OBJ_REMOTE_VPN_ENDPOINT
  subnet 172.16.0.0 255.240.0.0
  description OBJ_REMOTE_VPN_ENDPOINT is a label
@@ -292,11 +409,13 @@ object network OBJ_NATTED_INSIDE_HOST1
  description OBJ_NATTED_INSIDE_HOST1 is a label
 </code></pre>
 
-							<a class="btn btn-default" href="blog/2014/asa-vpn-config.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2014/asa-vpn-dialup-config.html"><h1 class="post-title">ASA Dialup VPN Configuration</h1></a>
-							<span class="post-date">07 June 2014</span>
-							<p>This Cisco dialup VPN configuration worked for ASA 5505 running on version 8.4(7). All upper case letters are labels and should be changed according to your standards and taste. IP addresses are representational.</p><h3>Network Object Mapping</h3>
+								<a class="btn btn-default" href="blog/2014/asa-vpn-config.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2014/asa-vpn-dialup-config.html"><h1 class="post-title">ASA Dialup VPN Configuration</h1></a>
+								<span class="post-date">07 June 2014</span>
+								<p>This Cisco dialup VPN configuration worked for ASA 5505 running on version 8.4(7). All upper case letters are labels and should be changed according to your standards and taste. IP addresses are representational.</p><h3>Network Object Mapping</h3>
 <pre><code>object network OBJ_VPN_ENDPOINT1
 subnet 10.175.0.0 255.255.128.0
 description OBJ_VPN_ENDPOINT1 is a label
@@ -304,21 +423,26 @@ description OBJ_VPN_ENDPOINT1 is a label
 <pre><code>ip local pool VPN_DHCP_POOL1 10.0.20.10-10.0.20.14
 </code></pre>
 
-							<a class="btn btn-default" href="blog/2014/asa-vpn-dialup-config.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2014/cisco-dialup-vpn-config.html"><h1 class="post-title">Cisco Dialup VPN Configuration</h1></a>
-							<span class="post-date">13 May 2014</span>
-							<p>This is my working Cisco dialup configuration. IP addresses and wildcard masks are fictitious.</p>
+								<a class="btn btn-default" href="blog/2014/asa-vpn-dialup-config.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2014/cisco-dialup-vpn-config.html"><h1 class="post-title">Cisco Dialup VPN Configuration</h1></a>
+								<span class="post-date">13 May 2014</span>
+								<p>This is my working Cisco dialup configuration. IP addresses and wildcard masks are fictitious.</p>
 
-							<a class="btn btn-default" href="blog/2014/cisco-dialup-vpn-config.html">Read More →</a>
-							<hr class="spacer"/>
-							<a href="blog/2014/remove-self-assigned-rsa-key.html"><h1 class="post-title">Removing Self-assigned RSA Key</h1></a>
-							<span class="post-date">01 May 2014</span>
-							<p>When enabling Cisco router's http server, it automatically generates a self-signed certificate which is good but when you decided to turn off the http server, it will then leave a self-signed certificate making running-config a bit messy. Here are the steps to remove the self-signed certificated if it's no longer needed.</p>
+								<a class="btn btn-default" href="blog/2014/cisco-dialup-vpn-config.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2014/remove-self-assigned-rsa-key.html"><h1 class="post-title">Removing Self-assigned RSA Key</h1></a>
+								<span class="post-date">01 May 2014</span>
+								<p>When enabling Cisco router's http server, it automatically generates a self-signed certificate which is good but when you decided to turn off the http server, it will then leave a self-signed certificate making running-config a bit messy. Here are the steps to remove the self-signed certificated if it's no longer needed.</p>
 
-							<a class="btn btn-default" href="blog/2014/remove-self-assigned-rsa-key.html">Read More →</a>
-							<hr class="spacer"/>
-      </div>
+								<a class="btn btn-default" href="blog/2014/remove-self-assigned-rsa-key.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+      </ul>
 			<div class="centre">
 				<div class="pagination"></div>
 			</div>
@@ -342,3 +466,4 @@ description OBJ_VPN_ENDPOINT1 is a label
 
 </body>
 </html>
+postspostsposts

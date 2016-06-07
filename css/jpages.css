@@ -30,13 +30,6 @@
 	background: #eee;
 }
 
-.pagination span { margin: 0 5px; }
-
-ul#posts {
-  list-style: none;
-  padding-left: 0;
-}
-
-div.centre {
-  text-align: center;
+.pagination span {
+	margin: 0 5px;
 }

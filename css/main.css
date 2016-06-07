@@ -32,3 +32,12 @@ hr.spacer {
   margin: 1.5rem 0;
   border-top: 2px dashed #eee;
 }
+
+ul#posts {
+  list-style: none;
+  padding-left: 0;
+}
+
+div.centre {
+  text-align: center;
+}
