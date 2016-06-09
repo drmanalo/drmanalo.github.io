@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Tue, 7 Jun 2016 21:48:44 +0100</pubDate>
-    <lastBuildDate>Tue, 7 Jun 2016 21:48:44 +0100</lastBuildDate>
+    <pubDate>Thu, 9 Jun 2016 07:57:24 +0100</pubDate>
+    <lastBuildDate>Thu, 9 Jun 2016 07:57:24 +0100</lastBuildDate>
 
       <item>
         <title>Pimping CentOS 7</title>
@@ -575,6 +575,110 @@ JENKINS_ARGS=&amp;quot;--prefix=/jenkins&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Restart jenkins and httpd. After which, jenkins should be available on &lt;a href=&quot;http://centos7/jenkins&quot;&gt;http://centos7/jenkins&lt;/a&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ sudo systemctl restart httpd
 $ sudo systemctl restart jenkins
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Oracle 11g XE on Ubuntu</title>
+        <link>https://drmanalo.github.io/blog/2015/oracle11g-xe-ubuntu.html</link>
+        <pubDate>Sat, 8 Aug 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/oracle11g-xe-ubuntu.html</guid>
+        <description>
+  	         &lt;p&gt;Express Editions of Oracle are in rpm (Red Hat Package Manager). But since I turned away from my CentOS, I have to install it on Ubuntu using the hard way I suppose.&lt;/p&gt;&lt;p&gt;For the installation of Oracle 11g R2 Express Edition (XE), a couple of additional Linux packages are required. These packages can be installed using apt (goodbye yum).&lt;/p&gt;&lt;h3&gt;Installing prerequisites&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install alien libaio1 unixodbc
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Downloading Oracle 11g&lt;/h3&gt;&lt;p&gt;Download the Oracle 11g R2 Express Edition from the Oracle website. Make sure you select the Linux x64 version from &lt;a href=&quot;http://www.oracle.com/technetwork/products/express-edition/downloads/index.htm&quot;&gt;Oracle website&lt;/a&gt;. Unzip the file after downloading.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ unzip oracle-xe-11.2.0-1.0.x86_64.rpm.zip
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Converting rpm to a Debian package&lt;/h3&gt;&lt;p&gt;This is done using the alien command. The -d parameter is used to inform alien that a Debian package should be generated. When the --scripts parameter is toggled, alien will try to convert the scripts that are meant to be run when the package is installed and removed. This will take a while so open another terminal for the next steps.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ cd Disk1
+  $ sudo alien --scripts -d oracle-xe-11.2.0-1.0.x86_64.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Creating /sbin/chkconfig&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+# Oracle 11gR2 XE installer chkconfig hack for Ubuntu
+file=/etc/init.d/oracle-xe
+if [[ ! `tail -n1 $file | grep INIT` ]]; then
+	echo &amp;gt;&amp;gt; $file
+	echo &amp;#39;### BEGIN INIT INFO&amp;#39; &amp;gt;&amp;gt; $file
+	echo &amp;#39;# Provides: OracleXE&amp;#39; &amp;gt;&amp;gt; $file
+	echo &amp;#39;# Required-Start: $remote_fs $syslog&amp;#39; &amp;gt;&amp;gt; $file
+	echo &amp;#39;# Required-Stop: $remote_fs $syslog&amp;#39; &amp;gt;&amp;gt; $file
+	echo &amp;#39;# Default-Start: 2 3 4 5&amp;#39; &amp;gt;&amp;gt; $file
+	echo &amp;#39;# Default-Stop: 0 1 6&amp;#39; &amp;gt;&amp;gt; $file
+	echo &amp;#39;# Short-Description: Oracle 11g Express Edition&amp;#39; &amp;gt;&amp;gt; $file
+	echo &amp;#39;### END INIT INFO&amp;#39; &amp;gt;&amp;gt; $file
+fi
+update-rc.d oracle-xe defaults 80 01
+#EOF
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;After saving the file, change its permissions.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo chmod 755 /sbin/chkconfig
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Set kernel parameters&lt;/h3&gt;&lt;p&gt;Kernel.shmmax is the maximum possible value of physical RAM in bytes. 536870912 / 1024 /1024 = 512 MB&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo vim /etc/sysctl.d/60-oracle.conf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# Oracle 11g XE kernel parameters
+fs.file-max=6815744
+net.ipv4.ip_local_port_range=9000 65000
+kernel.sem=250 32000 100 128
+kernel.shmmax=536870912
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Load the kernel parameters then verify&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo service procps start
+$ sudo sysctl -q fs.file-max
+fs.file-max = 6815744
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Add a listener file&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo ln -s /usr/bin/awk /bin/awk
+$ mkdir /var/lock/subsys
+$ touch /var/lock/subsys/listener
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Install the converted rpm&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo dpkg --install oracle-xe_11.2.0-2_amd64.deb
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Execute the following to avoid getting a ORA-00845: MEMORY_TARGET error. Note: replace “size=4096m” with the size of your machine’s RAM in MBs.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo rm -rf /dev/shm
+$ sudo mkdir /dev/shm
+$ sudo mount -t tmpfs shmfs -o size=4096m /dev/shm
+$ sudo vim /etc/rc2.d/S01shm_load
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Paste the following&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+case &amp;quot;$1&amp;quot; in
+    start) mkdir /var/lock/subsys 2&amp;gt;/dev/null
+       touch /var/lock/subsys/listener
+       rm /dev/shm 2&amp;gt;/dev/null
+       mkdir /dev/shm 2&amp;gt;/dev/null
+       mount -t tmpfs shmfs -o size=4096m /dev/shm ;;
+    *) echo error
+exit 1 ;;
+esac
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then change the file permission using &lt;code&gt;sudo chmod 755 /etc/rc2.d/S01shm_load&lt;/code&gt;&lt;/p&gt;&lt;h3&gt;Post installation configuration&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo /etc/init.d/oracle-xe configure
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Oracle Database 11g Express Edition Configuration
+-------------------------------------------------
+This will configure on-boot properties of Oracle Database 11g Express
+Edition.  The following questions will determine whether the database should
+be starting upon system boot, the ports it will use, and the passwords that
+will be used for database accounts.  Press Enter to accept the defaults.
+Ctrl-C will abort.
+
+Specify the HTTP port that will be used for Oracle Application Express [8080]:8000
+
+Specify a port that will be used for the database listener [1521]:
+
+Specify a password to be used for database accounts.  Note that the same
+password will be used for SYS and SYSTEM.  Oracle recommends the use of
+different passwords for each database account.  This can be done after
+initial configuration:
+Confirm the password:
+
+Do you want Oracle Database 11g Express Edition to be started on boot (y/n) [y]:n
+
+Starting Oracle Net Listener...Done
+Configuring database...Done
+Starting Oracle Database 11g Express Edition instance...Done
+Installation completed successfully.
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Update your .bashrc&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe
+export ORACLE_SID=XE
+export NLS_LANG=`$ORACLE_HOME/bin/nls_lang.sh`
+export ORACLE_BASE=/u01/app/oracle
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
+export PATH=$ORACLE_HOME/bin:$PATH
 &lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>

@@ -160,6 +160,18 @@ $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 								<hr class="spacer"/>
 					</li>
 					<li>
+								<a href="blog/2015/oracle11g-xe-ubuntu.html"><h1 class="post-title">Oracle 11g XE on Ubuntu</h1></a>
+								<span class="post-date">08 August 2015</span>
+								<p>Express Editions of Oracle are in rpm (Red Hat Package Manager). But since I turned away from my CentOS, I have to install it on Ubuntu using the hard way I suppose.</p><p>For the installation of Oracle 11g R2 Express Edition (XE), a couple of additional Linux packages are required. These packages can be installed using apt (goodbye yum).</p><h3>Installing prerequisites</h3>
+<pre><code>$ sudo apt-get install alien libaio1 unixodbc
+</code></pre><h3>Downloading Oracle 11g</h3><p>Download the Oracle 11g R2 Express Edition from the Oracle website. Make sure you select the Linux x64 version from <a href="http://www.oracle.com/technetwork/products/express-edition/downloads/index.htm">Oracle website</a>. Unzip the file after downloading.</p>
+<pre><code>$ unzip oracle-xe-11.2.0-1.0.x86_64.rpm.zip
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2015/oracle11g-xe-ubuntu.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
 								<a href="blog/2015/tomcat-service-script.html"><h1 class="post-title">Tomcat Service Script</h1></a>
 								<span class="post-date">22 July 2015</span>
 								<p>I copied this startup script from <a href="https://www.liferay.com/en_GB/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts">liferay</a>. You can use this script start and stop your tomcat instance just like any CentOS standard services.</p>
