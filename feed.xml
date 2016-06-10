@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Thu, 9 Jun 2016 07:57:24 +0100</pubDate>
-    <lastBuildDate>Thu, 9 Jun 2016 07:57:24 +0100</lastBuildDate>
+    <pubDate>Fri, 10 Jun 2016 08:31:24 +0100</pubDate>
+    <lastBuildDate>Fri, 10 Jun 2016 08:31:24 +0100</lastBuildDate>
 
       <item>
         <title>Pimping CentOS 7</title>
@@ -986,6 +986,38 @@ copy %file% %destination% /Y
 ECHO Backup finished!
 
 @REM ------- END backup.bat ------------------
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Setting Up Rails</title>
+        <link>https://drmanalo.github.io/blog/2015/setting-up-rails.html</link>
+        <pubDate>Sun, 26 Apr 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/setting-up-rails.html</guid>
+        <description>
+  	         &lt;p&gt;I bought the Web Designer Issue 233 being interested with jQuery effects but it turned out that I will find something far more interesting. I found a gem inside the magazine, it was a ruby! This issue discussed how to start learning rails. As rails website define it, Ruby on Rails® is an open-source web framework that’s optimised for programmer happiness and sustainable productivity. It lets you write beautiful code by favouring convention over configuration.&lt;/p&gt;&lt;p&gt;To be able to setup rails, we need to setup the dependencies first. The first requirement is ruby of course.&lt;/p&gt;&lt;h3&gt;Installing ruby&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ apt-add-repository ppa:brightbox/ruby-ng
+$ apt-get update
+$ apt-get install ruby2.2
+$ ruby -v
+  ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-linux-gnu]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Installing database options&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ apt-get install sqlite3 libsqlite3-dev
+$ sqlite3 --version
+  3.8.2 2013-12-06 14:53:30 27392118af4c38c5203a04b8013e1afdb1cebd0d
+
+$ apt-get install postgresql-9.3
+$ psql --version
+  psql (PostgreSQL) 9.3.6
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Other dependencies&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ apt-get install nodejs
+$ apt-get install ruby2.2-dev libssl-dev libreadline-dev
+$ apt-get install libyaml-dev libxml2-dev libxslt1-dev libcurl4-openssl-dev
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Finally&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ gem install rails -v 4.2.0
+$ rails -v
+  Rails 4.2.0
 &lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>

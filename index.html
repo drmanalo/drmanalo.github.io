@@ -213,6 +213,20 @@ $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 								<hr class="spacer"/>
 					</li>
 					<li>
+								<a href="blog/2015/setting-up-rails.html"><h1 class="post-title">Setting Up Rails</h1></a>
+								<span class="post-date">26 April 2015</span>
+								<p>I bought the Web Designer Issue 233 being interested with jQuery effects but it turned out that I will find something far more interesting. I found a gem inside the magazine, it was a ruby! This issue discussed how to start learning rails. As rails website define it, Ruby on Rails® is an open-source web framework that’s optimised for programmer happiness and sustainable productivity. It lets you write beautiful code by favouring convention over configuration.</p><p>To be able to setup rails, we need to setup the dependencies first. The first requirement is ruby of course.</p><h3>Installing ruby</h3>
+<pre><code>$ apt-add-repository ppa:brightbox/ruby-ng
+$ apt-get update
+$ apt-get install ruby2.2
+$ ruby -v
+  ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-linux-gnu]
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2015/setting-up-rails.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
 								<a href="blog/2015/application-context-and-dispatcher-servlet.html"><h1 class="post-title">applicationContext.xml and dispatcher-servlet.xml</h1></a>
 								<span class="post-date">18 April 2015</span>
 								<p>I was trying to improve an existing Spring project to be able to inject Hibernate's SessionFactory but get confused where to put my Hibernate XML configuration. I initially put it within <code>&lt;context-param/&gt;</code> but was surprised Spring is not creating my sessionFactory bean. Then I tried it under <code>&lt;init-param/&gt;</code> but the result is the same, there's no sessionFactory bean. I tried putting my Hibernate configuration on both locations and it worked. I still don't understand why hence I asked my friend Google.</p><p>I found this post from <a href="http://www.jroller.com/latenightdev/entry/spring_mvc_context_loading">Late Night Developer</a> which helped me understand why there are two places for my custom XML configurations.</p>
