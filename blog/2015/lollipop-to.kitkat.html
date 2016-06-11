@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>From Lollipop To Kitkat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>From Lollipop To Kitkat</h1>
+			<p><em>03 September 2015</em></p>
+			<p><p>Android system update is like pushed notifications where you cannot opt out. Rooted device actually can but I'm not rooting my device again since I had a bad experience with it. I kept ignoring this update but I woke up one morning in Android 5.0.2. This update is not compatible with my device as this drives it to the bend hence the reason I want to downgrade.</p><h3>Download Android debug bridge</h3>
+<pre><code>$ apt-cache search android-tools
+android-tools-fsutils - Android ext4 utilities with sparse support
+android-tools-adb - Android Debug Bridge CLI tool
+android-tools-adbd - Android Debug Bridge Phone Daemon
+android-tools-fastboot - Android Fastboot protocol CLI tool
+</code></pre><p>You can only install <code>android-tools-adb</code> for this purpose.</p>
+<!-- more --><h3>Download Android 4.4.4</h3><p>You can get the flash image you want from <a href="https://developers.google.com/android/nexus/images">Google Developers</a>. After downloading just extract it to make <code>flash-all.sh</code> available.</p>
+<pre><code>$ ll nakasi-ktu84p
+total 377240
+drwxr-x--- 2 drmanalo drmanalo      4096 Jun 13  2014 ./
+drwxr-xr-x 4 drmanalo drmanalo      4096 May 10 17:28 ../
+-rw-r----- 1 drmanalo drmanalo   2150992 Apr  1 18:46 bootloader-grouper-4.23.img
+-rw-r----- 1 drmanalo drmanalo       984 Jun 13  2014 flash-all.bat
+-rwxr-x--- 1 drmanalo drmanalo       872 Jun 13  2014 flash-all.sh*
+-rwxr-x--- 1 drmanalo drmanalo       698 Jun 13  2014 flash-base.sh*
+-rw-r----- 1 drmanalo drmanalo 384115329 Jun 13  2014 image-nakasi-ktu84p.zip
+</code></pre><h3>Check your device</h3><p>You should find your attached device. If not, chances are your android is not on USB debugging mode.</p>
+<pre><code>$ adb devices
+List of devices attached
+015d456d39380a04        device
+</code></pre><h3>Unlock your fastloader</h3><p>You should see Andriod chilling down showing its keypad.</p>
+<pre><code>$ adb reboot bootloader
+
+$ fastboot oem unlock
+&lt; waiting for device &gt;
+...
+(bootloader) erasing userdata...
+(bootloader) erasing userdata done
+(bootloader) erasing cache...
+(bootloader) erasing cache done
+(bootloader) unlocking...
+(bootloader) Bootloader is unlocked now.
+OKAY [ 26.159s]
+finished. total time: 26.159s
+</code></pre><h3>Flash Kitkat to your device</h3><p>You will need to run this to the folder where you unzipped the flash image.</p>
+<pre><code>$ ./flash-all.sh
+...
+(bootloader) Bootloader is already unlocked
+OKAY [  0.025s]
+finished. total time: 0.033s
+erasing &#39;boot&#39;...
+OKAY [  1.154s]
+finished. total time: 1.159s
+******** Did you mean to fastboot format this partition?
+erasing &#39;cache&#39;...
+OKAY [  1.030s]
+finished. total time: 1.033s
+erasing &#39;recovery&#39;...
+OKAY [  0.363s]
+finished. total time: 0.365s
+******** Did you mean to fastboot format this partition?
+erasing &#39;system&#39;...
+OKAY [  0.820s]
+finished. total time: 0.823s
+******** Did you mean to fastboot format this partition?
+erasing &#39;userdata&#39;...
+OKAY [  4.545s]
+finished. total time: 4.550s
+sending &#39;bootloader&#39; (2100 KB)...
+OKAY [  0.275s]
+writing &#39;bootloader&#39;...
+OKAY [  9.427s]
+finished. total time: 9.710s
+rebooting into bootloader...
+OKAY [  0.020s]
+finished. total time: 0.023s
+archive does not contain &#39;boot.sig&#39;
+archive does not contain &#39;recovery.sig&#39;
+archive does not contain &#39;system.sig&#39;
+archive does not contain &#39;vendor.img&#39;
+Creating filesystem with parameters:
+    Size: 30734811136
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 8192
+    Inode size: 256
+    Journal blocks: 32768
+    Label:
+    Blocks: 7503616
+    Block groups: 229
+    Reserved block group size: 1024
+Created filesystem with 11/1875968 inodes and 161774/7503616 blocks
+Creating filesystem with parameters:
+    Size: 464519168
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 7088
+    Inode size: 256
+    Journal blocks: 1772
+    Label:
+    Blocks: 113408
+    Block groups: 4
+    Reserved block group size: 31
+Created filesystem with 11/28352 inodes and 3654/113408 blocks
+--------------------------------------------
+Bootloader Version...: 4.23
+Baseband Version.....: N/A
+Serial Number........: 015d456d39380a04
+--------------------------------------------
+checking product...
+OKAY [  0.040s]
+checking version-bootloader...
+OKAY [  0.023s]
+sending &#39;boot&#39; (4994 KB)...
+OKAY [  0.640s]
+writing &#39;boot&#39;...
+OKAY [  0.995s]
+sending &#39;recovery&#39; (5534 KB)...
+OKAY [  0.705s]
+writing &#39;recovery&#39;...
+OKAY [  0.958s]
+erasing &#39;system&#39;...
+OKAY [  0.880s]
+sending &#39;system&#39; (644062 KB)...
+OKAY [ 79.820s]
+writing &#39;system&#39;...
+OKAY [ 37.576s]
+erasing &#39;userdata&#39;...
+OKAY [  4.584s]
+sending &#39;userdata&#39; (139197 KB)...
+OKAY [ 17.308s]
+writing &#39;userdata&#39;...
+OKAY [ 13.077s]
+erasing &#39;cache&#39;...
+OKAY [  0.673s]
+sending &#39;cache&#39; (9052 KB)...
+OKAY [  1.145s]
+writing &#39;cache&#39;...
+OKAY [  1.851s]
+rebooting...
+
+finished. total time: 160.447s
+Press any key to exit...
+</code></pre><h3>Lock your fastloader</h3>
+<pre><code>$ fastboot oem lock
+...
+(bootloader) Bootloader is locked now.
+OKAY [  8.913s]
+finished. total time: 8.913s
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/lollipop-to.kitkat.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/lollipop-to.kitkat.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

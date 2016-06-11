@@ -87,7 +87,11 @@ Summary     : Linux NTFS userspace driver
 					<li>
 								<a href="blog/2016/java8-on-centos7.html"><h1 class="post-title">Installing Java 1.8 on Centos</h1></a>
 								<span class="post-date">21 May 2016</span>
-								<p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
+								<p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p><p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p><h3>Downloading java 1.8</h3>
+<pre><code>$ cd /opt/
+$ wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz&quot;
+$ tar xzf jdk-8u91-linux-x64.tar.gz
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2016/java8-on-centos7.html">Read More →</a>
 								<hr class="spacer"/>
@@ -136,11 +140,124 @@ export PS1=&quot;\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)
 								<hr class="spacer"/>
 					</li>
 					<li>
+								<a href="blog/2016/groovy-testing.html"><h1 class="post-title">Groovy Testing</h1></a>
+								<span class="post-date">16 March 2016</span>
+								<p>My previous post is all about writing a simple Groovy CRUD application. It includes writing your views in Groovy as well though it doesn't involve where to put the files. But if you're a seasoned Java developer, you should know your way out.</p><p>What it lacks is how to test your Groovy classes which I'm about to document on this post.</p><h3>FakeLoader</h3><p>This is a workaround assuming your Spring Boot application bootstraps more <code>@Configuration</code> and you don't want to include them in your integration tests.</p>
+<pre><code>import org.junit.Test
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.test.context.ActiveProfiles
+
+/**
+ * For integration tests
+ */
+@ActiveProfiles(&quot;dev&quot;)
+@SpringBootApplication
+class FakeLoader {
+
+}
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2016/groovy-testing.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2016/bug-tracker-youtrack.html"><h1 class="post-title">Bug Tracker YouTrack</h1></a>
+								<span class="post-date">20 February 2016</span>
+								<p>I've been using Redmine as help desk and bug tracker since it has all the features/plugins you could ask for for a help desk or a bug tracker. But tracking bugs and issues has changed lately. When fixing bugs, you need to put in your estimate so you will have a pretty good idea how much effort you are putting into it. This is probably one of the reasons why <a href="http://www.redminecrm.com">RedmineCRM</a> premium plugins exists. The lack of planning tools in RedmineCRM pushed me further to use <a href="http://www.acunote.com">Acunote</a>. This is hosted online and free for a team of 5 users but 5 is very<br/>limiting. Acunote also lacks the tooling support you will get from Jira, FogBugz and the likes.</p><p>Since I don't need enterprise solution at the moment so I'll give YouTrack a try. It's free for the first 10 users so I actually doubled what Acunote is offering for free. As with Jira, FogBugz or Acunote, it has hosted solution too.</p><h3>Downloading YouTrack</h3>
+<pre><code>$ wget https://download.jetbrains.com/charisma/youtrack-6.0.12634.jar
+HTTP request sent, awaiting response... 200 OK
+Length: 111007822 (106M) [binary/octet-stream]
+Saving to: ‘youtrack-6.0.12634.jar’
+100%[======================================&gt;] 111,007,822 4.93MB/s   in 26s
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2016/bug-tracker-youtrack.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2016/teamcity-posgres.html"><h1 class="post-title">TeamCity With Postgres</h1></a>
+								<span class="post-date">26 January 2016</span>
+								<p>Recently, I've been looking for a Jenkins alternative and the closest I found is TeamCity. It's not free as in free speech compared to Jenkins but the twenty build configs and three build agents is more than enough for my small projects.</p><p>TeamCity promised to work out-of-the-box just like Jenkins does so I'll give it a go. It's using Tomcat by default so I'm expecting a flat learning curve here.</p><p><img src="/images/teamcity_login.png" alt="TeamCity login screen""/></p>
+
+								<a class="btn btn-default" href="blog/2016/teamcity-posgres.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2016/unable-to-mount-ntfs-drive.html"><h1 class="post-title">Fixing Unable to Mount NTFS Drive</h1></a>
+								<span class="post-date">18 January 2016</span>
+								<p>I was trying to mount a GPT NTFS drive and get <strong>Error mounting /dev/sdb1 at /media/drmanalo/DATA: Command-line mount -t "ntfs" -o</strong></p><h3>Culprit</h3><p>Windows 8 is using hibernation mode which writes RAM contents to the hard drive before powering off to be able to restore to the same state as it was before shutdown.</p><h3>Workaround</h3>
+<pre><code>$ sudo ntfsfix /dev/sdb1
+Mounting volume... The disk contains an unclean file system (0, 0).
+Metadata kept in Windows cache, refused to mount.
+FAILED
+Attempting to correct errors...
+Processing $MFT and $MFTMirr...
+Reading $MFT... OK
+Reading $MFTMirr... OK
+Comparing $MFTMirr to $MFT... OK
+Processing of $MFT and $MFTMirr completed successfully.
+Setting required flags on partition... OK
+Going to empty the journal ($LogFile)... OK
+Checking the alternate boot sector... OK
+NTFS volume version is 3.1.
+NTFS partition /dev/sdb1 was processed successfully.
+</code></pre>
+								<a class="btn btn-default" href="blog/2016/unable-to-mount-ntfs-drive.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/personal-package-archive.html"><h1 class="post-title">Personal Package Archive</h1></a>
+								<span class="post-date">28 December 2015</span>
+								<p><strong>Personal Package Archive</strong> is a collection of software not included in Ubuntu repositories by default. Typically these repositories focus on a single program, but they can include more depending on the person maintaining them. With PPAs, Ubuntu users can have access to bleeding-edge software without waiting for the next official release if ever the PPA made it to the official repository.</p><p>Here are my top PPAs...</p><h3>Kodi</h3>
+<pre><code>$ sudo add-apt-repository ppa:team-xbmc/ppa
+$ sudo apt-get update
+$ sudo apt-get install kodi
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2015/personal-package-archive.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
 								<a href="blog/2015/poormans.mac.html"><h1 class="post-title">Poorman's Mac</h1></a>
 								<span class="post-date">27 December 2015</span>
 								<p>After testing elementary OS using VirtualBox, I am finally installing it to my desktop. Not that I don't like CentOS anymore but it will help me on my job to totally embrace Ubuntu.</p><p><img src="/images/elementary_info.png" alt="Elementary OS Information""/></p>
 
 								<a class="btn btn-default" href="blog/2015/poormans.mac.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/making-java-groovy.html"><h1 class="post-title">Making Java Groovy</h1></a>
+								<span class="post-date">21 December 2015</span>
+								<p>There is a book of exactly the same title from <a href="https://www.manning.com/books/making-java-groovy">manning.com</a>. I don't have it yet but father Christmas will put it underneath my tree this Christmas.</p><p>What I do have is Spring Boot in Action which covers mixing Java with Groovy. This is what this post is all about. I am going to create a Spring Boot project but will primarily use <code>groovy</code>.</p><h3>Creating the project</h3>
+<pre><code>$ mkdir paluwagan
+$ cd paluwagan
+$ mkdir static
+$ spring init --dependencies web,h2,data-jpa,jdbc,groovy-templates --build gradle --packaging jar --extract
+Using service at https://start.spring.io
+Project extracted to &#39;/home/drmanalo/workspace/paluwagan&#39;
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2015/making-java-groovy.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/firewalld-101.html"><h1 class="post-title">firewalld 101</h1></a>
+								<span class="post-date">20 November 2015</span>
+								<p><strong>firewalld</strong> provides a dynamically managed firewall with support for network/firewall zones to define the trust level of network connections or interfaces. It has support for IPv4, IPv6 firewall settings and for ethernet bridges and has a separation of runtime and permanent configuration options. It also supports an interface for services or applications to add firewall rules directly.</p><p>The two important concepts of firewalld is <strong>zones</strong> and <strong>services</strong>.</p><p>A <strong>zone</strong> defines the trust level of the interface used for a connection. There are several pre-defined zones provided by firewalld.zone.</p><p>A <strong>service</strong> can be a list of local ports and destinations and additionally also a list of firewall helper modules automatically loaded if a service is enabled. Service configuration options and generic information about services are described in firewalld.service. The use of predefined services makes it easier for the user to enable and disable access to a service.</p>
+<pre><code>$ firewall-cmd --get-zones
+block dmz drop external home internal public trusted work
+</code></pre><p>In order from least trusted to most trusted, the pre-defined zones within firewalld are:</p>
+
+								<a class="btn btn-default" href="blog/2015/firewalld-101.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/spring-booted.html"><h1 class="post-title">Spring Booted</h1></a>
+								<span class="post-date">22 October 2015</span>
+								<blockquote><p><strong>Spring Boot</strong> is an exciting new way to develop Spring applications with minimal friction from the framework itself. Auto-configuration eliminates much of the boilerplate configuration that infests traditional Spring applications. Spring Boot starters enable you to specify build dependencies by what they offer rather than explicit library names and version. The Spring Boot CLI takes Spring Boot’s frictionless development model to a whole new level by enabling quick and easy development with Groovy from the command line. Finally, the Actuator lets you look inside your running application to see what and how Spring Boot has done.</p>
+</blockquote><p>Above is an excerpt from <strong>Craig Walls'</strong> <a href="https://www.manning.com/books/spring-boot-in-action">Spring Boot in Action</a> which perfectly describe my feelings with the traditional Spring configuration and how Spring Boot modernise it.</p><p>My favourite part of Spring Boot is its CLI so I'll try creating a new project using CLI.</p>
+
+								<a class="btn btn-default" href="blog/2015/spring-booted.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>
@@ -157,6 +274,48 @@ $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 </code></pre>
 
 								<a class="btn btn-default" href="blog/2015/jenkins-on-centos.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/lollipop-to.kitkat.html"><h1 class="post-title">From Lollipop To Kitkat</h1></a>
+								<span class="post-date">03 September 2015</span>
+								<p>Android system update is like pushed notifications where you cannot opt out. Rooted device actually can but I'm not rooting my device again since I had a bad experience with it. I kept ignoring this update but I woke up one morning in Android 5.0.2. This update is not compatible with my device as this drives it to the bend hence the reason I want to downgrade.</p><h3>Download Android debug bridge</h3>
+<pre><code>$ apt-cache search android-tools
+android-tools-fsutils - Android ext4 utilities with sparse support
+android-tools-adb - Android Debug Bridge CLI tool
+android-tools-adbd - Android Debug Bridge Phone Daemon
+android-tools-fastboot - Android Fastboot protocol CLI tool
+</code></pre><p>You can only install <code>android-tools-adb</code> for this purpose.</p>
+
+								<a class="btn btn-default" href="blog/2015/lollipop-to.kitkat.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/wildfly-on-ubuntu14.html"><h1 class="post-title"> Wildfly on Ubuntu 14</h1></a>
+								<span class="post-date">25 August 2015</span>
+								<p>I installed JBoss Application Server 7 but it won't start on my Ubuntu machine. If I will run <code>$JBOSS_HOME/bin/standalone.sh</code>,<br/>here's how far I can get.</p>
+<pre><code>=========================================================================
+
+  JBoss Bootstrap Environment
+
+  JBOSS_HOME: /opt/jboss7
+
+  JAVA: java
+
+  JAVA_OPTS:  -server -XX:+UseCompressedOops -XX:+TieredCompilation -Xms64m -Xmx512m -XX:MaxPermSize=256m
+  -Djava.net.preferIPv4Stack=true -Dorg.jboss.resolver.warning=true -Dsun.rmi.dgc.client.gcInterval=3600000
+  -Dsun.rmi.dgc.server.gcInterval=3600000 -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true
+  -Djboss.server.default.config=standalone.xml
+
+=========================================================================
+
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; support was removed in 8.0
+23:41:04,456 INFO  [org.jboss.modules] JBoss Modules version 1.1.1.GA
+23:41:05,336 INFO  [org.jboss.msc] JBoss MSC version 1.0.2.GA
+23:41:05,525 INFO  [org.jboss.as] JBAS015899: JBoss AS 7.1.1.Final &quot;Brontes&quot; starting
+</code></pre><p>A bit of Googling suggested it is a Java 8 related issue and shouldn't happen if I'm going to downgrade to Java 7. Stackoverflow did suggest I can use Wildfly 8 for my latest version of Java.</p>
+
+								<a class="btn btn-default" href="blog/2015/wildfly-on-ubuntu14.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>
@@ -182,7 +341,20 @@ $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 					<li>
 								<a href="blog/2015/pimping-my-vim.html"><h1 class="post-title">Pimping My vim</h1></a>
 								<span class="post-date">28 June 2015</span>
-								<p><strong>vim</strong> is a versatile and powerful text editor for command-line environments. In _*nix_ world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called <code>.vimrc</code> under your home folder.</p>
+								<p><strong>vim</strong> is a versatile and powerful text editor for command-line environments. In __*nix__ world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called <code>.vimrc</code> under your home folder.</p><h3>Creating ~/.vimrc</h3>
+<pre><code>set nocompatible
+syntax on
+set mouse=a
+set showmatch
+set autoindent
+set smartindent
+set backspace=2
+set tabstop=4
+set number
+set smarttab
+set shiftwidth=4
+colorscheme torte
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2015/pimping-my-vim.html">Read More →</a>
 								<hr class="spacer"/>
@@ -205,10 +377,128 @@ $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 								<hr class="spacer"/>
 					</li>
 					<li>
+								<a href="blog/2015/my-first-grails-app.html"><h1 class="post-title">qotd My First Grails App</h1></a>
+								<span class="post-date">11 June 2015</span>
+								<h3>Create an app</h3>
+<pre><code>$ grails create-app qotd
+| Application created at /home/drmanalo/intellij/qotd
+</code></pre><h3>Enjoy the fruit of your hardwork</h3>
+<pre><code>$ cd qotd
+
+$ grails run-app
+&gt; Configuring &gt; 0/1 projects &gt; root project &gt; Resolving dependencies &#39;:classpath1/1 projects &gt; Resolving dependencies &#39;:agent&#39; &gt; Resolving dependencies &#39;:versio:compileJava UP-TO-DATE
+&gt; Building 16% &gt; :compileGroovy &gt; Resolving dependencies &#39;:compile&#39; &gt; Resolving :compileGroovy
+Download https://repo.grails.org/grails/core/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar
+&gt; Building 16% &gt; :compileGroovy &gt; Resolving dependencies &#39;detachedConfiguration4:processResources
+:classes
+:findMainClass
+&gt; Building 83% &gt; :bootRun &gt; Resolving dependencies &#39;:runtime&#39; &gt; Resolving depend:bootRun
+Download https://repo.grails.org/grails/core/commons-io/commons-io/2.2/commons-io-2.2.jar
+Grails application running at http://localhost:8080
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2015/my-first-grails-app.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/factory-pattern.html"><h1 class="post-title">Factory Pattern</h1></a>
+								<span class="post-date">20 May 2015</span>
+								<p>From my Java best practices training, my instructor gave us an example of the factory pattern using Shape object with draw() method. The Shape interface is further implemented by a base class called ShapeFactory which decides what kind of shape it is going to create using some business intelligence you put into the factory.</p><p>The example is spot on but I found another good example from our hands-on exercise which I'm about to share. Not just because I'm a Star Wars fan but the way factory is being used.</p><h3>The Robot</h3>
+<pre><code>package com.robots;
+
+import java.awt.Color;
+import java.awt.Point;
+import java.util.List;
+
+import com.robots.parts.Part;
+
+public interface Robot {
+
+	void move(int distance, Direction direction);
+
+	List&lt;Part&gt; getParts();
+
+	String getName();
+
+	Point getXY();
+
+	void setXY(Point p);
+
+	double dist(Robot r2);
+
+	Color getColor();
+
+	int getSerial();
+
+}
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2015/factory-pattern.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/observer-pattern.html"><h1 class="post-title">Observer Pattern</h1></a>
+								<span class="post-date">20 May 2015</span>
+								<p><strong>Observer Pattern</strong> has been around Java since version JDK 1.0. One of the nice thing about having it inside the language is you only have to subclass it and just worry about its implementation logic.</p><p>Here are the key benefits of the observer pattern.</p>
+<ul>
+  <li>Neither <code>Observer</code> nor <code>Observable</code> know class type of the other</li>
+  <li><code>Observable</code> can communicate with any <code>Observer</code></li>
+  <li><code>Observer</code> can register for state change events on any <code>Observable</code></li>
+  <li>Any object that changes state of <code>Observable</code> indirectly broadcasts to all registered <code>Observers</code></li>
+</ul><p>This is from one of our exercises which is a card game called Tehi. This is not the complete program but what it shows here is how are you going to use the observer pattern. First you will notice CardDeck extends <code>Observable</code> and the abstract CardViewer implements <code>Observer</code>. The concrete classes FutureCardsViewer and PastCardViewers then has update method which is the glue that attached them to the <code>Observable</code>.</p>
+
+								<a class="btn btn-default" href="blog/2015/observer-pattern.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/jvm-garbage-collector-switches.html"><h1 class="post-title">JVM Garbage Collector Switches</h1></a>
+								<span class="post-date">19 May 2015</span>
+								<p>I took this from my Java best practices notes training. This is a verbatim of the switches I used as part of our exercises.</p><p>In many cases an application can meet performance goals with the default garbage collector. For sufficiently large applications that scale to large numbers of threads, processors, sockets, or a large amount of memory choosing an appropriate garbage collector will make a difference.</p>
+<pre><code>-XX:+UseSerialGC
+-XX:+UseParNewGC -XX:+UseConcMarkSweepGC
+-XX:+UseG1GC
+-XX:+AggressiveHeap
+-XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy
+-XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:GCTimeRatio=9
+-XX:+UseG1GC -Xmx30m
+-XX:+UseSerialGC -Xmx30m
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2015/jvm-garbage-collector-switches.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
 								<a href="blog/2015/7zip-backup-script.html"><h1 class="post-title">7zip Backup Script</h1></a>
 								<span class="post-date">10 May 2015</span>
 								<p>Here is a simple batch script to backup my project folder every 18:30. I wish I could run this in cron but my development machine is running Windows.</p>
+<pre><code>@SETLOCAL
+@ECHO OFF
 
+@REM ----- begin backup ------------------------------------------------
+@REM path is handled by mklink done initially
+@REM SET reads whitespaces too!
+
+SET file=workspace.7z
+SET source=C:\Users\dhonnee.manalo\git\workspace\
+
+@REM ----- 7za merges with old archive
+@REM ----- workaround is to delete first
+
+7za a -t7z %file% %source%
+
+ECHO Compression finished!
+@REM ----- end backup --------------------------------------------------
+
+@REM ----- copy to x:drive ---------------------------------------------
+
+SET destination=\\remote_server\dev\dhon.manalo\workspace\
+
+copy %file% %destination% /Y
+
+ECHO Backup finished!
+
+@REM ------- END backup.bat ------------------
+</code></pre>
 								<a class="btn btn-default" href="blog/2015/7zip-backup-script.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
@@ -230,60 +520,9 @@ $ ruby -v
 								<a href="blog/2015/application-context-and-dispatcher-servlet.html"><h1 class="post-title">applicationContext.xml and dispatcher-servlet.xml</h1></a>
 								<span class="post-date">18 April 2015</span>
 								<p>I was trying to improve an existing Spring project to be able to inject Hibernate's SessionFactory but get confused where to put my Hibernate XML configuration. I initially put it within <code>&lt;context-param/&gt;</code> but was surprised Spring is not creating my sessionFactory bean. Then I tried it under <code>&lt;init-param/&gt;</code> but the result is the same, there's no sessionFactory bean. I tried putting my Hibernate configuration on both locations and it worked. I still don't understand why hence I asked my friend Google.</p><p>I found this post from <a href="http://www.jroller.com/latenightdev/entry/spring_mvc_context_loading">Late Night Developer</a> which helped me understand why there are two places for my custom XML configurations.</p>
-<blockquote>The most important thing to understand is that there are 2 layers of application contexts, and they each have default XML files to load beans from.</blockquote>
-<!--more--><h3>Root Application Context</h3><p>The Root application context is created when you specify a ContextLoaderListener in your web.xml file. It allows you to define beans that will be available to all the servlet contexts. If you don't specify a listener, then there will be no Root context which is also valid. Here's how you define the ContextLoaderListener in the web.xml file.</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;web-app xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
-        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee
-                            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot;&gt;
+<blockquote><p>The most important thing to understand is that there are 2 layers of application contexts, and they each have default XML files to load beans from.</p>
+</blockquote>
 
-		&lt;!-- Configurations for the root application context (parent context) --&gt;
-		&lt;listener&gt;
-		    &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
-		&lt;/listener&gt;
-
-&lt;/web-app&gt;
-</code></pre><p>By default, the listener loads beans from the file <code>/WEB-INF/applicationContext.xml</code>. To specify an alternative file, use the contextConfigLocation context parameter in the web.xml file. In an instance,</p>
-<pre><code>&lt;web-app&gt;
-    ...
-    &lt;context-param&gt;
-		    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
-		    &lt;param-value&gt;
-		        /WEB-INF/spring/jdbc/spring-jdbc.xml
-		        /WEB-INF/spring/security/spring-security-context.xml
-		    &lt;/param-value&gt;
-		&lt;/context-param&gt;
-&lt;/web-app&gt;
-</code></pre><h3>Servlet Application Context</h3><p>Each Spring DispatcherServlet defined in the web.xml file gets its own application context. If there is a Root application context (i.e. if a ContextLoaderListener is defined), then that will be the parent of the servlet context and the beans will be available for use in the servlet context. By default, DispatcherServlet loads beans from the file <code>/WEB-INF/&lt;servlet-name&gt;-servlet</code>.xml which is widely named as dispatcher.</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;web-app xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
-        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee
-                            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot;&gt;
-
-		&lt;!-- Configurations for the DispatcherServlet application context (child context) --&gt;
-    &lt;servlet&gt;
-        &lt;servlet-name&gt;spring-mvc&lt;/servlet-name&gt;
-        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-    &lt;/servlet&gt;
-
-&lt;/web-app&gt;
-</code></pre><p>To change the name of the XML bean file that the servlet loads, you can use the namespace initialisation parameter, but be careful as the servlet assumes that the file is in WEB-INF, and ends in .xml, so you don't put those as part of the parameter value. This is inconsistent with the other file specifications already mentioned, which are relative to the wep app base. In an instance,</p>
-<pre><code>&lt;web-app&gt;
-    ...
-    &lt;servlet&gt;
-        &lt;servlet-name&gt;spring-mvc&lt;/servlet-name&gt;
-        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-        &lt;init-param&gt;
-            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
-            &lt;param-value&gt;
-                /WEB-INF/spring/mvc/spring-mvc-servlet.xml
-            &lt;/param-value&gt;
-        &lt;/init-param&gt;
-    &lt;/servlet&gt;
-&lt;/web-app&gt;
-</code></pre>
 								<a class="btn btn-default" href="blog/2015/application-context-and-dispatcher-servlet.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
@@ -306,6 +545,22 @@ $ ruby -v
 </ul>
 
 								<a class="btn btn-default" href="blog/2015/spring-form-binding-with-freemarker.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2015/oracle1489.html"><h1 class="post-title">Workaround for ORA-01489</h1></a>
+								<span class="post-date">08 February 2015</span>
+								<p>Just saw this issue while concatenating fields in Oracle.</p><h3>Issue</h3>
+<pre><code>SELECT LISTAGG(column_name, &#39;, &#39;) WITHIN GROUP (ORDER BY column_name) alias FROM table_name;
+
+ORA-01489: result of string concatenation is too long
+01489. 00000 -  &quot;result of string concatenation is too long&quot;
+*Cause:    String concatenation result is more than the maximum size.
+*Action:   Make sure that the result is less than the maximum size.
+</code></pre><h3>Workaround</h3>
+<pre><code>SELECT RTRIM(XMLAGG(XMLELEMENT(e, column_name, &#39;,&#39;).EXTRACT(&#39;//text()&#39;) ORDER BY column_name).GETCLOBVAL(), &#39;,&#39;) alias FROM table_name;
+</code></pre>
+								<a class="btn btn-default" href="blog/2015/oracle1489.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>

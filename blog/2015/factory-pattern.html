@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Factory Pattern</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Factory Pattern</h1>
+			<p><em>20 May 2015</em></p>
+			<p><p>From my Java best practices training, my instructor gave us an example of the factory pattern using Shape object with draw() method. The Shape interface is further implemented by a base class called ShapeFactory which decides what kind of shape it is going to create using some business intelligence you put into the factory.</p><p>The example is spot on but I found another good example from our hands-on exercise which I'm about to share. Not just because I'm a Star Wars fan but the way factory is being used.</p><h3>The Robot</h3>
+<pre><code>package com.robots;
+
+import java.awt.Color;
+import java.awt.Point;
+import java.util.List;
+
+import com.robots.parts.Part;
+
+public interface Robot {
+
+	void move(int distance, Direction direction);
+
+	List&lt;Part&gt; getParts();
+
+	String getName();
+
+	Point getXY();
+
+	void setXY(Point p);
+
+	double dist(Robot r2);
+
+	Color getColor();
+
+	int getSerial();
+
+}
+</code></pre>
+<!-- more --><h3>The Robot Factory</h3>
+<pre><code>package com.robots;
+
+public final class RobotFactory {
+
+	public static Robot createRobot() {
+
+		Robot robot = null;
+
+		if (Math.random() &gt; 0.5) {
+			robot = new C3PO();
+		} else {
+			robot = new R2D2();
+		}
+		return robot;
+	}
+
+}
+</code></pre><h3>The Basic Robot</h3>
+<pre><code>package com.robots;
+
+import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.robots.parts.Part;
+
+public abstract class BasicRobot implements Robot {
+
+	// All Robots share the same fuel source.
+	private static final Fuel fuel = new Fuel();
+
+	// All robots share the same &#39;force&#39;.
+	private static final Force theForce = new Force();
+
+	private Color color;
+
+	private String name;
+
+	// x and y range from 0 to 199.
+	private int x = (int) (Math.random() * 200);
+
+	private int y = (int) (Math.random() * 200);
+
+	protected List&lt;Part&gt; parts = new ArrayList&lt;Part&gt;();
+
+	private static int meetingPoint = 50;
+
+	public final static AtomicInteger speed = new AtomicInteger(10);
+
+	/**
+	 * Distance from another Robot
+	 */
+	public double dist(Robot r2) {
+		Point p1 = getXY();
+		Point p2 = r2.getXY();
+		return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
+	}
+
+	public static Fuel getFuel() {
+		return fuel;
+	}
+
+	public static Force getTheForce() {
+		return theForce;
+	}
+
+	public static int getSpeed() {
+		return speed.get();
+	}
+
+	public static void setSpeed(int speed) {
+		BasicRobot.speed.set(speed);
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public List&lt;Part&gt; getParts() {
+		return parts;
+	}
+
+	boolean spin = false;
+
+	protected static ExecutorService threadPool = Executors.newCachedThreadPool();
+
+	public void move(final int distance, final Direction direction) {
+
+		threadPool.submit(new Runnable() {
+
+			@Override
+			public void run() {
+
+				try {
+					for (int i = 0; i &lt; distance; i += 1) {
+
+						synchronized (fuel) {
+							synchronized (theForce) {
+								theForce.reduce();
+								fuel.reduce();
+							}
+						}
+
+						switch (direction) {
+						case EAST:
+							x = (x + 1) % 200;
+							break;
+						case WEST:
+							x = (200 + x - 1) % 200;
+							break;
+						case NORTH:
+							y = (200 + y - 1) % 200;
+							break;
+						case SOUTH:
+							y = (y + 1) % 200;
+							break;
+						}
+					}
+					Thread.sleep(50 / getSpeed());
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+
+					System.out.println(&quot;Ending Force is &quot; + BasicRobot.getTheForce().getForceStrength());
+					System.out.println(&quot;Ending Fuel is &quot; + BasicRobot.getFuel().getAmount());
+					System.out.println(getName() + &quot;  Done!&quot;);
+				}// End of finally block.
+
+			}
+		});
+
+	}
+
+	public Point getXY() {
+		return new Point(x, y);
+	}
+
+	public void setXY(Point p) {
+		x = (int) p.getX();
+		y = (int) p.getY();
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public static int getMeetingPoint() {
+		return meetingPoint;
+	}
+
+}
+</code></pre><h3>C3PO</h3>
+<pre><code>package com.robots;
+
+import java.awt.Color;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.robots.parts.Motor;
+import com.robots.parts.Pulley;
+
+public final class C3PO extends BasicRobot {
+
+	private static AtomicInteger lastSerial = new AtomicInteger(0);
+
+	private final int serial;
+
+	public C3PO() {
+		parts.add(new Motor(485575, &quot;Lucinet silent motor - leg&quot;, 24));
+		parts.add(new Motor(485576, &quot;Lucinet silent motor - leg&quot;, 24));
+		parts.add(new Motor(485577, &quot;Lucinet silent motor - neck&quot;, 24));
+		parts.add(new Motor(485578, &quot;Lucinet silent motor - arm&quot;, 24));
+		parts.add(new Motor(485579, &quot;Lucinet silent motor - arm&quot;, 24));
+		parts.add(new Pulley(485579, &quot;Lucinet pulley system&quot;, 100));
+		setColor(new Color(251, 232, 123));
+		// Using &quot;lastSerial++&quot; would be unsafe since lastSerial is shared.
+		serial = lastSerial.incrementAndGet();
+		setName(&quot;C3PO &quot; + serial);
+	}
+
+	public int getSerial() {
+		return serial;
+	}
+
+	public void speak() {
+		System.out.println(&quot;I am C3PO, human cyborg relations droid!&quot;);
+	}
+
+}
+</code></pre><h3>R2D2</h3>
+<pre><code>package com.robots;
+
+import java.awt.Color;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.robots.parts.Motor;
+
+import com.robots.parts.Pulley;
+import com.robots.parts.Wheel;
+
+public final class R2D2 extends BasicRobot {
+
+	private static AtomicInteger lastSerial = new AtomicInteger(0);
+	private final int serial;
+
+	public R2D2() {
+		parts.add(new Motor(123456, &quot;Chubb high torque motor&quot;, 120));
+		parts.add(new Pulley(334563, &quot;Low resistance pully&quot;, 100));
+		parts.add(new Wheel(884457, &quot;Rubber skinned alloy wheel&quot;, 200));
+		parts.add(new Wheel(884458, &quot;Rubber skinned alloy wheel&quot;, 200));
+		parts.add(new Wheel(884459, &quot;Rubber skinned alloy wheel&quot;, 200));
+		setColor(new Color(98, 98, 249));
+		// Using lastSerial++ would be unsage since lastSerial is shared.
+		serial = lastSerial.incrementAndGet();
+		setName(&quot;R2D2 &quot; + serial);
+	}
+
+	public int getSerial() {
+		return serial;
+	}
+
+	public void beep() {
+		System.out.println(&quot;bi bi bib be bi bi be bi&quot;);
+	}
+
+}
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/factory-pattern.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/factory-pattern.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

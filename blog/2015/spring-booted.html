@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Spring Booted</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Spring Booted</h1>
+			<p><em>22 October 2015</em></p>
+			<p><blockquote><p><strong>Spring Boot</strong> is an exciting new way to develop Spring applications with minimal friction from the framework itself. Auto-configuration eliminates much of the boilerplate configuration that infests traditional Spring applications. Spring Boot starters enable you to specify build dependencies by what they offer rather than explicit library names and version. The Spring Boot CLI takes Spring Boot’s frictionless development model to a whole new level by enabling quick and easy development with Groovy from the command line. Finally, the Actuator lets you look inside your running application to see what and how Spring Boot has done.</p>
+</blockquote><p>Above is an excerpt from <strong>Craig Walls'</strong> <a href="https://www.manning.com/books/spring-boot-in-action">Spring Boot in Action</a> which perfectly describe my feelings with the traditional Spring configuration and how Spring Boot modernise it.</p><p>My favourite part of Spring Boot is its CLI so I'll try creating a new project using CLI.</p>
+<!-- more --><h3>Installing Spring Boot CLI</h3>
+<pre><code>$ sdk install springboot
+
+Downloading: springboot 1.3.5.RELEASE
+
+Hang tight, this could take a while...
+
+
+Installing: springboot 1.3.5.RELEASE
+Done installing!
+
+Do you want springboot 1.3.5.RELEASE to be set as default? (Y/n):
+
+Setting springboot 1.3.5.RELEASE as default.
+</code></pre><h3>Installing gradle</h3><p>This is optional. You will need <code>gradle</code> if you don't want to use the default project type <code>maven</code>.</p>
+<pre><code>$ sdk install gradle
+
+Downloading: gradle 2.13
+
+Hang tight, this could take a while...
+
+
+Installing: gradle 2.13
+Done installing!
+
+Do you want gradle 2.13 to be set as default? (Y/n):
+
+Setting gradle 2.13 as default.
+</code></pre><h3>Spring shell</h3>
+<pre><code>$ spring shell
+Spring Boot (v1.3.5.RELEASE)
+Hit TAB to complete. Type &#39;help&#39; and hit RETURN for help, and &#39;exit&#39; to quit.
+
+$ help
+usage:
+       &lt;command&gt; [&lt;args&gt;]
+
+Available commands are:
+
+  help command        
+    Get help on commands
+
+  version                
+    Show the version
+
+  run [options] &lt;files&gt; [--] [args]
+    Run a spring groovy script
+
+  test [options] &lt;files&gt; [--] [args]
+    Run a spring groovy script test
+
+  grab                
+    Download a spring groovy script&#39;s dependencies to ./repository
+
+  jar [options] &lt;jar-name&gt; &lt;files&gt;
+    Create a self-contained executable jar file from a Spring Groovy script
+
+  war [options] &lt;war-name&gt; &lt;files&gt;
+    Create a self-contained executable war file from a Spring Groovy script
+
+  install [options] &lt;coordinates&gt;
+    Install dependencies to the lib directory
+
+  uninstall [options] &lt;coordinates&gt;
+    Uninstall dependencies from the lib directory
+
+  init [options] [location]
+    Initialize a new project using Spring Initializr (start.spring.io)
+
+  prompt                
+    Change the prompt used with the current &#39;shell&#39; command. Execute with no arguments to return to the previous value.
+
+  clear                
+    Clear the screen
+
+  exit                
+    Quit the embedded shell
+
+Common options:
+
+  -d, --debug Verbose mode   
+    Print additional status information for the command you are running
+
+
+See &#39;help &lt;command&gt;&#39; for more information on a specific command.
+</code></pre><h3>spring init at a glance</h3>
+<pre><code>$ spring init -l
+
+  .   ____          _            __ _ _
+ /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+:: Service capabilities ::  https://start.spring.io
+
+Supported dependencies
++-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+
+| Id                                | Description                                                                                                                                                            | Required version            |
++-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+
+| activiti-basic                    | Activiti BPMN workflow engine                                                                                                                                          |                             |
+| actuator                          | Production ready features to help you monitor and manage your application                                                                                              |                             |
+| actuator-docs                     | API documentation for the Actuator endpoints                                                                                                                           | &gt;= 1.3.0.M4                 |
+| amqp                              | Advanced Message Queuing Protocol via spring-rabbit                                                                                                                    |                             |
+| aop                               | Aspect-oriented programming including spring-aop and AspectJ                                                                                                           |                             |
+| artemis                           | Java Message Service API via Apache Artemis                                                                                                                            | &gt;= 1.3.0.M2                 |
+| batch                             | Spring Batch including HSQLDB database                                                                                                                                 |                             |
+| cache                             | Spring&#39;s Cache abstraction                                                                                                                                             | &gt;= 1.3.0.M1                 |
+| cloud-aws                         | AWS native services from spring-cloud-aws                                                                                                                              | &gt;= 1.2.3.RELEASE            |
+| cloud-aws-jdbc                    | Relational databases on AWS with RDS and spring-cloud-aws-jdbc                                                                                                         | &gt;= 1.2.3.RELEASE            |
+| cloud-aws-messaging               | Messaging on AWS with SQS and spring-cloud-aws-messaging                                                                                                               | &gt;= 1.2.3.RELEASE            |
+| cloud-bus-amqp                    | A simple control bus with AMQP and spring-cloud-bus-amqp                                                                                                               | [0.0.0.RELEASE,1.3.0.M5]    |
+| cloud-bus-kafka                   | A simple control bus with Kafka and spring-cloud-bus                                                                                                                   | (1.3.0.M5,9999.9.9.RELEASE] |
+| cloud-bus-rabbit                  | A simple control bus with Rabbit and spring-cloud-bus                                                                                                                  | (1.3.0.M5,9999.9.9.RELEASE] |
+| cloud-bus-redis                   | A simple control bus with Redis and spring-cloud-bus                                                                                                                   | (1.3.0.M5,9999.9.9.RELEASE] |
+| cloud-cloudfoundry-discovery      | Service discovery with Cloud Foundry                                                                                                                                   | &gt;= 1.3.0.M4                 |
+| cloud-cluster-hazelcast           | Leadership election and global state with Hazelcast and spring-cloud-cluster-hazelcast                                                                                 | &gt;= 1.3.0.M4                 |
+| cloud-cluster-redis               | Leadership election and global state with Redis and spring-cloud-cluster-redis                                                                                         | &gt;= 1.3.0.M4                 |
+| cloud-cluster-zookeeper           | Leadership election and global state with Zookeeper and spring-cloud-cluster-zookeeper                                                                                 | &gt;= 1.3.0.M4                 |
+| cloud-config-client               | spring-cloud-config Client                                                                                                                                             | &gt;= 1.2.3.RELEASE            |
+| cloud-config-server               | Central management for configuration via a git or svn backend                                                                                                          | &gt;= 1.2.3.RELEASE            |
+| cloud-connectors                  | Simplifies connecting to services in cloud platforms, including spring-cloud-connector and spring-cloud-cloudfoundry-connector                                         | &gt;= 1.2.0.RELEASE            |
+| cloud-eureka                      | Service discovery using spring-cloud-netflix and Eureka                                                                                                                | &gt;= 1.2.3.RELEASE            |
+| cloud-eureka-server               | spring-cloud-netflix Eureka Server                                                                                                                                     | &gt;= 1.2.3.RELEASE            |
+| cloud-feign                       | Declarative REST clients with spring-cloud-netflix Feign                                                                                                               | &gt;= 1.2.3.RELEASE            |
+| cloud-hystrix                     | Circuit breaker with spring-cloud-netflix Hystrix                                                                                                                      | &gt;= 1.2.3.RELEASE            |
+| cloud-hystrix-dashboard           | Circuit breaker dashboard with spring-cloud-netflix Hystrix                                                                                                            | &gt;= 1.2.3.RELEASE            |
+| cloud-oauth2                      | OAuth2 and distributed application patterns with spring-cloud-security                                                                                                 | &gt;= 1.2.3.RELEASE            |
+| cloud-ribbon                      | Client side load balancing with spring-cloud-netflix and Ribbon                                                                                                        | &gt;= 1.2.3.RELEASE            |
+| cloud-security                    | Secure load balancing and routing with spring-cloud-security                                                                                                           | &gt;= 1.2.3.RELEASE            |
+| cloud-starter                     | spring-cloud-context (e.g. Bootstrap context and @RefreshScope)                                                                                                        | &gt;= 1.2.3.RELEASE            |
+| cloud-starter-consul-bus          | Inter instance control events with Hashicorp Consul                                                                                                                    | &gt;= 1.3.0.M4                 |
+| cloud-starter-consul-config       | Configuration management with Hashicorp Consul                                                                                                                         | &gt;= 1.3.0.M4                 |
+| cloud-starter-consul-discovery    | Service discovery with Hashicorp Consul                                                                                                                                | &gt;= 1.3.0.M4                 |
+| cloud-starter-sleuth              | Distributed tracing via logs with spring-cloud-sleuth                                                                                                                  | &gt;= 1.3.0.M4                 |
+| cloud-starter-zipkin              | Distributed tracing via Zipkin and spring-cloud-sleuth-zipkin                                                                                                          | &gt;= 1.3.0.M4                 |
+| cloud-starter-zookeeper-config    | Configuration management with Zookeeper and spring-cloud-zookeeper-config                                                                                              | &gt;= 1.3.0.M4                 |
+| cloud-starter-zookeeper-discovery | Service discovery with Zookeeper and spring-cloud-zookeeper-discovery                                                                                                  | &gt;= 1.3.0.M4                 |
+| cloud-stream-binder-kafka         | Messaging microservices with Kafka                                                                                                                                     | &gt;= 1.3.0.M4                 |
+| cloud-stream-binder-rabbit        | Messaging microservices with RabbitMQ                                                                                                                                  | &gt;= 1.3.0.M4                 |
+| cloud-stream-binder-redis         | Messaging microservices with Redis                                                                                                                                     | &gt;= 1.3.0.M4                 |
+| cloud-turbine                     | Circuit breaker metric aggregation using spring-cloud-netflix with Turbine and server-sent events                                                                      | &gt;= 1.2.3.RELEASE            |
+| cloud-turbine-amqp                | Circuit breaker metric aggregation using spring-cloud-netflix with Turbine and AMQP                                                                                    | [0.0.0.RELEASE,1.3.0.M5]    |
+| cloud-turbine-stream              | Circuit breaker metric aggregation using spring-cloud-netflix with Turbine and Spring Cloud Stream (choose a specific Stream binder implementation to complement this) | (1.3.0.M5,999.9.9.RELEASE]  |
+| cloud-zuul                        | Intelligent and programmable routing with spring-cloud-netflix Zuul                                                                                                    | &gt;= 1.2.3.RELEASE            |
+| data-cassandra                    | Cassandra NoSQL Database, including spring-data-cassandra                                                                                                              | &gt;= 1.3.0.RC1                |
+| data-elasticsearch                | Elasticsearch search and analytics engine including spring-data-elasticsearch                                                                                          |                             |
+| data-gemfire                      | GemFire distributed data store including spring-data-gemfire                                                                                                           |                             |
+| data-jpa                          | Java Persistence API including spring-data-jpa, spring-orm and Hibernate                                                                                               |                             |
+| data-jpa                          | Java Persistence API including spring-data-jpa, spring-orm and Hibernate                                                                                               |                             |
+| data-mongodb                      | MongoDB NoSQL Database, including spring-data-mongodb                                                                                                                  |                             |
+| data-rest                         | Exposing Spring Data repositories over REST via spring-data-rest-webmvc                                                                                                |                             |
+| data-rest-hal                     | Browsing Spring Data REST repositories with an HTML UI                                                                                                                 | &gt;= 1.3.0.M1                 |
+| data-solr                         | Apache Solr search platform, including spring-data-solr                                                                                                                |                             |
+| derby                             | Apache Derby database (with embedded support)                                                                                                                          | &gt;= 1.2.2.RELEASE            |
+| devtools                          | Spring Boot Development Tools                                                                                                                                          | &gt;= 1.3.0.M1                 |
+| freemarker                        | FreeMarker templating engine                                                                                                                                           |                             |
+| groovy-templates                  | Groovy templating engine                                                                                                                                               |                             |
+| h2                                | H2 database (with embedded support)                                                                                                                                    |                             |
+| hateoas                           | HATEOAS-based RESTful services                                                                                                                                         | &gt;= 1.2.2.RELEASE            |
+| hornetq                           | Java Message Service API via HornetQ                                                                                                                                   |                             |
+| hsql                              | HSQLDB database (with embedded support)                                                                                                                                |                             |
+| integration                       | Common spring-integration modules                                                                                                                                      |                             |
+| jdbc                              | JDBC databases                                                                                                                                                         |                             |
+| jersey                            | the Jersey RESTful Web Services framework                                                                                                                              | &gt;= 1.2.0.RELEASE            |
+| jooq                              | Persistence support using Java Object Oriented Querying                                                                                                                | &gt;= 1.3.0.M2                 |
+| jta-atomikos                      | JTA distributed transactions via Atomikos                                                                                                                              | &gt;= 1.2.0.M1                 |
+| jta-bitronix                      | JTA distributed transactions via Bitronix                                                                                                                              | &gt;= 1.2.0.M1                 |
+| lombok                            | Lombok                                                                                                                                                                 | &gt;= 1.3.0.M4                 |
+| mail                              | javax.mail                                                                                                                                                             | &gt;= 1.2.0.RC1                |
+| mobile                            | Simplify the development of mobile web applications with spring-mobile                                                                                                 |                             |
+| mustache                          | Mustache templating engine                                                                                                                                             | &gt;= 1.2.2.RELEASE            |
+| mysql                             | MySQL jdbc driver                                                                                                                                                      |                             |
+| postgresql                        | PostgreSQL jdbc driver                                                                                                                                                 |                             |
+| ratpack                           | Spring Boot integration for the Ratpack framework                                                                                                                      | &gt;= 1.2.0.RELEASE            |
+| redis                             | REDIS key-value data store, including spring-redis                                                                                                                     |                             |
+| remote-shell                      | CRaSH shell integration                                                                                                                                                |                             |
+| restdocs                          | Document RESTful services by combining hand-written and auto-generated documentation                                                                                   |                             |
+| security                          | Secure your application via spring-security                                                                                                                            |                             |
+| social-facebook                   | spring-social-facebook                                                                                                                                                 |                             |
+| social-linkedin                   | spring-social-linkedin                                                                                                                                                 |                             |
+| social-twitter                    | spring-social-twitter                                                                                                                                                  |                             |
+| thymeleaf                         | Thymeleaf templating engine, including integration with Spring                                                                                                         |                             |
+| vaadin                            | Vaadin                                                                                                                                                                 |                             |
+| validation                        | JSR-303 validation infrastructure (already included with web)                                                                                                          | &gt;= 1.3.0.M1                 |
+| velocity                          | Velocity templating engine                                                                                                                                             |                             |
+| web                               | Full-stack web development with Tomcat and Spring MVC                                                                                                                  |                             |
+| websocket                         | Websocket development with SockJS and STOMP                                                                                                                            |                             |
+| ws                                | Contract-first SOAP service development with Spring Web Services                                                                                                       |                             |
++-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+
+
+
+Project types (* denotes the default)
++-----------------+-----------------------------------------+-----------------------------+
+| Id              | Description                             | Tags                        |
++-----------------+-----------------------------------------+-----------------------------+
+| gradle-build    | Generate a Gradle build file            | build:gradle,format:build   |
+| gradle-project  | Generate a Gradle based project archive | build:gradle,format:project |
+| maven-build     | Generate a Maven pom.xml                | build:maven,format:build    |
+| maven-project * | Generate a Maven based project archive  | build:maven,format:project  |
++-----------------+-----------------------------------------+-----------------------------+
+
+
+Parameters
++-------------+------------------------------------------+------------------------------+
+| Id          | Description                              | Default value                |
++-------------+------------------------------------------+------------------------------+
+| type        | project type                             | maven-project                |
+| bootVersion | spring boot version                      | 1.2.7.RELEASE                |
+| packaging   | project packaging                        | jar                          |
+| javaVersion | language level                           | 1.8                          |
+| language    | programming language                     | java                         |
+| groupId     | project coordinates                      | com.example                  |
+| artifactId  | project coordinates (infer archive name) | demo                         |
+| version     | project version                          | 0.0.1-SNAPSHOT               |
+| name        | project name (infer application name)    | demo                         |
+| description | project description                      | Demo project for Spring Boot |
+| packageName | root package                             | com.example                  |
++-------------+------------------------------------------+------------------------------+
+</code></pre><h3>Creating my first project</h3>
+<pre><code>$ spring init --dependencies web,h2,data-jpa,jdbc,groovy-templates,security --build gradle --packaging jar --extract
+Using service at https://start.spring.io
+Project extracted to &#39;/home/drmanalo/workspace/paluwagan&#39;
+
+$ tree
+.
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── com
+    │   │       └── example
+    │   │           └── DemoApplication.java
+    │   └── resources
+    │       ├── application.properties
+    │       ├── static
+    │       └── templates
+    └── test
+        └── java
+            └── com
+                └── example
+                    └── DemoApplicationTests.java
+</code></pre><h3>Running the application</h3>
+<pre><code>$ gradle bootRun
+
+Started DemoApplication in 4.605 seconds (JVM running for 4.954)
+&gt; Building 80% &gt; :bootRun
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/spring-booted.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/spring-booted.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

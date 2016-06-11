@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Observer Pattern</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Observer Pattern</h1>
+			<p><em>20 May 2015</em></p>
+			<p><p><strong>Observer Pattern</strong> has been around Java since version JDK 1.0. One of the nice thing about having it inside the language is you only have to subclass it and just worry about its implementation logic.</p><p>Here are the key benefits of the observer pattern.</p>
+<ul>
+  <li>Neither <code>Observer</code> nor <code>Observable</code> know class type of the other</li>
+  <li><code>Observable</code> can communicate with any <code>Observer</code></li>
+  <li><code>Observer</code> can register for state change events on any <code>Observable</code></li>
+  <li>Any object that changes state of <code>Observable</code> indirectly broadcasts to all registered <code>Observers</code></li>
+</ul><p>This is from one of our exercises which is a card game called Tehi. This is not the complete program but what it shows here is how are you going to use the observer pattern. First you will notice CardDeck extends <code>Observable</code> and the abstract CardViewer implements <code>Observer</code>. The concrete classes FutureCardsViewer and PastCardViewers then has update method which is the glue that attached them to the <code>Observable</code>.</p>
+<!-- more --><h3>Card Deck</h3>
+<pre><code>package com.tehi;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Observable;
+
+public final class CardDeck extends Observable {
+
+	private LinkedList&lt;PlayingCard&gt; cardStack = new LinkedList&lt;&gt;();
+
+	/**
+	 * Initially the cards are ordered by suite and rank.
+	 */
+	CardDeck(){
+		Rank[] rankArray = Rank.values();
+		Suite[] suiteArray = Suite.values();
+		for (Suite suite : suiteArray) {
+			for (Rank rank : rankArray) {
+				cardStack.add(new PlayingCard(suite, rank));
+			}
+		}
+	}
+
+	/**
+	 * Deals 1 card from the top of the deck
+	 */
+	PlayingCard deal(){
+		PlayingCard card;
+		try {
+			card = cardStack.pop();
+		} catch (NoSuchElementException e) {
+			throw new IllegalStateException(&quot;Ran out of cards!&quot;);
+		}
+		setChanged();
+		notifyObservers(getRanksDealt());
+		return card;
+	}
+
+	/**
+	 * Gets the ith card, 0 &lt;= i &lt; 52. The
+	 * card is not removed.
+	 * @param index
+	 * @return
+	 */
+	PlayingCard peek(int index){
+		if(index&lt;0 || index&gt;cardStack.size()-1){
+			return null;
+		}
+		return cardStack.get(index);
+	}
+
+	/**
+	 * Shuffles the stack of cards.
+	 */
+	void shuffle(){
+		Collections.shuffle(cardStack);
+	}		
+
+	/**
+	 * Deals n cards from the top of the deck
+	 * @param n
+	 */
+	PlayingCard[] deal(int n){
+		PlayingCard[] result = new PlayingCard[n];
+		for(int i=0; i&lt;n;i++){
+			result[i]=deal();
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the ranks of the cards left in the deck.
+	 * @return an int[] containing the ranks of the remaining cards
+	 */
+	int[] getRanksLeft(){
+		int[] result = new int[13];
+		Arrays.fill(result, 0);
+		for (PlayingCard card : cardStack) {
+			int rankNUmber = card.getRank().getRankNumber()-1;
+			result[rankNUmber]++;
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the ranks of the cards no longer in the deck.
+	 * @return an int[] containing the ranks of the already dealt cards
+	 */
+	int[] getRanksDealt(){
+		int[] result = new int[13];
+		int[] dealt = getRanksLeft();
+		for (int i=0; i&lt;dealt.length;i++) {
+			result[i]=4-dealt[i];
+		}
+		return result;
+	}
+
+	/**
+	 * Accessor to the number of cards left in the deck.
+	 * @return an int, the size of the deck.
+	 */
+	public int size(){
+		return cardStack.size();
+	}
+
+	/**
+	 * Checks if the deck is empty.
+	 * @return true if the deck has no cards, false otherwise.
+	 */
+	public boolean isEmpty() {
+		return (size()==0)?true:false;
+	}
+}
+</code></pre><h3>Cards Viewer</h3>
+<pre><code>package com.tehi;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.util.Observer;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+@SuppressWarnings(&quot;serial&quot;)
+public abstract class CardsViewer extends JPanel implements Observer {
+
+	private JPanel centerPanel = new JPanel();
+	protected JLabel[][] tiles = new JLabel[4][13];
+
+	public CardsViewer() {
+		setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		setLayout(new BorderLayout());
+		centerPanel.setLayout(new GridLayout(4, 13));
+		for (int i = 0; i &lt; 4; i++) {
+			for (int j = 0; j &lt; 13; j++) {
+				tiles[i][j] = new JLabel(&quot;&quot;, JLabel.CENTER);
+				tiles[i][j].setText(Rank.convertIntToRank(j + 1).getName());
+				centerPanel.add(tiles[i][j]);
+			}
+		}
+		add(centerPanel, BorderLayout.CENTER);
+	}
+
+	/**
+	 * Updates the GUI.
+	 * @param data an int[] with ranks of cards.
+	 */
+	protected abstract void updateChart(int[] data);
+}
+</code></pre><h3>Future Cards Viewer</h3>
+<pre><code>package com.tehi;
+
+import java.util.Observable;
+
+public class FutureCardsViewer extends CardsViewer {
+
+	/**
+	 * Chart that displays cards that have not been dealt.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * The Observable is an instance of CardDeck and
+	 * the Object is an int[] with the ranks that
+	 * have already been dealt from the deck.
+	 */
+	@Override
+	public void update(Observable observable, Object arg) {
+		CardDeck deck = (CardDeck)observable;
+		int[] ranksNotDealt = deck.getRanksLeft();		
+		updateChart(ranksNotDealt);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected void updateChart(int[] ranksNotDealt) {
+		for (int j = 0; j &lt; ranksNotDealt.length; j++) {
+			int numberOfcardsDealt = ranksNotDealt[j];
+			for (int i = 0; i &lt; 4 - numberOfcardsDealt; i++) {
+				tiles[i][j].setText(&quot;&quot;);
+			}
+			for (int i = 4 - numberOfcardsDealt; i &lt; 4; i++) {
+				tiles[i][j].setText(Rank.convertIntToRank(j + 1).getName());
+			}			
+		}
+	}
+}
+</code></pre><h3>Past Cards Viewer</h3>
+<pre><code>package com.tehi;
+
+import java.util.Observable;
+
+public class PastCardsViewer extends CardsViewer {
+
+	/**
+	 * Chart that displays cards that have been dealt.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * The Observable is an instance of CardDeck and
+	 * the Object is an int[] with the ranks that
+	 * have already been dealt from the deck.
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		int[] ranksDealt = (int[]) arg;
+		updateChart(ranksDealt);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected void updateChart(int[] ranksDealt) {
+		for (int j = 0; j &lt; ranksDealt.length; j++) {
+			int numberOfcardsDealt = ranksDealt[j];
+			for (int i = 0; i &lt; 4 - numberOfcardsDealt; i++) {
+				tiles[i][j].setText(&quot;&quot;);
+			}
+			for (int i = 4 - numberOfcardsDealt; i &lt; 4; i++) {
+				tiles[i][j].setText(Rank.convertIntToRank(j + 1).getName());
+			}			
+		}
+	}
+}
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/observer-pattern.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/observer-pattern.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

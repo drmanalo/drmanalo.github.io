@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Making Java Groovy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Making Java Groovy</h1>
+			<p><em>21 December 2015</em></p>
+			<p><p>There is a book of exactly the same title from <a href="https://www.manning.com/books/making-java-groovy">manning.com</a>. I don't have it yet but father Christmas will put it underneath my tree this Christmas.</p><p>What I do have is Spring Boot in Action which covers mixing Java with Groovy. This is what this post is all about. I am going to create a Spring Boot project but will primarily use <code>groovy</code>.</p><h3>Creating the project</h3>
+<pre><code>$ mkdir paluwagan
+$ cd paluwagan
+$ mkdir static
+$ spring init --dependencies web,h2,data-jpa,jdbc,groovy-templates --build gradle --packaging jar --extract
+Using service at https://start.spring.io
+Project extracted to &#39;/home/drmanalo/workspace/paluwagan&#39;
+</code></pre>
+<!-- more --><p>By default, the package belongs to com.demo and the main application is called DemoApplication. A quick refactor will allow you to change to a more meaningful package or application class name.</p><h3>build.gradle</h3>
+<pre><code>apply plugin: &quot;groovy&quot;
+apply plugin: &quot;spring-boot&quot;
+apply plugin: &quot;application&quot;
+apply plugin: &quot;jar&quot;
+
+sourceCompatibility = &quot;1.6&quot;
+targetCompatibility = &quot;1.8&quot;
+
+version = &quot;${version}&quot;
+group = &quot;${group}&quot;
+mainClassName = &quot;com.manalo.PaluwaganApplication&quot;
+
+buildscript {
+    ext {
+        springBootVersion = &#39;1.3.0.RELEASE&#39;
+    }    
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath(&quot;org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}&quot;)
+    }
+}
+
+war {
+    baseName = &#39;paluwagan&#39;
+    version =  &#39;1.0.0&#39;
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    runtime &quot;com.h2database:h2&quot;
+    compile &quot;org.codehaus.groovy:groovy&quot;
+    compile &quot;org.codehaus.groovy:groovy-templates&quot;
+    compile &quot;org.webjars:startbootstrap-sb-admin-2:1.0.8-1&quot;
+    compile &quot;org.springframework.boot:spring-boot-starter-web&quot;
+    compile &quot;org.springframework.boot:spring-boot-starter-actuator&quot;
+    compile &quot;org.springframework.boot:spring-boot-starter-data-jpa&quot;
+    compile &quot;org.springframework.boot:spring-boot-starter-redis&quot;
+    compile &quot;org.springframework.boot:spring-boot-starter-tomcat&quot;
+    compile &quot;org.springframework.boot:spring-boot-starter-security&quot;
+    compile &quot;org.springframework.session:spring-session:1.0.2.RELEASE&quot;
+    testCompile &quot;org.springframework.boot:spring-boot-starter-test&quot;
+    testCompile &quot;org.spockframework:spock-core:1.0-groovy-2.4&quot;
+    testCompile &quot;org.spockframework:spock-spring:1.0-groovy-2.4&quot;
+    testRuntime &quot;cglib:cglib-nodep:3.2.0&quot;
+}
+</code></pre><h3>application.properties</h3><p>I want to avoid the default port 8080 therefore I'm changing it to a different port.</p>
+<pre><code># general
+server.port=8000
+</code></pre><p>This stops Hibernate from generating my tables which is a very good feature but if you're planning to use Flyway or Liquibase in the future, it is best to set <code>ddl-auto</code> to none. The standard Hibernate property values are <code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, or <code>create-drop</code>.</p>
+<pre><code># Java Persistence API
+spring.jpa.generate-ddl=false
+spring.jpa.hibernate.ddl-auto=none
+</code></pre><h3>application-dev.properties</h3>
+<pre><code># logger
+logging.level.*=INFO
+logging.level.com.manalo.*=DEBUG
+
+# Hypersonic web console
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2
+</code></pre><p>If you want more control to your schema and its data, you will need <code>schema.sql</code> and <code>data.sql</code>. By convention, you can have <code>schema-{platform}</code> and <code>data-{platform}</code> if you are using more than one relational database.</p>
+<pre><code># datasource
+spring.datasource.initialize=true
+spring.datasource.platform=h2
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.password=password
+spring.datasource.username=testuser
+spring.datasource.url=jdbc:h2:mem:test;MODE=PostgreSQL;USER=${spring.datasource.username};PASSWORD=${spring.datasource.password};
+</code></pre><h3>schema-h2.sql</h3>
+<pre><code>create table user (
+    id       identity,
+    username varchar(20)  not null,
+    password varchar(255) not null,
+    fullname varchar(100)
+);
+</code></pre><h3>data-h2.sql</h3>
+<pre><code>insert into user (id, username, password, fullname) values (1, &#39;admin&#39;, &#39;secret&#39;, &#39;James Bond&#39;);
+</code></pre><h3>SpringBootApplication</h3><p>The default <code>DemoApplication</code> is written in java where the equivalent groovy class is like this.</p>
+<pre><code>package com.manalo
+
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+
+@SpringBootApplication
+class PaluwaganApplication {
+
+    static void main(String[] args) {
+        SpringApplication.run(PaluwaganApplication.class, args)
+    }
+
+}
+</code></pre><h3>Data Access Layer</h3><p>A very simple way of using what Spring Data offers.</p>
+<pre><code>package com.manalo.repository
+
+import com.manalo.domain.User
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface UserRepository extends JpaRepository&lt;User, Integer&gt; {
+
+    User findByUsername(String username)
+
+}
+</code></pre><h3>Service Layer</h3><p>A simple <code>CRUD</code> service</p>
+<pre><code>package com.manalo.service
+
+import com.manalo.domain.User
+import com.manalo.repository.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+
+import javax.persistence.criteria.CriteriaBuilder.In
+
+@Service
+class UserService {
+
+    @Autowired
+    private UserRepository userRepository
+
+    Collection&lt;User&gt; list() {
+        userRepository.findAll()
+    }
+
+    User findById(Integer id) {
+        userRepository.findOne(id)
+    }
+
+    User save(User user) {
+        if (user.id) { // update
+            def existing = this.findById(user.id)
+            existing.with {
+                username = user.username
+                password = user.password
+                userRepository.save(existing)
+            }
+        } else { // create
+            userRepository.save(user)
+        }
+    }
+
+    void delete(User user) {
+        def existing = this.findById(user.id)
+        if (existing != null) {
+            userRepository.delete(existing)
+        }
+    }
+}
+</code></pre><h3>Domain Object</h3>
+<pre><code>package com.manalo.domain
+
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+
+@Entity
+class User {
+
+    @Id
+    @GeneratedValue
+    Integer id
+
+    String username
+    String password
+}
+</code></pre><h3>Controller</h3>
+<pre><code>package com.manalo.controller
+
+import com.manalo.service.UserService
+import com.manalo.domain.User
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.servlet.ModelAndView
+import org.springframework.stereotype.Controller;
+
+@Controller
+@RequestMapping(&quot;/user&quot;)
+class UserController {
+
+    @Autowired
+    private UserService userService
+
+    @RequestMapping(&quot;/list&quot;)
+    ModelAndView list() {
+        return new ModelAndView(&#39;views/user/list&#39;, [users: userService.list()])
+    }
+
+    @RequestMapping(&quot;/add&quot;)
+    ModelAndView add() {
+        return new ModelAndView(&quot;views/user/edit&quot;, [user: new User()])
+    }
+
+    @RequestMapping(&quot;{id}&quot;)
+    ModelAndView view(@PathVariable(&quot;id&quot;) Integer id) {
+        return new ModelAndView(&quot;views/user/edit&quot;, [user: userService.findById(id)])
+    }
+
+    @RequestMapping(value = &quot;save&quot;, method = RequestMethod.POST)
+    ModelAndView save(User user) {
+        userService.save(user)
+        return new ModelAndView(&quot;redirect:/user/list&quot;)
+    }
+
+    @RequestMapping(value = &quot;delete&quot;, method = RequestMethod.POST)
+    ModelAndView delete(User user) {
+        userService.delete(user)
+        return new ModelAndView(&quot;redirect:/user/list&quot;)
+    }
+}
+</code></pre><h3>View: Main Groovy Template</h3>
+<pre><code>yieldUnescaped &#39;&lt;!DOCTYPE html&gt;&#39;
+html {
+    head {
+        title(pageTitle)
+        link rel: &quot;stylesheet&quot;, href: &quot;/webjars/bootstrap/3.3.6/css/bootstrap.min.css&quot;
+        link rel: &quot;stylesheet&quot;, href: &quot;/webjars/font-awesome/4.5.0/css/font-awesome.min.css&quot;
+        link rel: &quot;stylesheet&quot;, href: &quot;/webjars/startbootstrap-sb-admin-2/1.0.8-1/css/sb-admin-2.css&quot;
+        link rel: &quot;stylesheet&quot;, href: &quot;/webjars/metisMenu/1.1.3-1/metisMenu.min.css&quot;
+    }
+    body {
+        div(id: &quot;wrapper&quot;) {
+            nav(class: &quot;navbar navbar-default navbar-static-top&quot;, role: &quot;navigation&quot;, style: &quot;margin-bottom: 0&quot;) {
+                div(class: &quot;nav-header&quot;) {
+                    button(type: &quot;button&quot;, class: &quot;navbar-toggle&quot;, &quot;data-toggle&quot;: &quot;collapse&quot;, &quot;data-target&quot;: &quot;.navbar-collapse&quot;) {
+                        span class: &quot;sr-only&quot;, &quot;Toggle navigation&quot;
+                        span class: &quot;icon-bar&quot;, &quot;&quot;
+                        span class: &quot;icon-bar&quot;, &quot;&quot;
+                        span class: &quot;icon-bar&quot;, &quot;&quot;
+                    }
+                    a class: &quot;navbar-brand&quot;, href: &quot;index.html&quot;, &quot;Paluwagan&quot;
+                }
+                ul(class: &quot;nav navbar-top-links navbar-right&quot;) {
+                    li(class: &quot;dropdown&quot;) {
+                        a(class: &quot;dropdown-toggle&quot;, &quot;data-toggle&quot;: &quot;dropdown&quot;, href: &quot;#&quot;) {
+                            i class: &quot;fa fa-user fa-fw&quot;, &quot;&quot;
+                            i class: &quot;fa fa-caret-down&quot;, &quot;&quot;
+                        }
+                    }
+                }
+                div(class: &quot;navbar-default sidebar&quot;, role: &quot;navigation&quot;) {
+                    div(class: &quot;sidebar-nav navbar-collapse&quot;) {
+                        ul(class: &quot;nav&quot;, id: &quot;side-menu&quot;) {
+                            li {
+                                a href: &quot;/user/list&quot;, &quot;Users&quot;
+                            }
+                        }
+                    }
+                }
+            } // end nav
+
+            mainBody()
+        } // end wrapper
+
+        script src: &quot;/webjars/jquery/1.11.1/jquery.min.js&quot;, &quot;&quot;
+        script src: &quot;/webjars/bootstrap/3.3.6/js/bootstrap.min.js&quot;, &quot;&quot;
+        script src: &quot;/webjars/metisMenu/1.1.3-1/metisMenu.min.js&quot;, &quot;&quot;
+        script src: &quot;/webjars/startbootstrap-sb-admin-2/1.0.8-1/js/sb-admin-2.js&quot;, &quot;&quot;
+    } // end body
+}
+</code></pre><h3>View: edit.tpl</h3>
+<pre><code>layout &quot;layouts/main.tpl&quot;,
+pageTitle: &quot;Paluwagan :: Manage User&quot;,
+mainBody: contents {
+    div(id: &quot;page-wrapper&quot;, style: &quot;min-height: 450px&quot;) {
+        div(class: &quot;row&quot;) {
+            div(class: &quot;col-lg-12&quot;) {
+                h3 class: &quot;page-header&quot;, &quot;Manage User&quot;
+                form(id: &quot;editForm&quot;, action: &quot;/user/save&quot;, method: &quot;post&quot;, class: &quot;form-horizontal&quot;) {
+                    input name: &quot;id&quot;, type: &quot;hidden&quot;, value: user.id ?: &quot;&quot;
+                    div(class: &quot;form-group&quot;) {
+                        label for: &quot;username&quot;, &quot;Username&quot;, class: &quot;col-sm-2 control-label&quot;
+                        div(class: &quot;col-sm-3&quot;) {
+                            input name: &quot;username&quot;, type: &quot;text&quot;, value: user.username ?: &quot;&quot;
+                        }
+                    }
+                    div(class: &quot;form-group&quot;) {
+                        label for: &quot;password&quot;, &quot;Password&quot;, class: &quot;col-sm-2 control-label&quot;
+                        div(class: &quot;col-sm-3&quot;) {
+                            input name: &quot;password&quot;, type: &quot;password&quot;, value: user.password ?: &quot;&quot;
+                        }
+                    }
+                    div(class: &quot;form-group&quot;) {
+                        div(class: &quot;col-sm-offset-2 col-sm-3&quot;) {
+                            button type: &quot;submit&quot;, class: &quot;btn btn-default&quot;, &quot;Submit&quot;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre><h3>View: list.tpl</h3>
+<pre><code>layout &#39;layouts/main.tpl&#39;,
+pageTitle: &#39;Paluwagan :: Users&#39;,
+mainBody: contents {
+    div(id: &quot;page-wrapper&quot;, style: &quot;min-height: 450px&quot;) {
+        div(class: &quot;row&quot;) {
+            div(class: &quot;col-lg-12&quot;) {
+                h3 class: &quot;page-header&quot;, &quot;List of Users&quot;
+                table(class: &quot;table table-striped&quot;) {
+                    thead {
+                        tr {
+                            th &quot;Username&quot;
+                            th &quot;Password&quot;
+                            th &quot;Manage&quot;
+                        }
+                    }
+                    tbody {
+                        users.each { user -&gt;
+                            tr {
+                                td &quot;$user.username&quot;
+                                td &quot;$user.password&quot;
+                                td {
+                                    a(href: &quot;$user.id&quot;) {
+                                        i class: &quot;fa fa-pencil&quot;, &quot; Edit &quot;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                div {
+                    a(href: &quot;/user/add&quot;) {
+                        i class: &quot;fa fa-plus&quot;, &quot; Add user &quot;
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre><h3>Testing using Spock</h3><p>On my next post I will detail how I wrote the unit and integration tests for my repository, service and controller Groovy classes.</p></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2015/making-java-groovy.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2015/making-java-groovy.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

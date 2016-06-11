@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Fri, 10 Jun 2016 08:31:24 +0100</pubDate>
-    <lastBuildDate>Fri, 10 Jun 2016 08:31:24 +0100</lastBuildDate>
+    <pubDate>Sat, 11 Jun 2016 13:07:50 +0100</pubDate>
+    <lastBuildDate>Sat, 11 Jun 2016 13:07:50 +0100</lastBuildDate>
 
       <item>
         <title>Pimping CentOS 7</title>
@@ -93,12 +93,12 @@ done
         <pubDate>Sat, 21 May 2016 00:00:00 +0100</pubDate>
         <guid isPermaLink="false">blog/2016/java8-on-centos7.html</guid>
         <description>
-  	         &lt;p&gt;We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise &lt;code&gt;nix&lt;/code&gt; experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I&apos;ll probably get one of those Linux Developer Suite.&lt;/p&gt;&lt;p&gt;As an exercise, I&apos;m installing Java 1.8 and hopefully install more &lt;code&gt;dockers&lt;/code&gt; to my CentOS in the near future. A quick Google took me to &lt;a href=&quot;http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/&quot;&gt;techadmin&apos;s blog&lt;/a&gt;.&lt;/p&gt;
-&lt;!-- more --&gt;&lt;h3&gt;Downloading java 1.8&lt;/h3&gt;
+  	         &lt;p&gt;We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise &lt;code&gt;nix&lt;/code&gt; experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I&apos;ll probably get one of those Linux Developer Suite.&lt;/p&gt;&lt;p&gt;As an exercise, I&apos;m installing Java 1.8 and hopefully install more &lt;code&gt;dockers&lt;/code&gt; to my CentOS in the near future. A quick Google took me to &lt;a href=&quot;http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/&quot;&gt;techadmin&apos;s blog&lt;/a&gt;.&lt;/p&gt;&lt;h3&gt;Downloading java 1.8&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;$ cd /opt/
 $ wget --no-cookies --no-check-certificate --header &amp;quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&amp;quot; &amp;quot;http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz&amp;quot;
 $ tar xzf jdk-8u91-linux-x64.tar.gz
-&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Install using alternatives&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Install using alternatives&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;$ cd /opt/jdk1.8.0_91/
 $ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
 $ alternatives --config java
@@ -418,6 +418,520 @@ Total time: 14.107 secs
   	    </description>
       </item>
       <item>
+        <title>Groovy Testing</title>
+        <link>https://drmanalo.github.io/blog/2016/groovy-testing.html</link>
+        <pubDate>Wed, 16 Mar 2016 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2016/groovy-testing.html</guid>
+        <description>
+  	         &lt;p&gt;My previous post is all about writing a simple Groovy CRUD application. It includes writing your views in Groovy as well though it doesn&apos;t involve where to put the files. But if you&apos;re a seasoned Java developer, you should know your way out.&lt;/p&gt;&lt;p&gt;What it lacks is how to test your Groovy classes which I&apos;m about to document on this post.&lt;/p&gt;&lt;h3&gt;FakeLoader&lt;/h3&gt;&lt;p&gt;This is a workaround assuming your Spring Boot application bootstraps more &lt;code&gt;@Configuration&lt;/code&gt; and you don&apos;t want to include them in your integration tests.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import org.junit.Test
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.test.context.ActiveProfiles
+
+/**
+ * For integration tests
+ */
+@ActiveProfiles(&amp;quot;dev&amp;quot;)
+@SpringBootApplication
+class FakeLoader {
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Repository integration test&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.manalo.repository
+
+import com.manalo.FakeLoader
+import com.manalo.config.HttpSessionConfig
+import com.manalo.domain.User
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.SpringApplicationConfiguration
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.web.WebAppConfiguration
+import spock.lang.Specification
+
+@ActiveProfiles(&amp;quot;dev&amp;quot;)
+@SpringApplicationConfiguration(classes = FakeLoader)
+@WebAppConfiguration
+class UserRepositorySpec extends Specification{
+
+    @Autowired
+    UserRepository userRepository
+
+    User user
+
+    def setup() {
+        user = new User(id: 1, username: &amp;quot;admin&amp;quot;, password: &amp;quot;secret&amp;quot;)
+    }
+
+    def &amp;quot;Should save user&amp;quot;() {
+
+        when: &amp;quot;save is invoked&amp;quot;
+        userRepository.save(user)
+
+        then: &amp;quot;user saved and searchable&amp;quot;
+        User actual = userRepository.findOne(1)
+        actual.getId() == 1
+        actual.getUsername() == &amp;quot;admin&amp;quot;
+        actual.getPassword() == &amp;quot;secret&amp;quot;
+    }
+
+    def &amp;quot;Should edit user&amp;quot;() {
+
+        String username = &amp;quot;updated user&amp;quot;
+        String password = &amp;quot;updated password&amp;quot;
+
+        when: &amp;quot;update is invoked&amp;quot;
+        user.setUsername(username)
+        user.setPassword(password)
+        userRepository.save(user)
+
+        then: &amp;quot;user updated and searchable&amp;quot;
+        User actual = userRepository.findOne(1)
+        actual.getId() == 1
+        actual.getUsername() == username
+        actual.getPassword() == password
+    }
+
+    def &amp;quot;Should delete user&amp;quot;() {
+
+        when: &amp;quot;user is invoked&amp;quot;
+        userRepository.delete(user)
+
+        then: &amp;quot;user deleted and not searchable&amp;quot;
+        User actual = userRepository.findOne(1)
+        assert actual == null
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Service layer test&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.manalo.controller
+
+import com.manalo.domain.User
+import com.manalo.repository.UserRepository
+import com.manalo.service.UserService
+import spock.lang.Specification
+
+class UserServiceSpec extends Specification {
+
+    UserService userService
+    UserRepository userRepository = Mock(UserRepository)
+
+    final Integer userId = 1
+
+    def setup() {
+        userService = new UserService(userRepository: userRepository)
+    }
+
+    def &amp;quot;Should find all users&amp;quot;() {
+
+        when: &amp;quot;the users are retrieved&amp;quot;
+        userService.list()
+
+        then: &amp;quot;a list of users is returned&amp;quot;
+        1 * userRepository.findAll()
+    }
+
+    def &amp;quot;Should find by id&amp;quot;() {
+
+        when: &amp;quot;looking for user.id $userId&amp;quot;
+        userService.findById(userId)
+
+        then: &amp;quot;user.id $userId is found&amp;quot;
+        1 * userRepository.findOne(userId)
+    }
+
+    def &amp;quot;Should save a user&amp;quot;() {
+
+        given: &amp;quot;a new user&amp;quot;
+        User user = new User()
+
+        when: &amp;quot;save is invoked&amp;quot;
+        userService.save(user)
+
+        then: &amp;quot;user is saved&amp;quot;
+        1 * userRepository.save(user)
+    }
+
+    def &amp;quot;Should update existing user&amp;quot;() {
+
+        given: &amp;quot;an existing user&amp;quot;
+        User user = new User()
+        user.id = userId
+        userRepository.findOne(userId) &amp;gt;&amp;gt; user
+
+        when: &amp;quot;save is invoked&amp;quot;
+        userService.save(user)
+
+        then: &amp;quot;user is saved&amp;quot;
+        1 * userRepository.save(user)
+    }
+
+    def &amp;quot;Should delete existing user&amp;quot;() {
+
+        given: &amp;quot;an existing user&amp;quot;
+        User user = new User()
+        user.id = userId
+        userRepository.findOne(userId) &amp;gt;&amp;gt; user
+
+        when: &amp;quot;delete is invoked&amp;quot;
+        userService.delete(user)
+
+        then: &amp;quot;user is deleted&amp;quot;
+        1 * userRepository.delete(user)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Controller test&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.manalo.controller
+
+import com.manalo.domain.User
+import com.manalo.service.UserService
+import org.springframework.test.web.servlet.MockMvc
+import spock.lang.Specification
+
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+
+class UserControllerSpec extends Specification {
+
+    MockMvc mockMvc
+    UserService userService = Mock(UserService)
+
+    def setup() {
+        def controller = new UserController(userService: userService)
+        mockMvc = standaloneSetup(controller).build()
+    }
+
+    def &amp;quot;should return list of users&amp;quot;() {
+
+        given:
+        final String userList = &amp;quot;/user/list&amp;quot;
+
+        when:
+        &amp;quot;requesting $userList&amp;quot;
+        def response = mockMvc.perform(get(userList))
+
+        then: &amp;quot;receive 200&amp;quot;
+        response.andExpect(status().isOk())
+        1 * userService.list()
+    }
+
+    def &amp;quot;should load screen for adding new user&amp;quot;() {
+
+        given:
+        final String userAdd = &amp;quot;/user/add&amp;quot;
+
+        when:
+        &amp;quot;requesting $userAdd&amp;quot;
+        def response = mockMvc.perform((get(userAdd)))
+
+        then: &amp;quot;receive 200&amp;quot;
+        response.andExpect(status().isOk())
+                .andExpect(view().name(&amp;quot;views/user/edit&amp;quot;))
+    }
+
+    def &amp;quot;should load screen for editing user&amp;quot;() {
+
+        given:
+        final String userEdit = &amp;quot;/user/1&amp;quot;
+
+        when:
+        &amp;quot;requesting $userEdit&amp;quot;
+        def response = mockMvc.perform((get(userEdit)))
+
+        then: &amp;quot;receive 200&amp;quot;
+        response.andExpect(status().isOk())
+                .andExpect(view().name(&amp;quot;views/user/edit&amp;quot;))
+        1 * userService.findById(1)
+    }
+
+    def &amp;quot;should redirect after save&amp;quot;() {
+
+        given:
+        final String userSave = &amp;quot;/user/save&amp;quot;
+
+        when:
+        &amp;quot;requesting $userSave&amp;quot;
+        def response = mockMvc.perform((post(userSave)))
+
+        then: &amp;quot;receive 302&amp;quot;
+        response.andExpect(status().is3xxRedirection())
+                .andExpect(view().name(&amp;quot;redirect:/user/list&amp;quot;))
+    }
+
+    def &amp;quot;should delete existing user&amp;quot;() {
+
+        given:
+        final String userDelete = &amp;quot;/user/delete&amp;quot;
+
+        when:
+        &amp;quot;requesting $userDelete&amp;quot;
+        def response = mockMvc.perform(post(userDelete))
+
+        then: &amp;quot;receive 302&amp;quot;
+        response.andExpect(status().is3xxRedirection())
+                .andExpect(view().name(&amp;quot;redirect:/user/list&amp;quot;))
+    }
+
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Bug Tracker YouTrack</title>
+        <link>https://drmanalo.github.io/blog/2016/bug-tracker-youtrack.html</link>
+        <pubDate>Sat, 20 Feb 2016 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2016/bug-tracker-youtrack.html</guid>
+        <description>
+  	         &lt;p&gt;I&apos;ve been using Redmine as help desk and bug tracker since it has all the features/plugins you could ask for for a help desk or a bug tracker. But tracking bugs and issues has changed lately. When fixing bugs, you need to put in your estimate so you will have a pretty good idea how much effort you are putting into it. This is probably one of the reasons why &lt;a href=&quot;http://www.redminecrm.com&quot;&gt;RedmineCRM&lt;/a&gt; premium plugins exists. The lack of planning tools in RedmineCRM pushed me further to use &lt;a href=&quot;http://www.acunote.com&quot;&gt;Acunote&lt;/a&gt;. This is hosted online and free for a team of 5 users but 5 is very&lt;br/&gt;limiting. Acunote also lacks the tooling support you will get from Jira, FogBugz and the likes.&lt;/p&gt;&lt;p&gt;Since I don&apos;t need enterprise solution at the moment so I&apos;ll give YouTrack a try. It&apos;s free for the first 10 users so I actually doubled what Acunote is offering for free. As with Jira, FogBugz or Acunote, it has hosted solution too.&lt;/p&gt;&lt;h3&gt;Downloading YouTrack&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ wget https://download.jetbrains.com/charisma/youtrack-6.0.12634.jar
+HTTP request sent, awaiting response... 200 OK
+Length: 111007822 (106M) [binary/octet-stream]
+Saving to: ‘youtrack-6.0.12634.jar’
+100%[======================================&amp;gt;] 111,007,822 4.93MB/s   in 26s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Running YouTrack&lt;/h3&gt;&lt;p&gt;You can run youtrack by executing this&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ java -Xmx1g -XX:MaxPermSize=250m -Djava.awt.headless=true -jar youtrack-6.0.12634.jar localhost:8112/youtrack
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This will automatically open your browser to &lt;a href=&quot;http://localhost:8112/youtrack&quot;&gt;http://localhost:8112/youtrack&lt;/a&gt;. After adding the root account, you can start creating your first project.&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/images/youtrack.png&quot; alt=&quot;YouTrack agile board&quot;&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; These scripts are optional.&lt;/p&gt;&lt;h3&gt;/etc/init.d/youtrack&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          youtrack
+# Required-Start:    $local_fs $remote_fs
+# Required-Stop:     $local_fs $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: initscript for youtrack
+# Description:       initscript for youtrack
+### END INIT INFO
+
+export HOME=/home/drmanalo
+
+set -e
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME=youtrack
+OWNER=drmanalo
+SCRIPT=/opt/$NAME/$NAME.sh
+
+d_start() {
+    su $OWNER -l -c &amp;quot;$SCRIPT start&amp;quot;
+}
+
+d_stop() {
+    su $OWNER -l -c &amp;quot;$SCRIPT stop&amp;quot;
+}
+
+case &amp;quot;$1&amp;quot; in
+  start)
+    echo &amp;quot;Starting $NAME...&amp;quot;
+    d_start
+    ;;
+    stop)
+    echo &amp;quot;Stopping $NAME...&amp;quot;
+    d_stop
+    ;;
+  restart|force-reload)
+    echo &amp;quot;Restarting $NAME...&amp;quot;
+    d_stop
+    d_start
+    ;;
+  *)
+    echo &amp;quot;Usage: sudo /etc/init.d/youtrack {start|stop|restart}&amp;quot; &amp;gt;&amp;amp;2
+    exit 1
+    ;;
+esac
+
+exit 0
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;/opt/youtrack/youtrack.sh&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;#! /bin/sh
+
+export HOME=/home/drmanalo
+export JAVA_HOME=/opt/jdk/jdk1.8.0_05
+
+NAME=youtrack
+PORT=8112
+INSTALL_FOLDER=/opt/$NAME
+JAR=$INSTALL_FOLDER/`ls -Lt $INSTALL_FOLDER/*.jar | grep -o &amp;quot;$NAME-[^/]*.jar&amp;quot; | head -1`
+LOG=$INSTALL_FOLDER/$NAME-$PORT.log
+PID=$INSTALL_FOLDER/$NAME-$PORT.pid
+
+d_start() {
+    if [ -f $PID ]; then
+        PID_VALUE=`cat $PID`
+        if [ ! -z &amp;quot;$PID_VALUE&amp;quot; ]; then
+            PID_VALUE=`ps ax | grep $PID_VALUE | grep -v grep | awk &amp;#39;{print $1}&amp;#39;`
+            if [ ! -z &amp;quot;$PID_VALUE&amp;quot; ]; then
+                exit 1;
+            fi
+        fi
+    fi
+
+    PREV_DIR=`pwd`
+    cd $INSTALL_FOLDER
+    exec $JAVA_HOME/bin/java -Xmx1g -jar $JAR $PORT &amp;gt;&amp;gt; $LOG 2&amp;gt;&amp;amp;1 &amp;amp;
+    echo $! &amp;gt; $PID
+    cd $PREV_DIR
+}
+
+d_stop() {
+    if [ -f $PID ]; then
+        PID_VALUE=`cat $PID`
+        if [ ! -z &amp;quot;$PID_VALUE&amp;quot; ]; then
+            PID_VALUE=`ps ax | grep $PID_VALUE | grep -v grep | awk &amp;#39;{print $1}&amp;#39;`
+            if [ ! -z &amp;quot;$PID_VALUE&amp;quot; ]; then
+                kill $PID_VALUE
+                WAIT_TIME=0
+                while [ `ps ax | grep $PID_VALUE | grep -v grep | wc -l` -ne 0 -a &amp;quot;$WAIT_TIME&amp;quot; -lt 2 ]
+                do
+                    sleep 1
+                    WAIT_TIME=$(expr $WAIT_TIME + 1)
+                done
+                if [ `ps ax | grep $PID_VALUE | grep -v grep | wc -l` -ne 0 ]; then
+                    WAIT_TIME=0
+                    while [ `ps ax | grep $PID_VALUE | grep -v grep | wc -l` -ne 0 -a &amp;quot;$WAIT_TIME&amp;quot; -lt 15 ]
+                    do
+                        sleep 1
+                        WAIT_TIME=$(expr $WAIT_TIME + 1)
+                    done
+                    echo
+                fi
+                if [ `ps ax | grep $PID_VALUE | grep -v grep | wc -l` -ne 0 ]; then
+                    kill -9 $PID_VALUE
+                fi
+           fi
+        fi
+        rm -f $PID
+    fi
+}
+
+case &amp;quot;$1&amp;quot; in
+    start)
+        d_start
+    ;;
+    stop)
+        d_stop
+    ;;
+    *)
+        echo &amp;quot;Usage: $0 {start|stop|restart}&amp;quot; &amp;gt;&amp;amp;2
+        exit 1
+    ;;
+esac
+
+exit 0
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;YouTrack as service&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo update-rc.d youtrack defaults
+Adding system startup for /etc/init.d/youtrack ...
+   /etc/rc0.d/K20youtrack -&amp;gt; ../init.d/youtrack
+   /etc/rc1.d/K20youtrack -&amp;gt; ../init.d/youtrack
+   /etc/rc6.d/K20youtrack -&amp;gt; ../init.d/youtrack
+   /etc/rc2.d/S20youtrack -&amp;gt; ../init.d/youtrack
+   /etc/rc3.d/S20youtrack -&amp;gt; ../init.d/youtrack
+   /etc/rc4.d/S20youtrack -&amp;gt; ../init.d/youtrack
+   /etc/rc5.d/S20youtrack -&amp;gt; ../init.d/youtrack
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>TeamCity With Postgres</title>
+        <link>https://drmanalo.github.io/blog/2016/teamcity-posgres.html</link>
+        <pubDate>Tue, 26 Jan 2016 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2016/teamcity-posgres.html</guid>
+        <description>
+  	         &lt;p&gt;Recently, I&apos;ve been looking for a Jenkins alternative and the closest I found is TeamCity. It&apos;s not free as in free speech compared to Jenkins but the twenty build configs and three build agents is more than enough for my small projects.&lt;/p&gt;&lt;p&gt;TeamCity promised to work out-of-the-box just like Jenkins does so I&apos;ll give it a go. It&apos;s using Tomcat by default so I&apos;m expecting a flat learning curve here.&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/images/teamcity_login.png&quot; alt=&quot;TeamCity login screen&quot;&quot;/&gt;&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Download TeamCity&lt;/h3&gt;&lt;p&gt;Download TeamCity from &lt;a href=&quot;https://www.jetbrains.com/teamcity/download&quot;&gt;https://www.jetbrains.com/teamcity/download&lt;/a&gt; and extract it to your chosen destination. I extracted mine in &lt;code&gt;/opt&lt;/code&gt; folder.&lt;/p&gt;&lt;h3&gt;Run TeamCity&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ ./bin/runAll.sh start
+Using CATALINA_BASE:   /opt/TeamCity
+Using CATALINA_HOME:   /opt/TeamCity
+Using CATALINA_TMPDIR: /opt/TeamCity/temp
+Using JRE_HOME:        /opt/jdk/jdk1.8.0_05
+Using CLASSPATH:       /opt/TeamCity/bin/bootstrap.jar:/opt/TeamCity/bin/tomcat-juli.jar
+Using CATALINA_PID:    ../logs/teamcity.pid
+Tomcat started.
+Starting TeamCity build agent...
+Java executable is found in &amp;#39;/opt/jdk/jdk1.8.0_05&amp;#39;.
+Starting TeamCity Build Agent Launcher...
+Agent home directory is /opt/TeamCity/buildAgent
+Current Java runtime version is 1.8
+Lock file: /opt/TeamCity/buildAgent/logs/buildAgent.properties.lock
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Check the application&lt;/h3&gt;&lt;p&gt;Just browse &lt;a href=&quot;http://localhost:8111&quot;&gt;http://localhost:8111&lt;/a&gt;. To change the server port, in the &lt;code&gt;&amp;lt;TeamCity Home&amp;gt;/conf/server.xml&lt;/code&gt; file, change the port number in the HTTP/1.1 connector&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;Connector port=&amp;quot;8111&amp;quot; protocol=&amp;quot;HTTP/1.1&amp;quot;
+    connectionTimeout=&amp;quot;20000&amp;quot;
+    redirectPort=&amp;quot;8443&amp;quot;
+    enableLookup=&amp;quot;false&amp;quot;
+    useBodyEncodingForURI=&amp;quot;true&amp;quot;
+/&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Download JDBC driver&lt;/h3&gt;&lt;p&gt;In one of the setup screens, you have to choose your database backend. I&apos;m using Postgres so I have to download the JDBC driver and put it on this directory. &lt;code&gt;.BuildServer&lt;/code&gt; is the default install folder TeamCity has created in your home folder.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;~/.BuildServer$ tree lib
+lib
+└── jdbc
+    └── postgresql-9.3-1103.jdbc41.jar
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Create the database backend&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo -u postgres psql postgres
+psql (9.3.9)
+Type &amp;quot;help&amp;quot; for help.
+
+postgres=# create user teamcity with createdb encrypted password &amp;#39;TeamCity&amp;#39;;
+postgres=# create database teamcity with owner teamcity;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Fiddle the application&lt;/h3&gt;&lt;p&gt;After an hour of fiddling, I have a successful build. The real challenge is deploying the artifacts. But I&apos;m sure my friend Google has answer.&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/images/teamcity.png&quot; alt=&quot;TeamCity project screen&quot;&quot;/&gt;&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Fixing Unable to Mount NTFS Drive</title>
+        <link>https://drmanalo.github.io/blog/2016/unable-to-mount-ntfs-drive.html</link>
+        <pubDate>Mon, 18 Jan 2016 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2016/unable-to-mount-ntfs-drive.html</guid>
+        <description>
+  	         &lt;p&gt;I was trying to mount a GPT NTFS drive and get &lt;strong&gt;Error mounting /dev/sdb1 at /media/drmanalo/DATA: Command-line mount -t &quot;ntfs&quot; -o&lt;/strong&gt;&lt;/p&gt;&lt;h3&gt;Culprit&lt;/h3&gt;&lt;p&gt;Windows 8 is using hibernation mode which writes RAM contents to the hard drive before powering off to be able to restore to the same state as it was before shutdown.&lt;/p&gt;&lt;h3&gt;Workaround&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo ntfsfix /dev/sdb1
+Mounting volume... The disk contains an unclean file system (0, 0).
+Metadata kept in Windows cache, refused to mount.
+FAILED
+Attempting to correct errors...
+Processing $MFT and $MFTMirr...
+Reading $MFT... OK
+Reading $MFTMirr... OK
+Comparing $MFTMirr to $MFT... OK
+Processing of $MFT and $MFTMirr completed successfully.
+Setting required flags on partition... OK
+Going to empty the journal ($LogFile)... OK
+Checking the alternate boot sector... OK
+NTFS volume version is 3.1.
+NTFS partition /dev/sdb1 was processed successfully.
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Personal Package Archive</title>
+        <link>https://drmanalo.github.io/blog/2015/personal-package-archive.html</link>
+        <pubDate>Mon, 28 Dec 2015 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2015/personal-package-archive.html</guid>
+        <description>
+  	         &lt;p&gt;&lt;strong&gt;Personal Package Archive&lt;/strong&gt; is a collection of software not included in Ubuntu repositories by default. Typically these repositories focus on a single program, but they can include more depending on the person maintaining them. With PPAs, Ubuntu users can have access to bleeding-edge software without waiting for the next official release if ever the PPA made it to the official repository.&lt;/p&gt;&lt;p&gt;Here are my top PPAs...&lt;/p&gt;&lt;h3&gt;Kodi&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo add-apt-repository ppa:team-xbmc/ppa
+$ sudo apt-get update
+$ sudo apt-get install kodi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Ruby&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo apt-add-repository ppa:brightbox/ruby-ng
+$ sudo apt-get update
+$ sudo apt-get install ruby2.2
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;PHP&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo add-apt-repository ppa:ondrej/php5
+$ sudo apt-get update
+$ sudo apt-get install php5 php5-mysql
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Ubuntu numix&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo add-apt-repository ppa:numix/ppa
+$ sudo apt-get update
+$ sudo apt-get install numix-gtk-theme numix-icon-theme-circle
+$ sudo apt-get install apt-get install numix-wallpaper-*
+
+$ sudo apt-add-repository ppa:mpstark/elementary-tweaks-daily
+$ sudo apt-get update
+$ sudo apt-get install elementary-tweaks
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
         <title>Poorman&apos;s Mac</title>
         <link>https://drmanalo.github.io/blog/2015/poormans.mac.html</link>
         <pubDate>Sun, 27 Dec 2015 00:00:00 +0000</pubDate>
@@ -481,6 +995,775 @@ alias agr=&amp;#39;sudo apt-get upgrade&amp;#39;
 alias x=&amp;#39;exit&amp;#39;
 alias c=&amp;#39;clear&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Screenshots&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/images/elementary1.png&quot; alt=&quot;Elementary OS screenshot1&quot;&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/images/elementary2.png&quot; alt=&quot;Elementary OS screenshot2&quot;&quot;/&gt;&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Making Java Groovy</title>
+        <link>https://drmanalo.github.io/blog/2015/making-java-groovy.html</link>
+        <pubDate>Mon, 21 Dec 2015 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2015/making-java-groovy.html</guid>
+        <description>
+  	         &lt;p&gt;There is a book of exactly the same title from &lt;a href=&quot;https://www.manning.com/books/making-java-groovy&quot;&gt;manning.com&lt;/a&gt;. I don&apos;t have it yet but father Christmas will put it underneath my tree this Christmas.&lt;/p&gt;&lt;p&gt;What I do have is Spring Boot in Action which covers mixing Java with Groovy. This is what this post is all about. I am going to create a Spring Boot project but will primarily use &lt;code&gt;groovy&lt;/code&gt;.&lt;/p&gt;&lt;h3&gt;Creating the project&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ mkdir paluwagan
+$ cd paluwagan
+$ mkdir static
+$ spring init --dependencies web,h2,data-jpa,jdbc,groovy-templates --build gradle --packaging jar --extract
+Using service at https://start.spring.io
+Project extracted to &amp;#39;/home/drmanalo/workspace/paluwagan&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;p&gt;By default, the package belongs to com.demo and the main application is called DemoApplication. A quick refactor will allow you to change to a more meaningful package or application class name.&lt;/p&gt;&lt;h3&gt;build.gradle&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;apply plugin: &amp;quot;groovy&amp;quot;
+apply plugin: &amp;quot;spring-boot&amp;quot;
+apply plugin: &amp;quot;application&amp;quot;
+apply plugin: &amp;quot;jar&amp;quot;
+
+sourceCompatibility = &amp;quot;1.6&amp;quot;
+targetCompatibility = &amp;quot;1.8&amp;quot;
+
+version = &amp;quot;${version}&amp;quot;
+group = &amp;quot;${group}&amp;quot;
+mainClassName = &amp;quot;com.manalo.PaluwaganApplication&amp;quot;
+
+buildscript {
+    ext {
+        springBootVersion = &amp;#39;1.3.0.RELEASE&amp;#39;
+    }    
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath(&amp;quot;org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}&amp;quot;)
+    }
+}
+
+war {
+    baseName = &amp;#39;paluwagan&amp;#39;
+    version =  &amp;#39;1.0.0&amp;#39;
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    runtime &amp;quot;com.h2database:h2&amp;quot;
+    compile &amp;quot;org.codehaus.groovy:groovy&amp;quot;
+    compile &amp;quot;org.codehaus.groovy:groovy-templates&amp;quot;
+    compile &amp;quot;org.webjars:startbootstrap-sb-admin-2:1.0.8-1&amp;quot;
+    compile &amp;quot;org.springframework.boot:spring-boot-starter-web&amp;quot;
+    compile &amp;quot;org.springframework.boot:spring-boot-starter-actuator&amp;quot;
+    compile &amp;quot;org.springframework.boot:spring-boot-starter-data-jpa&amp;quot;
+    compile &amp;quot;org.springframework.boot:spring-boot-starter-redis&amp;quot;
+    compile &amp;quot;org.springframework.boot:spring-boot-starter-tomcat&amp;quot;
+    compile &amp;quot;org.springframework.boot:spring-boot-starter-security&amp;quot;
+    compile &amp;quot;org.springframework.session:spring-session:1.0.2.RELEASE&amp;quot;
+    testCompile &amp;quot;org.springframework.boot:spring-boot-starter-test&amp;quot;
+    testCompile &amp;quot;org.spockframework:spock-core:1.0-groovy-2.4&amp;quot;
+    testCompile &amp;quot;org.spockframework:spock-spring:1.0-groovy-2.4&amp;quot;
+    testRuntime &amp;quot;cglib:cglib-nodep:3.2.0&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;application.properties&lt;/h3&gt;&lt;p&gt;I want to avoid the default port 8080 therefore I&apos;m changing it to a different port.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# general
+server.port=8000
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This stops Hibernate from generating my tables which is a very good feature but if you&apos;re planning to use Flyway or Liquibase in the future, it is best to set &lt;code&gt;ddl-auto&lt;/code&gt; to none. The standard Hibernate property values are &lt;code&gt;none&lt;/code&gt;, &lt;code&gt;validate&lt;/code&gt;, &lt;code&gt;update&lt;/code&gt;, &lt;code&gt;create&lt;/code&gt;, or &lt;code&gt;create-drop&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Java Persistence API
+spring.jpa.generate-ddl=false
+spring.jpa.hibernate.ddl-auto=none
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;application-dev.properties&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# logger
+logging.level.*=INFO
+logging.level.com.manalo.*=DEBUG
+
+# Hypersonic web console
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If you want more control to your schema and its data, you will need &lt;code&gt;schema.sql&lt;/code&gt; and &lt;code&gt;data.sql&lt;/code&gt;. By convention, you can have &lt;code&gt;schema-{platform}&lt;/code&gt; and &lt;code&gt;data-{platform}&lt;/code&gt; if you are using more than one relational database.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# datasource
+spring.datasource.initialize=true
+spring.datasource.platform=h2
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.password=password
+spring.datasource.username=testuser
+spring.datasource.url=jdbc:h2:mem:test;MODE=PostgreSQL;USER=${spring.datasource.username};PASSWORD=${spring.datasource.password};
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;schema-h2.sql&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;create table user (
+    id       identity,
+    username varchar(20)  not null,
+    password varchar(255) not null,
+    fullname varchar(100)
+);
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;data-h2.sql&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;insert into user (id, username, password, fullname) values (1, &amp;#39;admin&amp;#39;, &amp;#39;secret&amp;#39;, &amp;#39;James Bond&amp;#39;);
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;SpringBootApplication&lt;/h3&gt;&lt;p&gt;The default &lt;code&gt;DemoApplication&lt;/code&gt; is written in java where the equivalent groovy class is like this.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;package com.manalo
+
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+
+@SpringBootApplication
+class PaluwaganApplication {
+
+    static void main(String[] args) {
+        SpringApplication.run(PaluwaganApplication.class, args)
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Data Access Layer&lt;/h3&gt;&lt;p&gt;A very simple way of using what Spring Data offers.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;package com.manalo.repository
+
+import com.manalo.domain.User
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface UserRepository extends JpaRepository&amp;lt;User, Integer&amp;gt; {
+
+    User findByUsername(String username)
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Service Layer&lt;/h3&gt;&lt;p&gt;A simple &lt;code&gt;CRUD&lt;/code&gt; service&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;package com.manalo.service
+
+import com.manalo.domain.User
+import com.manalo.repository.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+
+import javax.persistence.criteria.CriteriaBuilder.In
+
+@Service
+class UserService {
+
+    @Autowired
+    private UserRepository userRepository
+
+    Collection&amp;lt;User&amp;gt; list() {
+        userRepository.findAll()
+    }
+
+    User findById(Integer id) {
+        userRepository.findOne(id)
+    }
+
+    User save(User user) {
+        if (user.id) { // update
+            def existing = this.findById(user.id)
+            existing.with {
+                username = user.username
+                password = user.password
+                userRepository.save(existing)
+            }
+        } else { // create
+            userRepository.save(user)
+        }
+    }
+
+    void delete(User user) {
+        def existing = this.findById(user.id)
+        if (existing != null) {
+            userRepository.delete(existing)
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Domain Object&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.manalo.domain
+
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+
+@Entity
+class User {
+
+    @Id
+    @GeneratedValue
+    Integer id
+
+    String username
+    String password
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Controller&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.manalo.controller
+
+import com.manalo.service.UserService
+import com.manalo.domain.User
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.servlet.ModelAndView
+import org.springframework.stereotype.Controller;
+
+@Controller
+@RequestMapping(&amp;quot;/user&amp;quot;)
+class UserController {
+
+    @Autowired
+    private UserService userService
+
+    @RequestMapping(&amp;quot;/list&amp;quot;)
+    ModelAndView list() {
+        return new ModelAndView(&amp;#39;views/user/list&amp;#39;, [users: userService.list()])
+    }
+
+    @RequestMapping(&amp;quot;/add&amp;quot;)
+    ModelAndView add() {
+        return new ModelAndView(&amp;quot;views/user/edit&amp;quot;, [user: new User()])
+    }
+
+    @RequestMapping(&amp;quot;{id}&amp;quot;)
+    ModelAndView view(@PathVariable(&amp;quot;id&amp;quot;) Integer id) {
+        return new ModelAndView(&amp;quot;views/user/edit&amp;quot;, [user: userService.findById(id)])
+    }
+
+    @RequestMapping(value = &amp;quot;save&amp;quot;, method = RequestMethod.POST)
+    ModelAndView save(User user) {
+        userService.save(user)
+        return new ModelAndView(&amp;quot;redirect:/user/list&amp;quot;)
+    }
+
+    @RequestMapping(value = &amp;quot;delete&amp;quot;, method = RequestMethod.POST)
+    ModelAndView delete(User user) {
+        userService.delete(user)
+        return new ModelAndView(&amp;quot;redirect:/user/list&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;View: Main Groovy Template&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;yieldUnescaped &amp;#39;&amp;lt;!DOCTYPE html&amp;gt;&amp;#39;
+html {
+    head {
+        title(pageTitle)
+        link rel: &amp;quot;stylesheet&amp;quot;, href: &amp;quot;/webjars/bootstrap/3.3.6/css/bootstrap.min.css&amp;quot;
+        link rel: &amp;quot;stylesheet&amp;quot;, href: &amp;quot;/webjars/font-awesome/4.5.0/css/font-awesome.min.css&amp;quot;
+        link rel: &amp;quot;stylesheet&amp;quot;, href: &amp;quot;/webjars/startbootstrap-sb-admin-2/1.0.8-1/css/sb-admin-2.css&amp;quot;
+        link rel: &amp;quot;stylesheet&amp;quot;, href: &amp;quot;/webjars/metisMenu/1.1.3-1/metisMenu.min.css&amp;quot;
+    }
+    body {
+        div(id: &amp;quot;wrapper&amp;quot;) {
+            nav(class: &amp;quot;navbar navbar-default navbar-static-top&amp;quot;, role: &amp;quot;navigation&amp;quot;, style: &amp;quot;margin-bottom: 0&amp;quot;) {
+                div(class: &amp;quot;nav-header&amp;quot;) {
+                    button(type: &amp;quot;button&amp;quot;, class: &amp;quot;navbar-toggle&amp;quot;, &amp;quot;data-toggle&amp;quot;: &amp;quot;collapse&amp;quot;, &amp;quot;data-target&amp;quot;: &amp;quot;.navbar-collapse&amp;quot;) {
+                        span class: &amp;quot;sr-only&amp;quot;, &amp;quot;Toggle navigation&amp;quot;
+                        span class: &amp;quot;icon-bar&amp;quot;, &amp;quot;&amp;quot;
+                        span class: &amp;quot;icon-bar&amp;quot;, &amp;quot;&amp;quot;
+                        span class: &amp;quot;icon-bar&amp;quot;, &amp;quot;&amp;quot;
+                    }
+                    a class: &amp;quot;navbar-brand&amp;quot;, href: &amp;quot;index.html&amp;quot;, &amp;quot;Paluwagan&amp;quot;
+                }
+                ul(class: &amp;quot;nav navbar-top-links navbar-right&amp;quot;) {
+                    li(class: &amp;quot;dropdown&amp;quot;) {
+                        a(class: &amp;quot;dropdown-toggle&amp;quot;, &amp;quot;data-toggle&amp;quot;: &amp;quot;dropdown&amp;quot;, href: &amp;quot;#&amp;quot;) {
+                            i class: &amp;quot;fa fa-user fa-fw&amp;quot;, &amp;quot;&amp;quot;
+                            i class: &amp;quot;fa fa-caret-down&amp;quot;, &amp;quot;&amp;quot;
+                        }
+                    }
+                }
+                div(class: &amp;quot;navbar-default sidebar&amp;quot;, role: &amp;quot;navigation&amp;quot;) {
+                    div(class: &amp;quot;sidebar-nav navbar-collapse&amp;quot;) {
+                        ul(class: &amp;quot;nav&amp;quot;, id: &amp;quot;side-menu&amp;quot;) {
+                            li {
+                                a href: &amp;quot;/user/list&amp;quot;, &amp;quot;Users&amp;quot;
+                            }
+                        }
+                    }
+                }
+            } // end nav
+
+            mainBody()
+        } // end wrapper
+
+        script src: &amp;quot;/webjars/jquery/1.11.1/jquery.min.js&amp;quot;, &amp;quot;&amp;quot;
+        script src: &amp;quot;/webjars/bootstrap/3.3.6/js/bootstrap.min.js&amp;quot;, &amp;quot;&amp;quot;
+        script src: &amp;quot;/webjars/metisMenu/1.1.3-1/metisMenu.min.js&amp;quot;, &amp;quot;&amp;quot;
+        script src: &amp;quot;/webjars/startbootstrap-sb-admin-2/1.0.8-1/js/sb-admin-2.js&amp;quot;, &amp;quot;&amp;quot;
+    } // end body
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;View: edit.tpl&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;layout &amp;quot;layouts/main.tpl&amp;quot;,
+pageTitle: &amp;quot;Paluwagan :: Manage User&amp;quot;,
+mainBody: contents {
+    div(id: &amp;quot;page-wrapper&amp;quot;, style: &amp;quot;min-height: 450px&amp;quot;) {
+        div(class: &amp;quot;row&amp;quot;) {
+            div(class: &amp;quot;col-lg-12&amp;quot;) {
+                h3 class: &amp;quot;page-header&amp;quot;, &amp;quot;Manage User&amp;quot;
+                form(id: &amp;quot;editForm&amp;quot;, action: &amp;quot;/user/save&amp;quot;, method: &amp;quot;post&amp;quot;, class: &amp;quot;form-horizontal&amp;quot;) {
+                    input name: &amp;quot;id&amp;quot;, type: &amp;quot;hidden&amp;quot;, value: user.id ?: &amp;quot;&amp;quot;
+                    div(class: &amp;quot;form-group&amp;quot;) {
+                        label for: &amp;quot;username&amp;quot;, &amp;quot;Username&amp;quot;, class: &amp;quot;col-sm-2 control-label&amp;quot;
+                        div(class: &amp;quot;col-sm-3&amp;quot;) {
+                            input name: &amp;quot;username&amp;quot;, type: &amp;quot;text&amp;quot;, value: user.username ?: &amp;quot;&amp;quot;
+                        }
+                    }
+                    div(class: &amp;quot;form-group&amp;quot;) {
+                        label for: &amp;quot;password&amp;quot;, &amp;quot;Password&amp;quot;, class: &amp;quot;col-sm-2 control-label&amp;quot;
+                        div(class: &amp;quot;col-sm-3&amp;quot;) {
+                            input name: &amp;quot;password&amp;quot;, type: &amp;quot;password&amp;quot;, value: user.password ?: &amp;quot;&amp;quot;
+                        }
+                    }
+                    div(class: &amp;quot;form-group&amp;quot;) {
+                        div(class: &amp;quot;col-sm-offset-2 col-sm-3&amp;quot;) {
+                            button type: &amp;quot;submit&amp;quot;, class: &amp;quot;btn btn-default&amp;quot;, &amp;quot;Submit&amp;quot;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;View: list.tpl&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;layout &amp;#39;layouts/main.tpl&amp;#39;,
+pageTitle: &amp;#39;Paluwagan :: Users&amp;#39;,
+mainBody: contents {
+    div(id: &amp;quot;page-wrapper&amp;quot;, style: &amp;quot;min-height: 450px&amp;quot;) {
+        div(class: &amp;quot;row&amp;quot;) {
+            div(class: &amp;quot;col-lg-12&amp;quot;) {
+                h3 class: &amp;quot;page-header&amp;quot;, &amp;quot;List of Users&amp;quot;
+                table(class: &amp;quot;table table-striped&amp;quot;) {
+                    thead {
+                        tr {
+                            th &amp;quot;Username&amp;quot;
+                            th &amp;quot;Password&amp;quot;
+                            th &amp;quot;Manage&amp;quot;
+                        }
+                    }
+                    tbody {
+                        users.each { user -&amp;gt;
+                            tr {
+                                td &amp;quot;$user.username&amp;quot;
+                                td &amp;quot;$user.password&amp;quot;
+                                td {
+                                    a(href: &amp;quot;$user.id&amp;quot;) {
+                                        i class: &amp;quot;fa fa-pencil&amp;quot;, &amp;quot; Edit &amp;quot;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                div {
+                    a(href: &amp;quot;/user/add&amp;quot;) {
+                        i class: &amp;quot;fa fa-plus&amp;quot;, &amp;quot; Add user &amp;quot;
+                    }
+                }
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Testing using Spock&lt;/h3&gt;&lt;p&gt;On my next post I will detail how I wrote the unit and integration tests for my repository, service and controller Groovy classes.&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>firewalld 101</title>
+        <link>https://drmanalo.github.io/blog/2015/firewalld-101.html</link>
+        <pubDate>Fri, 20 Nov 2015 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2015/firewalld-101.html</guid>
+        <description>
+  	         &lt;p&gt;&lt;strong&gt;firewalld&lt;/strong&gt; provides a dynamically managed firewall with support for network/firewall zones to define the trust level of network connections or interfaces. It has support for IPv4, IPv6 firewall settings and for ethernet bridges and has a separation of runtime and permanent configuration options. It also supports an interface for services or applications to add firewall rules directly.&lt;/p&gt;&lt;p&gt;The two important concepts of firewalld is &lt;strong&gt;zones&lt;/strong&gt; and &lt;strong&gt;services&lt;/strong&gt;.&lt;/p&gt;&lt;p&gt;A &lt;strong&gt;zone&lt;/strong&gt; defines the trust level of the interface used for a connection. There are several pre-defined zones provided by firewalld.zone.&lt;/p&gt;&lt;p&gt;A &lt;strong&gt;service&lt;/strong&gt; can be a list of local ports and destinations and additionally also a list of firewall helper modules automatically loaded if a service is enabled. Service configuration options and generic information about services are described in firewalld.service. The use of predefined services makes it easier for the user to enable and disable access to a service.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ firewall-cmd --get-zones
+block dmz drop external home internal public trusted work
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In order from least trusted to most trusted, the pre-defined zones within firewalld are:&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Zone &lt;/th&gt;
+      &lt;th&gt;Definition &lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;drop &lt;/td&gt;
+      &lt;td&gt;The lowest level of trust. All incoming connections are dropped without reply and only outgoing connections are possible &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;block &lt;/td&gt;
+      &lt;td&gt;Similar to the above, but instead of simply dropping connections, incoming requests are rejected with an icmp-host-prohibited or icmp6-adm-prohibited message &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;public &lt;/td&gt;
+      &lt;td&gt;Represents public, untrusted networks. You don&apos;t trust other computers but may allow selected incoming connections on a case-by-case basis &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;external &lt;/td&gt;
+      &lt;td&gt;External networks in the event that you are using the firewall as your gateway. It is configured for NAT masquerading so that your internal network remains private but reachable &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;internal &lt;/td&gt;
+      &lt;td&gt;The other side of the external zone, used for the internal portion of a gateway. The computers are fairly trustworthy and some additional services are available &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;dmz &lt;/td&gt;
+      &lt;td&gt;Used for computers located in a DMZ (isolated computers that will not have access to the rest of your network). Only certain incoming connections are allowed &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;work &lt;/td&gt;
+      &lt;td&gt;work: Used for work machines. Trust most of the computers in the network. A few more services might be allowed &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;home &lt;/td&gt;
+      &lt;td&gt;A home environment. It generally implies that you trust most of the other computers and that a few more services will be accepted &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;trusted &lt;/td&gt;
+      &lt;td&gt;Trust all of the machines in the network. The most open of the available options and should be used sparingly &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;&lt;h3&gt;Changing the zone of your interface permanently&lt;/h3&gt;&lt;p&gt;Interfaces will always revert to the default zone if they do not have an alternative zone defined within their configuration. On CentOS, these configurations are defined within the &lt;code&gt;/etc/sysconfig/network-scripts&lt;/code&gt; directory with files of the format ifcfg-interface.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ firewall-cmd --list-all
+public (default, active)
+  interfaces: enp0s3
+  sources:
+  services: dhcpv6-client ssh
+  ports:
+  masquerade: no
+  forward-ports:
+  icmp-blocks:
+  rich rules:
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You will see from the output that I have a public zone applied to &lt;strong&gt;enp0s3&lt;/strong&gt;. I will then open &lt;strong&gt;/etc/sysconfig/network-scripts/ifcfg-enp0s3&lt;/strong&gt; to add zone at the bottom.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;TYPE=&amp;quot;Ethernet&amp;quot;
+BOOTPROTO=&amp;quot;dhcp&amp;quot;
+DEFROUTE=&amp;quot;yes&amp;quot;
+PEERDNS=&amp;quot;yes&amp;quot;
+PEERROUTES=&amp;quot;yes&amp;quot;
+IPV4_FAILURE_FATAL=&amp;quot;no&amp;quot;
+IPV6INIT=&amp;quot;yes&amp;quot;
+IPV6_AUTOCONF=&amp;quot;yes&amp;quot;
+IPV6_DEFROUTE=&amp;quot;yes&amp;quot;
+IPV6_PEERDNS=&amp;quot;yes&amp;quot;
+IPV6_PEERROUTES=&amp;quot;yes&amp;quot;
+IPV6_FAILURE_FATAL=&amp;quot;no&amp;quot;
+NAME=&amp;quot;enp0s3&amp;quot;
+UUID=&amp;quot;d51651b7-8f3a-4ee0-bee4-3b58f9e356b7&amp;quot;
+DEVICE=&amp;quot;enp0s3&amp;quot;
+ONBOOT=&amp;quot;yes&amp;quot;
+ZONE=home
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To implement your changes, you&apos;ll have to restart the network service, followed by the firewall service:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo systemctl restart network.service
+$ sudo systemctl restart firewalld.service
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Adjusting the Default Zone&lt;/h3&gt;&lt;p&gt;You can change the default zone with the &lt;code&gt;--set-default-zone=&lt;/code&gt; parameter. This will immediately change any interface that had fallen back on the default to the new zone.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo firewall-cmd --set-default-zone=home
+success
+$ firewall-cmd --list-all
+home (default, active)
+  interfaces: enp0s3
+  sources:
+  services: dhcpv6-client ipp-client mdns samba-client ssh
+  ports:
+  masquerade: no
+  forward-ports:
+  icmp-blocks:
+  rich rules:
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Adding a Service to your Zones&lt;/h3&gt;&lt;p&gt;The easiest method is to add the services or ports you need to the zones you are using. Again, you can get a list of the available services with the --get-services option.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ firewall-cmd --get-services
+RH-Satellite-6 amanda-client bacula bacula-client dhcp dhcpv6 dhcpv6-client dns ftp high-availability
+http https imaps ipp ipp-client ipsec kerberos kpasswd ldap ldaps libvirt libvirt-tls mdns mountd
+ms-wbt mysql nfs ntp openvpn pmcd pmproxy pmwebapi pmwebapis pop3s postgresql proxy-dhcp radius
+rpc-bind samba samba-client smtp ssh telnet tftp tftp-client transmission-client vnc-server wbem-https
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You can enable a service for a zone using the &lt;strong&gt;--add-service=&lt;/strong&gt; parameter. The operation will target the default zone or whatever zone is specified by the &lt;strong&gt;--zone=&lt;/strong&gt; parameter. By default, this will only adjust the current firewall session. You can adjust the permanent firewall configuration by including the &lt;strong&gt;--permanent&lt;/strong&gt; flag.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo firewall-cmd --zone=home --add-service=http
+success
+$ firewall-cmd --zone=home --list-services
+dhcpv6-client http ipp-client mdns samba-client ssh
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Once you have tested that everything is working as it should, you will probably want to modify the permanent firewall rules so that your service will still be available after a reboot.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo firewall-cmd --zone=home --permanent --add-service=http
+success
+$ sudo firewall-cmd --zone=home --permanent --list-services
+dhcpv6-client http ipp-client mdns samba-client ssh
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Opening a Port for your Zones&lt;/h3&gt;&lt;p&gt;The easiest way to add support for your specific application is to open up the ports that it uses in the appropriate zone(s). This is as easy as specifying the port or port range, and the associated protocol for the ports you need to open.&lt;/p&gt;&lt;p&gt;For instance, if our application runs on port 4000 and uses TCP, we could add this to the &quot;home&quot; zone for this session using the &lt;strong&gt;--add-port=&lt;/strong&gt; parameter. Protocols can be either &lt;strong&gt;tcp&lt;/strong&gt; or &lt;strong&gt;udp&lt;/strong&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo firewall-cmd --zone=home --add-port=4000/tcp
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;After testing, you would likely want to add these to the permanent firewall.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo firewall-cmd --zone=home --permanent --add-port=4000/tcp
+success
+$ sudo firewall-cmd --zone=home --permanent --list-ports
+4000/tcp
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Defining a Service&lt;/h3&gt;&lt;p&gt;Opening ports for your zones is easy, but it can be difficult to keep track of what each one is for. If you ever decommission a service on your server, you may have a hard time remembering which ports that have been opened are still required. To avoid this situation, it is possible to define a service.&lt;/p&gt;&lt;p&gt;Services are simply collections of ports with an associated name and description. Using services is easier to administer than ports, but requires a bit of upfront work. The easiest way to start is to copy an existing script &lt;code&gt;/usr/lib/firewalld/services&lt;/code&gt; to the &lt;code&gt;/etc/firewalld/services&lt;/code&gt; directory&lt;br/&gt;where the firewall looks for non-standard definitions.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo cp /usr/lib/firewalld/services/http.xml /etc/firewalld/services/webrick.xml
+$ sudo vi /etc/firewalld/services/webrick.xml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;service&amp;gt;
+  &amp;lt;short&amp;gt;webrick&amp;lt;/short&amp;gt;
+  &amp;lt;description&amp;gt;Ruby&amp;#39;s default HTTP server.This is single threaded which means can only process single request at a time.&amp;lt;/description&amp;gt;
+  &amp;lt;port protocol=&amp;quot;tcp&amp;quot; port=&amp;quot;4000&amp;quot;/&amp;gt;
+&amp;lt;/service&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo firewall-cmd --reload
+success
+$ firewall-cmd --get-services
+RH-Satellite-6 amanda-client bacula bacula-client dhcp dhcpv6 dhcpv6-client dns ftp high-availability
+http https imaps ipp ipp-client ipsec kerberos kpasswd ldap ldaps libvirt libvirt-tls mdns mountd ms-wbt
+mysql nfs ntp openvpn pmcd pmproxy pmwebapi pmwebapis pop3s postgresql proxy-dhcp radius rpc-bind samba
+samba-client smtp ssh telnet tftp tftp-client transmission-client vnc-server wbem-https webrick
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Creating Your Own Zones&lt;/h3&gt;&lt;p&gt;While the predefined zones will probably be more than enough for most users, it can be helpful to define your own zones that are more descriptive of their function.&lt;/p&gt;&lt;p&gt;When adding a zone, you must add it to the permanent firewall configuration. You can then reload to bring the configuration into your running session. For instance, I could create a zone by typing&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo firewall-cmd --permanent --new-zone=
+success
+$ sudo firewall-cmd --permanent --get-zones
+block dmz drop external home internal public publicweb trusted work
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Spring Booted</title>
+        <link>https://drmanalo.github.io/blog/2015/spring-booted.html</link>
+        <pubDate>Thu, 22 Oct 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/spring-booted.html</guid>
+        <description>
+  	         &lt;blockquote&gt;&lt;p&gt;&lt;strong&gt;Spring Boot&lt;/strong&gt; is an exciting new way to develop Spring applications with minimal friction from the framework itself. Auto-configuration eliminates much of the boilerplate configuration that infests traditional Spring applications. Spring Boot starters enable you to specify build dependencies by what they offer rather than explicit library names and version. The Spring Boot CLI takes Spring Boot’s frictionless development model to a whole new level by enabling quick and easy development with Groovy from the command line. Finally, the Actuator lets you look inside your running application to see what and how Spring Boot has done.&lt;/p&gt;
+&lt;/blockquote&gt;&lt;p&gt;Above is an excerpt from &lt;strong&gt;Craig Walls&apos;&lt;/strong&gt; &lt;a href=&quot;https://www.manning.com/books/spring-boot-in-action&quot;&gt;Spring Boot in Action&lt;/a&gt; which perfectly describe my feelings with the traditional Spring configuration and how Spring Boot modernise it.&lt;/p&gt;&lt;p&gt;My favourite part of Spring Boot is its CLI so I&apos;ll try creating a new project using CLI.&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Installing Spring Boot CLI&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sdk install springboot
+
+Downloading: springboot 1.3.5.RELEASE
+
+Hang tight, this could take a while...
+
+
+Installing: springboot 1.3.5.RELEASE
+Done installing!
+
+Do you want springboot 1.3.5.RELEASE to be set as default? (Y/n):
+
+Setting springboot 1.3.5.RELEASE as default.
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Installing gradle&lt;/h3&gt;&lt;p&gt;This is optional. You will need &lt;code&gt;gradle&lt;/code&gt; if you don&apos;t want to use the default project type &lt;code&gt;maven&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sdk install gradle
+
+Downloading: gradle 2.13
+
+Hang tight, this could take a while...
+
+
+Installing: gradle 2.13
+Done installing!
+
+Do you want gradle 2.13 to be set as default? (Y/n):
+
+Setting gradle 2.13 as default.
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Spring shell&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ spring shell
+Spring Boot (v1.3.5.RELEASE)
+Hit TAB to complete. Type &amp;#39;help&amp;#39; and hit RETURN for help, and &amp;#39;exit&amp;#39; to quit.
+
+$ help
+usage:
+       &amp;lt;command&amp;gt; [&amp;lt;args&amp;gt;]
+
+Available commands are:
+
+  help command        
+    Get help on commands
+
+  version                
+    Show the version
+
+  run [options] &amp;lt;files&amp;gt; [--] [args]
+    Run a spring groovy script
+
+  test [options] &amp;lt;files&amp;gt; [--] [args]
+    Run a spring groovy script test
+
+  grab                
+    Download a spring groovy script&amp;#39;s dependencies to ./repository
+
+  jar [options] &amp;lt;jar-name&amp;gt; &amp;lt;files&amp;gt;
+    Create a self-contained executable jar file from a Spring Groovy script
+
+  war [options] &amp;lt;war-name&amp;gt; &amp;lt;files&amp;gt;
+    Create a self-contained executable war file from a Spring Groovy script
+
+  install [options] &amp;lt;coordinates&amp;gt;
+    Install dependencies to the lib directory
+
+  uninstall [options] &amp;lt;coordinates&amp;gt;
+    Uninstall dependencies from the lib directory
+
+  init [options] [location]
+    Initialize a new project using Spring Initializr (start.spring.io)
+
+  prompt                
+    Change the prompt used with the current &amp;#39;shell&amp;#39; command. Execute with no arguments to return to the previous value.
+
+  clear                
+    Clear the screen
+
+  exit                
+    Quit the embedded shell
+
+Common options:
+
+  -d, --debug Verbose mode   
+    Print additional status information for the command you are running
+
+
+See &amp;#39;help &amp;lt;command&amp;gt;&amp;#39; for more information on a specific command.
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;spring init at a glance&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ spring init -l
+
+  .   ____          _            __ _ _
+ /\\ / ___&amp;#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &amp;#39;_ | &amp;#39;_| | &amp;#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &amp;#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+:: Service capabilities ::  https://start.spring.io
+
+Supported dependencies
++-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+
+| Id                                | Description                                                                                                                                                            | Required version            |
++-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+
+| activiti-basic                    | Activiti BPMN workflow engine                                                                                                                                          |                             |
+| actuator                          | Production ready features to help you monitor and manage your application                                                                                              |                             |
+| actuator-docs                     | API documentation for the Actuator endpoints                                                                                                                           | &amp;gt;= 1.3.0.M4                 |
+| amqp                              | Advanced Message Queuing Protocol via spring-rabbit                                                                                                                    |                             |
+| aop                               | Aspect-oriented programming including spring-aop and AspectJ                                                                                                           |                             |
+| artemis                           | Java Message Service API via Apache Artemis                                                                                                                            | &amp;gt;= 1.3.0.M2                 |
+| batch                             | Spring Batch including HSQLDB database                                                                                                                                 |                             |
+| cache                             | Spring&amp;#39;s Cache abstraction                                                                                                                                             | &amp;gt;= 1.3.0.M1                 |
+| cloud-aws                         | AWS native services from spring-cloud-aws                                                                                                                              | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-aws-jdbc                    | Relational databases on AWS with RDS and spring-cloud-aws-jdbc                                                                                                         | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-aws-messaging               | Messaging on AWS with SQS and spring-cloud-aws-messaging                                                                                                               | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-bus-amqp                    | A simple control bus with AMQP and spring-cloud-bus-amqp                                                                                                               | [0.0.0.RELEASE,1.3.0.M5]    |
+| cloud-bus-kafka                   | A simple control bus with Kafka and spring-cloud-bus                                                                                                                   | (1.3.0.M5,9999.9.9.RELEASE] |
+| cloud-bus-rabbit                  | A simple control bus with Rabbit and spring-cloud-bus                                                                                                                  | (1.3.0.M5,9999.9.9.RELEASE] |
+| cloud-bus-redis                   | A simple control bus with Redis and spring-cloud-bus                                                                                                                   | (1.3.0.M5,9999.9.9.RELEASE] |
+| cloud-cloudfoundry-discovery      | Service discovery with Cloud Foundry                                                                                                                                   | &amp;gt;= 1.3.0.M4                 |
+| cloud-cluster-hazelcast           | Leadership election and global state with Hazelcast and spring-cloud-cluster-hazelcast                                                                                 | &amp;gt;= 1.3.0.M4                 |
+| cloud-cluster-redis               | Leadership election and global state with Redis and spring-cloud-cluster-redis                                                                                         | &amp;gt;= 1.3.0.M4                 |
+| cloud-cluster-zookeeper           | Leadership election and global state with Zookeeper and spring-cloud-cluster-zookeeper                                                                                 | &amp;gt;= 1.3.0.M4                 |
+| cloud-config-client               | spring-cloud-config Client                                                                                                                                             | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-config-server               | Central management for configuration via a git or svn backend                                                                                                          | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-connectors                  | Simplifies connecting to services in cloud platforms, including spring-cloud-connector and spring-cloud-cloudfoundry-connector                                         | &amp;gt;= 1.2.0.RELEASE            |
+| cloud-eureka                      | Service discovery using spring-cloud-netflix and Eureka                                                                                                                | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-eureka-server               | spring-cloud-netflix Eureka Server                                                                                                                                     | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-feign                       | Declarative REST clients with spring-cloud-netflix Feign                                                                                                               | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-hystrix                     | Circuit breaker with spring-cloud-netflix Hystrix                                                                                                                      | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-hystrix-dashboard           | Circuit breaker dashboard with spring-cloud-netflix Hystrix                                                                                                            | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-oauth2                      | OAuth2 and distributed application patterns with spring-cloud-security                                                                                                 | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-ribbon                      | Client side load balancing with spring-cloud-netflix and Ribbon                                                                                                        | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-security                    | Secure load balancing and routing with spring-cloud-security                                                                                                           | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-starter                     | spring-cloud-context (e.g. Bootstrap context and @RefreshScope)                                                                                                        | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-starter-consul-bus          | Inter instance control events with Hashicorp Consul                                                                                                                    | &amp;gt;= 1.3.0.M4                 |
+| cloud-starter-consul-config       | Configuration management with Hashicorp Consul                                                                                                                         | &amp;gt;= 1.3.0.M4                 |
+| cloud-starter-consul-discovery    | Service discovery with Hashicorp Consul                                                                                                                                | &amp;gt;= 1.3.0.M4                 |
+| cloud-starter-sleuth              | Distributed tracing via logs with spring-cloud-sleuth                                                                                                                  | &amp;gt;= 1.3.0.M4                 |
+| cloud-starter-zipkin              | Distributed tracing via Zipkin and spring-cloud-sleuth-zipkin                                                                                                          | &amp;gt;= 1.3.0.M4                 |
+| cloud-starter-zookeeper-config    | Configuration management with Zookeeper and spring-cloud-zookeeper-config                                                                                              | &amp;gt;= 1.3.0.M4                 |
+| cloud-starter-zookeeper-discovery | Service discovery with Zookeeper and spring-cloud-zookeeper-discovery                                                                                                  | &amp;gt;= 1.3.0.M4                 |
+| cloud-stream-binder-kafka         | Messaging microservices with Kafka                                                                                                                                     | &amp;gt;= 1.3.0.M4                 |
+| cloud-stream-binder-rabbit        | Messaging microservices with RabbitMQ                                                                                                                                  | &amp;gt;= 1.3.0.M4                 |
+| cloud-stream-binder-redis         | Messaging microservices with Redis                                                                                                                                     | &amp;gt;= 1.3.0.M4                 |
+| cloud-turbine                     | Circuit breaker metric aggregation using spring-cloud-netflix with Turbine and server-sent events                                                                      | &amp;gt;= 1.2.3.RELEASE            |
+| cloud-turbine-amqp                | Circuit breaker metric aggregation using spring-cloud-netflix with Turbine and AMQP                                                                                    | [0.0.0.RELEASE,1.3.0.M5]    |
+| cloud-turbine-stream              | Circuit breaker metric aggregation using spring-cloud-netflix with Turbine and Spring Cloud Stream (choose a specific Stream binder implementation to complement this) | (1.3.0.M5,999.9.9.RELEASE]  |
+| cloud-zuul                        | Intelligent and programmable routing with spring-cloud-netflix Zuul                                                                                                    | &amp;gt;= 1.2.3.RELEASE            |
+| data-cassandra                    | Cassandra NoSQL Database, including spring-data-cassandra                                                                                                              | &amp;gt;= 1.3.0.RC1                |
+| data-elasticsearch                | Elasticsearch search and analytics engine including spring-data-elasticsearch                                                                                          |                             |
+| data-gemfire                      | GemFire distributed data store including spring-data-gemfire                                                                                                           |                             |
+| data-jpa                          | Java Persistence API including spring-data-jpa, spring-orm and Hibernate                                                                                               |                             |
+| data-jpa                          | Java Persistence API including spring-data-jpa, spring-orm and Hibernate                                                                                               |                             |
+| data-mongodb                      | MongoDB NoSQL Database, including spring-data-mongodb                                                                                                                  |                             |
+| data-rest                         | Exposing Spring Data repositories over REST via spring-data-rest-webmvc                                                                                                |                             |
+| data-rest-hal                     | Browsing Spring Data REST repositories with an HTML UI                                                                                                                 | &amp;gt;= 1.3.0.M1                 |
+| data-solr                         | Apache Solr search platform, including spring-data-solr                                                                                                                |                             |
+| derby                             | Apache Derby database (with embedded support)                                                                                                                          | &amp;gt;= 1.2.2.RELEASE            |
+| devtools                          | Spring Boot Development Tools                                                                                                                                          | &amp;gt;= 1.3.0.M1                 |
+| freemarker                        | FreeMarker templating engine                                                                                                                                           |                             |
+| groovy-templates                  | Groovy templating engine                                                                                                                                               |                             |
+| h2                                | H2 database (with embedded support)                                                                                                                                    |                             |
+| hateoas                           | HATEOAS-based RESTful services                                                                                                                                         | &amp;gt;= 1.2.2.RELEASE            |
+| hornetq                           | Java Message Service API via HornetQ                                                                                                                                   |                             |
+| hsql                              | HSQLDB database (with embedded support)                                                                                                                                |                             |
+| integration                       | Common spring-integration modules                                                                                                                                      |                             |
+| jdbc                              | JDBC databases                                                                                                                                                         |                             |
+| jersey                            | the Jersey RESTful Web Services framework                                                                                                                              | &amp;gt;= 1.2.0.RELEASE            |
+| jooq                              | Persistence support using Java Object Oriented Querying                                                                                                                | &amp;gt;= 1.3.0.M2                 |
+| jta-atomikos                      | JTA distributed transactions via Atomikos                                                                                                                              | &amp;gt;= 1.2.0.M1                 |
+| jta-bitronix                      | JTA distributed transactions via Bitronix                                                                                                                              | &amp;gt;= 1.2.0.M1                 |
+| lombok                            | Lombok                                                                                                                                                                 | &amp;gt;= 1.3.0.M4                 |
+| mail                              | javax.mail                                                                                                                                                             | &amp;gt;= 1.2.0.RC1                |
+| mobile                            | Simplify the development of mobile web applications with spring-mobile                                                                                                 |                             |
+| mustache                          | Mustache templating engine                                                                                                                                             | &amp;gt;= 1.2.2.RELEASE            |
+| mysql                             | MySQL jdbc driver                                                                                                                                                      |                             |
+| postgresql                        | PostgreSQL jdbc driver                                                                                                                                                 |                             |
+| ratpack                           | Spring Boot integration for the Ratpack framework                                                                                                                      | &amp;gt;= 1.2.0.RELEASE            |
+| redis                             | REDIS key-value data store, including spring-redis                                                                                                                     |                             |
+| remote-shell                      | CRaSH shell integration                                                                                                                                                |                             |
+| restdocs                          | Document RESTful services by combining hand-written and auto-generated documentation                                                                                   |                             |
+| security                          | Secure your application via spring-security                                                                                                                            |                             |
+| social-facebook                   | spring-social-facebook                                                                                                                                                 |                             |
+| social-linkedin                   | spring-social-linkedin                                                                                                                                                 |                             |
+| social-twitter                    | spring-social-twitter                                                                                                                                                  |                             |
+| thymeleaf                         | Thymeleaf templating engine, including integration with Spring                                                                                                         |                             |
+| vaadin                            | Vaadin                                                                                                                                                                 |                             |
+| validation                        | JSR-303 validation infrastructure (already included with web)                                                                                                          | &amp;gt;= 1.3.0.M1                 |
+| velocity                          | Velocity templating engine                                                                                                                                             |                             |
+| web                               | Full-stack web development with Tomcat and Spring MVC                                                                                                                  |                             |
+| websocket                         | Websocket development with SockJS and STOMP                                                                                                                            |                             |
+| ws                                | Contract-first SOAP service development with Spring Web Services                                                                                                       |                             |
++-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+
+
+
+Project types (* denotes the default)
++-----------------+-----------------------------------------+-----------------------------+
+| Id              | Description                             | Tags                        |
++-----------------+-----------------------------------------+-----------------------------+
+| gradle-build    | Generate a Gradle build file            | build:gradle,format:build   |
+| gradle-project  | Generate a Gradle based project archive | build:gradle,format:project |
+| maven-build     | Generate a Maven pom.xml                | build:maven,format:build    |
+| maven-project * | Generate a Maven based project archive  | build:maven,format:project  |
++-----------------+-----------------------------------------+-----------------------------+
+
+
+Parameters
++-------------+------------------------------------------+------------------------------+
+| Id          | Description                              | Default value                |
++-------------+------------------------------------------+------------------------------+
+| type        | project type                             | maven-project                |
+| bootVersion | spring boot version                      | 1.2.7.RELEASE                |
+| packaging   | project packaging                        | jar                          |
+| javaVersion | language level                           | 1.8                          |
+| language    | programming language                     | java                         |
+| groupId     | project coordinates                      | com.example                  |
+| artifactId  | project coordinates (infer archive name) | demo                         |
+| version     | project version                          | 0.0.1-SNAPSHOT               |
+| name        | project name (infer application name)    | demo                         |
+| description | project description                      | Demo project for Spring Boot |
+| packageName | root package                             | com.example                  |
++-------------+------------------------------------------+------------------------------+
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Creating my first project&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ spring init --dependencies web,h2,data-jpa,jdbc,groovy-templates,security --build gradle --packaging jar --extract
+Using service at https://start.spring.io
+Project extracted to &amp;#39;/home/drmanalo/workspace/paluwagan&amp;#39;
+
+$ tree
+.
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── com
+    │   │       └── example
+    │   │           └── DemoApplication.java
+    │   └── resources
+    │       ├── application.properties
+    │       ├── static
+    │       └── templates
+    └── test
+        └── java
+            └── com
+                └── example
+                    └── DemoApplicationTests.java
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Running the application&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ gradle bootRun
+
+Started DemoApplication in 4.605 seconds (JVM running for 4.954)
+&amp;gt; Building 80% &amp;gt; :bootRun
+&lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>
       <item>
@@ -575,6 +1858,323 @@ JENKINS_ARGS=&amp;quot;--prefix=/jenkins&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Restart jenkins and httpd. After which, jenkins should be available on &lt;a href=&quot;http://centos7/jenkins&quot;&gt;http://centos7/jenkins&lt;/a&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ sudo systemctl restart httpd
 $ sudo systemctl restart jenkins
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>From Lollipop To Kitkat</title>
+        <link>https://drmanalo.github.io/blog/2015/lollipop-to.kitkat.html</link>
+        <pubDate>Thu, 3 Sep 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/lollipop-to.kitkat.html</guid>
+        <description>
+  	         &lt;p&gt;Android system update is like pushed notifications where you cannot opt out. Rooted device actually can but I&apos;m not rooting my device again since I had a bad experience with it. I kept ignoring this update but I woke up one morning in Android 5.0.2. This update is not compatible with my device as this drives it to the bend hence the reason I want to downgrade.&lt;/p&gt;&lt;h3&gt;Download Android debug bridge&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ apt-cache search android-tools
+android-tools-fsutils - Android ext4 utilities with sparse support
+android-tools-adb - Android Debug Bridge CLI tool
+android-tools-adbd - Android Debug Bridge Phone Daemon
+android-tools-fastboot - Android Fastboot protocol CLI tool
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You can only install &lt;code&gt;android-tools-adb&lt;/code&gt; for this purpose.&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Download Android 4.4.4&lt;/h3&gt;&lt;p&gt;You can get the flash image you want from &lt;a href=&quot;https://developers.google.com/android/nexus/images&quot;&gt;Google Developers&lt;/a&gt;. After downloading just extract it to make &lt;code&gt;flash-all.sh&lt;/code&gt; available.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ ll nakasi-ktu84p
+total 377240
+drwxr-x--- 2 drmanalo drmanalo      4096 Jun 13  2014 ./
+drwxr-xr-x 4 drmanalo drmanalo      4096 May 10 17:28 ../
+-rw-r----- 1 drmanalo drmanalo   2150992 Apr  1 18:46 bootloader-grouper-4.23.img
+-rw-r----- 1 drmanalo drmanalo       984 Jun 13  2014 flash-all.bat
+-rwxr-x--- 1 drmanalo drmanalo       872 Jun 13  2014 flash-all.sh*
+-rwxr-x--- 1 drmanalo drmanalo       698 Jun 13  2014 flash-base.sh*
+-rw-r----- 1 drmanalo drmanalo 384115329 Jun 13  2014 image-nakasi-ktu84p.zip
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Check your device&lt;/h3&gt;&lt;p&gt;You should find your attached device. If not, chances are your android is not on USB debugging mode.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ adb devices
+List of devices attached
+015d456d39380a04        device
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Unlock your fastloader&lt;/h3&gt;&lt;p&gt;You should see Andriod chilling down showing its keypad.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ adb reboot bootloader
+
+$ fastboot oem unlock
+&amp;lt; waiting for device &amp;gt;
+...
+(bootloader) erasing userdata...
+(bootloader) erasing userdata done
+(bootloader) erasing cache...
+(bootloader) erasing cache done
+(bootloader) unlocking...
+(bootloader) Bootloader is unlocked now.
+OKAY [ 26.159s]
+finished. total time: 26.159s
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Flash Kitkat to your device&lt;/h3&gt;&lt;p&gt;You will need to run this to the folder where you unzipped the flash image.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ ./flash-all.sh
+...
+(bootloader) Bootloader is already unlocked
+OKAY [  0.025s]
+finished. total time: 0.033s
+erasing &amp;#39;boot&amp;#39;...
+OKAY [  1.154s]
+finished. total time: 1.159s
+******** Did you mean to fastboot format this partition?
+erasing &amp;#39;cache&amp;#39;...
+OKAY [  1.030s]
+finished. total time: 1.033s
+erasing &amp;#39;recovery&amp;#39;...
+OKAY [  0.363s]
+finished. total time: 0.365s
+******** Did you mean to fastboot format this partition?
+erasing &amp;#39;system&amp;#39;...
+OKAY [  0.820s]
+finished. total time: 0.823s
+******** Did you mean to fastboot format this partition?
+erasing &amp;#39;userdata&amp;#39;...
+OKAY [  4.545s]
+finished. total time: 4.550s
+sending &amp;#39;bootloader&amp;#39; (2100 KB)...
+OKAY [  0.275s]
+writing &amp;#39;bootloader&amp;#39;...
+OKAY [  9.427s]
+finished. total time: 9.710s
+rebooting into bootloader...
+OKAY [  0.020s]
+finished. total time: 0.023s
+archive does not contain &amp;#39;boot.sig&amp;#39;
+archive does not contain &amp;#39;recovery.sig&amp;#39;
+archive does not contain &amp;#39;system.sig&amp;#39;
+archive does not contain &amp;#39;vendor.img&amp;#39;
+Creating filesystem with parameters:
+    Size: 30734811136
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 8192
+    Inode size: 256
+    Journal blocks: 32768
+    Label:
+    Blocks: 7503616
+    Block groups: 229
+    Reserved block group size: 1024
+Created filesystem with 11/1875968 inodes and 161774/7503616 blocks
+Creating filesystem with parameters:
+    Size: 464519168
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 7088
+    Inode size: 256
+    Journal blocks: 1772
+    Label:
+    Blocks: 113408
+    Block groups: 4
+    Reserved block group size: 31
+Created filesystem with 11/28352 inodes and 3654/113408 blocks
+--------------------------------------------
+Bootloader Version...: 4.23
+Baseband Version.....: N/A
+Serial Number........: 015d456d39380a04
+--------------------------------------------
+checking product...
+OKAY [  0.040s]
+checking version-bootloader...
+OKAY [  0.023s]
+sending &amp;#39;boot&amp;#39; (4994 KB)...
+OKAY [  0.640s]
+writing &amp;#39;boot&amp;#39;...
+OKAY [  0.995s]
+sending &amp;#39;recovery&amp;#39; (5534 KB)...
+OKAY [  0.705s]
+writing &amp;#39;recovery&amp;#39;...
+OKAY [  0.958s]
+erasing &amp;#39;system&amp;#39;...
+OKAY [  0.880s]
+sending &amp;#39;system&amp;#39; (644062 KB)...
+OKAY [ 79.820s]
+writing &amp;#39;system&amp;#39;...
+OKAY [ 37.576s]
+erasing &amp;#39;userdata&amp;#39;...
+OKAY [  4.584s]
+sending &amp;#39;userdata&amp;#39; (139197 KB)...
+OKAY [ 17.308s]
+writing &amp;#39;userdata&amp;#39;...
+OKAY [ 13.077s]
+erasing &amp;#39;cache&amp;#39;...
+OKAY [  0.673s]
+sending &amp;#39;cache&amp;#39; (9052 KB)...
+OKAY [  1.145s]
+writing &amp;#39;cache&amp;#39;...
+OKAY [  1.851s]
+rebooting...
+
+finished. total time: 160.447s
+Press any key to exit...
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Lock your fastloader&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ fastboot oem lock
+...
+(bootloader) Bootloader is locked now.
+OKAY [  8.913s]
+finished. total time: 8.913s
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title> Wildfly on Ubuntu 14</title>
+        <link>https://drmanalo.github.io/blog/2015/wildfly-on-ubuntu14.html</link>
+        <pubDate>Tue, 25 Aug 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/wildfly-on-ubuntu14.html</guid>
+        <description>
+  	         &lt;p&gt;I installed JBoss Application Server 7 but it won&apos;t start on my Ubuntu machine. If I will run &lt;code&gt;$JBOSS_HOME/bin/standalone.sh&lt;/code&gt;,&lt;br/&gt;here&apos;s how far I can get.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;=========================================================================
+
+  JBoss Bootstrap Environment
+
+  JBOSS_HOME: /opt/jboss7
+
+  JAVA: java
+
+  JAVA_OPTS:  -server -XX:+UseCompressedOops -XX:+TieredCompilation -Xms64m -Xmx512m -XX:MaxPermSize=256m
+  -Djava.net.preferIPv4Stack=true -Dorg.jboss.resolver.warning=true -Dsun.rmi.dgc.client.gcInterval=3600000
+  -Dsun.rmi.dgc.server.gcInterval=3600000 -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true
+  -Djboss.server.default.config=standalone.xml
+
+=========================================================================
+
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; support was removed in 8.0
+23:41:04,456 INFO  [org.jboss.modules] JBoss Modules version 1.1.1.GA
+23:41:05,336 INFO  [org.jboss.msc] JBoss MSC version 1.0.2.GA
+23:41:05,525 INFO  [org.jboss.as] JBAS015899: JBoss AS 7.1.1.Final &amp;quot;Brontes&amp;quot; starting
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;A bit of Googling suggested it is a Java 8 related issue and shouldn&apos;t happen if I&apos;m going to downgrade to Java 7. Stackoverflow did suggest I can use Wildfly 8 for my latest version of Java.&lt;/p&gt;
+&lt;!-- more --&gt;&lt;p&gt;I found &lt;a href=&quot;http://sukharevd.net/wildfly-8-installation.html&quot;&gt;Dmitriy Sukharev&apos;s blog&lt;/a&gt; with details on how to install Wildfly 8 quickly. He has the installation script on his dropbox but I verbatim it in case the URL change.&lt;/p&gt;&lt;h3&gt;wildfly-install.sh&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+#title           :wildfly-install.sh
+#description     :The script to install Wildfly 8.x
+#more            :http://sukharevd.net/wildfly-8-installation.html
+#author	         :Dmitriy Sukharev
+#date            :201411290028
+#usage           :/bin/bash wildfly-install.sh
+
+WILDFLY_VERSION=8.2.0.Final
+WILDFLY_FILENAME=wildfly-$WILDFLY_VERSION
+WILDFLY_ARCHIVE_NAME=$WILDFLY_FILENAME.tar.gz
+WILDFLY_DOWNLOAD_ADDRESS=http://download.jboss.org/wildfly/$WILDFLY_VERSION/$WILDFLY_ARCHIVE_NAME
+
+INSTALL_DIR=/opt
+WILDFLY_FULL_DIR=$INSTALL_DIR/$WILDFLY_FILENAME
+WILDFLY_DIR=$INSTALL_DIR/wildfly
+
+WILDFLY_USER=&amp;quot;wildfly&amp;quot;
+WILDFLY_SERVICE=&amp;quot;wildfly&amp;quot;
+
+WILDFLY_STARTUP_TIMEOUT=240
+WILDFLY_SHUTDOWN_TIMEOUT=30
+
+SCRIPT_DIR=&amp;quot;$( cd &amp;quot;$( dirname &amp;quot;${BASH_SOURCE[0]}&amp;quot; )&amp;quot; &amp;amp;&amp;amp; pwd )&amp;quot;
+
+if [[ $EUID -ne 0 ]]; then
+   echo &amp;quot;This script must be run as root.&amp;quot;
+   exit 1
+fi
+
+echo &amp;quot;Downloading: $WILDFLY_DOWNLOAD_ADDRESS...&amp;quot;
+[ -e &amp;quot;$WILDFLY_ARCHIVE_NAME&amp;quot; ] &amp;amp;&amp;amp; echo &amp;#39;Wildfly archive already exists.&amp;#39;
+if [ ! -e &amp;quot;$WILDFLY_ARCHIVE_NAME&amp;quot; ]; then
+  wget -q $WILDFLY_DOWNLOAD_ADDRESS
+  if [ $? -ne 0 ]; then
+    echo &amp;quot;Not possible to download Wildfly.&amp;quot;
+    exit 1
+  fi
+fi
+
+echo &amp;quot;Cleaning up...&amp;quot;
+rm -f &amp;quot;$WILDFLY_DIR&amp;quot;
+rm -rf &amp;quot;$WILDFLY_FULL_DIR&amp;quot;
+rm -rf &amp;quot;/var/run/$WILDFLY_SERVICE/&amp;quot;
+rm -f &amp;quot;/etc/init.d/$WILDFLY_SERVICE&amp;quot;
+
+echo &amp;quot;Installation...&amp;quot;
+mkdir $WILDFLY_FULL_DIR
+tar -xzf $WILDFLY_ARCHIVE_NAME -C $INSTALL_DIR
+ln -s $WILDFLY_FULL_DIR/ $WILDFLY_DIR
+useradd -s /sbin/nologin $WILDFLY_USER
+chown -R $WILDFLY_USER:$WILDFLY_USER $WILDFLY_DIR
+chown -R $WILDFLY_USER:$WILDFLY_USER $WILDFLY_DIR/
+
+echo &amp;quot;Registrating Wildfly as service...&amp;quot;
+# if Debian-like distribution
+if [ -r /lib/lsb/init-functions ]; then
+    cp $WILDFLY_DIR/bin/init.d/wildfly-init-debian.sh /etc/init.d/$WILDFLY_SERVICE
+    sed -i -e &amp;#39;s,NAME=wildfly,NAME=&amp;#39;$WILDFLY_SERVICE&amp;#39;,g&amp;#39; /etc/init.d/$WILDFLY_SERVICE
+    WILDFLY_SERVICE_CONF=/etc/default/$WILDFLY_SERVICE
+fi
+
+# if RHEL-like distribution
+if [ -r /etc/init.d/functions ]; then
+    cp $WILDFLY_DIR/bin/init.d/wildfly-init-redhat.sh /etc/init.d/$WILDFLY_SERVICE
+    WILDFLY_SERVICE_CONF=/etc/default/wildfly.conf
+fi
+
+# if neither Debian nor RHEL like distribution
+if [ ! -r /lib/lsb/init-functions -a ! -r /etc/init.d/functions ]; then
+cat &amp;gt; /etc/init.d/$WILDFLY_SERVICE &amp;lt;&amp;lt; &amp;quot;EOF&amp;quot;
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          ${WILDFLY_SERVICE}
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/Stop ${WILDFLY_FILENAME}
+### END INIT INFO
+
+WILDFLY_USER=${WILDFLY_USER}
+WILDFLY_DIR=${WILDFLY_DIR}
+
+case &amp;quot;$1&amp;quot; in
+start)
+echo &amp;quot;Starting ${WILDFLY_FILENAME}...&amp;quot;
+start-stop-daemon --start --background --chuid $WILDFLY_USER --exec $WILDFLY_DIR/bin/standalone.sh
+exit $?
+;;
+stop)
+echo &amp;quot;Stopping ${WILDFLY_FILENAME}...&amp;quot;
+
+start-stop-daemon --start --quiet --background --chuid $WILDFLY_USER --exec $WILDFLY_DIR/bin/jboss-cli.sh -- --connect command=:shutdown
+exit $?
+;;
+log)
+echo &amp;quot;Showing server.log...&amp;quot;
+tail -500f $WILDFLY_DIR/standalone/log/server.log
+;;
+*)
+echo &amp;quot;Usage: /etc/init.d/wildfly {start|stop}&amp;quot;
+exit 1
+;;
+esac
+exit 0
+EOF
+sed -i -e &amp;#39;s,${WILDFLY_USER},&amp;#39;$WILDFLY_USER&amp;#39;,g; s,${WILDFLY_FILENAME},&amp;#39;$WILDFLY_FILENAME&amp;#39;,g; s,${WILDFLY_SERVICE},&amp;#39;$WILDFLY_SERVICE&amp;#39;,g; s,${WILDFLY_DIR},&amp;#39;$WILDFLY_DIR&amp;#39;,g&amp;#39; /etc/init.d/$WILDFLY_SERVICE
+fi
+
+chmod 755 /etc/init.d/$WILDFLY_SERVICE
+
+if [ ! -z &amp;quot;$WILDFLY_SERVICE_CONF&amp;quot; ]; then
+    echo &amp;quot;Configuring service...&amp;quot;
+    echo JBOSS_HOME=\&amp;quot;$WILDFLY_DIR\&amp;quot; &amp;gt; $WILDFLY_SERVICE_CONF
+    echo JBOSS_USER=$WILDFLY_USER &amp;gt;&amp;gt; $WILDFLY_SERVICE_CONF
+    echo STARTUP_WAIT=$WILDFLY_STARTUP_TIMEOUT &amp;gt;&amp;gt; $WILDFLY_SERVICE_CONF
+    echo SHUTDOWN_WAIT=$WILDFLY_SHUTDOWN_TIMEOUT &amp;gt;&amp;gt; $WILDFLY_SERVICE_CONF
+fi
+
+echo &amp;quot;Configuring application server...&amp;quot;
+sed -i -e &amp;#39;s,&amp;lt;deployment-scanner path=&amp;quot;deployments&amp;quot; relative-to=&amp;quot;jboss.server.base.dir&amp;quot; scan-interval=&amp;quot;5000&amp;quot;/&amp;gt;,&amp;lt;deployment-scanner path=&amp;quot;deployments&amp;quot; relative-to=&amp;quot;jboss.server.base.dir&amp;quot; scan-interval=&amp;quot;5000&amp;quot; deployment-timeout=&amp;quot;&amp;#39;$WILDFLY_STARTUP_TIMEOUT&amp;#39;&amp;quot;/&amp;gt;,g&amp;#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e &amp;#39;s,&amp;lt;inet-address value=&amp;quot;${jboss.bind.address:127.0.0.1}&amp;quot;/&amp;gt;,&amp;lt;any-address/&amp;gt;,g&amp;#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e &amp;#39;s,&amp;lt;socket-binding name=&amp;quot;ajp&amp;quot; port=&amp;quot;${jboss.ajp.port:8009}&amp;quot;/&amp;gt;,&amp;lt;socket-binding name=&amp;quot;ajp&amp;quot; port=&amp;quot;${jboss.ajp.port:28009}&amp;quot;/&amp;gt;,g&amp;#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e &amp;#39;s,&amp;lt;socket-binding name=&amp;quot;http&amp;quot; port=&amp;quot;${jboss.http.port:8080}&amp;quot;/&amp;gt;,&amp;lt;socket-binding name=&amp;quot;http&amp;quot; port=&amp;quot;${jboss.http.port:28080}&amp;quot;/&amp;gt;,g&amp;#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e &amp;#39;s,&amp;lt;socket-binding name=&amp;quot;https&amp;quot; port=&amp;quot;${jboss.https.port:8443}&amp;quot;/&amp;gt;,&amp;lt;socket-binding name=&amp;quot;https&amp;quot; port=&amp;quot;${jboss.https.port:28443}&amp;quot;/&amp;gt;,g&amp;#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e &amp;#39;s,&amp;lt;socket-binding name=&amp;quot;osgi-http&amp;quot; interface=&amp;quot;management&amp;quot; port=&amp;quot;8090&amp;quot;/&amp;gt;,&amp;lt;socket-binding name=&amp;quot;osgi-http&amp;quot; interface=&amp;quot;management&amp;quot; port=&amp;quot;28090&amp;quot;/&amp;gt;,g&amp;#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
+
+service $WILDFLY_SERVICE start
+
+echo &amp;quot;Done.&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Once you have the above script, run it using&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo bash wildfly-install.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;After installation standard Wildfly welcome page is available at &lt;a href=&quot;http://localhost:28080&quot;&gt;http://localhost:28080&lt;/a&gt;.&lt;/p&gt;&lt;h3&gt;Wildfly as service&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;sudo update-rc.d wildfly defaults
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To manually run wildfly&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo service wildfly start
 &lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>
@@ -806,8 +2406,7 @@ exit 0
         <pubDate>Sun, 28 Jun 2015 00:00:00 +0100</pubDate>
         <guid isPermaLink="false">blog/2015/pimping-my-vim.html</guid>
         <description>
-  	         &lt;p&gt;&lt;strong&gt;vim&lt;/strong&gt; is a versatile and powerful text editor for command-line environments. In _*nix_ world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called &lt;code&gt;.vimrc&lt;/code&gt; under your home folder.&lt;/p&gt;
-&lt;!-- more --&gt;&lt;h3&gt;Creating ~/.vimrc&lt;/h3&gt;
+  	         &lt;p&gt;&lt;strong&gt;vim&lt;/strong&gt; is a versatile and powerful text editor for command-line environments. In __*nix__ world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called &lt;code&gt;.vimrc&lt;/code&gt; under your home folder.&lt;/p&gt;&lt;h3&gt;Creating ~/.vimrc&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;set nocompatible
 syntax on
 set mouse=a
@@ -820,7 +2419,8 @@ set number
 set smarttab
 set shiftwidth=4
 colorscheme torte
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;set nocompatible&lt;/strong&gt; fixes the issue where arrow keys do not function properly on some systems&lt;/p&gt;&lt;p&gt;&lt;strong&gt;syntax on&lt;/strong&gt; enables syntax highlighting for programming languages&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set mouse=a&lt;/strong&gt; allows you to click around the text editor with your mouse to move the cursor&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set showmatch&lt;/strong&gt; highlights matching brackets in programming languages&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set autoindent&lt;/strong&gt; if indented, new lines will also be indented&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set smartindent&lt;/strong&gt; automatically indents lines after opening a bracket in programming languages&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set backspace=2&lt;/strong&gt; makes the backspace key function like it should&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set tabstop=4&lt;/strong&gt; how much space Vim gives to a tab&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set number&lt;/strong&gt; enables line numbering&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set smarttab&lt;/strong&gt; improves tabbing&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set shiftwidth=4&lt;/strong&gt; assists code formatting&lt;/p&gt;&lt;p&gt;&lt;strong&gt;colorscheme torte&lt;/strong&gt; changes the color scheme to your liking. Look in &lt;code&gt;/usr/share/vim/vim73/colors&lt;/code&gt; for options. Folder location varies according to your version of vim.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;p&gt;&lt;strong&gt;set nocompatible&lt;/strong&gt; fixes the issue where arrow keys do not function properly on some systems&lt;/p&gt;&lt;p&gt;&lt;strong&gt;syntax on&lt;/strong&gt; enables syntax highlighting for programming languages&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set mouse=a&lt;/strong&gt; allows you to click around the text editor with your mouse to move the cursor&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set showmatch&lt;/strong&gt; highlights matching brackets in programming languages&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set autoindent&lt;/strong&gt; if indented, new lines will also be indented&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set smartindent&lt;/strong&gt; automatically indents lines after opening a bracket in programming languages&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set backspace=2&lt;/strong&gt; makes the backspace key function like it should&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set tabstop=4&lt;/strong&gt; how much space Vim gives to a tab&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set number&lt;/strong&gt; enables line numbering&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set smarttab&lt;/strong&gt; improves tabbing&lt;/p&gt;&lt;p&gt;&lt;strong&gt;set shiftwidth=4&lt;/strong&gt; assists code formatting&lt;/p&gt;&lt;p&gt;&lt;strong&gt;colorscheme torte&lt;/strong&gt; changes the color scheme to your liking. Look in &lt;code&gt;/usr/share/vim/vim73/colors&lt;/code&gt; for options. Folder location varies according to your version of vim.&lt;/p&gt;
   	    </description>
       </item>
       <item>
@@ -952,13 +2552,667 @@ colorscheme torte
   	    </description>
       </item>
       <item>
+        <title>qotd My First Grails App</title>
+        <link>https://drmanalo.github.io/blog/2015/my-first-grails-app.html</link>
+        <pubDate>Thu, 11 Jun 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/my-first-grails-app.html</guid>
+        <description>
+  	         &lt;h3&gt;Create an app&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ grails create-app qotd
+| Application created at /home/drmanalo/intellij/qotd
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Enjoy the fruit of your hardwork&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ cd qotd
+
+$ grails run-app
+&amp;gt; Configuring &amp;gt; 0/1 projects &amp;gt; root project &amp;gt; Resolving dependencies &amp;#39;:classpath1/1 projects &amp;gt; Resolving dependencies &amp;#39;:agent&amp;#39; &amp;gt; Resolving dependencies &amp;#39;:versio:compileJava UP-TO-DATE
+&amp;gt; Building 16% &amp;gt; :compileGroovy &amp;gt; Resolving dependencies &amp;#39;:compile&amp;#39; &amp;gt; Resolving :compileGroovy
+Download https://repo.grails.org/grails/core/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar
+&amp;gt; Building 16% &amp;gt; :compileGroovy &amp;gt; Resolving dependencies &amp;#39;detachedConfiguration4:processResources
+:classes
+:findMainClass
+&amp;gt; Building 83% &amp;gt; :bootRun &amp;gt; Resolving dependencies &amp;#39;:runtime&amp;#39; &amp;gt; Resolving depend:bootRun
+Download https://repo.grails.org/grails/core/commons-io/commons-io/2.2/commons-io-2.2.jar
+Grails application running at http://localhost:8080
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;p&gt;By typing a one-liner grails command, I have a fully working web application. I wish there is a similar story on Spring framework. To be fair though, Spring Boot has opinionated way of doing things but if you want rapid prototyping, then grails is the answer. If you will inspect the files created by &lt;strong&gt;create-app&lt;/strong&gt;, there is a reasonable number of.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ tree qotd/
+qotd/
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+├── grails-app
+│   ├── assets
+│   │   ├── images
+│   │   │   ├── apple-touch-icon.png
+│   │   │   ├── apple-touch-icon-retina.png
+│   │   │   ├── favicon.ico
+│   │   │   ├── grails_logo.png
+│   │   │   ├── skin
+│   │   │   │   ├── database_add.png
+│   │   │   │   ├── database_delete.png
+│   │   │   │   ├── database_edit.png
+│   │   │   │   ├── database_save.png
+│   │   │   │   ├── database_table.png
+│   │   │   │   ├── exclamation.png
+│   │   │   │   ├── house.png
+│   │   │   │   ├── information.png
+│   │   │   │   ├── shadow.jpg
+│   │   │   │   ├── sorted_asc.gif
+│   │   │   │   └── sorted_desc.gif
+│   │   │   ├── spinner.gif
+│   │   │   └── springsource.png
+│   │   ├── javascripts
+│   │   │   ├── application.js
+│   │   │   └── jquery-2.1.3.js
+│   │   └── stylesheets
+│   │       ├── application.css
+│   │       ├── errors.css
+│   │       ├── main.css
+│   │       └── mobile.css
+│   ├── conf
+│   │   ├── application.yml
+│   │   ├── logback.groovy
+│   │   └── spring
+│   │       └── resources.groovy
+│   ├── controllers
+│   │   └── UrlMappings.groovy
+│   ├── domain
+│   ├── i18n
+│   │   ├── messages_cs_CZ.properties
+│   │   ├── messages_da.properties
+│   │   ├── messages_de.properties
+│   │   ├── messages_es.properties
+│   │   ├── messages_fr.properties
+│   │   ├── messages_it.properties
+│   │   ├── messages_ja.properties
+│   │   ├── messages_nb.properties
+│   │   ├── messages_nl.properties
+│   │   ├── messages_pl.properties
+│   │   ├── messages.properties
+│   │   ├── messages_pt_BR.properties
+│   │   ├── messages_pt_PT.properties
+│   │   ├── messages_ru.properties
+│   │   ├── messages_sv.properties
+│   │   ├── messages_th.properties
+│   │   └── messages_zh_CN.properties
+│   ├── init
+│   │   ├── BootStrap.groovy
+│   │   └── qotd
+│   │       └── Application.groovy
+│   ├── services
+│   ├── taglib
+│   ├── utils
+│   └── views
+│       ├── error.gsp
+│       ├── index.gsp
+│       ├── layouts
+│       │   └── main.gsp
+│       └── notFound.gsp
+└── src
+    ├── integration-test
+    │   └── groovy
+    ├── main
+    │   ├── groovy
+    │   └── webapp
+    └── test
+        └── groovy
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Factory Pattern</title>
+        <link>https://drmanalo.github.io/blog/2015/factory-pattern.html</link>
+        <pubDate>Wed, 20 May 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/factory-pattern.html</guid>
+        <description>
+  	         &lt;p&gt;From my Java best practices training, my instructor gave us an example of the factory pattern using Shape object with draw() method. The Shape interface is further implemented by a base class called ShapeFactory which decides what kind of shape it is going to create using some business intelligence you put into the factory.&lt;/p&gt;&lt;p&gt;The example is spot on but I found another good example from our hands-on exercise which I&apos;m about to share. Not just because I&apos;m a Star Wars fan but the way factory is being used.&lt;/p&gt;&lt;h3&gt;The Robot&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.robots;
+
+import java.awt.Color;
+import java.awt.Point;
+import java.util.List;
+
+import com.robots.parts.Part;
+
+public interface Robot {
+
+	void move(int distance, Direction direction);
+
+	List&amp;lt;Part&amp;gt; getParts();
+
+	String getName();
+
+	Point getXY();
+
+	void setXY(Point p);
+
+	double dist(Robot r2);
+
+	Color getColor();
+
+	int getSerial();
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;The Robot Factory&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.robots;
+
+public final class RobotFactory {
+
+	public static Robot createRobot() {
+
+		Robot robot = null;
+
+		if (Math.random() &amp;gt; 0.5) {
+			robot = new C3PO();
+		} else {
+			robot = new R2D2();
+		}
+		return robot;
+	}
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;The Basic Robot&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.robots;
+
+import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.robots.parts.Part;
+
+public abstract class BasicRobot implements Robot {
+
+	// All Robots share the same fuel source.
+	private static final Fuel fuel = new Fuel();
+
+	// All robots share the same &amp;#39;force&amp;#39;.
+	private static final Force theForce = new Force();
+
+	private Color color;
+
+	private String name;
+
+	// x and y range from 0 to 199.
+	private int x = (int) (Math.random() * 200);
+
+	private int y = (int) (Math.random() * 200);
+
+	protected List&amp;lt;Part&amp;gt; parts = new ArrayList&amp;lt;Part&amp;gt;();
+
+	private static int meetingPoint = 50;
+
+	public final static AtomicInteger speed = new AtomicInteger(10);
+
+	/**
+	 * Distance from another Robot
+	 */
+	public double dist(Robot r2) {
+		Point p1 = getXY();
+		Point p2 = r2.getXY();
+		return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
+	}
+
+	public static Fuel getFuel() {
+		return fuel;
+	}
+
+	public static Force getTheForce() {
+		return theForce;
+	}
+
+	public static int getSpeed() {
+		return speed.get();
+	}
+
+	public static void setSpeed(int speed) {
+		BasicRobot.speed.set(speed);
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public List&amp;lt;Part&amp;gt; getParts() {
+		return parts;
+	}
+
+	boolean spin = false;
+
+	protected static ExecutorService threadPool = Executors.newCachedThreadPool();
+
+	public void move(final int distance, final Direction direction) {
+
+		threadPool.submit(new Runnable() {
+
+			@Override
+			public void run() {
+
+				try {
+					for (int i = 0; i &amp;lt; distance; i += 1) {
+
+						synchronized (fuel) {
+							synchronized (theForce) {
+								theForce.reduce();
+								fuel.reduce();
+							}
+						}
+
+						switch (direction) {
+						case EAST:
+							x = (x + 1) % 200;
+							break;
+						case WEST:
+							x = (200 + x - 1) % 200;
+							break;
+						case NORTH:
+							y = (200 + y - 1) % 200;
+							break;
+						case SOUTH:
+							y = (y + 1) % 200;
+							break;
+						}
+					}
+					Thread.sleep(50 / getSpeed());
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+
+					System.out.println(&amp;quot;Ending Force is &amp;quot; + BasicRobot.getTheForce().getForceStrength());
+					System.out.println(&amp;quot;Ending Fuel is &amp;quot; + BasicRobot.getFuel().getAmount());
+					System.out.println(getName() + &amp;quot;  Done!&amp;quot;);
+				}// End of finally block.
+
+			}
+		});
+
+	}
+
+	public Point getXY() {
+		return new Point(x, y);
+	}
+
+	public void setXY(Point p) {
+		x = (int) p.getX();
+		y = (int) p.getY();
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public static int getMeetingPoint() {
+		return meetingPoint;
+	}
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;C3PO&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.robots;
+
+import java.awt.Color;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.robots.parts.Motor;
+import com.robots.parts.Pulley;
+
+public final class C3PO extends BasicRobot {
+
+	private static AtomicInteger lastSerial = new AtomicInteger(0);
+
+	private final int serial;
+
+	public C3PO() {
+		parts.add(new Motor(485575, &amp;quot;Lucinet silent motor - leg&amp;quot;, 24));
+		parts.add(new Motor(485576, &amp;quot;Lucinet silent motor - leg&amp;quot;, 24));
+		parts.add(new Motor(485577, &amp;quot;Lucinet silent motor - neck&amp;quot;, 24));
+		parts.add(new Motor(485578, &amp;quot;Lucinet silent motor - arm&amp;quot;, 24));
+		parts.add(new Motor(485579, &amp;quot;Lucinet silent motor - arm&amp;quot;, 24));
+		parts.add(new Pulley(485579, &amp;quot;Lucinet pulley system&amp;quot;, 100));
+		setColor(new Color(251, 232, 123));
+		// Using &amp;quot;lastSerial++&amp;quot; would be unsafe since lastSerial is shared.
+		serial = lastSerial.incrementAndGet();
+		setName(&amp;quot;C3PO &amp;quot; + serial);
+	}
+
+	public int getSerial() {
+		return serial;
+	}
+
+	public void speak() {
+		System.out.println(&amp;quot;I am C3PO, human cyborg relations droid!&amp;quot;);
+	}
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;R2D2&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.robots;
+
+import java.awt.Color;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.robots.parts.Motor;
+
+import com.robots.parts.Pulley;
+import com.robots.parts.Wheel;
+
+public final class R2D2 extends BasicRobot {
+
+	private static AtomicInteger lastSerial = new AtomicInteger(0);
+	private final int serial;
+
+	public R2D2() {
+		parts.add(new Motor(123456, &amp;quot;Chubb high torque motor&amp;quot;, 120));
+		parts.add(new Pulley(334563, &amp;quot;Low resistance pully&amp;quot;, 100));
+		parts.add(new Wheel(884457, &amp;quot;Rubber skinned alloy wheel&amp;quot;, 200));
+		parts.add(new Wheel(884458, &amp;quot;Rubber skinned alloy wheel&amp;quot;, 200));
+		parts.add(new Wheel(884459, &amp;quot;Rubber skinned alloy wheel&amp;quot;, 200));
+		setColor(new Color(98, 98, 249));
+		// Using lastSerial++ would be unsage since lastSerial is shared.
+		serial = lastSerial.incrementAndGet();
+		setName(&amp;quot;R2D2 &amp;quot; + serial);
+	}
+
+	public int getSerial() {
+		return serial;
+	}
+
+	public void beep() {
+		System.out.println(&amp;quot;bi bi bib be bi bi be bi&amp;quot;);
+	}
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Observer Pattern</title>
+        <link>https://drmanalo.github.io/blog/2015/observer-pattern.html</link>
+        <pubDate>Wed, 20 May 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/observer-pattern.html</guid>
+        <description>
+  	         &lt;p&gt;&lt;strong&gt;Observer Pattern&lt;/strong&gt; has been around Java since version JDK 1.0. One of the nice thing about having it inside the language is you only have to subclass it and just worry about its implementation logic.&lt;/p&gt;&lt;p&gt;Here are the key benefits of the observer pattern.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Neither &lt;code&gt;Observer&lt;/code&gt; nor &lt;code&gt;Observable&lt;/code&gt; know class type of the other&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;Observable&lt;/code&gt; can communicate with any &lt;code&gt;Observer&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;Observer&lt;/code&gt; can register for state change events on any &lt;code&gt;Observable&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Any object that changes state of &lt;code&gt;Observable&lt;/code&gt; indirectly broadcasts to all registered &lt;code&gt;Observers&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;This is from one of our exercises which is a card game called Tehi. This is not the complete program but what it shows here is how are you going to use the observer pattern. First you will notice CardDeck extends &lt;code&gt;Observable&lt;/code&gt; and the abstract CardViewer implements &lt;code&gt;Observer&lt;/code&gt;. The concrete classes FutureCardsViewer and PastCardViewers then has update method which is the glue that attached them to the &lt;code&gt;Observable&lt;/code&gt;.&lt;/p&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Card Deck&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.tehi;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Observable;
+
+public final class CardDeck extends Observable {
+
+	private LinkedList&amp;lt;PlayingCard&amp;gt; cardStack = new LinkedList&amp;lt;&amp;gt;();
+
+	/**
+	 * Initially the cards are ordered by suite and rank.
+	 */
+	CardDeck(){
+		Rank[] rankArray = Rank.values();
+		Suite[] suiteArray = Suite.values();
+		for (Suite suite : suiteArray) {
+			for (Rank rank : rankArray) {
+				cardStack.add(new PlayingCard(suite, rank));
+			}
+		}
+	}
+
+	/**
+	 * Deals 1 card from the top of the deck
+	 */
+	PlayingCard deal(){
+		PlayingCard card;
+		try {
+			card = cardStack.pop();
+		} catch (NoSuchElementException e) {
+			throw new IllegalStateException(&amp;quot;Ran out of cards!&amp;quot;);
+		}
+		setChanged();
+		notifyObservers(getRanksDealt());
+		return card;
+	}
+
+	/**
+	 * Gets the ith card, 0 &amp;lt;= i &amp;lt; 52. The
+	 * card is not removed.
+	 * @param index
+	 * @return
+	 */
+	PlayingCard peek(int index){
+		if(index&amp;lt;0 || index&amp;gt;cardStack.size()-1){
+			return null;
+		}
+		return cardStack.get(index);
+	}
+
+	/**
+	 * Shuffles the stack of cards.
+	 */
+	void shuffle(){
+		Collections.shuffle(cardStack);
+	}		
+
+	/**
+	 * Deals n cards from the top of the deck
+	 * @param n
+	 */
+	PlayingCard[] deal(int n){
+		PlayingCard[] result = new PlayingCard[n];
+		for(int i=0; i&amp;lt;n;i++){
+			result[i]=deal();
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the ranks of the cards left in the deck.
+	 * @return an int[] containing the ranks of the remaining cards
+	 */
+	int[] getRanksLeft(){
+		int[] result = new int[13];
+		Arrays.fill(result, 0);
+		for (PlayingCard card : cardStack) {
+			int rankNUmber = card.getRank().getRankNumber()-1;
+			result[rankNUmber]++;
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the ranks of the cards no longer in the deck.
+	 * @return an int[] containing the ranks of the already dealt cards
+	 */
+	int[] getRanksDealt(){
+		int[] result = new int[13];
+		int[] dealt = getRanksLeft();
+		for (int i=0; i&amp;lt;dealt.length;i++) {
+			result[i]=4-dealt[i];
+		}
+		return result;
+	}
+
+	/**
+	 * Accessor to the number of cards left in the deck.
+	 * @return an int, the size of the deck.
+	 */
+	public int size(){
+		return cardStack.size();
+	}
+
+	/**
+	 * Checks if the deck is empty.
+	 * @return true if the deck has no cards, false otherwise.
+	 */
+	public boolean isEmpty() {
+		return (size()==0)?true:false;
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Cards Viewer&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.tehi;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.util.Observer;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+@SuppressWarnings(&amp;quot;serial&amp;quot;)
+public abstract class CardsViewer extends JPanel implements Observer {
+
+	private JPanel centerPanel = new JPanel();
+	protected JLabel[][] tiles = new JLabel[4][13];
+
+	public CardsViewer() {
+		setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		setLayout(new BorderLayout());
+		centerPanel.setLayout(new GridLayout(4, 13));
+		for (int i = 0; i &amp;lt; 4; i++) {
+			for (int j = 0; j &amp;lt; 13; j++) {
+				tiles[i][j] = new JLabel(&amp;quot;&amp;quot;, JLabel.CENTER);
+				tiles[i][j].setText(Rank.convertIntToRank(j + 1).getName());
+				centerPanel.add(tiles[i][j]);
+			}
+		}
+		add(centerPanel, BorderLayout.CENTER);
+	}
+
+	/**
+	 * Updates the GUI.
+	 * @param data an int[] with ranks of cards.
+	 */
+	protected abstract void updateChart(int[] data);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Future Cards Viewer&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.tehi;
+
+import java.util.Observable;
+
+public class FutureCardsViewer extends CardsViewer {
+
+	/**
+	 * Chart that displays cards that have not been dealt.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * The Observable is an instance of CardDeck and
+	 * the Object is an int[] with the ranks that
+	 * have already been dealt from the deck.
+	 */
+	@Override
+	public void update(Observable observable, Object arg) {
+		CardDeck deck = (CardDeck)observable;
+		int[] ranksNotDealt = deck.getRanksLeft();		
+		updateChart(ranksNotDealt);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected void updateChart(int[] ranksNotDealt) {
+		for (int j = 0; j &amp;lt; ranksNotDealt.length; j++) {
+			int numberOfcardsDealt = ranksNotDealt[j];
+			for (int i = 0; i &amp;lt; 4 - numberOfcardsDealt; i++) {
+				tiles[i][j].setText(&amp;quot;&amp;quot;);
+			}
+			for (int i = 4 - numberOfcardsDealt; i &amp;lt; 4; i++) {
+				tiles[i][j].setText(Rank.convertIntToRank(j + 1).getName());
+			}			
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Past Cards Viewer&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.tehi;
+
+import java.util.Observable;
+
+public class PastCardsViewer extends CardsViewer {
+
+	/**
+	 * Chart that displays cards that have been dealt.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * The Observable is an instance of CardDeck and
+	 * the Object is an int[] with the ranks that
+	 * have already been dealt from the deck.
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		int[] ranksDealt = (int[]) arg;
+		updateChart(ranksDealt);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected void updateChart(int[] ranksDealt) {
+		for (int j = 0; j &amp;lt; ranksDealt.length; j++) {
+			int numberOfcardsDealt = ranksDealt[j];
+			for (int i = 0; i &amp;lt; 4 - numberOfcardsDealt; i++) {
+				tiles[i][j].setText(&amp;quot;&amp;quot;);
+			}
+			for (int i = 4 - numberOfcardsDealt; i &amp;lt; 4; i++) {
+				tiles[i][j].setText(Rank.convertIntToRank(j + 1).getName());
+			}			
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>JVM Garbage Collector Switches</title>
+        <link>https://drmanalo.github.io/blog/2015/jvm-garbage-collector-switches.html</link>
+        <pubDate>Tue, 19 May 2015 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2015/jvm-garbage-collector-switches.html</guid>
+        <description>
+  	         &lt;p&gt;I took this from my Java best practices notes training. This is a verbatim of the switches I used as part of our exercises.&lt;/p&gt;&lt;p&gt;In many cases an application can meet performance goals with the default garbage collector. For sufficiently large applications that scale to large numbers of threads, processors, sockets, or a large amount of memory choosing an appropriate garbage collector will make a difference.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-XX:+UseSerialGC
+-XX:+UseParNewGC -XX:+UseConcMarkSweepGC
+-XX:+UseG1GC
+-XX:+AggressiveHeap
+-XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy
+-XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:GCTimeRatio=9
+-XX:+UseG1GC -Xmx30m
+-XX:+UseSerialGC -Xmx30m
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;-XX:+UseSerialGC&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Serial Garbage Collector&lt;/strong&gt; is a single threaded garbage collector. It was the default on all of Sun&apos;s VMs prior to Java 5. There is no communication overhead between threads. Best for a single processor machine or a multiprocessor machine with small (say &amp;lt; 100 MB) data sets.&lt;/p&gt;&lt;h3&gt;-XX:+UseParallelGC&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Parallel Collector&lt;/strong&gt; also known as the &lt;strong&gt;Throughput Collector&lt;/strong&gt;. The young generation will be collected using a Parallel Collector. It is intended for applications with medium- to large-sized data sets that are run on multiprocessor or multi-threaded hardware. It is only available after java 1.3.1. and is the default for server VMs on Java 5 and 6. The old generation defaults to collection by the Serial Collector.&lt;/p&gt;&lt;h3&gt;-XX:+UseParNewGC -XX:+UseConcMarkSweepGC&lt;/h3&gt;&lt;p&gt;This setting will use the &lt;strong&gt;Concurrent Mark&lt;/strong&gt; and &lt;strong&gt;Sweep Collector&lt;/strong&gt; for the old generation and the Parallel New GC for the young space. The difference between &lt;strong&gt;UseParNewGC&lt;/strong&gt; (parallel copying collector in the new space) and &lt;strong&gt;UseParallelGC&lt;/strong&gt; is that the copy phase in the former uses multiple threads while the latter uses a single thread.&lt;/p&gt;&lt;h3&gt;-XX:+UseParallelGC -XX:+UseParallelOldGC&lt;/h3&gt;&lt;p&gt;This setting uses the Parallel (Throughput) Collector for the young generation and uses parallel threads rather than a Serial Collector for the old generation.&lt;/p&gt;&lt;h3&gt;UseG1GC&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;G1 collector&lt;/strong&gt; does both the young and tenured spaces. It is best for applications that require large heaps with limited GC latency. Large means&lt;br/&gt;heap sizes of around 6GB or larger, and stable and predictable pause time below 0.5 seconds.&lt;/p&gt;&lt;h3&gt;-XX:+UseAdaptiveSizePolicy&lt;/h3&gt;&lt;p&gt;Use built-in tuning with the Parallel (Throughput) collector. It keeps statistics and adjusts the sizes of the young and old generation.&lt;/p&gt;&lt;h3&gt;-XX:+AggressiveHeap&lt;/h3&gt;&lt;p&gt;Uses the Parallel Collector with adaptive sizing. The JVM can attempt to aggressively tune the parameters of its tuning algorithm based on using all the resources of the operating system on which you are running. It attempts to set various parameters to be optimal for long-running, memory allocation-intensive jobs. In situations where the JVM can use all of the resources of the operating system, use this option to determine if the JVM can deliver satisfactory results.&lt;/p&gt;&lt;h3&gt;-XX:GCTimeRatio=nnn&lt;/h3&gt;&lt;p&gt;A hint to the virtual machine that it&apos;s desirable that not more than 1 / (1 + nnn) of the application execution time be spent in the collector. &lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
         <title>7zip Backup Script</title>
         <link>https://drmanalo.github.io/blog/2015/7zip-backup-script.html</link>
         <pubDate>Sun, 10 May 2015 00:00:00 +0100</pubDate>
         <guid isPermaLink="false">blog/2015/7zip-backup-script.html</guid>
         <description>
   	         &lt;p&gt;Here is a simple batch script to backup my project folder every 18:30. I wish I could run this in cron but my development machine is running Windows.&lt;/p&gt;
-&lt;!-- more --&gt;
 &lt;pre&gt;&lt;code&gt;@SETLOCAL
 @ECHO OFF
 
@@ -1028,8 +3282,9 @@ $ rails -v
         <guid isPermaLink="false">blog/2015/application-context-and-dispatcher-servlet.html</guid>
         <description>
   	         &lt;p&gt;I was trying to improve an existing Spring project to be able to inject Hibernate&apos;s SessionFactory but get confused where to put my Hibernate XML configuration. I initially put it within &lt;code&gt;&amp;lt;context-param/&amp;gt;&lt;/code&gt; but was surprised Spring is not creating my sessionFactory bean. Then I tried it under &lt;code&gt;&amp;lt;init-param/&amp;gt;&lt;/code&gt; but the result is the same, there&apos;s no sessionFactory bean. I tried putting my Hibernate configuration on both locations and it worked. I still don&apos;t understand why hence I asked my friend Google.&lt;/p&gt;&lt;p&gt;I found this post from &lt;a href=&quot;http://www.jroller.com/latenightdev/entry/spring_mvc_context_loading&quot;&gt;Late Night Developer&lt;/a&gt; which helped me understand why there are two places for my custom XML configurations.&lt;/p&gt;
-&lt;blockquote&gt;The most important thing to understand is that there are 2 layers of application contexts, and they each have default XML files to load beans from.&lt;/blockquote&gt;
-&lt;!--more--&gt;&lt;h3&gt;Root Application Context&lt;/h3&gt;&lt;p&gt;The Root application context is created when you specify a ContextLoaderListener in your web.xml file. It allows you to define beans that will be available to all the servlet contexts. If you don&apos;t specify a listener, then there will be no Root context which is also valid. Here&apos;s how you define the ContextLoaderListener in the web.xml file.&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;The most important thing to understand is that there are 2 layers of application contexts, and they each have default XML files to load beans from.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Root Application Context&lt;/h3&gt;&lt;p&gt;The Root application context is created when you specify a ContextLoaderListener in your web.xml file. It allows you to define beans that will be available to all the servlet contexts. If you don&apos;t specify a listener, then there will be no Root context which is also valid. Here&apos;s how you define the ContextLoaderListener in the web.xml file.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
 &amp;lt;web-app xmlns=&amp;quot;http://java.sun.com/xml/ns/javaee&amp;quot;
         xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
@@ -1178,37 +3433,86 @@ public ModelAndView listUsers() {
   &lt;li&gt;Not Just for the Web&lt;/li&gt;
 &lt;/ul&gt;
 &lt;!-- more --&gt;&lt;h3&gt;Importing Spring&lt;/h3&gt;&lt;p&gt;&lt;code&gt;&amp;lt;#import &amp;quot;/spring.ftl&amp;quot; as spring/&amp;gt;&lt;/code&gt; is the import statement to be able to use &lt;code&gt;&amp;lt;@spring&amp;gt;&lt;/code&gt; within the view.&lt;/p&gt;&lt;h3&gt;Binding your modelAttribute or command&lt;/h3&gt;&lt;p&gt;&lt;code&gt;&amp;lt;@spring.bind &amp;quot;form&amp;quot;/&amp;gt;&lt;/code&gt; where form is the key to the mapped object exposed by your controller. You can pass the&lt;br/&gt;binded form in your HTTP post within your controller using &lt;code&gt;@ModelAttribute&lt;/code&gt; or &lt;code&gt;@Command&lt;/code&gt;. Nested fields can be&lt;br/&gt;used to access an object within binded form such as &lt;strong&gt;form.object.property&lt;/strong&gt;.&lt;/p&gt;
-&lt;table style=&quot;border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; &quot; summary=&quot;Table of macro definitions&quot;&gt;&lt;colgroup&gt;&lt;col align=&quot;left&quot;&gt;&lt;col&gt;&lt;col&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th align=&quot;center&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;macro&lt;/th&gt;&lt;th align=&quot;center&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;VTL definition&lt;/th&gt;&lt;th align=&quot;center&quot; style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;FTL definition&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;message&lt;/strong&gt;&lt;/span&gt; (output a string from a resource bundle based on the code parameter)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springMessage($code)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.message
-code/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;messageText&lt;/strong&gt;&lt;/span&gt; (output a string from a resource bundle based on the code parameter, falling back to the value of the default parameter)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springMessageText($code
-$text)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.messageText code,
-text/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;url&lt;/strong&gt;&lt;/span&gt; (prefix a relative URL with the application&apos;s context root)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springUrl($relativeUrl)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.url
-relativeUrl/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formInput&lt;/strong&gt;&lt;/span&gt; (standard input field for gathering user input)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormInput($path
-$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formInput path, attributes,
-fieldType/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formHiddenInput *&lt;/strong&gt;&lt;/span&gt;
-(hidden input field for submitting non-user input)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormHiddenInput($path
-$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formHiddenInput path,
-attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formPasswordInput&lt;/strong&gt;&lt;/span&gt; *
-(standard input field for gathering passwords. Note that no value will ever be populated in fields of this type)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormPasswordInput($path
-$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formPasswordInput path,
-attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formTextarea&lt;/strong&gt;&lt;/span&gt; (large text field for gathering long, freeform text input)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormTextarea($path
-$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formTextarea path,
-attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formSingleSelect&lt;/strong&gt;&lt;/span&gt; (drop
-down box of options allowing a single required value to be selected)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormSingleSelect( $path $options
-$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formSingleSelect path, options,
-attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formMultiSelect&lt;/strong&gt;&lt;/span&gt; (a list box of options allowing the user to select 0 or more
-values)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormMultiSelect($path $options
-$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formMultiSelect path, options,
-attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formRadioButtons&lt;/strong&gt;&lt;/span&gt; (a set of radio buttons allowing a single selection to be made
-from the available choices)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormRadioButtons($path $options
-$separator $attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formRadioButtons path, options
-separator, attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formCheckboxes&lt;/strong&gt;&lt;/span&gt; (a set of checkboxes allowing 0 or more values to be
-selected)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormCheckboxes($path $options
-$separator $attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formCheckboxes path, options,
-separator, attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;formCheckbox&lt;/strong&gt;&lt;/span&gt; (a single checkbox)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springFormCheckbox($path
-$attributes)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border-bottom: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.formCheckbox path,
-attributes/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;left&quot; style=&quot;border-right: 0.5pt solid ; &quot;&gt;&lt;span class=&quot;bold&quot;&gt;&lt;strong&gt;showErrors&lt;/strong&gt;&lt;/span&gt; (simplify display of validation errors for the bound field)&lt;/td&gt;&lt;td style=&quot;border-right: 0.5pt solid ; &quot;&gt;&lt;code class=&quot;literal&quot;&gt;#springShowErrors($separator
-$classOrStyle)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;&quot;&gt;&lt;code class=&quot;literal&quot;&gt;&amp;lt;@spring.showErrors separator,
-classOrStyle/&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;strong&gt;Source:&lt;/strong&gt; &lt;a href=&quot;http://docs.spring.io/autorepo/docs/spring/3.2.x/spring-framework-reference/html/view.html&quot;&gt;docs.spring.io&lt;/a&gt;&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;macro &lt;/th&gt;
+      &lt;th&gt;definition &lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.message code/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;output a string from a resource bundle based on the code parameter &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.messageText code, text/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;output a string from a resource bundle based on the code parameter, falling back to the value of the default parameter &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.url relativeUrl/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;prefix a relative URL with the application&apos;s context root&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.formInput path, attributes, fieldType/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;standard input field for gathering user input&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.formHiddenInput path, attributes/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;hidden input field for submitting non-user input&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.formPasswordInput path, attributes/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;standard input field for gathering passwords. Note that no value will ever be populated in fields of this type&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.formTextarea path, attributes/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;large text field for gathering long, freeform text input&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.formSingleSelect path, options, attributes/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;drop down box of options allowing a single required value to be selected&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.formMultiSelect path, options, attributes/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;a list box of options allowing the user to select 0 or more values&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.formRadioButtons path, options separator, attributes/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;a set of radio buttons allowing a single selection to be made from the available choices&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.formCheckboxes path, options, separator, attributes/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;a set of checkboxes allowing 0 or more values to be selected&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.formCheckbox path, attributes/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;a single checkbox&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;&amp;lt;@spring.showErrors separator, classOrStyle/&amp;gt;&lt;/strong&gt; &lt;/td&gt;
+      &lt;td&gt;simplified display of validation errors for the bound field&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;&lt;p&gt;&lt;strong&gt;Source:&lt;/strong&gt; &lt;a href=&quot;http://docs.spring.io/autorepo/docs/spring/3.2.x/spring-framework-reference/html/view.html&quot;&gt;docs.spring.io&lt;/a&gt;&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Workaround for ORA-01489</title>
+        <link>https://drmanalo.github.io/blog/2015/oracle1489.html</link>
+        <pubDate>Sun, 8 Feb 2015 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2015/oracle1489.html</guid>
+        <description>
+  	         &lt;p&gt;Just saw this issue while concatenating fields in Oracle.&lt;/p&gt;&lt;h3&gt;Issue&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;SELECT LISTAGG(column_name, &amp;#39;, &amp;#39;) WITHIN GROUP (ORDER BY column_name) alias FROM table_name;
+
+ORA-01489: result of string concatenation is too long
+01489. 00000 -  &amp;quot;result of string concatenation is too long&amp;quot;
+*Cause:    String concatenation result is more than the maximum size.
+*Action:   Make sure that the result is less than the maximum size.
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Workaround&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;SELECT RTRIM(XMLAGG(XMLELEMENT(e, column_name, &amp;#39;,&amp;#39;).EXTRACT(&amp;#39;//text()&amp;#39;) ORDER BY column_name).GETCLOBVAL(), &amp;#39;,&amp;#39;) alias FROM table_name;
+&lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>
       <item>

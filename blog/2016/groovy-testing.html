@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Groovy Testing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+         <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Groovy Testing</h1>
+			<p><em>16 March 2016</em></p>
+			<p><p>My previous post is all about writing a simple Groovy CRUD application. It includes writing your views in Groovy as well though it doesn't involve where to put the files. But if you're a seasoned Java developer, you should know your way out.</p><p>What it lacks is how to test your Groovy classes which I'm about to document on this post.</p><h3>FakeLoader</h3><p>This is a workaround assuming your Spring Boot application bootstraps more <code>@Configuration</code> and you don't want to include them in your integration tests.</p>
+<pre><code>import org.junit.Test
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.test.context.ActiveProfiles
+
+/**
+ * For integration tests
+ */
+@ActiveProfiles(&quot;dev&quot;)
+@SpringBootApplication
+class FakeLoader {
+
+}
+</code></pre>
+<!-- more --><h3>Repository integration test</h3>
+<pre><code>package com.manalo.repository
+
+import com.manalo.FakeLoader
+import com.manalo.config.HttpSessionConfig
+import com.manalo.domain.User
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.SpringApplicationConfiguration
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.web.WebAppConfiguration
+import spock.lang.Specification
+
+@ActiveProfiles(&quot;dev&quot;)
+@SpringApplicationConfiguration(classes = FakeLoader)
+@WebAppConfiguration
+class UserRepositorySpec extends Specification{
+
+    @Autowired
+    UserRepository userRepository
+
+    User user
+
+    def setup() {
+        user = new User(id: 1, username: &quot;admin&quot;, password: &quot;secret&quot;)
+    }
+
+    def &quot;Should save user&quot;() {
+
+        when: &quot;save is invoked&quot;
+        userRepository.save(user)
+
+        then: &quot;user saved and searchable&quot;
+        User actual = userRepository.findOne(1)
+        actual.getId() == 1
+        actual.getUsername() == &quot;admin&quot;
+        actual.getPassword() == &quot;secret&quot;
+    }
+
+    def &quot;Should edit user&quot;() {
+
+        String username = &quot;updated user&quot;
+        String password = &quot;updated password&quot;
+
+        when: &quot;update is invoked&quot;
+        user.setUsername(username)
+        user.setPassword(password)
+        userRepository.save(user)
+
+        then: &quot;user updated and searchable&quot;
+        User actual = userRepository.findOne(1)
+        actual.getId() == 1
+        actual.getUsername() == username
+        actual.getPassword() == password
+    }
+
+    def &quot;Should delete user&quot;() {
+
+        when: &quot;user is invoked&quot;
+        userRepository.delete(user)
+
+        then: &quot;user deleted and not searchable&quot;
+        User actual = userRepository.findOne(1)
+        assert actual == null
+    }
+}
+</code></pre><h3>Service layer test</h3>
+<pre><code>package com.manalo.controller
+
+import com.manalo.domain.User
+import com.manalo.repository.UserRepository
+import com.manalo.service.UserService
+import spock.lang.Specification
+
+class UserServiceSpec extends Specification {
+
+    UserService userService
+    UserRepository userRepository = Mock(UserRepository)
+
+    final Integer userId = 1
+
+    def setup() {
+        userService = new UserService(userRepository: userRepository)
+    }
+
+    def &quot;Should find all users&quot;() {
+
+        when: &quot;the users are retrieved&quot;
+        userService.list()
+
+        then: &quot;a list of users is returned&quot;
+        1 * userRepository.findAll()
+    }
+
+    def &quot;Should find by id&quot;() {
+
+        when: &quot;looking for user.id $userId&quot;
+        userService.findById(userId)
+
+        then: &quot;user.id $userId is found&quot;
+        1 * userRepository.findOne(userId)
+    }
+
+    def &quot;Should save a user&quot;() {
+
+        given: &quot;a new user&quot;
+        User user = new User()
+
+        when: &quot;save is invoked&quot;
+        userService.save(user)
+
+        then: &quot;user is saved&quot;
+        1 * userRepository.save(user)
+    }
+
+    def &quot;Should update existing user&quot;() {
+
+        given: &quot;an existing user&quot;
+        User user = new User()
+        user.id = userId
+        userRepository.findOne(userId) &gt;&gt; user
+
+        when: &quot;save is invoked&quot;
+        userService.save(user)
+
+        then: &quot;user is saved&quot;
+        1 * userRepository.save(user)
+    }
+
+    def &quot;Should delete existing user&quot;() {
+
+        given: &quot;an existing user&quot;
+        User user = new User()
+        user.id = userId
+        userRepository.findOne(userId) &gt;&gt; user
+
+        when: &quot;delete is invoked&quot;
+        userService.delete(user)
+
+        then: &quot;user is deleted&quot;
+        1 * userRepository.delete(user)
+    }
+}
+</code></pre><h3>Controller test</h3>
+<pre><code>package com.manalo.controller
+
+import com.manalo.domain.User
+import com.manalo.service.UserService
+import org.springframework.test.web.servlet.MockMvc
+import spock.lang.Specification
+
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+
+class UserControllerSpec extends Specification {
+
+    MockMvc mockMvc
+    UserService userService = Mock(UserService)
+
+    def setup() {
+        def controller = new UserController(userService: userService)
+        mockMvc = standaloneSetup(controller).build()
+    }
+
+    def &quot;should return list of users&quot;() {
+
+        given:
+        final String userList = &quot;/user/list&quot;
+
+        when:
+        &quot;requesting $userList&quot;
+        def response = mockMvc.perform(get(userList))
+
+        then: &quot;receive 200&quot;
+        response.andExpect(status().isOk())
+        1 * userService.list()
+    }
+
+    def &quot;should load screen for adding new user&quot;() {
+
+        given:
+        final String userAdd = &quot;/user/add&quot;
+
+        when:
+        &quot;requesting $userAdd&quot;
+        def response = mockMvc.perform((get(userAdd)))
+
+        then: &quot;receive 200&quot;
+        response.andExpect(status().isOk())
+                .andExpect(view().name(&quot;views/user/edit&quot;))
+    }
+
+    def &quot;should load screen for editing user&quot;() {
+
+        given:
+        final String userEdit = &quot;/user/1&quot;
+
+        when:
+        &quot;requesting $userEdit&quot;
+        def response = mockMvc.perform((get(userEdit)))
+
+        then: &quot;receive 200&quot;
+        response.andExpect(status().isOk())
+                .andExpect(view().name(&quot;views/user/edit&quot;))
+        1 * userService.findById(1)
+    }
+
+    def &quot;should redirect after save&quot;() {
+
+        given:
+        final String userSave = &quot;/user/save&quot;
+
+        when:
+        &quot;requesting $userSave&quot;
+        def response = mockMvc.perform((post(userSave)))
+
+        then: &quot;receive 302&quot;
+        response.andExpect(status().is3xxRedirection())
+                .andExpect(view().name(&quot;redirect:/user/list&quot;))
+    }
+
+    def &quot;should delete existing user&quot;() {
+
+        given:
+        final String userDelete = &quot;/user/delete&quot;
+
+        when:
+        &quot;requesting $userDelete&quot;
+        def response = mockMvc.perform(post(userDelete))
+
+        then: &quot;receive 302&quot;
+        response.andExpect(status().is3xxRedirection())
+                .andExpect(view().name(&quot;redirect:/user/list&quot;))
+    }
+
+
+}
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2016/groovy-testing.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2016/groovy-testing.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>
