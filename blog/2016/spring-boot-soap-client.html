@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Spring Boot SOAP Client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1>dhon.manalo</h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Spring Boot SOAP Client</h1>
+			<p><em>18 June 2016</em></p>
+			<p><p>This is how I implemented "Consuming a SOAP Web Service" from <a href="https://spring.io/guides/gs/consuming-web-service/">Spring Guides</a>. For the RESTful world, SOAP is dead but it's pretty much alive and <a href="https://github.com/spring-projects/spring-boot/tree/master/spring-boot-starters/spring-boot-starter-ws">Spring</a> is developing features for it. I'm not yet sure why the web service we are integrating to has extra requirements not available in REST but if you're wondering why companies are using SOAP, here is a good <a href="http://spf13.com/post/soap-vs-rest">REST vs SOAP article</a>.</p><p>To get started with SOAP, I have to add this to my existing Spring Boot POM.</p>
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-ws&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre><p>The above Spring Boot starter will add the following dependencies.</p>
+<!-- more -->
+<pre><code>&lt;dependency&gt;
+	&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+	&lt;artifactId&gt;spring-jms&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+	&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+	&lt;artifactId&gt;spring-oxm&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+	&lt;groupId&gt;org.springframework.ws&lt;/groupId&gt;
+	&lt;artifactId&gt;spring-ws-core&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+	&lt;groupId&gt;org.springframework.ws&lt;/groupId&gt;
+	&lt;artifactId&gt;spring-ws-support&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre><h3>Generating POJOs using WSDL</h3><p>Since I'm going to build a client that fetches weather data from <a href="http://wiki.cdyne.com/index.php/CDYNE_Weather">CDYNE weather</a>, I need POJOs as request and response objects. To generate them, I'm going to add this to my POM's plugins.</p>
+<pre><code>&lt;plugin&gt;
+	&lt;groupId&gt;org.jvnet.jaxb2.maven2&lt;/groupId&gt;
+	&lt;artifactId&gt;maven-jaxb2-plugin&lt;/artifactId&gt;
+	&lt;version&gt;0.12.3&lt;/version&gt;
+	&lt;executions&gt;
+		&lt;execution&gt;
+			&lt;goals&gt;
+				&lt;goal&gt;generate&lt;/goal&gt;
+			&lt;/goals&gt;
+		&lt;/execution&gt;
+	&lt;/executions&gt;
+	&lt;configuration&gt;
+		&lt;schemaLanguage&gt;WSDL&lt;/schemaLanguage&gt;
+		&lt;generatePackage&gt;com.prototype.wsdl&lt;/generatePackage&gt;
+		&lt;schemas&gt;
+			&lt;schema&gt;
+				&lt;url&gt;http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl&lt;/url&gt;
+			&lt;/schema&gt;
+		&lt;/schemas&gt;
+	&lt;/configuration&gt;
+&lt;/plugin&gt;
+</code></pre><p>Everytime you build your project, <code>maven-jaxb2-plugin</code> will regenerate the POJOs or you can use <code>mvn generate-sources</code></p>
+<pre><code>$ mvn generate-sources
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building patterns 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- maven-jaxb2-plugin:0.12.3:generate (default) @ prototype ---
+[INFO] Up-to-date check for source resources [[http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl, file:/home/drmanalo/workspace/prototype/pom.xml]] and taret resources [[file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/ArrayOfForecast.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/ArrayOfWeatherDescription.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/Forecast.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/ForecastReturn.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetCityForecastByZIP.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetCityForecastByZIPResponse.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetCityWeatherByZIP.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetCityWeatherByZIPResponse.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetWeatherInformation.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetWeatherInformationResponse.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/ObjectFactory.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/POP.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/Temp.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/WeatherDescription.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/WeatherReturn.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/package-info.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/META-INF/sun-jaxb.episode]].
+[WARNING] The URI [http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl] seems to represent an absolute HTTP or HTTPS URL. Getting the last modification timestamp is only possible if the URL is accessible and if the server returns the [Last-Modified] header correctly. This method is not reliable and is likely to fail. In this case the last modification timestamp will be assumed to be unknown.
+[ERROR] Could not retrieve the last modification timestamp for the URI [http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl] from the HTTP URL connection. The [Last-Modified] header was probably not set correctly.
+[WARNING] Last modification of the URI [http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl] is not known.
+[INFO] Sources are not up-to-date, XJC will be executed.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2.138 s
+[INFO] Finished at: 2016-06-19T09:01:55+01:00
+[INFO] Final Memory: 13M/161M
+[INFO] ------------------------------------------------------------------------
+</code></pre><h3>Weather client</h3>
+<pre><code>package com.prototype.weather;
+
+import java.text.SimpleDateFormat;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
+import org.springframework.ws.soap.client.core.SoapActionCallback;
+
+import com.prototype.wsdl.Forecast;
+import com.prototype.wsdl.ForecastReturn;
+import com.prototype.wsdl.GetCityForecastByZIP;
+import com.prototype.wsdl.GetCityForecastByZIPResponse;
+import com.prototype.wsdl.Temp;
+
+public class WeatherClient extends WebServiceGatewaySupport {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(WeatherClient.class);
+
+	public GetCityForecastByZIPResponse getCityForecastByZip(String zipCode) {
+
+		GetCityForecastByZIP request = new GetCityForecastByZIP();
+		request.setZIP(zipCode);
+
+		LOGGER.info(&quot;Requesting forecast for &quot; + zipCode + &quot;...&quot;);
+
+		GetCityForecastByZIPResponse response = (GetCityForecastByZIPResponse) getWebServiceTemplate()
+				.marshalSendAndReceive(&quot;http://wsf.cdyne.com/WeatherWS/Weather.asmx&quot;, request,
+						new SoapActionCallback(&quot;http://ws.cdyne.com/WeatherWS/GetCityForecastByZIP&quot;));
+
+		return response;
+	}
+
+	public void printResponse(GetCityForecastByZIPResponse response) {
+
+		ForecastReturn forecastReturn = response.getGetCityForecastByZIPResult();
+
+		if (forecastReturn.isSuccess()) {
+
+			LOGGER.info(&quot;Forecast for &quot; + forecastReturn.getCity() + &quot;, &quot; + forecastReturn.getState());
+
+			SimpleDateFormat format = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);
+			for (Forecast forecast : forecastReturn.getForecastResult().getForecast()) {
+
+				Temp temperature = forecast.getTemperatures();
+
+				LOGGER.info(String.format(&quot;%s %s %s°-%s°&quot;,
+						format.format(forecast.getDate().toGregorianCalendar().getTime()), forecast.getDesciption(),
+						temperature.getMorningLow(), temperature.getDaytimeHigh()));
+			}
+		} else {
+			LOGGER.info(&quot;No forecast received&quot;);
+		}
+	}
+
+}
+</code></pre><h3>Weather Client configuration</h3>
+<pre><code>package com.prototype;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+
+import com.prototype.weather.WeatherClient;
+
+@Configuration
+public class WeatherClientConfiguration {
+
+	@Bean
+	public Jaxb2Marshaller marshaller() {
+		final Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		marshaller.setContextPath(&quot;com.prototype.wsdl&quot;);
+		return marshaller;
+	}
+
+	@Bean
+	public WeatherClient weatherClient(Jaxb2Marshaller marshaller) {
+		final WeatherClient client = new WeatherClient();
+		client.setDefaultUri(&quot;http://ws.cdyne.com/WeatherWS&quot;);
+		client.setMarshaller(marshaller);
+		client.setUnmarshaller(marshaller);
+		return client;
+	}
+}
+</code></pre><h3>Weather Client Test</h3>
+<pre><code>package com.prototype.weather;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import com.prototype.PrototypeApplication;
+import com.prototype.WeatherClientConfiguration;
+import com.prototype.weather.WeatherClient;
+import com.prototype.wsdl.GetCityForecastByZIPResponse;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = PrototypeApplication.class)
+@WebAppConfiguration
+public class WeatherClientTest {
+
+	@Test
+	public void testWeatherClient() {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(WeatherClientConfiguration.class);
+		WeatherClient weatherClient = context.getBean(WeatherClient.class);
+		GetCityForecastByZIPResponse response = weatherClient.getCityForecastByZip(&quot;94304&quot;);
+		weatherClient.printResponse(response);
+		context.close();
+	}
+}
+</code></pre><p>You should see this on your console</p>
+<pre><code>09:06:08.626[0;39m [36m INFO [main] 57: StartupInfoLogger.logStarted[0;39m -- Started WeatherClientTest in 3.314 seconds (JVM running for 4.265)
+[33m09:06:08.647[0;39m [36m INFO [main] 578: AbstractApplicationContext.prepareRefresh[0;39m -- Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@7c84195: startup date [Sun Jun 19 09:06:08 BST 2016]; root of context hierarchy
+[33m09:06:08.661[0;39m [36m INFO [main] 494: Jaxb2Marshaller.createJaxbContextFromContextPath[0;39m -- Creating JAXBContext with context path [com.prototype.wsdl]
+[33m09:06:08.697[0;39m [36m INFO [main] 139: SaajSoapMessageFactory.afterPropertiesSet[0;39m -- Creating SAAJ 1.3 MessageFactory with SOAP 1.1 Protocol
+[33m09:06:08.704[0;39m [36m INFO [main] 25: WeatherClient.getCityForecastByZip[0;39m -- Requesting forecast for 94304...
+[33m09:06:09.889[0;39m [36m INFO [main] 40: WeatherClient.printResponse[0;39m -- Forecast for Palo Alto, CA
+[33m09:06:09.891[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-03 Partly Cloudy °-57°
+[33m09:06:09.891[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-04 Partly Cloudy 41°-58°
+[33m09:06:09.892[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-05 Partly Cloudy 41°-59°
+[33m09:06:09.892[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-06 Partly Cloudy 44°-56°
+[33m09:06:09.892[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-07 Partly Cloudy 41°-60°
+[33m09:06:09.893[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-08 Partly Cloudy 42°-60°
+[33m09:06:09.893[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-09 Partly Cloudy 43°-58°
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2016/spring-boot-soap-client.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2016/spring-boot-soap-client.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

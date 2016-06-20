@@ -6,9 +6,212 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Sun, 12 Jun 2016 01:49:53 +0100</pubDate>
-    <lastBuildDate>Sun, 12 Jun 2016 01:49:53 +0100</lastBuildDate>
+    <pubDate>Mon, 20 Jun 2016 22:37:59 +0100</pubDate>
+    <lastBuildDate>Mon, 20 Jun 2016 22:37:59 +0100</lastBuildDate>
 
+      <item>
+        <title>Spring Boot SOAP Client</title>
+        <link>https://drmanalo.github.io/blog/2016/spring-boot-soap-client.html</link>
+        <pubDate>Sat, 18 Jun 2016 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2016/spring-boot-soap-client.html</guid>
+        <description>
+  	         &lt;p&gt;This is how I implemented &quot;Consuming a SOAP Web Service&quot; from &lt;a href=&quot;https://spring.io/guides/gs/consuming-web-service/&quot;&gt;Spring Guides&lt;/a&gt;. For the RESTful world, SOAP is dead but it&apos;s pretty much alive and &lt;a href=&quot;https://github.com/spring-projects/spring-boot/tree/master/spring-boot-starters/spring-boot-starter-ws&quot;&gt;Spring&lt;/a&gt; is developing features for it. I&apos;m not yet sure why the web service we are integrating to has extra requirements not available in REST but if you&apos;re wondering why companies are using SOAP, here is a good &lt;a href=&quot;http://spf13.com/post/soap-vs-rest&quot;&gt;REST vs SOAP article&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;To get started with SOAP, I have to add this to my existing Spring Boot POM.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
+  &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+  &amp;lt;artifactId&amp;gt;spring-boot-starter-ws&amp;lt;/artifactId&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The above Spring Boot starter will add the following dependencies.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;spring-jms&amp;lt;/artifactId&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;spring-oxm&amp;lt;/artifactId&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;org.springframework.ws&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;spring-ws-core&amp;lt;/artifactId&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;org.springframework.ws&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;spring-ws-support&amp;lt;/artifactId&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Generating POJOs using WSDL&lt;/h3&gt;&lt;p&gt;Since I&apos;m going to build a client that fetches weather data from &lt;a href=&quot;http://wiki.cdyne.com/index.php/CDYNE_Weather&quot;&gt;CDYNE weather&lt;/a&gt;, I need POJOs as request and response objects. To generate them, I&apos;m going to add this to my POM&apos;s plugins.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;plugin&amp;gt;
+	&amp;lt;groupId&amp;gt;org.jvnet.jaxb2.maven2&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;maven-jaxb2-plugin&amp;lt;/artifactId&amp;gt;
+	&amp;lt;version&amp;gt;0.12.3&amp;lt;/version&amp;gt;
+	&amp;lt;executions&amp;gt;
+		&amp;lt;execution&amp;gt;
+			&amp;lt;goals&amp;gt;
+				&amp;lt;goal&amp;gt;generate&amp;lt;/goal&amp;gt;
+			&amp;lt;/goals&amp;gt;
+		&amp;lt;/execution&amp;gt;
+	&amp;lt;/executions&amp;gt;
+	&amp;lt;configuration&amp;gt;
+		&amp;lt;schemaLanguage&amp;gt;WSDL&amp;lt;/schemaLanguage&amp;gt;
+		&amp;lt;generatePackage&amp;gt;com.prototype.wsdl&amp;lt;/generatePackage&amp;gt;
+		&amp;lt;schemas&amp;gt;
+			&amp;lt;schema&amp;gt;
+				&amp;lt;url&amp;gt;http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl&amp;lt;/url&amp;gt;
+			&amp;lt;/schema&amp;gt;
+		&amp;lt;/schemas&amp;gt;
+	&amp;lt;/configuration&amp;gt;
+&amp;lt;/plugin&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Everytime you build your project, &lt;code&gt;maven-jaxb2-plugin&lt;/code&gt; will regenerate the POJOs or you can use &lt;code&gt;mvn generate-sources&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ mvn generate-sources
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building patterns 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- maven-jaxb2-plugin:0.12.3:generate (default) @ prototype ---
+[INFO] Up-to-date check for source resources [[http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl, file:/home/drmanalo/workspace/prototype/pom.xml]] and taret resources [[file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/ArrayOfForecast.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/ArrayOfWeatherDescription.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/Forecast.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/ForecastReturn.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetCityForecastByZIP.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetCityForecastByZIPResponse.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetCityWeatherByZIP.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetCityWeatherByZIPResponse.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetWeatherInformation.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/GetWeatherInformationResponse.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/ObjectFactory.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/POP.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/Temp.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/WeatherDescription.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/WeatherReturn.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/com/prototype/wsdl/package-info.java, file:/home/drmanalo/workspace/prototype/target/generated-sources/xjc/META-INF/sun-jaxb.episode]].
+[WARNING] The URI [http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl] seems to represent an absolute HTTP or HTTPS URL. Getting the last modification timestamp is only possible if the URL is accessible and if the server returns the [Last-Modified] header correctly. This method is not reliable and is likely to fail. In this case the last modification timestamp will be assumed to be unknown.
+[ERROR] Could not retrieve the last modification timestamp for the URI [http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl] from the HTTP URL connection. The [Last-Modified] header was probably not set correctly.
+[WARNING] Last modification of the URI [http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl] is not known.
+[INFO] Sources are not up-to-date, XJC will be executed.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2.138 s
+[INFO] Finished at: 2016-06-19T09:01:55+01:00
+[INFO] Final Memory: 13M/161M
+[INFO] ------------------------------------------------------------------------
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Weather client&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.prototype.weather;
+
+import java.text.SimpleDateFormat;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
+import org.springframework.ws.soap.client.core.SoapActionCallback;
+
+import com.prototype.wsdl.Forecast;
+import com.prototype.wsdl.ForecastReturn;
+import com.prototype.wsdl.GetCityForecastByZIP;
+import com.prototype.wsdl.GetCityForecastByZIPResponse;
+import com.prototype.wsdl.Temp;
+
+public class WeatherClient extends WebServiceGatewaySupport {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(WeatherClient.class);
+
+	public GetCityForecastByZIPResponse getCityForecastByZip(String zipCode) {
+
+		GetCityForecastByZIP request = new GetCityForecastByZIP();
+		request.setZIP(zipCode);
+
+		LOGGER.info(&amp;quot;Requesting forecast for &amp;quot; + zipCode + &amp;quot;...&amp;quot;);
+
+		GetCityForecastByZIPResponse response = (GetCityForecastByZIPResponse) getWebServiceTemplate()
+				.marshalSendAndReceive(&amp;quot;http://wsf.cdyne.com/WeatherWS/Weather.asmx&amp;quot;, request,
+						new SoapActionCallback(&amp;quot;http://ws.cdyne.com/WeatherWS/GetCityForecastByZIP&amp;quot;));
+
+		return response;
+	}
+
+	public void printResponse(GetCityForecastByZIPResponse response) {
+
+		ForecastReturn forecastReturn = response.getGetCityForecastByZIPResult();
+
+		if (forecastReturn.isSuccess()) {
+
+			LOGGER.info(&amp;quot;Forecast for &amp;quot; + forecastReturn.getCity() + &amp;quot;, &amp;quot; + forecastReturn.getState());
+
+			SimpleDateFormat format = new SimpleDateFormat(&amp;quot;yyyy-MM-dd&amp;quot;);
+			for (Forecast forecast : forecastReturn.getForecastResult().getForecast()) {
+
+				Temp temperature = forecast.getTemperatures();
+
+				LOGGER.info(String.format(&amp;quot;%s %s %s°-%s°&amp;quot;,
+						format.format(forecast.getDate().toGregorianCalendar().getTime()), forecast.getDesciption(),
+						temperature.getMorningLow(), temperature.getDaytimeHigh()));
+			}
+		} else {
+			LOGGER.info(&amp;quot;No forecast received&amp;quot;);
+		}
+	}
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Weather Client configuration&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.prototype;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+
+import com.prototype.weather.WeatherClient;
+
+@Configuration
+public class WeatherClientConfiguration {
+
+	@Bean
+	public Jaxb2Marshaller marshaller() {
+		final Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		marshaller.setContextPath(&amp;quot;com.prototype.wsdl&amp;quot;);
+		return marshaller;
+	}
+
+	@Bean
+	public WeatherClient weatherClient(Jaxb2Marshaller marshaller) {
+		final WeatherClient client = new WeatherClient();
+		client.setDefaultUri(&amp;quot;http://ws.cdyne.com/WeatherWS&amp;quot;);
+		client.setMarshaller(marshaller);
+		client.setUnmarshaller(marshaller);
+		return client;
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Weather Client Test&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;package com.prototype.weather;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import com.prototype.PrototypeApplication;
+import com.prototype.WeatherClientConfiguration;
+import com.prototype.weather.WeatherClient;
+import com.prototype.wsdl.GetCityForecastByZIPResponse;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = PrototypeApplication.class)
+@WebAppConfiguration
+public class WeatherClientTest {
+
+	@Test
+	public void testWeatherClient() {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(WeatherClientConfiguration.class);
+		WeatherClient weatherClient = context.getBean(WeatherClient.class);
+		GetCityForecastByZIPResponse response = weatherClient.getCityForecastByZip(&amp;quot;94304&amp;quot;);
+		weatherClient.printResponse(response);
+		context.close();
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You should see this on your console&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;09:06:08.626[0;39m [36m INFO [main] 57: StartupInfoLogger.logStarted[0;39m -- Started WeatherClientTest in 3.314 seconds (JVM running for 4.265)
+[33m09:06:08.647[0;39m [36m INFO [main] 578: AbstractApplicationContext.prepareRefresh[0;39m -- Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@7c84195: startup date [Sun Jun 19 09:06:08 BST 2016]; root of context hierarchy
+[33m09:06:08.661[0;39m [36m INFO [main] 494: Jaxb2Marshaller.createJaxbContextFromContextPath[0;39m -- Creating JAXBContext with context path [com.prototype.wsdl]
+[33m09:06:08.697[0;39m [36m INFO [main] 139: SaajSoapMessageFactory.afterPropertiesSet[0;39m -- Creating SAAJ 1.3 MessageFactory with SOAP 1.1 Protocol
+[33m09:06:08.704[0;39m [36m INFO [main] 25: WeatherClient.getCityForecastByZip[0;39m -- Requesting forecast for 94304...
+[33m09:06:09.889[0;39m [36m INFO [main] 40: WeatherClient.printResponse[0;39m -- Forecast for Palo Alto, CA
+[33m09:06:09.891[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-03 Partly Cloudy °-57°
+[33m09:06:09.891[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-04 Partly Cloudy 41°-58°
+[33m09:06:09.892[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-05 Partly Cloudy 41°-59°
+[33m09:06:09.892[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-06 Partly Cloudy 44°-56°
+[33m09:06:09.892[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-07 Partly Cloudy 41°-60°
+[33m09:06:09.893[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-08 Partly Cloudy 42°-60°
+[33m09:06:09.893[0;39m [36m INFO [main] 47: WeatherClient.printResponse[0;39m -- 2013-01-09 Partly Cloudy 43°-58°
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
       <item>
         <title>Pimping CentOS 7</title>
         <link>https://drmanalo.github.io/blog/2016/pimping-centos7.html</link>
