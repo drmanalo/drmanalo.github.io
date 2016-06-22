@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Exceptional Exceptions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Exceptional Exceptions</h1>
+			<p><em>11 June 2016</em></p>
+			<p><p>Creating an exception in Java is a very slow operation. Expect that throwing an exception will cost you around 1-5 microseconds. Nearly all this time is spent on filling in the exception thread stack. The deeper the stack trace is, the more time it will take to populate it. If you take a peek on <code>java.lang.Throwable</code> source, you will see the answer staring into your face.</p>
+<pre><code>public Throwable() {
+    fillInStackTrace();
+}
+
+public synchronized Throwable fillInStackTrace() {
+    if (stackTrace != null ||
+        backtrace != null /* Out of protocol state */ ) {
+        fillInStackTrace(0);
+        stackTrace = UNASSIGNED_STACK;
+    }
+    return this;
+}
+
+private native Throwable fillInStackTrace(int dummy);
+</code></pre><p>Usually we throw an exception in case of unexpected problems. This means that we don’t use exceptions as part of the the repetitive if-then-else mess.</p>
+<!-- more --><h3>Creating the project</h3>
+<pre><code>$ mvn archetype:generate \
+          -DinteractiveMode=false \
+          -DarchetypeGroupId=org.openjdk.jmh \
+          -DarchetypeArtifactId=jmh-java-benchmark-archetype \
+          -DgroupId=com.prototype \
+          -DartifactId=benchmark \
+          -Dversion=1.0
+</code></pre><h3>Writing the benchmark</h3>
+<pre><code>package com.prototype;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Warmup;
+
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
+@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.MICROSECONDS)
+public class ExceptionBenchmark {
+
+	@Benchmark
+	public Object baseline() {
+		return new Object();
+	}
+
+	@Benchmark
+	public Object exceptional() {
+		return new RuntimeException();
+	}
+
+}
+</code></pre><h3>Compiling</h3>
+<pre><code>$ mvn clean install
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building JMH benchmark sample: Java 1.0
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ benchmark ---
+[INFO] Deleting /home/drmanalo/workspace/benchmark/target
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ benchmark ---
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/drmanalo/workspace/benchmark/src/main/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ benchmark ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /home/drmanalo/workspace/benchmark/target/classes
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ benchmark ---
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/drmanalo/workspace/benchmark/src/test/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ benchmark ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- maven-surefire-plugin:2.17:test (default-test) @ benchmark ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ benchmark ---
+[INFO] Building jar: /home/drmanalo/workspace/benchmark/target/benchmark-1.0.jar
+[INFO]
+[INFO] --- maven-shade-plugin:2.2:shade (default) @ benchmark ---
+[INFO] Including org.openjdk.jmh:jmh-core:jar:1.12 in the shaded jar.
+[INFO] Including net.sf.jopt-simple:jopt-simple:jar:4.6 in the shaded jar.
+[INFO] Including org.apache.commons:commons-math3:jar:3.2 in the shaded jar.
+[INFO] Replacing /home/drmanalo/workspace/benchmark/target/benchmarks.jar with /home/drmanalo/workspace/benchmark/target/benchmark-1.0-shaded.jar
+[INFO]
+[INFO] --- maven-install-plugin:2.5.1:install (default-install) @ benchmark ---
+[INFO] Installing /home/drmanalo/workspace/benchmark/target/benchmark-1.0.jar to /home/drmanalo/.m2/repository/com/prototype/benchmark/1.0/benchmark-1.0.jar
+[INFO] Installing /home/drmanalo/workspace/benchmark/pom.xml to /home/drmanalo/.m2/repository/com/prototype/benchmark/1.0/benchmark-1.0.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2.604 s
+[INFO] Finished at: 2016-06-21T23:03:56+01:00
+[INFO] Final Memory: 24M/203M
+[INFO] ------------------------------------------------------------------------
+
+</code></pre><h3>Running the benchmarks</h3>
+<pre><code>$ java -jar target/benchmarks.jar
+# JMH 1.12 (released 82 days ago)
+# VM version: JDK 1.8.0_91, VM 25.91-b14
+# VM invoker: /opt/jdk1.8.0_91/jre/bin/java
+# VM options: &lt;none&gt;
+# Warmup: 5 iterations, 1 us each
+# Measurement: 20 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: com.prototype.ExceptionBenchmark.baseline
+
+# Run progress: 0.00% complete, ETA 00:06:40
+# Fork: 1 of 10
+# Warmup Iteration   1: 0.243 us/op
+# Warmup Iteration   2: 0.038 us/op
+# Warmup Iteration   3: 0.011 us/op
+# Warmup Iteration   4: 0.016 us/op
+# Warmup Iteration   5: 0.004 us/op
+Iteration   1: 0.004 us/op
+Iteration   2: 0.004 us/op
+Iteration   3: 0.004 us/op
+Iteration   4: 0.004 us/op
+Iteration   5: 0.004 us/op
+Iteration   6: 0.004 us/op
+Iteration   7: 0.004 us/op
+Iteration   8: 0.004 us/op
+Iteration   9: 0.004 us/op
+Iteration  10: 0.004 us/op
+Iteration  11: 0.004 us/op
+Iteration  12: 0.004 us/op
+Iteration  13: 0.004 us/op
+Iteration  14: 0.004 us/op
+Iteration  15: 0.004 us/op
+Iteration  16: 0.004 us/op
+Iteration  17: 0.004 us/op
+Iteration  18: 0.004 us/op
+Iteration  19: 0.004 us/op
+Iteration  20: 0.004 us/op
+
+# JMH 1.12 (released 82 days ago)
+# VM version: JDK 1.8.0_91, VM 25.91-b14
+# VM invoker: /opt/jdk1.8.0_91/jre/bin/java
+# VM options: &lt;none&gt;
+# Warmup: 5 iterations, 1 us each
+# Measurement: 20 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: com.prototype.ExceptionBenchmark.exceptional
+
+# Run progress: 50.00% complete, ETA 00:03:29
+# Fork: 1 of 10
+# Warmup Iteration   1: 2.083 us/op
+# Warmup Iteration   2: 2.454 us/op
+# Warmup Iteration   3: 1.918 us/op
+# Warmup Iteration   4: 1.853 us/op
+# Warmup Iteration   5: 1.455 us/op
+Iteration   1: 1.096 us/op
+Iteration   2: 1.067 us/op
+Iteration   3: 1.073 us/op
+Iteration   4: 1.075 us/op
+Iteration   5: 1.069 us/op
+Iteration   6: 1.074 us/op
+Iteration   7: 1.075 us/op
+Iteration   8: 1.065 us/op
+Iteration   9: 1.074 us/op
+Iteration  10: 1.070 us/op
+Iteration  11: 1.075 us/op
+Iteration  12: 0.994 us/op
+Iteration  13: 0.991 us/op
+Iteration  14: 0.994 us/op
+Iteration  15: 1.003 us/op
+Iteration  16: 0.999 us/op
+Iteration  17: 1.006 us/op
+Iteration  18: 1.001 us/op
+Iteration  19: 0.999 us/op
+Iteration  20: 0.998 us/op
+</code></pre><h3>and the test results...</h3>
+<pre><code>Result &quot;baseline&quot;:
+  0.004 ±(99.9%) 0.001 us/op [Average]
+  (min, avg, max) = (0.004, 0.004, 0.005), stdev = 0.001
+  CI (99.9%): [0.004, 0.004] (assumes normal distribution)
+
+Result &quot;exceptional&quot;:
+  1.017 ±(99.9%) 0.015 us/op [Average]
+  (min, avg, max) = (0.944, 1.017, 1.594), stdev = 0.062
+  CI (99.9%): [1.002, 1.032] (assumes normal distribution)
+
+Benchmark                       Mode  Cnt  Score    Error  Units
+ExceptionBenchmark.baseline     avgt  200  0.004 ±  0.001  us/op
+ExceptionBenchmark.exceptional  avgt  200  1.017 ±  0.015  us/op
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2016/exceptional-exceptions.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2016/exceptional-exceptions.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

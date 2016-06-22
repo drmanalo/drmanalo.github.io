@@ -32,7 +32,7 @@
       <div class="container sidebar-sticky">
 
         <div class="sidebar-about">
-          <h1>dhon.manalo</h1>
+          <h1><a href="/">dhon.manalo</a></h1>
           <p class="lead">"Any fool can write code that a computer can understand"</p>
         </div>
 
@@ -66,6 +66,29 @@
 </code></pre><p>The above Spring Boot starter will add the following dependencies.</p>
 
 								<a class="btn btn-default" href="blog/2016/spring-boot-soap-client.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2016/exceptional-exceptions.html"><h1 class="post-title">Exceptional Exceptions</h1></a>
+								<span class="post-date">11 June 2016</span>
+								<p>Creating an exception in Java is a very slow operation. Expect that throwing an exception will cost you around 1-5 microseconds. Nearly all this time is spent on filling in the exception thread stack. The deeper the stack trace is, the more time it will take to populate it. If you take a peek on <code>java.lang.Throwable</code> source, you will see the answer staring into your face.</p>
+<pre><code>public Throwable() {
+    fillInStackTrace();
+}
+
+public synchronized Throwable fillInStackTrace() {
+    if (stackTrace != null ||
+        backtrace != null /* Out of protocol state */ ) {
+        fillInStackTrace(0);
+        stackTrace = UNASSIGNED_STACK;
+    }
+    return this;
+}
+
+private native Throwable fillInStackTrace(int dummy);
+</code></pre><p>Usually we throw an exception in case of unexpected problems. This means that we don’t use exceptions as part of the the repetitive if-then-else mess.</p>
+
+								<a class="btn btn-default" href="blog/2016/exceptional-exceptions.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>
