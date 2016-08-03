@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Wed, 22 Jun 2016 23:25:08 +0100</pubDate>
-    <lastBuildDate>Wed, 22 Jun 2016 23:25:08 +0100</lastBuildDate>
+    <pubDate>Wed, 3 Aug 2016 07:59:19 +0100</pubDate>
+    <lastBuildDate>Wed, 3 Aug 2016 07:59:19 +0100</lastBuildDate>
 
       <item>
         <title>Spring Boot SOAP Client</title>
@@ -3917,6 +3917,303 @@ ORA-01489: result of string concatenation is too long
 *Action:   Make sure that the result is less than the maximum size.
 &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Workaround&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;SELECT RTRIM(XMLAGG(XMLELEMENT(e, column_name, &amp;#39;,&amp;#39;).EXTRACT(&amp;#39;//text()&amp;#39;) ORDER BY column_name).GETCLOBVAL(), &amp;#39;,&amp;#39;) alias FROM table_name;
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Redmining CentOS</title>
+        <link>https://drmanalo.github.io/blog/2014/redmining-centos.html</link>
+        <pubDate>Sat, 25 Oct 2014 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2014/redmining-centos.html</guid>
+        <description>
+  	         &lt;blockquote&gt;
+Redmine is a flexible project management web application written using Ruby on Rails framework.
+&lt;/blockquote&gt;&lt;p&gt;To install redmine, you have to check if you have &lt;code&gt;ruby&lt;/code&gt; installed. To install ruby with ease, use &lt;a href=&quot;https://rvm.io/&quot;&gt;RVM&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+$ curl -sSL https://get.rvm.io | bash -s stable
+$ source ~/.rvm/scripts/rvm
+$ rvm install ruby 2.3.1
+$ ruby -v
+ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;&lt;h3&gt;Install rubygems&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo yum install rubygems
+...
+================================================================================
+ Package                  Arch         Version                 Repository  Size
+================================================================================
+Installing:
+ rubygems                 noarch       2.0.14-20.el7           base       211 k
+Installing for dependencies:
+ ruby                     x86_64       2.0.0.353-20.el7        base        66 k
+ ruby-irb                 noarch       2.0.0.353-20.el7        base        87 k
+ ruby-libs                x86_64       2.0.0.353-20.el7        base       2.8 M
+ rubygem-bigdecimal       x86_64       1.2.0-20.el7            base        78 k
+ rubygem-io-console       x86_64       0.4.2-20.el7            base        49 k
+ rubygem-json             x86_64       1.7.7-20.el7            base        74 k
+ rubygem-psych            x86_64       2.0.0-20.el7            base        76 k
+ rubygem-rdoc             noarch       4.0.0-20.el7            base       317 k
+
+Transaction Summary
+================================================================================
+Install  1 Package (+8 Dependent packages)
+
+Installed:
+  rubygems.noarch 0:2.0.14-20.el7
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Install passenger&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ gem install passenger
+Fetching: daemon_controller-1.2.0.gem (100%)
+Successfully installed daemon_controller-1.2.0
+Fetching: passenger-4.0.53.gem (100%)
+Building native extensions.  This could take a while...
+Successfully installed passenger-4.0.53
+Parsing documentation for daemon_controller-1.2.0
+Installing ri documentation for daemon_controller-1.2.0
+Parsing documentation for passenger-4.0.53
+Installing ri documentation for passenger-4.0.53
+Done installing documentation for daemon_controller, passenger after 3 seconds
+2 gems installed
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Try running passenger-install-apache2-module&lt;/h3&gt;&lt;p&gt;I followed all the recommended suggestions before moving on.&lt;br/&gt;&lt;code&gt;
+sudo chmod o+x &amp;quot;/home/drmanalo&amp;quot;
+sudo chown -R drmanalo &amp;quot;/home/drmanalo/.rvm/gems/ruby-2.1.2&amp;quot;
+&lt;/code&gt;&lt;/p&gt;&lt;h3&gt;Then check for failed dependencies&lt;/h3&gt;&lt;p&gt;This script has its own intelligence of resolving dependencies but I prefer the manual method. Pay attention to &lt;code&gt;Found: no&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Checking for required software...
+
+ * Checking for C compiler...
+      Found: yes
+      Location: /bin/cc
+ * Checking for C++ compiler...
+      Found: yes
+      Location: /bin/c++
+ * Checking for Curl development headers with SSL support...
+      Found: no
+      Error: Cannot find the `curl-config` command.
+ * Checking for OpenSSL development headers...
+      Found: yes
+      Location: /usr/include/openssl/ssl.h
+ * Checking for Zlib development headers...
+      Found: yes
+      Location: /usr/include/zlib.h
+ * Checking for Apache 2...
+      Found: yes
+      Location of httpd: /usr/sbin/httpd
+      Apache version: 2.4.6
+ * Checking for Apache 2 development headers...
+      Found: no
+ * Checking for Rake (associated with /home/drmanalo/.rvm/gems/ruby-2.1.2/wrappers/ruby)...
+      Found: yes
+      Location: /home/drmanalo/.rvm/gems/ruby-2.1.2/wrappers/rake
+ * Checking for OpenSSL support for Ruby...
+      Found: yes
+ * Checking for RubyGems...
+      Found: yes
+ * Checking for Ruby development headers...
+      Found: yes
+      Location: /home/drmanalo/.rvm/rubies/ruby-2.1.2/include/ruby-2.1.0/ruby.h
+ * Checking for rack...
+      Found: yes
+ * Checking for Apache Portable Runtime (APR) development headers...
+      Found: no
+ * Checking for Apache Portable Runtime Utility (APU) development headers...
+      Found: no
+&lt;/code&gt;&lt;/pre&gt;&lt;h4&gt;Resolving all the negatives&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;$ yum install curl-devel
+================================================================================
+ Package               Arch           Version                Repository    Size
+================================================================================
+Installing:
+ libcurl-devel         x86_64         7.29.0-19.el7          base         295 k
+
+Transaction Summary
+================================================================================
+Install  1 Package
+
+Installed:
+  libcurl-devel.x86_64 0:7.29.0-19.el7
+
+$ yum install httpd-devel apr-devel apr-util-devel
+================================================================================
+ Package               Arch        Version                   Repository    Size
+================================================================================
+Installing:
+ apr-devel             x86_64      1.4.8-3.el7               base         188 k
+ apr-util-devel        x86_64      1.5.2-6.el7               base          76 k
+ httpd-devel           x86_64      2.4.6-18.el7.centos       updates      181 k
+Installing for dependencies:
+ cyrus-sasl-devel      x86_64      2.1.26-17.el7             base         309 k
+ expat-devel           x86_64      2.1.0-8.el7               base          56 k
+ openldap-devel        x86_64      2.4.39-3.el7              base         796 k
+
+Transaction Summary
+================================================================================
+Install  3 Packages (+3 Dependent packages)
+
+Installed:
+  apr-devel.x86_64 0:1.4.8-3.el7            apr-util-devel.x86_64 0:1.5.2-6.el7
+  httpd-devel.x86_64 0:2.4.6-18.el7.centos
+
+Dependency Installed:
+  cyrus-sasl-devel.x86_64 0:2.1.26-17.el7    expat-devel.x86_64 0:2.1.0-8.el7
+  openldap-devel.x86_64 0:2.4.39-3.el7
+&lt;/code&gt;&lt;/pre&gt;&lt;h4&gt;Retrying passenger&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;$ passenger-install-apache2-module
+Welcome to the Phusion Passenger Apache 2 module installer, v4.0.53.
+--------------------------------------------
+Which languages are you interested in?
+------------------------------------------
+Checking for required software...
+--------------------------------------------
+Sanity checking Apache installation...
+--------------------------------------------
+Compiling and installing Apache 2 module...
+creating Makefile
+cd &amp;#39;buildout/ruby/ruby-2.1.2-x86_64-linux/&amp;#39; &amp;amp;&amp;amp; make
+compiling /home/drmanalo/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.53/ext/ruby/passenger_native_support.c
+linking shared-object passenger_native_support.so
+--------------------------------------------
+Almost there!
+
+Please edit your Apache configuration file, and add these lines:
+
+   LoadModule passenger_module /home/drmanalo/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.53/buildout/apache2/mod_passenger.so
+   &amp;lt;IfModule mod_passenger.c&amp;gt;
+     PassengerRoot /home/drmanalo/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.53
+     PassengerDefaultRuby /home/drmanalo/.rvm/gems/ruby-2.1.2/wrappers/ruby
+   &amp;lt;/IfModule&amp;gt;
+
+After you restart Apache, you are ready to deploy any number of web
+applications on Apache, with a minimum amount of configuration!
+
+Press ENTER to continue.
+--------------------------------------------
+Phusion Passenger is a trademark of Hongli Lai &amp;amp; Ninh Bui.
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Add passenger.conf to /etc/http/conf.d&lt;/h3&gt;&lt;p&gt;Please bear in mind the absolute paths going to my home folder. I inherited this when I first install &lt;code&gt;ruby&lt;/code&gt; for my Octopress. After adding this config file, run &lt;code&gt;systemctl restart httpd&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;LoadModule passenger_module /home/drmanalo/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.53/buildout/apache2/mod_passenger.so
+   &amp;lt;IfModule mod_passenger.c&amp;gt;
+     PassengerRoot /home/drmanalo/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.53
+     PassengerDefaultRuby /home/drmanalo/.rvm/gems/ruby-2.1.2/wrappers/ruby
+   &amp;lt;/IfModule&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;After installing passenger, I created my redmine database and granted the right privileges. I won&apos;t detail it here for security reasons.&lt;/p&gt;&lt;h3&gt;Passenger install on elementary OS 0.2.1&lt;/h3&gt;&lt;p&gt;This is not CentOS related but I&apos;m documenting here the extra step I made to have passenger-install-apache-module on elementary OS.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;p&gt;To install Curl development headers with SSL support:&lt;br/&gt; Please run &lt;code&gt;apt-get install libcurl4-openssl-dev&lt;/code&gt; or libcurl4-gnutls-dev, whichever you prefer.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;To install Apache 2 development headers:&lt;br/&gt; Please install it with &lt;code&gt;apt-get install apache2-threaded-dev&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;To install Apache Portable Runtime (APR) development headers:&lt;br/&gt; Please install it with &lt;code&gt;apt-get install libapr1-dev&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;To install Apache Portable Runtime Utility (APU) development headers:&lt;br/&gt; Please install it with &lt;code&gt;apt-get install libaprutil1-dev&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;h3&gt;Installing redmine 2.6&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ svn co http://svn.redmine.org/redmine/branches/2.6-stable redmine-2.6
+
+$ mv redmine-2.6 redmine
+
+$ sudo mv redmine /var/www
+
+$ cd /var/www/redmine/config
+
+$ cp database.yml.example database.yml
+
+# Put the right database settings
+$ vim database.yml
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Setting up rails&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ cd /var/www/redmine
+
+$ gem install bundler
+Successfully installed bundler-1.7.4
+Parsing documentation for bundler-1.7.4
+Done installing documentation for bundler after 1 seconds
+1 gem installed
+
+$ bundle install
+An error occurred while installing mysql2 (0.3.16), and Bundler cannot continue.
+Make sure that `gem install mysql2 -v &amp;#39;0.3.16&amp;#39;` succeeds before bundling.
+
+# Resolve mysql2 first
+$ sudo yum install mariadb-devel
+================================================================================
+ Package             Arch         Version                   Repository     Size
+================================================================================
+Installing:
+ mariadb-devel       x86_64       1:5.5.37-1.el7_0          updates       744 k
+
+Transaction Summary
+================================================================================
+Install  1 Package
+
+Installed:
+  mariadb-devel.x86_64 1:5.5.37-1.el7_0
+
+$ gem install mysql2 -v &amp;#39;0.3.16&amp;#39;
+Building native extensions.  This could take a while...
+Successfully installed mysql2-0.3.16
+Parsing documentation for mysql2-0.3.16
+Installing ri documentation for mysql2-0.3.16
+Done installing documentation for mysql2 after 0 seconds
+1 gem installed
+
+# Try bundle install again
+$ bundle install
+Your bundle is complete!
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+
+$ rake generate_secret_token
+
+$ RAILS_ENV=production rake db:migrate
+==  InsertBuiltinGroups: migrating ============================================
+==  InsertBuiltinGroups: migrated (0.1112s) ===================================
+
+$ RAILS_ENV=production rake redmine:load_default_data
+Select language: ar, az, bg, bs, ca, cs, da, de, el, en, en-GB, es, et, eu, fa, fi, fr, gl, he, hr, hu, id, it, ja, ko, lt, lv, mk, mn, nl, no, pl, pt, pt-BR, ro, ru, sk, sl, sq, sr, sr-YU, sv, th, tr, uk, vi, zh, zh-TW [en] en-GB
+====================================
+Default configuration data loaded.
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Activate Fast CGI&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ yum install mod_fcgid
+================================================================================
+ Package            Arch            Version                 Repository     Size
+================================================================================
+Installing:
+ mod_fcgid          x86_64          2.3.9-4.el7             base           79 k
+
+Transaction Summary
+================================================================================
+Install  1 Package
+Installed:
+  mod_fcgid.x86_64 0:2.3.9-4.el7
+
+$ cp dispatch.fcgi.example dispatch.fcgi
+
+$ cp htaccess.fcgi.example .htaccess
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Configure attachments folder&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ cp configuration.yml.example configuration.yml
+
+$ cd /var/www/redmine/config
+
+$ cp configuration.yml.example configuration.yml
+
+$ vim configuration.yml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# Absolute path to the directory where attachments are stored.
+  # The default is the &amp;#39;files&amp;#39; directory in your Redmine instance.
+  # Your Redmine instance needs to have write permission on this
+  # directory.
+  # Examples:
+  # attachments_storage_path: /var/redmine/files
+  # attachments_storage_path: D:/redmine/files
+ attachments_storage_path: /opt/redmine/files
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Create the vhost config file&lt;/h3&gt;&lt;p&gt;Create &lt;code&gt;redmine.conf&lt;/code&gt; under &lt;code&gt;/etc/httpd/conf.d&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;VirtualHost *:80&amp;gt;
+    ServerName redmine.local
+    ServerAdmin drmanalo@somewhere.net
+    DocumentRoot /var/www/redmine/public/
+    ErrorLog logs/redmine_error_log
+    &amp;lt;Directory &amp;quot;/var/www/redmine/public/&amp;quot;&amp;gt;
+        Options Indexes ExecCGI FollowSymLinks
+        Order allow,deny
+        Allow from all
+        AllowOverride all
+    &amp;lt;/Directory&amp;gt;
+&amp;lt;/VirtualHost&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Running redmine&lt;/h3&gt;&lt;p&gt;Setup the right folder permissions first.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo chown -R apache:apache /var/www/redmine
+$ sudo chmod -R 755 /var/www/redmine
+$ sys restart httpd
 &lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>
