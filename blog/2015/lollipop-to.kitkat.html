@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,14 +58,18 @@
 		<div class="post">
 			<h1>From Lollipop To Kitkat</h1>
 			<p><em>03 September 2015</em></p>
-			<p><p>Android system update is like pushed notifications where you cannot opt out. Rooted device actually can but I'm not rooting my device again since I had a bad experience with it. I kept ignoring this update but I woke up one morning in Android 5.0.2. This update is not compatible with my device as this drives it to the bend hence the reason I want to downgrade.</p><h3>Download Android debug bridge</h3>
+			<p><p>Android system update is like pushed notifications where you cannot opt out. Rooted device actually can but I'm not rooting my device again since I had a bad experience with it. I kept ignoring this update but I woke up one morning in Android 5.0.2. This update is not compatible with my device as this drives it to the bend hence the reason I want to downgrade.</p>
+<h3>Download Android debug bridge</h3>
 <pre><code>$ apt-cache search android-tools
 android-tools-fsutils - Android ext4 utilities with sparse support
 android-tools-adb - Android Debug Bridge CLI tool
 android-tools-adbd - Android Debug Bridge Phone Daemon
 android-tools-fastboot - Android Fastboot protocol CLI tool
-</code></pre><p>You can only install <code>android-tools-adb</code> for this purpose.</p>
-<!-- more --><h3>Download Android 4.4.4</h3><p>You can get the flash image you want from <a href="https://developers.google.com/android/nexus/images">Google Developers</a>. After downloading just extract it to make <code>flash-all.sh</code> available.</p>
+</code></pre>
+<p>You can only install <code>android-tools-adb</code> for this purpose.</p>
+<!-- more -->
+<h3>Download Android 4.4.4</h3>
+<p>You can get the flash image you want from <a href="https://developers.google.com/android/nexus/images">Google Developers</a>. After downloading just extract it to make <code>flash-all.sh</code> available.</p>
 <pre><code>$ ll nakasi-ktu84p
 total 377240
 drwxr-x--- 2 drmanalo drmanalo      4096 Jun 13  2014 ./
@@ -75,11 +79,15 @@ drwxr-xr-x 4 drmanalo drmanalo      4096 May 10 17:28 ../
 -rwxr-x--- 1 drmanalo drmanalo       872 Jun 13  2014 flash-all.sh*
 -rwxr-x--- 1 drmanalo drmanalo       698 Jun 13  2014 flash-base.sh*
 -rw-r----- 1 drmanalo drmanalo 384115329 Jun 13  2014 image-nakasi-ktu84p.zip
-</code></pre><h3>Check your device</h3><p>You should find your attached device. If not, chances are your android is not on USB debugging mode.</p>
+</code></pre>
+<h3>Check your device</h3>
+<p>You should find your attached device. If not, chances are your android is not on USB debugging mode.</p>
 <pre><code>$ adb devices
 List of devices attached
 015d456d39380a04        device
-</code></pre><h3>Unlock your fastloader</h3><p>You should see Andriod chilling down showing its keypad.</p>
+</code></pre>
+<h3>Unlock your fastloader</h3>
+<p>You should see Andriod chilling down showing its keypad.</p>
 <pre><code>$ adb reboot bootloader
 
 $ fastboot oem unlock
@@ -93,7 +101,9 @@ $ fastboot oem unlock
 (bootloader) Bootloader is unlocked now.
 OKAY [ 26.159s]
 finished. total time: 26.159s
-</code></pre><h3>Flash Kitkat to your device</h3><p>You will need to run this to the folder where you unzipped the flash image.</p>
+</code></pre>
+<h3>Flash Kitkat to your device</h3>
+<p>You will need to run this to the folder where you unzipped the flash image.</p>
 <pre><code>$ ./flash-all.sh
 ...
 (bootloader) Bootloader is already unlocked
@@ -192,7 +202,8 @@ rebooting...
 
 finished. total time: 160.447s
 Press any key to exit...
-</code></pre><h3>Lock your fastloader</h3>
+</code></pre>
+<h3>Lock your fastloader</h3>
 <pre><code>$ fastboot oem lock
 ...
 (bootloader) Bootloader is locked now.

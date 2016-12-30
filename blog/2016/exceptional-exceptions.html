@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -73,8 +73,10 @@ public synchronized Throwable fillInStackTrace() {
 }
 
 private native Throwable fillInStackTrace(int dummy);
-</code></pre><p>Usually we throw an exception in case of unexpected problems. This means that we don’t use exceptions as part of the the repetitive if-then-else mess.</p>
-<!-- more --><h3>Creating the project</h3>
+</code></pre>
+<p>Usually we throw an exception in case of unexpected problems. This means that we don’t use exceptions as part of the the repetitive if-then-else mess.</p>
+<!-- more -->
+<h3>Creating the project</h3>
 <pre><code>$ mvn archetype:generate \
           -DinteractiveMode=false \
           -DarchetypeGroupId=org.openjdk.jmh \
@@ -82,7 +84,8 @@ private native Throwable fillInStackTrace(int dummy);
           -DgroupId=com.prototype \
           -DartifactId=benchmark \
           -Dversion=1.0
-</code></pre><h3>Writing the benchmark</h3>
+</code></pre>
+<h3>Writing the benchmark</h3>
 <pre><code>package com.prototype;
 
 import java.util.concurrent.TimeUnit;
@@ -109,7 +112,8 @@ public class ExceptionBenchmark {
 	}
 
 }
-</code></pre><h3>Compiling</h3>
+</code></pre>
+<h3>Compiling</h3>
 <pre><code>$ mvn clean install
 [INFO] Scanning for projects...
 [INFO]                                                                         
@@ -158,7 +162,8 @@ public class ExceptionBenchmark {
 [INFO] Final Memory: 24M/203M
 [INFO] ------------------------------------------------------------------------
 
-</code></pre><h3>Running the benchmarks</h3>
+</code></pre>
+<h3>Running the benchmarks</h3>
 <pre><code>$ java -jar target/benchmarks.jar
 # JMH 1.12 (released 82 days ago)
 # VM version: JDK 1.8.0_91, VM 25.91-b14
@@ -237,7 +242,8 @@ Iteration  17: 1.006 us/op
 Iteration  18: 1.001 us/op
 Iteration  19: 0.999 us/op
 Iteration  20: 0.998 us/op
-</code></pre><h3>and the test results...</h3>
+</code></pre>
+<h3>and the test results...</h3>
 <pre><code>Result &quot;baseline&quot;:
   0.004 ±(99.9%) 0.001 us/op [Average]
   (min, avg, max) = (0.004, 0.004, 0.005), stdev = 0.001

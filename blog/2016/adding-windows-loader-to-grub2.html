@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,7 +58,8 @@
 		<div class="post">
 			<h1>Adding Windows Loader To grub2</h1>
 			<p><em>30 May 2016</em></p>
-			<p><p>I recently switched from ElementaryOS to CentOS. The install process went smoothly despite an initial issue while using a bootable SD card. I cannot detail the issue here but Google suggested using a DVD rather than SD card or any USB drive. Everything are working perfectly except I cannot go back to my Windows. It's embarassing to admit that we are using Windows for our open-source development but this is the reality. So when I'm away from work and testing things out, I'm rebooting to my CentOS and switch to Windows when I'm at work.</p><p>This is not grub2 specific issue by the way, grub2 should be able to add the loader but it has no knowledge of how to read <strong>ntfs</strong> partitions. The solution is install <code>ntfs-3g</code> and rebuild grub2 after.</p>
+			<p><p>I recently switched from ElementaryOS to CentOS. The install process went smoothly despite an initial issue while using a bootable SD card. I cannot detail the issue here but Google suggested using a DVD rather than SD card or any USB drive. Everything are working perfectly except I cannot go back to my Windows. It's embarassing to admit that we are using Windows for our open-source development but this is the reality. So when I'm away from work and testing things out, I'm rebooting to my CentOS and switch to Windows when I'm at work.</p>
+<p>This is not grub2 specific issue by the way, grub2 should be able to add the loader but it has no knowledge of how to read <strong>ntfs</strong> partitions. The solution is install <code>ntfs-3g</code> and rebuild grub2 after.</p>
 <pre><code>$ yum info ntfs-3g
 Installed Packages
 Name        : ntfs-3g
@@ -71,7 +72,8 @@ Repo        : installed
 From repo   : epel
 Summary     : Linux NTFS userspace driver
 </code></pre>
-<!-- more --><h3>Updating grub2</h3>
+<!-- more -->
+<h3>Updating grub2</h3>
 <pre><code># grub2-mkconfig -o /boot/grub2/grub.cfg
 Generating grub configuration file ...
 Found linux image: /boot/vmlinuz-3.10.0-327.18.2.el7.x86_64
@@ -96,7 +98,8 @@ ERROR: sil: invalid metadata checksum in area 3 on /dev/sda
 ERROR: sil: invalid metadata checksum in area 4 on /dev/sda
 Found Windows 7 (loader) on /dev/sda2
 done
-</code></pre><p>Not sure about the ERROR sil but I rebooted and have <strong>Windows 7 (loader) on /dev/sda2</strong> at the bottom of my grub.</p></p>
+</code></pre>
+<p>Not sure about the ERROR sil but I rebooted and have <strong>Windows 7 (loader) on /dev/sda2</strong> at the bottom of my grub.</p></p>
 		</div>
 	</div>
 

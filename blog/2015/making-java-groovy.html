@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,7 +58,9 @@
 		<div class="post">
 			<h1>Making Java Groovy</h1>
 			<p><em>21 December 2015</em></p>
-			<p><p>There is a book of exactly the same title from <a href="https://www.manning.com/books/making-java-groovy">manning.com</a>. I don't have it yet but father Christmas will put it underneath my tree this Christmas.</p><p>What I do have is Spring Boot in Action which covers mixing Java with Groovy. This is what this post is all about. I am going to create a Spring Boot project but will primarily use <code>groovy</code>.</p><h3>Creating the project</h3>
+			<p><p>There is a book of exactly the same title from <a href="https://www.manning.com/books/making-java-groovy">manning.com</a>. I don't have it yet but father Christmas will put it underneath my tree this Christmas.</p>
+<p>What I do have is Spring Boot in Action which covers mixing Java with Groovy. This is what this post is all about. I am going to create a Spring Boot project but will primarily use <code>groovy</code>.</p>
+<h3>Creating the project</h3>
 <pre><code>$ mkdir paluwagan
 $ cd paluwagan
 $ mkdir static
@@ -66,7 +68,9 @@ $ spring init --dependencies web,h2,data-jpa,jdbc,groovy-templates --build gradl
 Using service at https://start.spring.io
 Project extracted to &#39;/home/drmanalo/workspace/paluwagan&#39;
 </code></pre>
-<!-- more --><p>By default, the package belongs to com.demo and the main application is called DemoApplication. A quick refactor will allow you to change to a more meaningful package or application class name.</p><h3>build.gradle</h3>
+<!-- more -->
+<p>By default, the package belongs to com.demo and the main application is called DemoApplication. A quick refactor will allow you to change to a more meaningful package or application class name.</p>
+<h3>build.gradle</h3>
 <pre><code>apply plugin: &quot;groovy&quot;
 apply plugin: &quot;spring-boot&quot;
 apply plugin: &quot;application&quot;
@@ -117,14 +121,18 @@ dependencies {
     testCompile &quot;org.spockframework:spock-spring:1.0-groovy-2.4&quot;
     testRuntime &quot;cglib:cglib-nodep:3.2.0&quot;
 }
-</code></pre><h3>application.properties</h3><p>I want to avoid the default port 8080 therefore I'm changing it to a different port.</p>
+</code></pre>
+<h3>application.properties</h3>
+<p>I want to avoid the default port 8080 therefore I'm changing it to a different port.</p>
 <pre><code># general
 server.port=8000
-</code></pre><p>This stops Hibernate from generating my tables which is a very good feature but if you're planning to use Flyway or Liquibase in the future, it is best to set <code>ddl-auto</code> to none. The standard Hibernate property values are <code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, or <code>create-drop</code>.</p>
+</code></pre>
+<p>This stops Hibernate from generating my tables which is a very good feature but if you're planning to use Flyway or Liquibase in the future, it is best to set <code>ddl-auto</code> to none. The standard Hibernate property values are <code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, or <code>create-drop</code>.</p>
 <pre><code># Java Persistence API
 spring.jpa.generate-ddl=false
 spring.jpa.hibernate.ddl-auto=none
-</code></pre><h3>application-dev.properties</h3>
+</code></pre>
+<h3>application-dev.properties</h3>
 <pre><code># logger
 logging.level.*=INFO
 logging.level.com.manalo.*=DEBUG
@@ -132,7 +140,8 @@ logging.level.com.manalo.*=DEBUG
 # Hypersonic web console
 spring.h2.console.enabled=true
 spring.h2.console.path=/h2
-</code></pre><p>If you want more control to your schema and its data, you will need <code>schema.sql</code> and <code>data.sql</code>. By convention, you can have <code>schema-{platform}</code> and <code>data-{platform}</code> if you are using more than one relational database.</p>
+</code></pre>
+<p>If you want more control to your schema and its data, you will need <code>schema.sql</code> and <code>data.sql</code>. By convention, you can have <code>schema-{platform}</code> and <code>data-{platform}</code> if you are using more than one relational database.</p>
 <pre><code># datasource
 spring.datasource.initialize=true
 spring.datasource.platform=h2
@@ -140,16 +149,20 @@ spring.datasource.driver-class-name=org.h2.Driver
 spring.datasource.password=password
 spring.datasource.username=testuser
 spring.datasource.url=jdbc:h2:mem:test;MODE=PostgreSQL;USER=${spring.datasource.username};PASSWORD=${spring.datasource.password};
-</code></pre><h3>schema-h2.sql</h3>
+</code></pre>
+<h3>schema-h2.sql</h3>
 <pre><code>create table user (
     id       identity,
     username varchar(20)  not null,
     password varchar(255) not null,
     fullname varchar(100)
 );
-</code></pre><h3>data-h2.sql</h3>
+</code></pre>
+<h3>data-h2.sql</h3>
 <pre><code>insert into user (id, username, password, fullname) values (1, &#39;admin&#39;, &#39;secret&#39;, &#39;James Bond&#39;);
-</code></pre><h3>SpringBootApplication</h3><p>The default <code>DemoApplication</code> is written in java where the equivalent groovy class is like this.</p>
+</code></pre>
+<h3>SpringBootApplication</h3>
+<p>The default <code>DemoApplication</code> is written in java where the equivalent groovy class is like this.</p>
 <pre><code>package com.manalo
 
 import org.springframework.boot.SpringApplication
@@ -163,7 +176,9 @@ class PaluwaganApplication {
     }
 
 }
-</code></pre><h3>Data Access Layer</h3><p>A very simple way of using what Spring Data offers.</p>
+</code></pre>
+<h3>Data Access Layer</h3>
+<p>A very simple way of using what Spring Data offers.</p>
 <pre><code>package com.manalo.repository
 
 import com.manalo.domain.User
@@ -174,7 +189,9 @@ interface UserRepository extends JpaRepository&lt;User, Integer&gt; {
     User findByUsername(String username)
 
 }
-</code></pre><h3>Service Layer</h3><p>A simple <code>CRUD</code> service</p>
+</code></pre>
+<h3>Service Layer</h3>
+<p>A simple <code>CRUD</code> service</p>
 <pre><code>package com.manalo.service
 
 import com.manalo.domain.User
@@ -218,7 +235,8 @@ class UserService {
         }
     }
 }
-</code></pre><h3>Domain Object</h3>
+</code></pre>
+<h3>Domain Object</h3>
 <pre><code>package com.manalo.domain
 
 import javax.persistence.Entity
@@ -235,7 +253,8 @@ class User {
     String username
     String password
 }
-</code></pre><h3>Controller</h3>
+</code></pre>
+<h3>Controller</h3>
 <pre><code>package com.manalo.controller
 
 import com.manalo.service.UserService
@@ -282,7 +301,8 @@ class UserController {
         return new ModelAndView(&quot;redirect:/user/list&quot;)
     }
 }
-</code></pre><h3>View: Main Groovy Template</h3>
+</code></pre>
+<h3>View: Main Groovy Template</h3>
 <pre><code>yieldUnescaped &#39;&lt;!DOCTYPE html&gt;&#39;
 html {
     head {
@@ -332,7 +352,8 @@ html {
         script src: &quot;/webjars/startbootstrap-sb-admin-2/1.0.8-1/js/sb-admin-2.js&quot;, &quot;&quot;
     } // end body
 }
-</code></pre><h3>View: edit.tpl</h3>
+</code></pre>
+<h3>View: edit.tpl</h3>
 <pre><code>layout &quot;layouts/main.tpl&quot;,
 pageTitle: &quot;Paluwagan :: Manage User&quot;,
 mainBody: contents {
@@ -364,7 +385,8 @@ mainBody: contents {
         }
     }
 }
-</code></pre><h3>View: list.tpl</h3>
+</code></pre>
+<h3>View: list.tpl</h3>
 <pre><code>layout &#39;layouts/main.tpl&#39;,
 pageTitle: &#39;Paluwagan :: Users&#39;,
 mainBody: contents {
@@ -403,7 +425,9 @@ mainBody: contents {
         }
     }
 }
-</code></pre><h3>Testing using Spock</h3><p>On my next post I will detail how I wrote the unit and integration tests for my repository, service and controller Groovy classes.</p></p>
+</code></pre>
+<h3>Testing using Spock</h3>
+<p>On my next post I will detail how I wrote the unit and integration tests for my repository, service and controller Groovy classes.</p></p>
 		</div>
 	</div>
 

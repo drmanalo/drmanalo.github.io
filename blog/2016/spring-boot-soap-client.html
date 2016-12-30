@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,12 +58,14 @@
 		<div class="post">
 			<h1>Spring Boot SOAP Client</h1>
 			<p><em>18 June 2016</em></p>
-			<p><p>This is how I implemented "Consuming a SOAP Web Service" from <a href="https://spring.io/guides/gs/consuming-web-service/">Spring Guides</a>. For the RESTful world, SOAP is dead but it's pretty much alive and <a href="https://github.com/spring-projects/spring-boot/tree/master/spring-boot-starters/spring-boot-starter-ws">Spring</a> is developing features for it. I'm not yet sure why the web service we are integrating to has extra requirements not available in REST but if you're wondering why companies are using SOAP, here is a good <a href="http://spf13.com/post/soap-vs-rest">REST vs SOAP article</a>.</p><p>To get started with SOAP, I have to add this to my existing Spring Boot POM.</p>
+			<p><p>This is how I implemented "Consuming a SOAP Web Service" from <a href="https://spring.io/guides/gs/consuming-web-service/">Spring Guides</a>. For the RESTful world, SOAP is dead but it's pretty much alive and <a href="https://github.com/spring-projects/spring-boot/tree/master/spring-boot-starters/spring-boot-starter-ws">Spring</a> is developing features for it. I'm not yet sure why the web service we are integrating to has extra requirements not available in REST but if you're wondering why companies are using SOAP, here is a good <a href="http://spf13.com/post/soap-vs-rest">REST vs SOAP article</a>.</p>
+<p>To get started with SOAP, I have to add this to my existing Spring Boot POM.</p>
 <pre><code>&lt;dependency&gt;
   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
   &lt;artifactId&gt;spring-boot-starter-ws&lt;/artifactId&gt;
 &lt;/dependency&gt;
-</code></pre><p>The above Spring Boot starter will add the following dependencies.</p>
+</code></pre>
+<p>The above Spring Boot starter will add the following dependencies.</p>
 <!-- more -->
 <pre><code>&lt;dependency&gt;
 	&lt;groupId&gt;org.springframework&lt;/groupId&gt;
@@ -81,7 +83,9 @@
 	&lt;groupId&gt;org.springframework.ws&lt;/groupId&gt;
 	&lt;artifactId&gt;spring-ws-support&lt;/artifactId&gt;
 &lt;/dependency&gt;
-</code></pre><h3>Generating POJOs using WSDL</h3><p>Since I'm going to build a client that fetches weather data from <a href="http://wiki.cdyne.com/index.php/CDYNE_Weather">CDYNE weather</a>, I need POJOs as request and response objects. To generate them, I'm going to add this to my POM's plugins.</p>
+</code></pre>
+<h3>Generating POJOs using WSDL</h3>
+<p>Since I'm going to build a client that fetches weather data from <a href="http://wiki.cdyne.com/index.php/CDYNE_Weather">CDYNE weather</a>, I need POJOs as request and response objects. To generate them, I'm going to add this to my POM's plugins.</p>
 <pre><code>&lt;plugin&gt;
 	&lt;groupId&gt;org.jvnet.jaxb2.maven2&lt;/groupId&gt;
 	&lt;artifactId&gt;maven-jaxb2-plugin&lt;/artifactId&gt;
@@ -103,7 +107,8 @@
 		&lt;/schemas&gt;
 	&lt;/configuration&gt;
 &lt;/plugin&gt;
-</code></pre><p>Everytime you build your project, <code>maven-jaxb2-plugin</code> will regenerate the POJOs or you can use <code>mvn generate-sources</code></p>
+</code></pre>
+<p>Everytime you build your project, <code>maven-jaxb2-plugin</code> will regenerate the POJOs or you can use <code>mvn generate-sources</code></p>
 <pre><code>$ mvn generate-sources
 [INFO] Scanning for projects...
 [INFO]                                                                         
@@ -124,7 +129,8 @@
 [INFO] Finished at: 2016-06-19T09:01:55+01:00
 [INFO] Final Memory: 13M/161M
 [INFO] ------------------------------------------------------------------------
-</code></pre><h3>Weather client</h3>
+</code></pre>
+<h3>Weather client</h3>
 <pre><code>package com.prototype.weather;
 
 import java.text.SimpleDateFormat;
@@ -181,7 +187,8 @@ public class WeatherClient extends WebServiceGatewaySupport {
 	}
 
 }
-</code></pre><h3>Weather Client configuration</h3>
+</code></pre>
+<h3>Weather Client configuration</h3>
 <pre><code>package com.prototype;
 
 import org.springframework.context.annotation.Bean;
@@ -209,7 +216,8 @@ public class WeatherClientConfiguration {
 		return client;
 	}
 }
-</code></pre><h3>Weather Client Test</h3>
+</code></pre>
+<h3>Weather Client Test</h3>
 <pre><code>package com.prototype.weather;
 
 import org.junit.Test;
@@ -238,7 +246,8 @@ public class WeatherClientTest {
 		context.close();
 	}
 }
-</code></pre><p>You should see this on your console</p>
+</code></pre>
+<p>You should see this on your console</p>
 <pre><code>09:06:08.626[0;39m [36m INFO [main] 57: StartupInfoLogger.logStarted[0;39m -- Started WeatherClientTest in 3.314 seconds (JVM running for 4.265)
 [33m09:06:08.647[0;39m [36m INFO [main] 578: AbstractApplicationContext.prepareRefresh[0;39m -- Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@7c84195: startup date [Sun Jun 19 09:06:08 BST 2016]; root of context hierarchy
 [33m09:06:08.661[0;39m [36m INFO [main] 494: Jaxb2Marshaller.createJaxbContextFromContextPath[0;39m -- Creating JAXBContext with context path [com.prototype.wsdl]

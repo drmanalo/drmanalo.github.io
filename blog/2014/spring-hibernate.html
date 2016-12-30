@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,7 +58,8 @@
 		<div class="post">
 			<h1>Spring Persistence with Hibernate</h1>
 			<p><em>03 September 2014</em></p>
-			<p><p>After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I'm going to use H2 to avoid 3rd party database dependency.</p><p>Just like my previous post, I'm going to use <code>maven-archetype-generate</code> and will add Spring dependencies later on.</p>
+			<p><p>After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I'm going to use H2 to avoid 3rd party database dependency.</p>
+<p>Just like my previous post, I'm going to use <code>maven-archetype-generate</code> and will add Spring dependencies later on.</p>
 <pre><code>$ mvn archetype:generate -DgroupId=com.manalo.prototype -DartifactId=persistence -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 [INFO] Scanning for projects...
 [INFO]
@@ -90,7 +91,8 @@
 [INFO] Final Memory: 14M/150M
 [INFO] ------------------------------------------------------------------------
 </code></pre>
-<!-- more --><h3>mvn eclipse:eclipse</h3>
+<!-- more -->
+<h3>mvn eclipse:eclipse</h3>
 <pre><code>$ mvn eclipse:eclipse
 [INFO] Scanning for projects...
 [INFO]
@@ -115,7 +117,9 @@
 [INFO] Finished at: Thu Sep 04 23:23:07 BST 2014
 [INFO] Final Memory: 9M/150M
 [INFO] ------------------------------------------------------------------------
-</code></pre><h3>pom.xml</h3><p>Here's my complete <code>pom.xml</code> with added dependencies apart from Spring persistence.</p>
+</code></pre>
+<h3>pom.xml</h3>
+<p>Here's my complete <code>pom.xml</code> with added dependencies apart from Spring persistence.</p>
 <pre><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
 	xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
 
@@ -221,7 +225,9 @@
 	&lt;/build&gt;
 
 &lt;/project&gt;
-</code></pre><h3>Spring Configurations</h3><p>This contains database connection, connection pooling and Hibernate configurations. I defined the packages where Spring should look for its beans using <strong>context:component-scan</strong> elements.</p>
+</code></pre>
+<h3>Spring Configurations</h3>
+<p>This contains database connection, connection pooling and Hibernate configurations. I defined the packages where Spring should look for its beans using <strong>context:component-scan</strong> elements.</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
 	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
@@ -282,7 +288,9 @@
 	&lt;/bean&gt;
 
 &lt;/beans&gt;
-</code></pre><h3>application.properties</h3><p>I put this under <code>src/main/resources</code> which has to be added in your classpath in order for <code>PropertyPlaceholderConfigurer</code> to find it.</p>
+</code></pre>
+<h3>application.properties</h3>
+<p>I put this under <code>src/main/resources</code> which has to be added in your classpath in order for <code>PropertyPlaceholderConfigurer</code> to find it.</p>
 <pre><code># Embedded H2 database
 db.driver=org.h2.Driver
 db.user=testuser
@@ -304,7 +312,9 @@ db.pool.maxidletime=14400
 hibernate.hbm2ddl.auto=create
 hibernate.show_sql=true
 hibernate.dialect=org.hibernate.dialect.MySQLDialect
-</code></pre><h3>log4j.properties</h3><p>As this is part of <em>convention over configuration</em>, you have to name this file as <code>log4j.properties</code> and should also be within your classpath.</p>
+</code></pre>
+<h3>log4j.properties</h3>
+<p>As this is part of <em>convention over configuration</em>, you have to name this file as <code>log4j.properties</code> and should also be within your classpath.</p>
 <pre><code># Root logger
 log4j.rootLogger=INFO, file
 log4j.logger.com.manalo=DEBUG, stdout
@@ -322,7 +332,8 @@ log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.Target=System.out
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %5p %c{1}:%L - %m%n
-</code></pre><h3>Database Config</h3>
+</code></pre>
+<h3>Database Config</h3>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
 	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
@@ -351,14 +362,17 @@ log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %5p %c{1}:%L - %m%n
 	&lt;/jdbc:initialize-database&gt;
 
 &lt;/beans&gt;
-</code></pre><h3>initialise.sql</h3><p>You will notice this file is being loaded using <code>jdbc:script</code> element.</p>
+</code></pre>
+<h3>initialise.sql</h3>
+<p>You will notice this file is being loaded using <code>jdbc:script</code> element.</p>
 <pre><code>CREATE TABLE user (
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   	username VARCHAR (32) NOT NULL,
   	password VARCHAR (255) NOT NULL,
   	UNIQUE (USERNAME)
 );
-</code></pre><h3>Domain Object</h3>
+</code></pre>
+<h3>Domain Object</h3>
 <pre><code>package com.manalo.domain;
 
 import javax.persistence.Column;
@@ -408,7 +422,8 @@ public class User {
 	}
 
 }
-</code></pre><h3>Data Access Component</h3>
+</code></pre>
+<h3>Data Access Component</h3>
 <pre><code>package com.manalo.dao;
 
 import java.util.List;
@@ -453,7 +468,8 @@ public class UserDao {
 	}
 
 }
-</code></pre><h3>Service Layer</h3>
+</code></pre>
+<h3>Service Layer</h3>
 <pre><code>package com.manalo.service;
 
 import java.util.List;
@@ -485,7 +501,8 @@ public class UserManager {
 	}
 
 }
-</code></pre><h3>App.java</h3>
+</code></pre>
+<h3>App.java</h3>
 <pre><code>package com.manalo.prototype;
 
 import java.util.List;
@@ -530,7 +547,9 @@ public class App {
 
 	}
 }
-</code></pre><h3>Running the application</h3><p>Within Eclipse, right-click App.java -&gt; Run As -&gt; Java Application. You should see this within Eclipse's console. There are extra noises since log4j is doing its job.</p>
+</code></pre>
+<h3>Running the application</h3>
+<p>Within Eclipse, right-click App.java -&gt; Run As -&gt; Java Application. You should see this within Eclipse's console. There are extra noises since log4j is doing its job.</p>
 <pre><code>Hibernate: drop table if exists User
 Hibernate: create table User (id integer not null auto_increment, password varchar(255) not null, username varchar(255) not null, primary key (id))
 23:06:01,825  INFO SchemaExport:405 - HHH000230: Schema export complete
@@ -541,7 +560,8 @@ Username: drmanalo
 Password: secret
 Hibernate: select this_.id as id0_0_, this_.password as password0_0_, this_.username as username0_0_ from User this_
 Number of users: 1
-</code></pre><p><strong><a href="/downloads/persistence.zip">Download source</a></strong></p></p>
+</code></pre>
+<p><strong><a href="/downloads/persistence.zip">Download source</a></strong></p></p>
 		</div>
 	</div>
 

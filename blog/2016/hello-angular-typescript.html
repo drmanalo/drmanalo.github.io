@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Hello Angular Typescript</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Hello Angular Typescript</h1>
+			<p><em>29 December 2016</em></p>
+			<p><p><strong>Angular</strong> is one of many open source frameworks for developing web applications. I may have not seen all of them but this is the closest I think to Java and its metadata approach to programming. Another Javascript framework I wanted to use is <strong>nodejs</strong> but this is more than just a framework or library but a runtime environment if you like.</p>
+<h3>Angular Toolset</h3>
+<p>You will get this with any language you wanted to use, you need to set up its environment. <code>node</code> and <code>npm</code> is a must when writing Angular.</p>
+<pre><code>$ curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+Fetched 313 kB in 0s (484 kB/s)    
+
+## Run `apt-get install nodejs` (as root) to install Node.js v7.x and npm
+
+$ sudo apt-get install nodejs
+Fetched 10.9 MB in 2s (4,238 kB/s)
+
+$ node -v
+v7.3.0
+
+$ npm -v
+3.10.10
+</code></pre>
+<!-- more -->
+<h3>Creating hello angular project</h3>
+<pre><code>$ mkdir hello-typescript
+
+$ cd hello-typescript
+
+$ npm init -y
+</code></pre>
+<p><code>npm init</code> will create the starter <code>package.json</code> where I'm going to add the project dependencies. This is the <code>pom.xml</code> or the <code>build.gradle</code> or the <code>build.sbt</code> of the JVM world if you know what I mean.</p>
+<h3>Folder Structure</h3>
+<p>This is my hello-typescript folder structure. This will grow once you run <code>npm install</code>.</p>
+<pre><code>├── app
+│   ├── app.component.ts
+│   ├── app.module.ts
+│   └── main.ts
+├── index.html
+├── package.json
+├── systemjs.config.js
+└── tsconfig.json
+</code></pre>
+<h3>package.json</h3>
+<p>The <code>private: true</code> will prevent the package from being accidentally published to the npm registry.</p>
+<pre><code>{
+  &quot;name&quot;:         &quot;hello-typescript&quot;,
+  &quot;version&quot;:      &quot;1.0.0&quot;,
+  &quot;description&quot;:  &quot;Hello angular typescript project&quot;,
+  &quot;private&quot;:      true,
+  &quot;main&quot;:         &quot;index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;,
+    &quot;start&quot;: &quot;live-server&quot;
+  },
+  &quot;keywords&quot;: [],
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;dependencies&quot;: {
+    &quot;@angular/common&quot;: &quot;2.0.0&quot;,
+    &quot;@angular/compiler&quot;: &quot;2.0.0&quot;,
+    &quot;@angular/core&quot;: &quot;2.0.0&quot;,
+    &quot;@angular/forms&quot;: &quot;2.0.0&quot;,
+    &quot;@angular/http&quot;: &quot;2.0.0&quot;,
+    &quot;@angular/platform-browser&quot;: &quot;2.0.0&quot;,
+    &quot;@angular/platform-browser-dynamic&quot;: &quot;2.0.0&quot;,
+    &quot;@angular/router&quot;: &quot;3.0.0&quot;,
+    &quot;core-js&quot;: &quot;^2.4.0&quot;,
+    &quot;rxjs&quot;: &quot;5.0.0-beta.12&quot;,
+    &quot;systemjs&quot;: &quot;0.19.37&quot;,
+    &quot;zone.js&quot;: &quot;0.6.21&quot;
+  },
+  &quot;devDependencies&quot;: {
+    &quot;live-server&quot;: &quot;0.8.2&quot;,
+    &quot;typescript&quot;: &quot;^2.0.0&quot;
+  }
+}
+</code></pre>
+<h3>tsconfig.js</h3>
+<pre><code>{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES5&quot;,
+    &quot;module&quot;: &quot;commonjs&quot;,
+    &quot;experimentalDecorators&quot;: true,
+    &quot;noImplicitAny&quot;: true
+  }
+}
+</code></pre>
+<p>This is the Typescript configuration where you specify your <code>transpiler</code> output. <code>ES5</code> is chosen since no browser can natively load ECMAScript 6 modules.</p>
+<h3>systemjs.config.js</h3>
+<pre><code>System.config({
+    transpiler: &#39;typescript&#39;,
+    typescriptOptions: {emitDecoratorMetadata: true},
+    map: {
+      &#39;@angular&#39;: &#39;node_modules/@angular&#39;,
+      &#39;rxjs&#39;    : &#39;node_modules/rxjs&#39;
+    },
+    paths: {
+      &#39;node_modules/@angular/*&#39;: &#39;node_modules/@angular/*/bundles&#39;
+    },
+    meta: {
+      &#39;@angular/*&#39;: {&#39;format&#39;: &#39;cjs&#39;}
+    },
+    packages: {
+      &#39;app&#39;                              : {main: &#39;main&#39;, defaultExtension: &#39;ts&#39;},
+      &#39;rxjs&#39;                             : {main: &#39;Rx&#39;},
+      &#39;@angular/core&#39;                    : {main: &#39;core.umd.min.js&#39;},
+      &#39;@angular/common&#39;                  : {main: &#39;common.umd.min.js&#39;},
+      &#39;@angular/compiler&#39;                : {main: &#39;compiler.umd.min.js&#39;},
+      &#39;@angular/platform-browser&#39;        : {main: &#39;platform-browser.umd.min.js&#39;},
+      &#39;@angular/platform-browser-dynamic&#39;: {main: &#39;platform-browser-dynamic.umd.min.js&#39;}
+    }
+});
+</code></pre>
+<p><code>systemjs</code> is a module loader that can import at run time in any of the popular formats used today. This allows you to use import statements to load even third-party code. It solves the issue with the loading order of scripts and makes sure the application loads only those modules that it actually uses.</p>
+<h3>The app folder</h3>
+<p>It contains the following files:</p>
+<ul>
+  <li>app.component.ts — The only component of your app</li>
+  <li>app.module.ts — The declaration of the module that will include your component</li>
+  <li>main.ts — The bootstrap of the module</li>
+</ul>
+<h3>app.component.ts</h3>
+<pre><code>import { Component } from &#39;@angular/core&#39;;
+
+@Component({
+    selector: &#39;app&#39;,
+    template: `&lt;h1&gt;Hello {{ name }}!&lt;/h1&gt;`
+})
+
+export class AppComponent {
+    name: string;
+
+    constructor() {
+        this.name = &#39;Angular 2&#39;;
+    }
+}
+</code></pre>
+<h3>app.module.ts</h3>
+<pre><code>import { NgModule }      from &#39;@angular/core&#39;;
+import { BrowserModule } from &#39;@angular/platform-browser&#39;;
+import { AppComponent }  from &#39;./app.component&#39;;
+
+@NgModule({
+    imports:      [ BrowserModule ],
+    declarations: [ AppComponent ],
+    bootstrap:    [ AppComponent ]
+})
+
+export class AppModule { }
+</code></pre>
+<h3>main.ts</h3>
+<pre><code>import { platformBrowserDynamic } from &#39;@angular/platform-browser-dynamic&#39;;
+import { AppModule }  from &#39;./app.module&#39;;
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+</code></pre>
+<h3>Running hello-typescript</h3>
+<pre><code>$ npm install
+
+$ npm start
+
+&gt; hello-typescript@1.0.0 start /home/drmanalo/angular/hello-typescript
+&gt; live-server
+
+Serving &quot;/home/drmanalo/angular/hello-typescript&quot; at http://127.0.0.1:8080
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2016/hello-angular-typescript.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2016/hello-angular-typescript.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

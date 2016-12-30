@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title> Wildfly on Ubuntu 14</title>
+    <title>Wildfly on Ubuntu 14</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -56,7 +56,7 @@
 
 	<div class="content container">
 		<div class="post">
-			<h1> Wildfly on Ubuntu 14</h1>
+			<h1>Wildfly on Ubuntu 14</h1>
 			<p><em>25 August 2015</em></p>
 			<p><p>I installed JBoss Application Server 7 but it won't start on my Ubuntu machine. If I will run <code>$JBOSS_HOME/bin/standalone.sh</code>,<br/>here's how far I can get.</p>
 <pre><code>=========================================================================
@@ -78,8 +78,11 @@ Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; sup
 23:41:04,456 INFO  [org.jboss.modules] JBoss Modules version 1.1.1.GA
 23:41:05,336 INFO  [org.jboss.msc] JBoss MSC version 1.0.2.GA
 23:41:05,525 INFO  [org.jboss.as] JBAS015899: JBoss AS 7.1.1.Final &quot;Brontes&quot; starting
-</code></pre><p>A bit of Googling suggested it is a Java 8 related issue and shouldn't happen if I'm going to downgrade to Java 7. Stackoverflow did suggest I can use Wildfly 8 for my latest version of Java.</p>
-<!-- more --><p>I found <a href="http://sukharevd.net/wildfly-8-installation.html">Dmitriy Sukharev's blog</a> with details on how to install Wildfly 8 quickly. He has the installation script on his dropbox but I verbatim it in case the URL change.</p><h3>wildfly-install.sh</h3>
+</code></pre>
+<p>A bit of Googling suggested it is a Java 8 related issue and shouldn't happen if I'm going to downgrade to Java 7. Stackoverflow did suggest I can use Wildfly 8 for my latest version of Java.</p>
+<!-- more -->
+<p>I found <a href="http://sukharevd.net/wildfly-8-installation.html">Dmitriy Sukharev's blog</a> with details on how to install Wildfly 8 quickly. He has the installation script on his dropbox but I verbatim it in case the URL change.</p>
+<h3>wildfly-install.sh</h3>
 <pre><code>#!/bin/bash
 #title           :wildfly-install.sh
 #description     :The script to install Wildfly 8.x
@@ -211,11 +214,15 @@ sed -i -e &#39;s,&lt;socket-binding name=&quot;osgi-http&quot; interface=&quot;m
 service $WILDFLY_SERVICE start
 
 echo &quot;Done.&quot;
-</code></pre><p>Once you have the above script, run it using</p>
+</code></pre>
+<p>Once you have the above script, run it using</p>
 <pre><code>sudo bash wildfly-install.sh
-</code></pre><p>After installation standard Wildfly welcome page is available at <a href="http://localhost:28080">http://localhost:28080</a>.</p><h3>Wildfly as service</h3>
+</code></pre>
+<p>After installation standard Wildfly welcome page is available at <a href="http://localhost:28080">http://localhost:28080</a>.</p>
+<h3>Wildfly as service</h3>
 <pre><code>sudo update-rc.d wildfly defaults
-</code></pre><p>To manually run wildfly</p>
+</code></pre>
+<p>To manually run wildfly</p>
 <pre><code>sudo service wildfly start
 </code></pre></p>
 		</div>

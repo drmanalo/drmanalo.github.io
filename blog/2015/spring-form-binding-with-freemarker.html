@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,13 +58,18 @@
 		<div class="post">
 			<h1>Spring Form Binding with FreeMarker</h1>
 			<p><em>04 March 2015</em></p>
-			<p><p>I was using FreeMarker with my previous project as my email templating engine but for now I'm using it for all my views. I will show here the macros that bind a Spring form.</p><p>One might wonder why I'm leaving JSP but the whole truth is I'm typing less with FreeMarker. I read this post from <a href="http://blog.stackhunter.com/2014/01/17/10-reasons-to-replace-your-jsps-with-freemarker-templates/">stackhunter.com</a> and among the 10 reasons mentioned I like these:</p>
+			<p><p>I was using FreeMarker with my previous project as my email templating engine but for now I'm using it for all my views. I will show here the macros that bind a Spring form.</p>
+<p>One might wonder why I'm leaving JSP but the whole truth is I'm typing less with FreeMarker. I read this post from <a href="http://blog.stackhunter.com/2014/01/17/10-reasons-to-replace-your-jsps-with-freemarker-templates/">stackhunter.com</a> and among the 10 reasons mentioned I like these:</p>
 <ul>
   <li>No Classloading PermGen Issues</li>
   <li>JSON Support</li>
   <li>Not Just for the Web</li>
 </ul>
-<!-- more --><h3>Importing Spring</h3><p><code>&lt;#import &quot;/spring.ftl&quot; as spring/&gt;</code> is the import statement to be able to use <code>&lt;@spring&gt;</code> within the view.</p><h3>Binding your modelAttribute or command</h3><p><code>&lt;@spring.bind &quot;form&quot;/&gt;</code> where form is the key to the mapped object exposed by your controller. You can pass the<br/>binded form in your HTTP post within your controller using <code>@ModelAttribute</code> or <code>@Command</code>. Nested fields can be<br/>used to access an object within binded form such as <strong>form.object.property</strong>.</p>
+<!-- more -->
+<h3>Importing Spring</h3>
+<p><code>&lt;#import &quot;/spring.ftl&quot; as spring/&gt;</code> is the import statement to be able to use <code>&lt;@spring&gt;</code> within the view.</p>
+<h3>Binding your modelAttribute or command</h3>
+<p><code>&lt;@spring.bind &quot;form&quot;/&gt;</code> where form is the key to the mapped object exposed by your controller. You can pass the<br/>binded form in your HTTP post within your controller using <code>@ModelAttribute</code> or <code>@Command</code>. Nested fields can be<br/>used to access an object within binded form such as <strong>form.object.property</strong>.</p>
 <table>
   <thead>
     <tr>
@@ -126,7 +131,8 @@
       <td>simplified display of validation errors for the bound field</td>
     </tr>
   </tbody>
-</table><p><strong>Source:</strong> <a href="http://docs.spring.io/autorepo/docs/spring/3.2.x/spring-framework-reference/html/view.html">docs.spring.io</a></p></p>
+</table>
+<p><strong>Source:</strong> <a href="http://docs.spring.io/autorepo/docs/spring/3.2.x/spring-framework-reference/html/view.html">docs.spring.io</a></p></p>
 		</div>
 	</div>
 

@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,7 +58,9 @@
 		<div class="post">
 			<h1>Factory Pattern</h1>
 			<p><em>20 May 2015</em></p>
-			<p><p>From my Java best practices training, my instructor gave us an example of the factory pattern using Shape object with draw() method. The Shape interface is further implemented by a base class called ShapeFactory which decides what kind of shape it is going to create using some business intelligence you put into the factory.</p><p>The example is spot on but I found another good example from our hands-on exercise which I'm about to share. Not just because I'm a Star Wars fan but the way factory is being used.</p><h3>The Robot</h3>
+			<p><p>From my Java best practices training, my instructor gave us an example of the factory pattern using Shape object with draw() method. The Shape interface is further implemented by a base class called ShapeFactory which decides what kind of shape it is going to create using some business intelligence you put into the factory.</p>
+<p>The example is spot on but I found another good example from our hands-on exercise which I'm about to share. Not just because I'm a Star Wars fan but the way factory is being used.</p>
+<h3>The Robot</h3>
 <pre><code>package com.robots;
 
 import java.awt.Color;
@@ -87,7 +89,8 @@ public interface Robot {
 
 }
 </code></pre>
-<!-- more --><h3>The Robot Factory</h3>
+<!-- more -->
+<h3>The Robot Factory</h3>
 <pre><code>package com.robots;
 
 public final class RobotFactory {
@@ -105,7 +108,8 @@ public final class RobotFactory {
 	}
 
 }
-</code></pre><h3>The Basic Robot</h3>
+</code></pre>
+<h3>The Basic Robot</h3>
 <pre><code>package com.robots;
 
 import java.awt.Color;
@@ -251,7 +255,8 @@ public abstract class BasicRobot implements Robot {
 	}
 
 }
-</code></pre><h3>C3PO</h3>
+</code></pre>
+<h3>C3PO</h3>
 <pre><code>package com.robots;
 
 import java.awt.Color;
@@ -288,7 +293,8 @@ public final class C3PO extends BasicRobot {
 	}
 
 }
-</code></pre><h3>R2D2</h3>
+</code></pre>
+<h3>R2D2</h3>
 <pre><code>package com.robots;
 
 import java.awt.Color;

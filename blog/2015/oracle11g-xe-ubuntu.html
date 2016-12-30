@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,15 +58,22 @@
 		<div class="post">
 			<h1>Oracle 11g XE on Ubuntu</h1>
 			<p><em>08 August 2015</em></p>
-			<p><p>Express Editions of Oracle are in rpm (Red Hat Package Manager). But since I turned away from my CentOS, I have to install it on Ubuntu using the hard way I suppose.</p><p>For the installation of Oracle 11g R2 Express Edition (XE), a couple of additional Linux packages are required. These packages can be installed using apt (goodbye yum).</p><h3>Installing prerequisites</h3>
+			<p><p>Express Editions of Oracle are in rpm (Red Hat Package Manager). But since I turned away from my CentOS, I have to install it on Ubuntu using the hard way I suppose.</p>
+<p>For the installation of Oracle 11g R2 Express Edition (XE), a couple of additional Linux packages are required. These packages can be installed using apt (goodbye yum).</p>
+<h3>Installing prerequisites</h3>
 <pre><code>$ sudo apt-get install alien libaio1 unixodbc
-</code></pre><h3>Downloading Oracle 11g</h3><p>Download the Oracle 11g R2 Express Edition from the Oracle website. Make sure you select the Linux x64 version from <a href="http://www.oracle.com/technetwork/products/express-edition/downloads/index.htm">Oracle website</a>. Unzip the file after downloading.</p>
+</code></pre>
+<h3>Downloading Oracle 11g</h3>
+<p>Download the Oracle 11g R2 Express Edition from the Oracle website. Make sure you select the Linux x64 version from <a href="http://www.oracle.com/technetwork/products/express-edition/downloads/index.htm">Oracle website</a>. Unzip the file after downloading.</p>
 <pre><code>$ unzip oracle-xe-11.2.0-1.0.x86_64.rpm.zip
 </code></pre>
-<!-- more --><h3>Converting rpm to a Debian package</h3><p>This is done using the alien command. The -d parameter is used to inform alien that a Debian package should be generated. When the --scripts parameter is toggled, alien will try to convert the scripts that are meant to be run when the package is installed and removed. This will take a while so open another terminal for the next steps.</p>
+<!-- more -->
+<h3>Converting rpm to a Debian package</h3>
+<p>This is done using the alien command. The -d parameter is used to inform alien that a Debian package should be generated. When the --scripts parameter is toggled, alien will try to convert the scripts that are meant to be run when the package is installed and removed. This will take a while so open another terminal for the next steps.</p>
 <pre><code>$ cd Disk1
   $ sudo alien --scripts -d oracle-xe-11.2.0-1.0.x86_64.rpm
-</code></pre><h3>Creating /sbin/chkconfig</h3>
+</code></pre>
+<h3>Creating /sbin/chkconfig</h3>
 <pre><code>#!/bin/bash
 # Oracle 11gR2 XE installer chkconfig hack for Ubuntu
 file=/etc/init.d/oracle-xe
@@ -83,9 +90,12 @@ if [[ ! `tail -n1 $file | grep INIT` ]]; then
 fi
 update-rc.d oracle-xe defaults 80 01
 #EOF
-</code></pre><p>After saving the file, change its permissions.</p>
+</code></pre>
+<p>After saving the file, change its permissions.</p>
 <pre><code>$ sudo chmod 755 /sbin/chkconfig
-</code></pre><h3>Set kernel parameters</h3><p>Kernel.shmmax is the maximum possible value of physical RAM in bytes. 536870912 / 1024 /1024 = 512 MB</p>
+</code></pre>
+<h3>Set kernel parameters</h3>
+<p>Kernel.shmmax is the maximum possible value of physical RAM in bytes. 536870912 / 1024 /1024 = 512 MB</p>
 <pre><code>$ sudo vim /etc/sysctl.d/60-oracle.conf
 </code></pre>
 <pre><code># Oracle 11g XE kernel parameters
@@ -93,22 +103,27 @@ fs.file-max=6815744
 net.ipv4.ip_local_port_range=9000 65000
 kernel.sem=250 32000 100 128
 kernel.shmmax=536870912
-</code></pre><p>Load the kernel parameters then verify</p>
+</code></pre>
+<p>Load the kernel parameters then verify</p>
 <pre><code>$ sudo service procps start
 $ sudo sysctl -q fs.file-max
 fs.file-max = 6815744
-</code></pre><h3>Add a listener file</h3>
+</code></pre>
+<h3>Add a listener file</h3>
 <pre><code>$ sudo ln -s /usr/bin/awk /bin/awk
 $ mkdir /var/lock/subsys
 $ touch /var/lock/subsys/listener
-</code></pre><h3>Install the converted rpm</h3>
+</code></pre>
+<h3>Install the converted rpm</h3>
 <pre><code>$ sudo dpkg --install oracle-xe_11.2.0-2_amd64.deb
-</code></pre><p>Execute the following to avoid getting a ORA-00845: MEMORY_TARGET error. Note: replace “size=4096m” with the size of your machine’s RAM in MBs.</p>
+</code></pre>
+<p>Execute the following to avoid getting a ORA-00845: MEMORY_TARGET error. Note: replace “size=4096m” with the size of your machine’s RAM in MBs.</p>
 <pre><code>$ sudo rm -rf /dev/shm
 $ sudo mkdir /dev/shm
 $ sudo mount -t tmpfs shmfs -o size=4096m /dev/shm
 $ sudo vim /etc/rc2.d/S01shm_load
-</code></pre><p>Paste the following</p>
+</code></pre>
+<p>Paste the following</p>
 <pre><code>#!/bin/sh
 case &quot;$1&quot; in
     start) mkdir /var/lock/subsys 2&gt;/dev/null
@@ -119,7 +134,9 @@ case &quot;$1&quot; in
     *) echo error
 exit 1 ;;
 esac
-</code></pre><p>Then change the file permission using <code>sudo chmod 755 /etc/rc2.d/S01shm_load</code></p><h3>Post installation configuration</h3>
+</code></pre>
+<p>Then change the file permission using <code>sudo chmod 755 /etc/rc2.d/S01shm_load</code></p>
+<h3>Post installation configuration</h3>
 <pre><code>$ sudo /etc/init.d/oracle-xe configure
 </code></pre>
 <pre><code>Oracle Database 11g Express Edition Configuration
@@ -146,7 +163,8 @@ Starting Oracle Net Listener...Done
 Configuring database...Done
 Starting Oracle Database 11g Express Edition instance...Done
 Installation completed successfully.
-</code></pre><h3>Update your .bashrc</h3>
+</code></pre>
+<h3>Update your .bashrc</h3>
 <pre><code>export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe
 export ORACLE_SID=XE
 export NLS_LANG=`$ORACLE_HOME/bin/nls_lang.sh`

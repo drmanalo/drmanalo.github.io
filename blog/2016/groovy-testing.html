@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,7 +58,10 @@
 		<div class="post">
 			<h1>Groovy Testing</h1>
 			<p><em>16 March 2016</em></p>
-			<p><p>My previous post is all about writing a simple Groovy CRUD application. It includes writing your views in Groovy as well though it doesn't involve where to put the files. But if you're a seasoned Java developer, you should know your way out.</p><p>What it lacks is how to test your Groovy classes which I'm about to document on this post.</p><h3>FakeLoader</h3><p>This is a workaround assuming your Spring Boot application bootstraps more <code>@Configuration</code> and you don't want to include them in your integration tests.</p>
+			<p><p>My previous post is all about writing a simple Groovy CRUD application. It includes writing your views in Groovy as well though it doesn't involve where to put the files. But if you're a seasoned Java developer, you should know your way out.</p>
+<p>What it lacks is how to test your Groovy classes which I'm about to document on this post.</p>
+<h3>FakeLoader</h3>
+<p>This is a workaround assuming your Spring Boot application bootstraps more <code>@Configuration</code> and you don't want to include them in your integration tests.</p>
 <pre><code>import org.junit.Test
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.test.context.ActiveProfiles
@@ -72,7 +75,8 @@ class FakeLoader {
 
 }
 </code></pre>
-<!-- more --><h3>Repository integration test</h3>
+<!-- more -->
+<h3>Repository integration test</h3>
 <pre><code>package com.manalo.repository
 
 import com.manalo.FakeLoader
@@ -137,7 +141,8 @@ class UserRepositorySpec extends Specification{
         assert actual == null
     }
 }
-</code></pre><h3>Service layer test</h3>
+</code></pre>
+<h3>Service layer test</h3>
 <pre><code>package com.manalo.controller
 
 import com.manalo.domain.User
@@ -214,7 +219,8 @@ class UserServiceSpec extends Specification {
         1 * userRepository.delete(user)
     }
 }
-</code></pre><h3>Controller test</h3>
+</code></pre>
+<h3>Controller test</h3>
 <pre><code>package com.manalo.controller
 
 import com.manalo.domain.User

@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.4.0</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,8 +58,11 @@
 		<div class="post">
 			<h1>Custom JSP Tags</h1>
 			<p><em>30 April 2016</em></p>
-			<p><p>We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.</p><p>There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside <code>javax.servlet.jsp.tagext</code> and then writing your <code>tld</code> Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you're a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.</p><p>The other approach is by writing a tag file that goes to <code>WEB-INF/tags</code> folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html">JSP Tags 5</a>.</p>
-<!-- more --><h3>input.tag</h3>
+			<p><p>We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.</p>
+<p>There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside <code>javax.servlet.jsp.tagext</code> and then writing your <code>tld</code> Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you're a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.</p>
+<p>The other approach is by writing a tag file that goes to <code>WEB-INF/tags</code> folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html">JSP Tags 5</a>.</p>
+<!-- more -->
+<h3>input.tag</h3>
 <pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
 &lt;%@ tag description=&quot;Bootstrap input tag with error, icon and i8n support&quot;%&gt;
 &lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
@@ -116,7 +119,8 @@
 	  	&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/s:bind&gt;
-</code></pre><h3>calendar.tag</h3>
+</code></pre>
+<h3>calendar.tag</h3>
 <pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
 &lt;%@ tag description=&quot;Bootstrap input grouped tag with error, calendar icon and i8n support&quot;%&gt;
 &lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
@@ -153,7 +157,8 @@
 		&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/s:bind&gt;		
-</code></pre><h3>textarea.tag</h3>
+</code></pre>
+<h3>textarea.tag</h3>
 <pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
 &lt;%@ tag description=&quot;Bootstrap textarea tag with error, icon and i8n support&quot;%&gt;
 &lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
@@ -185,7 +190,8 @@
 		&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/s:bind&gt;
-</code></pre><h3>actions.tag</h3>
+</code></pre>
+<h3>actions.tag</h3>
 <pre><code>&lt;%@ tag language=&quot;java&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
 &lt;%@ tag	description=&quot;Bootstrap cancel, reset and submit buttons without i8n support&quot;%&gt;
 &lt;%@ attribute name=&quot;cancelPath&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot;%&gt;
@@ -197,7 +203,8 @@
 		&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; class=&quot;btn btn-primary&quot; /&gt;
 	&lt;/div&gt;
 &lt;/div&gt;
-</code></pre><h3>Importing the tags</h3>
+</code></pre>
+<h3>Importing the tags</h3>
 <pre><code>&lt;%@taglib tagdir=&quot;/WEB-INF/tags&quot; prefix=&quot;bs&quot;%&gt;
 </code></pre></p>
 		</div>
