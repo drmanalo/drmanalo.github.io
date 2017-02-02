@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Hello Ofbiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.0</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Hello Ofbiz</h1>
+			<p><em>01 February 2017</em></p>
+			<p><p>Just recently, I was tasked to support Apache Ofbiz (Open for Business) something not very exciting. The application is built on release 4 making Google search less efficient. The current release 16 is not that popular either let alone legacy versions. To have a better understanding of the framework, I'm going to follow this <a href="https://cwiki.apache.org/confluence/display/OFBIZ/OFBiz+Tutorial+-+A+Beginners+Development+Guide">OFBiz Tutorial</a>.</p>
+<p>Just like any JVM application, you will need a JDK to run Ofbiz. It's build tool is <code>ant</code> being Apache. Newer releases has <code>maven</code>, <code>ivy</code> and <code>gradle</code> as build tool.</p>
+<h3>Downloading ofbiz</h3>
+<pre><code>$ svn co http://svn.apache.org/repos/asf/ofbiz/branches/release15.12 ofbiz.15.12
+...
+U   ofbiz.15.12
+Checked out revision 1781334.
+</code></pre>
+<!-- more -->
+<h3>Ofbiz first run</h3>
+<pre><code>$ ./ant load-demo start
+|OFBiz-batch-3        |DatabaseUtil                  |I| Searching in 868 tables for primary key fields ...
+|OFBiz-batch-3        |DatabaseUtil                  |I| Reviewed 1698 primary key fields from database.
+</code></pre>
+<p>You will hear your CPU fan noise while Ofbiz is pulling its dependencies. Once successful, you should be able to browse <a href="https://localhost:8443/webtools">https://localhost:8443/webtools</a>.</p>
+<h3>Creating my first component</h3>
+<pre><code>$ ./ant create-component
+
+create-component:
+   [input] Component name: (e.g. mycomponent) [Mandatory]
+pokedex
+   [input] Component resource name: (e.g. MyComponent) [Mandatory]
+Pokedex
+   [input] Webapp name: (e.g. mycomponent) [Mandatory]
+pokedex
+   [input] Base permission: (e.g. MYCOMPONENT) [Mandatory]
+POKEDEX
+    [echo] The following hot-deploy component will be created:
+    [echo]               Name: pokedex
+    [echo]               Resource Name: pokedex
+    [echo]               Webapp Name: pokedex
+    [echo]               Base permission: POKEDEX
+...
+    [echo]             Restart OFBiz and then visit the URL: https://localhost:8443/pokedex
+    [echo]         
+
+BUILD SUCCESSFUL
+Total time: 1 minute 10 seconds
+</code></pre>
+<h3>Editing my first view</h3>
+<p>This is relative to my project folder. Open <code>/hot-deploy/pokedex/widget/PokedexScreens.xml</code>. For now, I'm adding a simple Hello Pokedex :) text.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;screens xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        xsi:noNamespaceSchemaLocation=&quot;http://ofbiz.apache.org/dtds/widget-screen.xsd&quot;&gt;
+
+    &lt;screen name=&quot;main&quot;&gt;
+        &lt;section&gt;
+            &lt;actions&gt;
+                &lt;set field=&quot;headerItem&quot; value=&quot;main&quot;/&gt;&lt;!-- this highlights the selected menu-item with name &quot;main&quot; --&gt;
+            &lt;/actions&gt;
+            &lt;widgets&gt;
+                &lt;decorator-screen name=&quot;PokedexCommonDecorator&quot; location=&quot;${parameters.mainDecoratorLocation}&quot;&gt;
+                    &lt;decorator-section name=&quot;body&quot;&gt;
+                        &lt;label text=&quot;Hello Pokedex :)&quot;/&gt;
+                    &lt;/decorator-section&gt;
+                &lt;/decorator-screen&gt;
+            &lt;/widgets&gt;
+        &lt;/section&gt;
+    &lt;/screen&gt;
+
+&lt;/screens&gt;
+</code></pre>
+<h3>To be continued...</h3></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2017/hello-ofbiz.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2017/hello-ofbiz.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

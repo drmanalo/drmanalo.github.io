@@ -209,6 +209,29 @@ import { AppModule }  from &#39;./app.module&#39;;
 
 platformBrowserDynamic().bootstrapModule(AppModule);
 </code></pre>
+<h3>index.html</h3>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Hello typescript project&lt;/title&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+
+  &lt;script src=&quot;node_modules/typescript/lib/typescript.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;node_modules/core-js/client/shim.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;node_modules/zone.js/dist/zone.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;node_modules/systemjs/dist/system.src.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;systemjs.config.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    System.import(&#39;app&#39;).catch(function(err){ console.error(err); });
+  &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;app&gt;Loading...&lt;/app&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
 <h3>Running hello-typescript</h3>
 <pre><code>$ npm install
 

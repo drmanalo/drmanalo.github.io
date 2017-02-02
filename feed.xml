@@ -6,9 +6,80 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Fri, 30 Dec 2016 00:16:16 +0000</pubDate>
-    <lastBuildDate>Fri, 30 Dec 2016 00:16:16 +0000</lastBuildDate>
+    <pubDate>Thu, 2 Feb 2017 00:58:04 +0000</pubDate>
+    <lastBuildDate>Thu, 2 Feb 2017 00:58:04 +0000</lastBuildDate>
 
+      <item>
+        <title>Hello Ofbiz</title>
+        <link>https://drmanalo.github.io/blog/2017/hello-ofbiz.html</link>
+        <pubDate>Wed, 1 Feb 2017 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2017/hello-ofbiz.html</guid>
+        <description>
+  	         &lt;p&gt;Just recently, I was tasked to support Apache Ofbiz (Open for Business) something not very exciting. The application is built on release 4 making Google search less efficient. The current release 16 is not that popular either let alone legacy versions. To have a better understanding of the framework, I&apos;m going to follow this &lt;a href=&quot;https://cwiki.apache.org/confluence/display/OFBIZ/OFBiz+Tutorial+-+A+Beginners+Development+Guide&quot;&gt;OFBiz Tutorial&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Just like any JVM application, you will need a JDK to run Ofbiz. It&apos;s build tool is &lt;code&gt;ant&lt;/code&gt; being Apache. Newer releases has &lt;code&gt;maven&lt;/code&gt;, &lt;code&gt;ivy&lt;/code&gt; and &lt;code&gt;gradle&lt;/code&gt; as build tool.&lt;/p&gt;
+&lt;h3&gt;Downloading ofbiz&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ svn co http://svn.apache.org/repos/asf/ofbiz/branches/release15.12 ofbiz.15.12
+...
+U   ofbiz.15.12
+Checked out revision 1781334.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;Ofbiz first run&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ ./ant load-demo start
+|OFBiz-batch-3        |DatabaseUtil                  |I| Searching in 868 tables for primary key fields ...
+|OFBiz-batch-3        |DatabaseUtil                  |I| Reviewed 1698 primary key fields from database.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You will hear your CPU fan noise while Ofbiz is pulling its dependencies. Once successful, you should be able to browse &lt;a href=&quot;https://localhost:8443/webtools&quot;&gt;https://localhost:8443/webtools&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;Creating my first component&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ ./ant create-component
+
+create-component:
+   [input] Component name: (e.g. mycomponent) [Mandatory]
+pokedex
+   [input] Component resource name: (e.g. MyComponent) [Mandatory]
+Pokedex
+   [input] Webapp name: (e.g. mycomponent) [Mandatory]
+pokedex
+   [input] Base permission: (e.g. MYCOMPONENT) [Mandatory]
+POKEDEX
+    [echo] The following hot-deploy component will be created:
+    [echo]               Name: pokedex
+    [echo]               Resource Name: pokedex
+    [echo]               Webapp Name: pokedex
+    [echo]               Base permission: POKEDEX
+...
+    [echo]             Restart OFBiz and then visit the URL: https://localhost:8443/pokedex
+    [echo]         
+
+BUILD SUCCESSFUL
+Total time: 1 minute 10 seconds
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Editing my first view&lt;/h3&gt;
+&lt;p&gt;This is relative to my project folder. Open &lt;code&gt;/hot-deploy/pokedex/widget/PokedexScreens.xml&lt;/code&gt;. For now, I&apos;m adding a simple Hello Pokedex :) text.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;screens xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:noNamespaceSchemaLocation=&amp;quot;http://ofbiz.apache.org/dtds/widget-screen.xsd&amp;quot;&amp;gt;
+
+    &amp;lt;screen name=&amp;quot;main&amp;quot;&amp;gt;
+        &amp;lt;section&amp;gt;
+            &amp;lt;actions&amp;gt;
+                &amp;lt;set field=&amp;quot;headerItem&amp;quot; value=&amp;quot;main&amp;quot;/&amp;gt;&amp;lt;!-- this highlights the selected menu-item with name &amp;quot;main&amp;quot; --&amp;gt;
+            &amp;lt;/actions&amp;gt;
+            &amp;lt;widgets&amp;gt;
+                &amp;lt;decorator-screen name=&amp;quot;PokedexCommonDecorator&amp;quot; location=&amp;quot;${parameters.mainDecoratorLocation}&amp;quot;&amp;gt;
+                    &amp;lt;decorator-section name=&amp;quot;body&amp;quot;&amp;gt;
+                        &amp;lt;label text=&amp;quot;Hello Pokedex :)&amp;quot;/&amp;gt;
+                    &amp;lt;/decorator-section&amp;gt;
+                &amp;lt;/decorator-screen&amp;gt;
+            &amp;lt;/widgets&amp;gt;
+        &amp;lt;/section&amp;gt;
+    &amp;lt;/screen&amp;gt;
+
+&amp;lt;/screens&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;To be continued...&lt;/h3&gt;
+  	    </description>
+      </item>
       <item>
         <title>Hello Angular Typescript</title>
         <link>https://drmanalo.github.io/blog/2016/hello-angular-typescript.html</link>
@@ -165,6 +236,29 @@ export class AppModule { }
 import { AppModule }  from &amp;#39;./app.module&amp;#39;;
 
 platformBrowserDynamic().bootstrapModule(AppModule);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;index.html&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+  &amp;lt;title&amp;gt;Hello typescript project&amp;lt;/title&amp;gt;
+  &amp;lt;meta charset=&amp;quot;UTF-8&amp;quot;&amp;gt;
+  &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1&amp;quot;&amp;gt;
+
+  &amp;lt;script src=&amp;quot;node_modules/typescript/lib/typescript.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;node_modules/core-js/client/shim.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;node_modules/zone.js/dist/zone.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;node_modules/systemjs/dist/system.src.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;systemjs.config.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script&amp;gt;
+    System.import(&amp;#39;app&amp;#39;).catch(function(err){ console.error(err); });
+  &amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body&amp;gt;
+  &amp;lt;app&amp;gt;Loading...&amp;lt;/app&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Running hello-typescript&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;$ npm install
