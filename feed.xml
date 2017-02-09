@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Thu, 2 Feb 2017 00:58:04 +0000</pubDate>
-    <lastBuildDate>Thu, 2 Feb 2017 00:58:04 +0000</lastBuildDate>
+    <pubDate>Thu, 9 Feb 2017 09:20:21 +0000</pubDate>
+    <lastBuildDate>Thu, 9 Feb 2017 09:20:21 +0000</lastBuildDate>
 
       <item>
         <title>Hello Ofbiz</title>
@@ -54,6 +54,71 @@ POKEDEX
 BUILD SUCCESSFUL
 Total time: 1 minute 10 seconds
 &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That single line of &lt;code&gt;ant&lt;/code&gt; command generated the following boiler-plate codes.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ tree hot-deploy/pokedex
+pokedex/
+├── build
+│   ├── classes
+│   └── lib
+│       └── pokedex.jar
+├── build.xml
+├── config
+│   └── PokedexUiLabels.xml
+├── data
+│   ├── helpdata
+│   │   └── HELP_Pokedex.xml
+│   ├── PokedexDemoData.xml
+│   ├── PokedexSecurityGroupDemoData.xml
+│   ├── PokedexSecurityPermissionSeedData.xml
+│   └── PokedexTypeData.xml
+├── documents
+│   └── Pokedex.xml
+├── dtd
+├── entitydef
+│   └── entitymodel.xml
+├── lib
+├── ofbiz-component.xml
+├── patches
+│   ├── production
+│   ├── qa
+│   └── test
+├── script
+├── servicedef
+│   └── services.xml
+├── src
+├── testdef
+│   └── PokedexTests.xml
+├── webapp
+│   └── pokedex
+│       ├── error
+│       │   └── error.jsp
+│       ├── index.jsp
+│       └── WEB-INF
+│           ├── actions
+│           ├── controller.xml
+│           └── web.xml
+└── widget
+    ├── CommonScreens.xml
+    ├── PokedexForms.xml
+    ├── PokedexMenus.xml
+    └── PokedexScreens.xml
+
+24 directories, 21 files
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Ofbiz is MVC&lt;/h3&gt;
+&lt;p&gt;The whole Ofbiz are organised as component. You can treat component as folder. Your custom component goes to &lt;code&gt;hot-deploy&lt;/code&gt; folder.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+  &lt;p&gt;Models are inside &lt;code&gt;{component_name}/entity&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;
+  &lt;p&gt;Views are inside &lt;code&gt;{component_name}/widget&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;
+  &lt;p&gt;Controller is inside &lt;code&gt;{component_name}/webapp/{component_name}/WEB-INF&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;
+  &lt;p&gt;Data are inside &lt;code&gt;{component_name}/data&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;
+  &lt;p&gt;Language file is inside &lt;code&gt;{component_name}/config&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3&gt;Editing my first view&lt;/h3&gt;
 &lt;p&gt;This is relative to my project folder. Open &lt;code&gt;/hot-deploy/pokedex/widget/PokedexScreens.xml&lt;/code&gt;. For now, I&apos;m adding a simple Hello Pokedex :) text.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;

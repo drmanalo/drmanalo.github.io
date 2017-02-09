@@ -97,6 +97,71 @@ POKEDEX
 BUILD SUCCESSFUL
 Total time: 1 minute 10 seconds
 </code></pre>
+<p>That single line of <code>ant</code> command generated the following boiler-plate codes.</p>
+<pre><code>$ tree hot-deploy/pokedex
+pokedex/
+├── build
+│   ├── classes
+│   └── lib
+│       └── pokedex.jar
+├── build.xml
+├── config
+│   └── PokedexUiLabels.xml
+├── data
+│   ├── helpdata
+│   │   └── HELP_Pokedex.xml
+│   ├── PokedexDemoData.xml
+│   ├── PokedexSecurityGroupDemoData.xml
+│   ├── PokedexSecurityPermissionSeedData.xml
+│   └── PokedexTypeData.xml
+├── documents
+│   └── Pokedex.xml
+├── dtd
+├── entitydef
+│   └── entitymodel.xml
+├── lib
+├── ofbiz-component.xml
+├── patches
+│   ├── production
+│   ├── qa
+│   └── test
+├── script
+├── servicedef
+│   └── services.xml
+├── src
+├── testdef
+│   └── PokedexTests.xml
+├── webapp
+│   └── pokedex
+│       ├── error
+│       │   └── error.jsp
+│       ├── index.jsp
+│       └── WEB-INF
+│           ├── actions
+│           ├── controller.xml
+│           └── web.xml
+└── widget
+    ├── CommonScreens.xml
+    ├── PokedexForms.xml
+    ├── PokedexMenus.xml
+    └── PokedexScreens.xml
+
+24 directories, 21 files
+</code></pre>
+<h3>Ofbiz is MVC</h3>
+<p>The whole Ofbiz are organised as component. You can treat component as folder. Your custom component goes to <code>hot-deploy</code> folder.</p>
+<ul>
+  <li>
+  <p>Models are inside <code>{component_name}/entity</code>.</p></li>
+  <li>
+  <p>Views are inside <code>{component_name}/widget</code>.</p></li>
+  <li>
+  <p>Controller is inside <code>{component_name}/webapp/{component_name}/WEB-INF</code>.</p></li>
+  <li>
+  <p>Data are inside <code>{component_name}/data</code>.</p></li>
+  <li>
+  <p>Language file is inside <code>{component_name}/config</code>.</p></li>
+</ul>
 <h3>Editing my first view</h3>
 <p>This is relative to my project folder. Open <code>/hot-deploy/pokedex/widget/PokedexScreens.xml</code>. For now, I'm adding a simple Hello Pokedex :) text.</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
