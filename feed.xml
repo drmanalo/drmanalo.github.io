@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Sun, 19 Feb 2017 00:37:04 +0000</pubDate>
-    <lastBuildDate>Sun, 19 Feb 2017 00:37:04 +0000</lastBuildDate>
+    <pubDate>Sun, 19 Feb 2017 00:47:36 +0000</pubDate>
+    <lastBuildDate>Sun, 19 Feb 2017 00:47:36 +0000</lastBuildDate>
 
       <item>
         <title>Hello Ofbiz</title>
@@ -519,6 +519,14 @@ pokedex/
     &amp;lt;/#list&amp;gt;
     &amp;lt;/tbody&amp;gt;
 &amp;lt;/table&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Model attributes via Groovy&lt;/h3&gt;
+&lt;p&gt;The above &lt;code&gt;ftls&lt;/code&gt; has &lt;code&gt;pokemonTypes&lt;/code&gt; and &lt;code&gt;pokedexList&lt;/code&gt; attributes but the bottom service don&apos;t have them. To expose these attributes, paste this groovy on &lt;code&gt;pokedex/webapp/pokedex/WEB-INF/actions/ListPokedex.groovy&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pokemonTypes = delegator.findList(&amp;quot;PokemonType&amp;quot;, null, null, null, null, false);
+context.pokemonTypes = pokemonTypes;
+
+pokedexList = delegator.findList(&amp;quot;Pokedex&amp;quot;, null, null, null, null, false);
+context.pokedexList = pokedexList;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Controller&lt;/h3&gt;
 &lt;p&gt;Paste this inside &lt;code&gt;pokedex/webapp/pokedex/WEB-INF/controller.xml&lt;/code&gt;.&lt;/p&gt;

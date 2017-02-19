@@ -563,6 +563,14 @@ pokedex/
     &lt;/tbody&gt;
 &lt;/table&gt;
 </code></pre>
+<h3>Model attributes via Groovy</h3>
+<p>The above <code>ftls</code> has <code>pokemonTypes</code> and <code>pokedexList</code> attributes but the bottom service don't have them. To expose these attributes, paste this groovy on <code>pokedex/webapp/pokedex/WEB-INF/actions/ListPokedex.groovy</code>.</p>
+<pre><code>pokemonTypes = delegator.findList(&quot;PokemonType&quot;, null, null, null, null, false);
+context.pokemonTypes = pokemonTypes;
+
+pokedexList = delegator.findList(&quot;Pokedex&quot;, null, null, null, null, false);
+context.pokedexList = pokedexList;
+</code></pre>
 <h3>Controller</h3>
 <p>Paste this inside <code>pokedex/webapp/pokedex/WEB-INF/controller.xml</code>.</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
