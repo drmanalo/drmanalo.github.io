@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Thu, 9 Feb 2017 09:20:21 +0000</pubDate>
-    <lastBuildDate>Thu, 9 Feb 2017 09:20:21 +0000</lastBuildDate>
+    <pubDate>Sun, 19 Feb 2017 00:37:04 +0000</pubDate>
+    <lastBuildDate>Sun, 19 Feb 2017 00:37:04 +0000</lastBuildDate>
 
       <item>
         <title>Hello Ofbiz</title>
@@ -30,6 +30,20 @@ Checked out revision 1781334.
 |OFBiz-batch-3        |DatabaseUtil                  |I| Reviewed 1698 primary key fields from database.
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;You will hear your CPU fan noise while Ofbiz is pulling its dependencies. Once successful, you should be able to browse &lt;a href=&quot;https://localhost:8443/webtools&quot;&gt;https://localhost:8443/webtools&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;Ofbiz is MVC&lt;/h3&gt;
+&lt;p&gt;The whole Ofbiz are organised as component. You can treat component as folder. Your custom component goes to &lt;code&gt;hot-deploy&lt;/code&gt; folder.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+  &lt;p&gt;Models are inside &lt;code&gt;{component_name}/entitydef&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;
+  &lt;p&gt;Views are inside &lt;code&gt;{component_name}/widget&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;
+  &lt;p&gt;Controller is inside &lt;code&gt;{component_name}/webapp/{component_name}/WEB-INF&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;
+  &lt;p&gt;Data are inside &lt;code&gt;{component_name}/data&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;
+  &lt;p&gt;Language file is inside &lt;code&gt;{component_name}/config&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3&gt;Creating my first component&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;$ ./ant create-component
 
@@ -105,22 +119,144 @@ pokedex/
 
 24 directories, 21 files
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Ofbiz is MVC&lt;/h3&gt;
-&lt;p&gt;The whole Ofbiz are organised as component. You can treat component as folder. Your custom component goes to &lt;code&gt;hot-deploy&lt;/code&gt; folder.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;
-  &lt;p&gt;Models are inside &lt;code&gt;{component_name}/entity&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;
-  &lt;p&gt;Views are inside &lt;code&gt;{component_name}/widget&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;
-  &lt;p&gt;Controller is inside &lt;code&gt;{component_name}/webapp/{component_name}/WEB-INF&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;
-  &lt;p&gt;Data are inside &lt;code&gt;{component_name}/data&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;
-  &lt;p&gt;Language file is inside &lt;code&gt;{component_name}/config&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;Editing my first view&lt;/h3&gt;
-&lt;p&gt;This is relative to my project folder. Open &lt;code&gt;/hot-deploy/pokedex/widget/PokedexScreens.xml&lt;/code&gt;. For now, I&apos;m adding a simple Hello Pokedex :) text.&lt;/p&gt;
+&lt;h3&gt;Model&lt;/h3&gt;
+&lt;p&gt;Paste this XML to &lt;code&gt;pokedex/entitydef/entitymodel.xml&lt;/code&gt;. Seems overrated to me since entity and model are synonyms on MVC&apos;s tiered architecture.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;entitymodel xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+    xsi:noNamespaceSchemaLocation=&amp;quot;http://ofbiz.apache.org/dtds/entitymodel.xsd&amp;quot;&amp;gt;
+    &amp;lt;!-- ========================================================= --&amp;gt;
+    &amp;lt;!-- ======================== Defaults ======================= --&amp;gt;
+    &amp;lt;!-- ========================================================= --&amp;gt;
+    &amp;lt;title&amp;gt;Entity of Pokedex Component&amp;lt;/title&amp;gt;
+    &amp;lt;description&amp;gt;Pokedex Emulation&amp;lt;/description&amp;gt;
+    &amp;lt;copyright&amp;gt;Niantic Labs&amp;lt;/copyright&amp;gt;
+    &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt;
+
+    &amp;lt;entity entity-name=&amp;quot;PokemonType&amp;quot; package-name=&amp;quot;com.prototype.pocket.monster&amp;quot; title=&amp;quot;Pokemon Type Entity&amp;quot;&amp;gt;
+        &amp;lt;field name=&amp;quot;pokemonTypeId&amp;quot; type=&amp;quot;id-ne&amp;quot;&amp;gt;
+            &amp;lt;description&amp;gt;primary sequenced ID&amp;lt;/description&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;type&amp;quot; type=&amp;quot;name&amp;quot;&amp;gt;&amp;lt;/field&amp;gt;
+        &amp;lt;prim-key field=&amp;quot;pokemonTypeId&amp;quot;/&amp;gt;
+    &amp;lt;/entity&amp;gt;
+
+    &amp;lt;entity entity-name=&amp;quot;Pokedex&amp;quot; package-name=&amp;quot;com.prototype.pocket.monster&amp;quot; title=&amp;quot;Pokedex Entity&amp;quot;&amp;gt;
+        &amp;lt;field name=&amp;quot;pokedexId&amp;quot; type=&amp;quot;id-ne&amp;quot;&amp;gt;
+            &amp;lt;description&amp;gt;primary sequenced ID&amp;lt;/description&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;pokemonTypeId&amp;quot; type=&amp;quot;id-ne&amp;quot;&amp;gt;&amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;monster&amp;quot; type=&amp;quot;name&amp;quot;&amp;gt;&amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;seen&amp;quot; type=&amp;quot;numeric&amp;quot;&amp;gt;&amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;caught&amp;quot; type=&amp;quot;numeric&amp;quot;&amp;gt;&amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;weight&amp;quot; type=&amp;quot;fixed-point&amp;quot;/&amp;gt;
+        &amp;lt;field name=&amp;quot;height&amp;quot; type=&amp;quot;fixed-point&amp;quot;/&amp;gt;
+        &amp;lt;field name=&amp;quot;description&amp;quot; type=&amp;quot;description&amp;quot;/&amp;gt;
+        &amp;lt;prim-key field=&amp;quot;pokedexId&amp;quot;/&amp;gt;
+        &amp;lt;relation type=&amp;quot;one&amp;quot; fk-name=&amp;quot;POKEMON_POKEMON_TYPEID&amp;quot; rel-entity-name=&amp;quot;PokemonType&amp;quot;&amp;gt;
+            &amp;lt;key-map field-name=&amp;quot;pokemonTypeId&amp;quot;/&amp;gt;
+        &amp;lt;/relation&amp;gt;
+    &amp;lt;/entity&amp;gt;
+
+&amp;lt;/entitymodel&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Test data&lt;/h3&gt;
+&lt;p&gt;Paste this XML to &lt;code&gt;pokedex/data/PokedexDemoData.xml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;entity-engine-xml&amp;gt;
+    &amp;lt;Pokedex pokedexId=&amp;quot;1&amp;quot; pokemonTypeId=&amp;quot;1&amp;quot; monster=&amp;quot;BULBASAUR&amp;quot; seen=&amp;quot;20&amp;quot; caught=&amp;quot;18&amp;quot; weight=&amp;quot;20.5&amp;quot; height=&amp;quot;1.35&amp;quot; description=&amp;quot;Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun&amp;#39;s ray, the seed grows progressively larger&amp;quot;/&amp;gt;
+    &amp;lt;Pokedex pokedexId=&amp;quot;2&amp;quot; pokemonTypeId=&amp;quot;1&amp;quot; monster=&amp;quot;IVYSAUR&amp;quot; seen=&amp;quot;2&amp;quot; caught=&amp;quot;2&amp;quot; weight=&amp;quot;30.5&amp;quot; height=&amp;quot;1.58&amp;quot; description=&amp;quot;An evolved Bulbasaur&amp;quot;/&amp;gt;
+    &amp;lt;Pokedex pokedexId=&amp;quot;3&amp;quot; pokemonTypeId=&amp;quot;1&amp;quot; monster=&amp;quot;VENUSAUR&amp;quot; seen=&amp;quot;1&amp;quot; caught=&amp;quot;1&amp;quot; weight=&amp;quot;32.5&amp;quot; height=&amp;quot;2.03&amp;quot; description=&amp;quot;An evolved Ivysaur&amp;quot;/&amp;gt;
+&amp;lt;/entity-engine-xml&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and to &lt;code&gt;pokedex/data/PokedexTypeData.xml&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;entity-engine-xml&amp;gt;
+    &amp;lt;PokemonType pokemonTypeId=&amp;quot;1&amp;quot; type=&amp;quot;GRASS&amp;quot;/&amp;gt;
+    &amp;lt;PokemonType pokemonTypeId=&amp;quot;2&amp;quot; type=&amp;quot;ELECTRIC&amp;quot;/&amp;gt;
+    &amp;lt;PokemonType pokemonTypeId=&amp;quot;3&amp;quot; type=&amp;quot;WATER&amp;quot;/&amp;gt;
+    &amp;lt;PokemonType pokemonTypeId=&amp;quot;4&amp;quot; type=&amp;quot;FIRE&amp;quot;/&amp;gt;
+    &amp;lt;PokemonType pokemonTypeId=&amp;quot;5&amp;quot; type=&amp;quot;PSYCHIC&amp;quot;/&amp;gt;
+    &amp;lt;PokemonType pokemonTypeId=&amp;quot;6&amp;quot; type=&amp;quot;FAIRY&amp;quot;/&amp;gt;
+    &amp;lt;PokemonType pokemonTypeId=&amp;quot;7&amp;quot; type=&amp;quot;STEEL&amp;quot;/&amp;gt;
+    &amp;lt;PokemonType pokemonTypeId=&amp;quot;8&amp;quot; type=&amp;quot;GROUND&amp;quot;/&amp;gt;
+    &amp;lt;PokemonType pokemonTypeId=&amp;quot;9&amp;quot; type=&amp;quot;NORMAL&amp;quot;/&amp;gt;
+&amp;lt;/entity-engine-xml&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Views&lt;/h3&gt;
+&lt;p&gt;Paste this XML to &lt;code&gt;pokedex/widget/PokedexForms.xml&lt;/code&gt;. I&apos;m not sure about the Ofbiz definition of form here but I&apos;m certain this is not just for HTML forms.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;forms xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+       xsi:noNamespaceSchemaLocation=&amp;quot;http://ofbiz.apache.org/dtds/widget-form.xsd&amp;quot;&amp;gt;
+
+    &amp;lt;form name=&amp;quot;addPokedexForm&amp;quot; type=&amp;quot;single&amp;quot; target=&amp;quot;addToPokedex&amp;quot;&amp;gt;
+        &amp;lt;auto-fields-service service-name=&amp;quot;addToPokedex&amp;quot;/&amp;gt;
+        &amp;lt;field name=&amp;quot;pokemonTypeId&amp;quot; title=&amp;quot;${uiLabelMap.CommonType}&amp;quot;&amp;gt;
+            &amp;lt;drop-down allow-empty=&amp;quot;false&amp;quot; current-description=&amp;quot;&amp;quot;&amp;gt;
+                &amp;lt;entity-options description=&amp;quot;${type}&amp;quot; key-field-name=&amp;quot;pokemonTypeId&amp;quot; entity-name=&amp;quot;PokemonType&amp;quot;&amp;gt;
+                    &amp;lt;entity-order-by field-name=&amp;quot;type&amp;quot;/&amp;gt;
+                &amp;lt;/entity-options&amp;gt;
+            &amp;lt;/drop-down&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;submitButton&amp;quot; title=&amp;quot;${uiLabelMap.CommonAdd}&amp;quot;&amp;gt;
+            &amp;lt;submit button-type=&amp;quot;button&amp;quot;/&amp;gt;
+        &amp;lt;/field&amp;gt;
+    &amp;lt;/form&amp;gt;
+
+    &amp;lt;form name=&amp;quot;findPokemonForm&amp;quot; type=&amp;quot;single&amp;quot; target=&amp;quot;findPokemon&amp;quot; default-entity-name=&amp;quot;Pokedex&amp;quot;&amp;gt;
+        &amp;lt;field name=&amp;quot;noConditionFind&amp;quot;&amp;gt;
+            &amp;lt;hidden value=&amp;quot;Y&amp;quot;/&amp;gt; &amp;lt;!-- if this isn&amp;#39;t there then with all fields empty no query will be done --&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;monster&amp;quot; title=&amp;quot;${uiLabelMap.PokedexMonster}&amp;quot;&amp;gt;
+            &amp;lt;text-find/&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;pokemonTypeId&amp;quot; title=&amp;quot;${uiLabelMap.PokemonType}&amp;quot;&amp;gt;
+            &amp;lt;drop-down allow-empty=&amp;quot;true&amp;quot; current-description=&amp;quot;&amp;quot;&amp;gt;
+                &amp;lt;entity-options description=&amp;quot;${type}&amp;quot; key-field-name=&amp;quot;pokemonTypeId&amp;quot; entity-name=&amp;quot;PokemonType&amp;quot;&amp;gt;
+                    &amp;lt;entity-order-by field-name=&amp;quot;type&amp;quot;/&amp;gt;
+                &amp;lt;/entity-options&amp;gt;
+            &amp;lt;/drop-down&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;searchButton&amp;quot; title=&amp;quot;${uiLabelMap.CommonFind}&amp;quot; widget-style=&amp;quot;smallSubmit&amp;quot;&amp;gt;
+            &amp;lt;submit button-type=&amp;quot;button&amp;quot; image-location=&amp;quot;/images/icons/magnifier.png&amp;quot;/&amp;gt;
+        &amp;lt;/field&amp;gt;
+    &amp;lt;/form&amp;gt;
+
+    &amp;lt;form name=&amp;quot;pokemonListForm&amp;quot; type=&amp;quot;list&amp;quot; list-name=&amp;quot;listIt&amp;quot; paginate-target=&amp;quot;findPokemon&amp;quot;
+          default-entity-name=&amp;quot;Pokedex&amp;quot; separate-columns=&amp;quot;true&amp;quot;
+          odd-row-style=&amp;quot;alternate-row&amp;quot; header-row-style=&amp;quot;header-row-2&amp;quot; default-table-style=&amp;quot;basic-table hover-bar&amp;quot;&amp;gt;
+        &amp;lt;actions&amp;gt;
+            &amp;lt;!-- Preparing search results for user query by using OFBiz stock service to perform find operations on a single entity or view entity --&amp;gt;
+            &amp;lt;service service-name=&amp;quot;performFind&amp;quot; result-map=&amp;quot;result&amp;quot; result-map-list=&amp;quot;listIt&amp;quot;&amp;gt;
+                &amp;lt;field-map field-name=&amp;quot;inputFields&amp;quot; from-field=&amp;quot;pokemonContext&amp;quot;/&amp;gt;
+                &amp;lt;field-map field-name=&amp;quot;entityName&amp;quot; value=&amp;quot;Pokedex&amp;quot;/&amp;gt;
+                &amp;lt;field-map field-name=&amp;quot;orderBy&amp;quot; from-field=&amp;quot;parameters.sortField&amp;quot;/&amp;gt;
+                &amp;lt;field-map field-name=&amp;quot;viewIndex&amp;quot; from-field=&amp;quot;viewIndex&amp;quot;/&amp;gt;
+                &amp;lt;field-map field-name=&amp;quot;viewSize&amp;quot; from-field=&amp;quot;viewSize&amp;quot;/&amp;gt;
+            &amp;lt;/service&amp;gt;
+        &amp;lt;/actions&amp;gt;
+        &amp;lt;field name=&amp;quot;pokedexId&amp;quot; title=&amp;quot;${uiLabelMap.PokedexId}&amp;quot;&amp;gt;
+            &amp;lt;display/&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;description&amp;quot; title=&amp;quot;${uiLabelMap.PokedexDescription}&amp;quot;&amp;gt;
+            &amp;lt;display/&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;monster&amp;quot; title=&amp;quot;${uiLabelMap.PokedexMonster}&amp;quot; sort-field=&amp;quot;true&amp;quot;&amp;gt;
+            &amp;lt;display/&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;seen&amp;quot; title=&amp;quot;${uiLabelMap.PokedexSeen}&amp;quot; sort-field=&amp;quot;true&amp;quot;&amp;gt;
+            &amp;lt;display/&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;caught&amp;quot; title=&amp;quot;${uiLabelMap.PokedexCaught}&amp;quot;&amp;gt;
+            &amp;lt;display/&amp;gt;
+        &amp;lt;/field&amp;gt;
+        &amp;lt;field name=&amp;quot;pokemonTypeId&amp;quot; title=&amp;quot;${uiLabelMap.PokemonType}&amp;quot;&amp;gt;
+            &amp;lt;display-entity entity-name=&amp;quot;PokemonType&amp;quot; key-field-name=&amp;quot;pokemonTypeId&amp;quot; description=&amp;quot;${type}&amp;quot;/&amp;gt;
+        &amp;lt;/field&amp;gt;
+    &amp;lt;/form&amp;gt;
+
+&amp;lt;/forms&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Paste this XML to &lt;code&gt;pokedex/widget/PokedexScreens.xml&lt;/code&gt;. You will notice above forms are loaded using this XML. The look-and-feel is described on &lt;code&gt;decorator&lt;/code&gt;&apos;s metadata.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
 &amp;lt;screens xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
         xsi:noNamespaceSchemaLocation=&amp;quot;http://ofbiz.apache.org/dtds/widget-screen.xsd&amp;quot;&amp;gt;
@@ -131,9 +267,68 @@ pokedex/
                 &amp;lt;set field=&amp;quot;headerItem&amp;quot; value=&amp;quot;main&amp;quot;/&amp;gt;&amp;lt;!-- this highlights the selected menu-item with name &amp;quot;main&amp;quot; --&amp;gt;
             &amp;lt;/actions&amp;gt;
             &amp;lt;widgets&amp;gt;
+                &amp;lt;decorator-screen name=&amp;quot;main-decorator&amp;quot; location=&amp;quot;${parameters.mainDecoratorLocation}&amp;quot;&amp;gt;
+                    &amp;lt;decorator-section name=&amp;quot;body&amp;quot;&amp;gt;
+                        &amp;lt;screenlet title=&amp;quot;Add To Pokedex&amp;quot;&amp;gt;
+                            &amp;lt;include-form name=&amp;quot;addPokedexForm&amp;quot; location=&amp;quot;component://pokedex/widget/PokedexForms.xml&amp;quot;/&amp;gt;
+                        &amp;lt;/screenlet&amp;gt;
+                    &amp;lt;/decorator-section&amp;gt;
+                &amp;lt;/decorator-screen&amp;gt;
+            &amp;lt;/widgets&amp;gt;
+        &amp;lt;/section&amp;gt;
+    &amp;lt;/screen&amp;gt;
+
+    &amp;lt;screen name=&amp;quot;findPokemon&amp;quot;&amp;gt;
+        &amp;lt;section&amp;gt;
+            &amp;lt;actions&amp;gt;
+                &amp;lt;set field=&amp;quot;headerItem&amp;quot; value=&amp;quot;findPokemon&amp;quot;/&amp;gt;
+                &amp;lt;set field=&amp;quot;titleProperty&amp;quot; value=&amp;quot;PageTitleFindPokemon&amp;quot;/&amp;gt;
+                &amp;lt;set field=&amp;quot;pokemonContext&amp;quot; from-field=&amp;quot;parameters&amp;quot;/&amp;gt;
+            &amp;lt;/actions&amp;gt;
+            &amp;lt;widgets&amp;gt;
+                &amp;lt;decorator-screen name=&amp;quot;main-decorator&amp;quot; location=&amp;quot;${parameters.mainDecoratorLocation}&amp;quot;&amp;gt;
+                    &amp;lt;decorator-section name=&amp;quot;body&amp;quot;&amp;gt;
+                        &amp;lt;section&amp;gt;
+                            &amp;lt;condition&amp;gt;
+                                &amp;lt;if-has-permission permission=&amp;quot;POKEDEX&amp;quot; action=&amp;quot;_VIEW&amp;quot;/&amp;gt;
+                            &amp;lt;/condition&amp;gt;
+                            &amp;lt;widgets&amp;gt;
+                                &amp;lt;decorator-screen name=&amp;quot;FindScreenDecorator&amp;quot; location=&amp;quot;component://common/widget/CommonScreens.xml&amp;quot;&amp;gt;
+                                    &amp;lt;decorator-section name=&amp;quot;search-options&amp;quot;&amp;gt;
+                                        &amp;lt;include-form name=&amp;quot;findPokemonForm&amp;quot; location=&amp;quot;component://pokedex/widget/PokedexForms.xml&amp;quot;/&amp;gt;
+                                    &amp;lt;/decorator-section&amp;gt;
+                                    &amp;lt;decorator-section name=&amp;quot;search-results&amp;quot;&amp;gt;
+                                        &amp;lt;include-form name=&amp;quot;pokemonListForm&amp;quot; location=&amp;quot;component://pokedex/widget/PokedexForms.xml&amp;quot;/&amp;gt;
+                                    &amp;lt;/decorator-section&amp;gt;
+                                &amp;lt;/decorator-screen&amp;gt;
+                            &amp;lt;/widgets&amp;gt;
+                            &amp;lt;fail-widgets&amp;gt;
+                                &amp;lt;label style=&amp;quot;h3&amp;quot;&amp;gt;${uiLabelMap.PokedexViewPermissionError}&amp;lt;/label&amp;gt;
+                            &amp;lt;/fail-widgets&amp;gt;
+                        &amp;lt;/section&amp;gt;
+                    &amp;lt;/decorator-section&amp;gt;
+                &amp;lt;/decorator-screen&amp;gt;
+            &amp;lt;/widgets&amp;gt;
+        &amp;lt;/section&amp;gt;
+    &amp;lt;/screen&amp;gt;``
+
+    &amp;lt;screen name=&amp;quot;AddToPokedexFtl&amp;quot;&amp;gt;
+        &amp;lt;section&amp;gt;
+            &amp;lt;actions&amp;gt;
+                &amp;lt;set field=&amp;quot;titleProperty&amp;quot; value=&amp;quot;Custom FTL&amp;quot;/&amp;gt;
+                &amp;lt;set field=&amp;quot;headerItem&amp;quot; value=&amp;quot;addToPokedexFtl&amp;quot;/&amp;gt;
+                &amp;lt;script location=&amp;quot;component://pokedex/webapp/pokedex/WEB-INF/actions/ListPokedex.groovy&amp;quot;/&amp;gt;
+            &amp;lt;/actions&amp;gt;
+            &amp;lt;widgets&amp;gt;
                 &amp;lt;decorator-screen name=&amp;quot;PokedexCommonDecorator&amp;quot; location=&amp;quot;${parameters.mainDecoratorLocation}&amp;quot;&amp;gt;
                     &amp;lt;decorator-section name=&amp;quot;body&amp;quot;&amp;gt;
-                        &amp;lt;label text=&amp;quot;Hello Pokedex :)&amp;quot;/&amp;gt;
+                        &amp;lt;label style=&amp;quot;h4&amp;quot; text=&amp;quot;${uiLabelMap.PokedexList}&amp;quot;/&amp;gt;
+                        &amp;lt;platform-specific&amp;gt;
+                            &amp;lt;html&amp;gt;&amp;lt;html-template location=&amp;quot;component://pokedex/webapp/pokedex/crud/list.ftl&amp;quot;/&amp;gt;&amp;lt;/html&amp;gt;
+                        &amp;lt;/platform-specific&amp;gt;
+                        &amp;lt;platform-specific&amp;gt;
+                            &amp;lt;html&amp;gt;&amp;lt;html-template location=&amp;quot;component://pokedex/webapp/pokedex/crud/add.ftl&amp;quot;/&amp;gt;&amp;lt;/html&amp;gt;
+                        &amp;lt;/platform-specific&amp;gt;
                     &amp;lt;/decorator-section&amp;gt;
                 &amp;lt;/decorator-screen&amp;gt;
             &amp;lt;/widgets&amp;gt;
@@ -142,7 +337,389 @@ pokedex/
 
 &amp;lt;/screens&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;To be continued...&lt;/h3&gt;
+&lt;p&gt;Paste this XML to &lt;code&gt;pokedex/widget/CommonScreens.xml&lt;/code&gt;. This is the metadata the &lt;code&gt;decorators&lt;/code&gt; for the above screens.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;screens xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:noNamespaceSchemaLocation=&amp;quot;http://ofbiz.apache.org/dtds/widget-screen.xsd&amp;quot;&amp;gt;
+
+    &amp;lt;screen name=&amp;quot;main-decorator&amp;quot;&amp;gt;
+        &amp;lt;section&amp;gt;
+            &amp;lt;actions&amp;gt;
+                &amp;lt;property-map resource=&amp;quot;PokedexUiLabels&amp;quot; map-name=&amp;quot;uiLabelMap&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+                &amp;lt;property-map resource=&amp;quot;CommonUiLabels&amp;quot; map-name=&amp;quot;uiLabelMap&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+
+                &amp;lt;set field=&amp;quot;layoutSettings.companyName&amp;quot; from-field=&amp;quot;uiLabelMap.PokedexCompanyName&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+                &amp;lt;set field=&amp;quot;layoutSettings.companySubtitle&amp;quot; from-field=&amp;quot;uiLabelMap.PokedexCompanySubtitle&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+
+                &amp;lt;set field=&amp;quot;activeApp&amp;quot; value=&amp;quot;pokedex&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+                &amp;lt;set field=&amp;quot;applicationMenuName&amp;quot; value=&amp;quot;MainAppBar&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+                &amp;lt;set field=&amp;quot;applicationMenuLocation&amp;quot; value=&amp;quot;component://pokedex/widget/PokedexMenus.xml&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+                &amp;lt;set field=&amp;quot;applicationTitle&amp;quot; value=&amp;quot;${uiLabelMap.PokedexApplication}&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+            &amp;lt;/actions&amp;gt;
+            &amp;lt;widgets&amp;gt;
+                &amp;lt;include-screen name=&amp;quot;GlobalDecorator&amp;quot; location=&amp;quot;component://common/widget/CommonScreens.xml&amp;quot;/&amp;gt;
+            &amp;lt;/widgets&amp;gt;
+        &amp;lt;/section&amp;gt;
+    &amp;lt;/screen&amp;gt;
+
+    &amp;lt;screen name=&amp;quot;PokedexCommonDecorator&amp;quot;&amp;gt;
+        &amp;lt;section&amp;gt;
+            &amp;lt;actions
+                &amp;lt;property-map resource=&amp;quot;PokedexUiLabels&amp;quot; map-name=&amp;quot;uiLabelMap&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+                &amp;lt;property-map resource=&amp;quot;CommonUiLabels&amp;quot; map-name=&amp;quot;uiLabelMap&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+                &amp;lt;!-- Including custom CSS Styles that you want to use in your application view. [] in field can be used to
+                 set the order of loading CSS files to load if there are multiple --&amp;gt;
+                &amp;lt;set field=&amp;quot;styleSheets[]&amp;quot; value=&amp;quot;/pokedex/static/css/bootstrap.min.css&amp;quot;/&amp;gt;
+
+                &amp;lt;!-- Including custom JS that you want to use in your application view. [] in field can be used to
+                     set the order of loading of JS files to load if there are multiple --&amp;gt;
+                &amp;lt;set field=&amp;quot;javaScripts[+0]&amp;quot; value=&amp;quot;/pokedex/static/js/bootstrap.min.js&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+                &amp;lt;set field=&amp;quot;layoutSettings.companyName&amp;quot; from-field=&amp;quot;uiLabelMap.PokedexCompanyName&amp;quot; global=&amp;quot;true&amp;quot;/&amp;gt;
+            &amp;lt;/actions&amp;gt;
+            &amp;lt;widgets&amp;gt;
+                &amp;lt;section&amp;gt;
+                    &amp;lt;condition&amp;gt;
+                        &amp;lt;if-has-permission permission=&amp;quot;POKEDEX&amp;quot; action=&amp;quot;_VIEW&amp;quot;/&amp;gt;
+                    &amp;lt;/condition&amp;gt;
+                    &amp;lt;widgets&amp;gt;
+                        &amp;lt;platform-specific&amp;gt;
+                            &amp;lt;html&amp;gt;
+                                &amp;lt;html-template location=&amp;quot;component://pokedex/webapp/pokedex/includes/PreBody.ftl&amp;quot;/&amp;gt;
+                            &amp;lt;/html&amp;gt;
+                        &amp;lt;/platform-specific&amp;gt;
+                        &amp;lt;decorator-section-include name=&amp;quot;pre-body&amp;quot;/&amp;gt;
+                        &amp;lt;decorator-section-include name=&amp;quot;body&amp;quot;/&amp;gt;
+                        &amp;lt;platform-specific&amp;gt;
+                            &amp;lt;html&amp;gt;
+                                &amp;lt;html-template location=&amp;quot;component://pokedex/webapp/pokedex/includes/PostBody.ftl&amp;quot;/&amp;gt;
+                            &amp;lt;/html&amp;gt;
+                        &amp;lt;/platform-specific&amp;gt;
+                    &amp;lt;/widgets&amp;gt;
+                    &amp;lt;fail-widgets&amp;gt;
+                        &amp;lt;label style=&amp;quot;h3&amp;quot;&amp;gt;${uiLabelMap.OfbizDemoViewPermissionError}&amp;lt;/label&amp;gt;
+                    &amp;lt;/fail-widgets&amp;gt;
+                &amp;lt;/section&amp;gt;
+            &amp;lt;/widgets&amp;gt;
+        &amp;lt;/section&amp;gt;
+    &amp;lt;/screen&amp;gt;
+&amp;lt;/screens&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Paste this XML to &lt;code&gt;pokedex/widget/PokedexMenus&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;menus xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+       xsi:noNamespaceSchemaLocation=&amp;quot;http://ofbiz.apache.org/dtds/widget-menu.xsd&amp;quot;&amp;gt;
+    &amp;lt;menu name=&amp;quot;MainAppBar&amp;quot; title=&amp;quot;${uiLabelMap.PokedexApplication}&amp;quot; extends=&amp;quot;CommonAppBarMenu&amp;quot; extends-resource=&amp;quot;component://common/widget/CommonMenus.xml&amp;quot;&amp;gt;
+        &amp;lt;menu-item name=&amp;quot;findPokemon&amp;quot; title=&amp;quot;${uiLabelMap.PokemonFind}&amp;quot;&amp;gt;
+            &amp;lt;link target=&amp;quot;findPokemon&amp;quot;/&amp;gt;
+        &amp;lt;/menu-item&amp;gt;
+        &amp;lt;menu-item name=&amp;quot;addToPokedexFtl&amp;quot; title=&amp;quot;${uiLabelMap.AddToPokedexFtl}&amp;quot;&amp;gt;
+            &amp;lt;link target=&amp;quot;addToPokedexFtl&amp;quot;/&amp;gt;
+        &amp;lt;/menu-item&amp;gt;
+    &amp;lt;/menu&amp;gt;
+&amp;lt;/menus&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Paste this HTML to &lt;code&gt;pokedex/webapp/pokedex/includes/PreBody.ftl&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;${layoutSettings.companyName}&amp;lt;/title&amp;gt;
+    &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, user-scalable=no&amp;quot;/&amp;gt;
+    &amp;lt;#if webSiteFaviconContent?has_content&amp;gt;
+        &amp;lt;link rel=&amp;quot;shortcut icon&amp;quot; href=&amp;quot;&amp;quot;&amp;gt;
+    &amp;lt;/#if&amp;gt;
+    &amp;lt;#list styleSheets as styleSheet&amp;gt;
+        &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;${StringUtil.wrapString(styleSheet)}&amp;quot; type=&amp;quot;text/css&amp;quot;/&amp;gt;
+    &amp;lt;/#list&amp;gt;
+    &amp;lt;#list javaScripts as javaScript&amp;gt;
+        &amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;${StringUtil.wrapString(javaScript)}&amp;quot;/&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;/#list&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body data-offset=&amp;quot;125&amp;quot;&amp;gt;
+    &amp;lt;div class=&amp;quot;container menus&amp;quot; id=&amp;quot;container&amp;quot;&amp;gt;
+      &amp;lt;div class=&amp;quot;row&amp;quot;&amp;gt;
+        &amp;lt;div class=&amp;quot;col-sm-12&amp;quot;&amp;gt;
+          &amp;lt;ul id=&amp;quot;page-title&amp;quot; class=&amp;quot;breadcrumb&amp;quot;&amp;gt;
+            &amp;lt;li&amp;gt;
+                &amp;lt;a href=&amp;quot;&amp;lt;@ofbizUrl&amp;gt;main&amp;lt;/@ofbizUrl&amp;gt;&amp;quot;&amp;gt;Main&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+            &amp;lt;li class=&amp;quot;active&amp;quot;&amp;gt;&amp;lt;span class=&amp;quot;flipper-title&amp;quot;&amp;gt;${StringUtil.wrapString(uiLabelMap[titleProperty])}&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li class=&amp;quot;pull-right&amp;quot;&amp;gt;
+              &amp;lt;a href=&amp;quot;&amp;lt;@ofbizUrl&amp;gt;logout&amp;lt;/@ofbizUrl&amp;gt;&amp;quot; title=&amp;quot;${uiLabelMap.CommonLogout}&amp;quot;&amp;gt;logout&amp;lt;/i&amp;gt;&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+          &amp;lt;/ul&amp;gt;
+        &amp;lt;/div&amp;gt;
+      &amp;lt;/div&amp;gt;
+      &amp;lt;div class=&amp;quot;row&amp;quot;&amp;gt;
+        &amp;lt;div class=&amp;quot;col-lg-12 header-col&amp;quot;&amp;gt;
+          &amp;lt;div id=&amp;quot;main-content&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and to &lt;code&gt;pokedex/webapp/pokedex/includes/PostBody.ftl&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;          &amp;lt;#-- Close the tags opened in the PreBody section --&amp;gt;
+          &amp;lt;/div&amp;gt;
+        &amp;lt;/div&amp;gt;
+      &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The above HTML has styling and Javascript dependencies you have to download from &lt;a href=&quot;https://github.com/twbs/bootstrap/releases/download/v3.3.7/bootstrap-3.3.7-dist.zip&quot;&gt;Twitter&apos;s bootstrap&lt;/a&gt;. Then create two folders inside &lt;code&gt;pokedex/webapp/pokedex/static&lt;/code&gt;, one for &lt;code&gt;css&lt;/code&gt; and one for &lt;code&gt;js&lt;/code&gt;. Place &lt;code&gt;bootstrap.min.css&lt;/code&gt; and &lt;code&gt;bootstrap.min.js&lt;/code&gt; to their respective folder. Afterwhich, expose the above static resources in your &lt;code&gt;pokedex/webapp/pokedex/WEB-INF/web.xml&lt;/code&gt; by editing the allowedPaths.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;init-param&amp;gt;
+     &amp;lt;param-name&amp;gt;allowedPaths&amp;lt;/param-name&amp;gt;
+     &amp;lt;param-value&amp;gt;/error:/control:/select:/index.html:/index.jsp:/default.html:/default.jsp:/images:/includes/maincss.css:/static&amp;lt;/param-value&amp;gt;
+&amp;lt;/init-param&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Paste this to &lt;code&gt;pokedex/webapp/pokedex/crud/add.ftl&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;form method=&amp;quot;post&amp;quot; action=&amp;quot;&amp;lt;@ofbizUrl&amp;gt;addToPokedexEvent&amp;lt;/@ofbizUrl&amp;gt;&amp;quot; name=&amp;quot;addToPokedexEvent&amp;quot; class=&amp;quot;form-horizontal&amp;quot;&amp;gt;
+    &amp;lt;div class=&amp;quot;control-group&amp;quot;&amp;gt;
+        &amp;lt;label class=&amp;quot;control-label&amp;quot; for=&amp;quot;pokemonType&amp;quot;&amp;gt;${uiLabelMap.PokemonType}&amp;lt;/label&amp;gt;
+        &amp;lt;div class=&amp;quot;controls&amp;quot;&amp;gt;
+            &amp;lt;select id=&amp;quot;pokemonTypeId&amp;quot; name=&amp;quot;pokemonTypeId&amp;quot;&amp;gt;
+                &amp;lt;#list pokemonTypes as pokemonType&amp;gt;
+                    &amp;lt;option value=&amp;#39;${pokemonType.pokemonTypeId}&amp;#39;&amp;gt;${pokemonType.type}&amp;lt;/option&amp;gt;
+                &amp;lt;/#list&amp;gt;
+            &amp;lt;/select&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div class=&amp;quot;control-group&amp;quot;&amp;gt;
+        &amp;lt;label class=&amp;quot;control-label&amp;quot; for=&amp;quot;monster&amp;quot;&amp;gt;${uiLabelMap.PokedexMonster}&amp;lt;/label&amp;gt;
+        &amp;lt;div class=&amp;quot;controls&amp;quot;&amp;gt;
+            &amp;lt;input type=&amp;quot;text&amp;quot; id=&amp;quot;monster&amp;quot; name=&amp;quot;monster&amp;quot; required&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div class=&amp;quot;control-group&amp;quot;&amp;gt;
+        &amp;lt;label class=&amp;quot;control-label&amp;quot; for=&amp;quot;description&amp;quot;&amp;gt;${uiLabelMap.PokedexDescription}&amp;lt;/label&amp;gt;
+        &amp;lt;div class=&amp;quot;controls&amp;quot;&amp;gt;
+            &amp;lt;input type=&amp;quot;text&amp;quot; id=&amp;quot;description&amp;quot; name=&amp;quot;description&amp;quot; required&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div class=&amp;quot;control-group&amp;quot;&amp;gt;
+        &amp;lt;div class=&amp;quot;controls&amp;quot;&amp;gt;
+            &amp;lt;button type=&amp;quot;submit&amp;quot; class=&amp;quot;btn&amp;quot;&amp;gt;${uiLabelMap.CommonAdd}&amp;lt;/button&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and to &lt;code&gt;pokedex/webapp/pokedex/crud/list.ftl&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;table class=&amp;quot;table table-bordered table-striped table-hover&amp;quot;&amp;gt;
+    &amp;lt;thead&amp;gt;
+        &amp;lt;tr&amp;gt;
+            &amp;lt;th&amp;gt;${uiLabelMap.PokedexId}&amp;lt;/th&amp;gt;
+            &amp;lt;th&amp;gt;${uiLabelMap.PokemonType}&amp;lt;/th&amp;gt;
+            &amp;lt;th&amp;gt;${uiLabelMap.PokedexMonster}&amp;lt;/th&amp;gt;
+            &amp;lt;th&amp;gt;${uiLabelMap.PokedexDescription}&amp;lt;/th&amp;gt;
+        &amp;lt;/tr&amp;gt;
+    &amp;lt;/thead&amp;gt;
+    &amp;lt;tbody&amp;gt;
+    &amp;lt;#list pokedexList as pokedex&amp;gt;
+        &amp;lt;tr&amp;gt;
+            &amp;lt;td&amp;gt;${pokedex.pokedexId}&amp;lt;/td&amp;gt;
+            &amp;lt;td&amp;gt;${pokedex.getRelatedOne(&amp;quot;PokemonType&amp;quot;).get(&amp;quot;type&amp;quot;, locale)}&amp;lt;/td&amp;gt;
+            &amp;lt;td&amp;gt;${pokedex.monster}&amp;lt;/td&amp;gt;
+            &amp;lt;td&amp;gt;${pokedex.description}&amp;lt;/td&amp;gt;
+        &amp;lt;/tr&amp;gt;
+    &amp;lt;/#list&amp;gt;
+    &amp;lt;/tbody&amp;gt;
+&amp;lt;/table&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Controller&lt;/h3&gt;
+&lt;p&gt;Paste this inside &lt;code&gt;pokedex/webapp/pokedex/WEB-INF/controller.xml&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;site-conf xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:noNamespaceSchemaLocation=&amp;quot;http://ofbiz.apache.org/dtds/site-conf.xsd&amp;quot;&amp;gt;
+    &amp;lt;!-- The controller elements that are common to all OFBiz components
+         can be found in the following xml file. A component can override the
+         elements found in the common-controller.xml file. --&amp;gt;
+    &amp;lt;include location=&amp;quot;component://common/webcommon/WEB-INF/common-controller.xml&amp;quot;/&amp;gt;
+
+    &amp;lt;description&amp;gt;Pokedex Component Site Configuration File&amp;lt;/description&amp;gt;
+
+    &amp;lt;!-- Events to run on every request before security (chains exempt) --&amp;gt;
+    &amp;lt;!--
+    &amp;lt;preprocessor&amp;gt;
+    &amp;lt;/preprocessor&amp;gt;
+    --&amp;gt;
+    &amp;lt;!-- Events to run on every request after all other processing (chains exempt) --&amp;gt;
+    &amp;lt;!--
+    &amp;lt;postprocessor&amp;gt;
+        &amp;lt;event name=&amp;quot;test&amp;quot; type=&amp;quot;java&amp;quot; path=&amp;quot;org.ofbiz.webapp.event.TestEvent&amp;quot; invoke=&amp;quot;test&amp;quot;/&amp;gt;
+    &amp;lt;/postprocessor&amp;gt;
+    --&amp;gt;
+
+    &amp;lt;!-- Request Mappings --&amp;gt;
+    &amp;lt;request-map uri=&amp;quot;main&amp;quot;&amp;gt;
+        &amp;lt;security https=&amp;quot;true&amp;quot; auth=&amp;quot;true&amp;quot;/&amp;gt;
+        &amp;lt;response name=&amp;quot;success&amp;quot; type=&amp;quot;view&amp;quot; value=&amp;quot;main&amp;quot;/&amp;gt;
+    &amp;lt;/request-map&amp;gt;
+    &amp;lt;request-map uri=&amp;quot;addToPokedexEvent&amp;quot;&amp;gt;
+        &amp;lt;security https=&amp;quot;true&amp;quot; auth=&amp;quot;true&amp;quot;/&amp;gt;
+        &amp;lt;event type=&amp;quot;java&amp;quot; path=&amp;quot;com.prototype.pocket.monster.PokedexEvent&amp;quot; invoke=&amp;quot;addToPokedex&amp;quot;/&amp;gt;
+        &amp;lt;response name=&amp;quot;success&amp;quot; type=&amp;quot;view&amp;quot; value=&amp;quot;addToPokedexFtl&amp;quot;/&amp;gt;
+        &amp;lt;response name=&amp;quot;error&amp;quot; type=&amp;quot;view&amp;quot; value=&amp;quot;addToPokedexFtl&amp;quot;/&amp;gt;
+    &amp;lt;/request-map&amp;gt;
+    &amp;lt;request-map uri=&amp;quot;findPokemon&amp;quot;&amp;gt;
+        &amp;lt;security https=&amp;quot;true&amp;quot; auth=&amp;quot;true&amp;quot;/&amp;gt;
+        &amp;lt;response name=&amp;quot;success&amp;quot; type=&amp;quot;view&amp;quot; value=&amp;quot;findPokemon&amp;quot;/&amp;gt;
+    &amp;lt;/request-map&amp;gt;
+    &amp;lt;request-map uri=&amp;quot;addToPokedexFtl&amp;quot;&amp;gt;
+        &amp;lt;security https=&amp;quot;true&amp;quot; auth=&amp;quot;true&amp;quot;/&amp;gt;
+        &amp;lt;response name=&amp;quot;success&amp;quot; type=&amp;quot;view&amp;quot; value=&amp;quot;addToPokedexFtl&amp;quot;/&amp;gt;
+    &amp;lt;/request-map&amp;gt;
+
+    &amp;lt;!-- View Mappings --&amp;gt;
+    &amp;lt;view-map name=&amp;quot;main&amp;quot; type=&amp;quot;screen&amp;quot; page=&amp;quot;component://pokedex/widget/PokedexScreens.xml#main&amp;quot;/&amp;gt;
+    &amp;lt;view-map name=&amp;quot;findPokemon&amp;quot; type=&amp;quot;screen&amp;quot; page=&amp;quot;component://pokedex/widget/PokedexScreens.xml#findPokemon&amp;quot;/&amp;gt;
+    &amp;lt;view-map name=&amp;quot;addToPokedexFtl&amp;quot; type=&amp;quot;screen&amp;quot; page=&amp;quot;component://pokedex/widget/PokedexScreens.xml#AddToPokedexFtl&amp;quot;/&amp;gt;
+
+&amp;lt;/site-conf&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Service Layer&lt;/h3&gt;
+&lt;p&gt;Paste this XML to &lt;code&gt;pokedex/servicedef/services.xml&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;services xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:noNamespaceSchemaLocation=&amp;quot;http://ofbiz.apache.org/dtds/services.xsd&amp;quot;&amp;gt;
+    &amp;lt;description&amp;gt;Pokedex Services&amp;lt;/description&amp;gt;
+    &amp;lt;vendor&amp;gt;&amp;lt;/vendor&amp;gt;
+    &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt;
+
+    &amp;lt;service name=&amp;quot;addToPokedex&amp;quot; default-entity-name=&amp;quot;Pokedex&amp;quot; engine=&amp;quot;entity-auto&amp;quot; invoke=&amp;quot;create&amp;quot; auth=&amp;quot;true&amp;quot;&amp;gt;
+        &amp;lt;description&amp;gt;Create a pokedex entry&amp;lt;/description&amp;gt;
+        &amp;lt;auto-attributes include=&amp;quot;pk&amp;quot; mode=&amp;quot;OUT&amp;quot; optional=&amp;quot;false&amp;quot;/&amp;gt;
+        &amp;lt;auto-attributes include=&amp;quot;nonpk&amp;quot; mode=&amp;quot;IN&amp;quot; optional=&amp;quot;true&amp;quot;/&amp;gt;
+        &amp;lt;override name=&amp;quot;comments&amp;quot; optional=&amp;quot;true&amp;quot;/&amp;gt;
+    &amp;lt;/service&amp;gt;
+
+    &amp;lt;service name=&amp;quot;addToPokedexService&amp;quot; default-entity-name=&amp;quot;Pokedex&amp;quot; engine=&amp;quot;java&amp;quot;
+             location=&amp;quot;com.prototype.pocket.monster.PokedexService&amp;quot; invoke=&amp;quot;addToPokedex&amp;quot; auth=&amp;quot;false&amp;quot;&amp;gt;
+        &amp;lt;description&amp;gt;Add to Pokedex using a service&amp;lt;/description&amp;gt;
+        &amp;lt;auto-attributes include=&amp;quot;pk&amp;quot; mode=&amp;quot;OUT&amp;quot; optional=&amp;quot;false&amp;quot;/&amp;gt;
+        &amp;lt;auto-attributes include=&amp;quot;nonpk&amp;quot; mode=&amp;quot;IN&amp;quot; optional=&amp;quot;true&amp;quot;/&amp;gt;
+        &amp;lt;override name=&amp;quot;comments&amp;quot; optional=&amp;quot;true&amp;quot;/&amp;gt;
+    &amp;lt;/service&amp;gt;
+
+&amp;lt;/services&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Out-of-the-box (OOTB) Services&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;addToPokedex&lt;/code&gt; is using the &lt;code&gt;entity-auto&lt;/code&gt; which is for simple one-to-many entity relationship. For multiple entities of complex relationship, you will need to write your custom implementation to your service.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;findPokemon&lt;/code&gt; is using the generic service &lt;code&gt;performFind&lt;/code&gt; which is efficient to use when you have to perform search on one entity or one view entity.&lt;/p&gt;
+&lt;h3&gt;Event&lt;/h3&gt;
+&lt;p&gt;You might notice that one of the controller mappings is mapped to &lt;code&gt;addToPokedexEvent&lt;/code&gt;. Create this event on &lt;code&gt;pokedex/com/prototype/pocket/monster/PokedexEvent.java&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;package com.prototype.pocket.monster;
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.service.LocalDispatcher;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class PokedexEvent {
+
+    public static final String module = PokedexEvent.class.getName();
+
+    public static String addToPokedex(HttpServletRequest request, HttpServletResponse response) {
+
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute(&amp;quot;dispatcher&amp;quot;);
+
+        String pokemonTypeId = request.getParameter(&amp;quot;pokemonTypeId&amp;quot;);
+        String monster = request.getParameter(&amp;quot;monster&amp;quot;);
+        String description = request.getParameter(&amp;quot;description&amp;quot;);
+
+        if (UtilValidate.isEmpty(monster) || UtilValidate.isEmpty(description)) {
+            request.setAttribute(&amp;quot;_ERROR_MESSAGE_&amp;quot;, &amp;quot;Monster and its description is required&amp;quot;);
+            return &amp;quot;error&amp;quot;;
+        }
+
+        try {
+            Debug.logInfo(&amp;quot;Adding to pokedex using events&amp;quot;, module);
+            dispatcher.runSync(&amp;quot;addToPokedexService&amp;quot;, UtilMisc.toMap(&amp;quot;pokemonTypeId&amp;quot;, pokemonTypeId,
+                    &amp;quot;monster&amp;quot;, monster, &amp;quot;description&amp;quot;, description));
+        } catch (GenericServiceException e) {
+            request.setAttribute(&amp;quot;_ERROR_MESSAGE_&amp;quot;, &amp;quot;Unable to add to pokedex: &amp;quot; + e.toString());
+            return &amp;quot;error&amp;quot;;
+            request.setAttribute(&amp;quot;_EVENT_MESSAGE_&amp;quot;, &amp;quot;Successfully added to Pokedex&amp;quot;);
+        }
+
+        return &amp;quot;success&amp;quot;;
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The above event invokes &lt;code&gt;addToPokedexService&lt;/code&gt;. Create this service on &lt;code&gt;pokedex/src/com/prototype/pocket/monster/PokedexService.java&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;package com.prototype.pocket.monster;
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.ServiceUtil;
+
+import java.util.Map;
+
+public class PokedexService{
+
+    public static final String module = PokedexService.class.getName();
+
+    public static Map&amp;lt;String, Object&amp;gt; addToPokedex(DispatchContext dispatchContext, Map&amp;lt;String, ? extends Object&amp;gt; context) {
+
+        Map&amp;lt;String, Object&amp;gt; result = ServiceUtil.returnSuccess();
+        Delegator delegator = dispatchContext.getDelegator();
+
+        try {
+            GenericValue pokedex = delegator.makeValue(&amp;quot;Pokedex&amp;quot;);
+            pokedex.setNextSeqId();
+            pokedex.setNonPKFields(context);
+            pokedex = delegator.create(pokedex);
+            result.put(&amp;quot;pokedexId&amp;quot;, pokedex.getString(&amp;quot;pokedexId&amp;quot;));
+        } catch (GenericEntityException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(&amp;quot;Error while adding to pokedex using &amp;quot; + module);
+        }
+
+        return result;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Service vs Event&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Criteria &lt;/th&gt;
+      &lt;th align=&quot;center&quot;&gt;Service &lt;/th&gt;
+      &lt;th align=&quot;center&quot;&gt;Event&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Require Definition &lt;/td&gt;
+      &lt;td align=&quot;center&quot;&gt;Yes &lt;/td&gt;
+      &lt;td align=&quot;center&quot;&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Used to write business logic &lt;/td&gt;
+      &lt;td align=&quot;center&quot;&gt;Yes &lt;/td&gt;
+      &lt;td align=&quot;center&quot;&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Job Scheduling possible &lt;/td&gt;
+      &lt;td align=&quot;center&quot;&gt;Yes &lt;/td&gt;
+      &lt;td align=&quot;center&quot;&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Implementation possibilities &lt;/td&gt;
+      &lt;td align=&quot;center&quot;&gt;Entity auto, Java, Simple (XML) &amp;amp; Groovy &lt;/td&gt;
+      &lt;td align=&quot;center&quot;&gt;Simple (XML), Java &amp;amp; Groovy&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Return Type &lt;/td&gt;
+      &lt;td align=&quot;center&quot;&gt;Map &lt;/td&gt;
+      &lt;td align=&quot;center&quot;&gt;String&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;Running pokedex&lt;/h3&gt;
+&lt;p&gt;Now that the &lt;code&gt;model&lt;/code&gt;, &lt;code&gt;views&lt;/code&gt;, &lt;code&gt;controller&lt;/code&gt; and &lt;code&gt;service&lt;/code&gt; are wired using XMLs, you run &lt;code&gt;./ant clean-all build load-demo start&lt;/code&gt; to test your application.&lt;/p&gt;
   	    </description>
       </item>
       <item>
