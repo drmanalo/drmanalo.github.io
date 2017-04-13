@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Porting subversion To git</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Porting subversion To git</h1>
+			<p><em>12 April 2017</em></p>
+			<p><p>Before leaving my current role, I was tasked to migrate existing SVN repositories into git. It is exciting since I never did such thing in the past. Funny enough, I was challenged to install <code>git-all</code> on one of our unregistered Red Hat box. I'm failing to run this command to make base repository accessible. I can raise a ticket to register the box but I'm worried waiting for resolution would take longer than doing the migration on a different machine.</p>
+<pre><code>rhn-channel --add --channel=rhel-x86_64-server-optional-6
+</code></pre>
+<p>Anyways, I have to install <code>git-svn</code> to my personal laptop and do the migration.</p>
+<pre><code>$ sudo yum install git-svn
+...
+Running transaction
+Installing : git-svn-1.8.3.1-6.el7_2.1.x86_64                                           1/1
+Verifying  : git-svn-1.8.3.1-6.el7_2.1.x86_64                                           1/1
+
+Installed:
+   git-svn.x86_64 0:1.8.3.1-6.el7_2.1                                                                 
+</code></pre>
+<!-- more -->
+<h3>Backup and load svn repository</h3>
+<p>Since I'm going to do the migration on a my personal laptop, I need to dump all the repositories and load them.</p>
+<pre><code>$ svnadmin dump /var/svn/ami &gt; airmenzies.dump
+$ svnadmin create /home/drmanalo/svn/airmenzies
+$ svnadmin load /home/drmanalo/svn/airmenzies &lt; airmenzies.dump
+</code></pre>
+<h3>Create committers.txt</h3>
+<p>Google seach results will give you a one liner to get all the committers.</p>
+<pre><code>$ svn log -q | awk -F &#39;|&#39; &#39;/^r/ {sub(&quot;^ &quot;, &quot;&quot;, $2); sub(&quot; $&quot;, &quot;&quot;, $2); print $2&quot; = &quot;$2&quot; &lt;&quot;$2&quot;&gt;&quot;}&#39; | sort -u &gt; committers.txt
+</code></pre>
+<p>We only have half a dozen svn users, so I decided to get it from <code>conf/passwd</code> file of one of the repositories. Format should be like this.</p>
+<pre><code>root = root &lt;root@centos.dev&gt;
+</code></pre>
+<h3>Clone subversion using git-svn</h3>
+<p>Here, I'm going to clone an existing svn repository into my home drive folder called <code>temp</code>.</p>
+<pre><code>$ git svn clone file:///home/drmanalo/svn/airmenzies --no-metadata --authors-file=/home/drmanalo/Documents/committers.txt --stdlayout ~/temp
+...
+r1152 = 8ba77ef334b586dc7560e0bf5be0427f1b255fb8 (refs/remotes/trunk)
+Checked out HEAD:
+file:///home/drmanalo/svn/airmenzies/trunk r1152
+</code></pre>
+<h3>Convert svn:ignore properties into .gitignore</h3>
+<pre><code>$ cd ~/temp
+$ git svn show-ignore -i trunk &gt; .gitignore
+$ git add .gitignore
+$ git commit -m &#39;Convert svn:ignore properties to .gitignore.&#39;
+</code></pre>
+<h3>Create a bare git repository</h3>
+<pre><code>$ git init --bare ~/projects/airmenzies.git
+Initialised empty Git repository in /home/drmanalo/projects/airmenzies.git/
+$ cd ~/projects/airmenzies.git/
+$ git symbolic-ref HEAD refs/heads/trunk
+
+### Push to the bare repository
+
+$ cd ~/temp
+$ git remote add bare ~/projects/airmenzies.git
+$ git config remote.bare.push &#39;refs/remotes/*:refs/head/*&#39;
+
+
+$ git push bare master
+Counting objects: 32238, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (11853/11853), done.
+Writing objects: 100% (32238/32238), 37.48 MiB | 53.16 MiB/s, done.
+Total 32238 (delta 16197), reused 28310 (delta 14223)
+To /home/drmanalo/projects/airmenzies.git
+ * [new branch]      master -&gt; master
+</code></pre>
+<p>You can safely delete the <code>~/temp</code> folder.</p>
+<h3>Push the bare repository</h3>
+<p>In this instance, I'm pushing the converted svn to my local <code>gitlab</code>.</p>
+<pre><code>$ cd ~/projects/airmenzies.git
+$ git remote add origin http://root@localhost/devops/airmenzies.git
+
+$ git push -u origin --all
+Password for &#39;http://root@localhost&#39;:
+Counting objects: 32238, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (9879/9879), done.
+Writing objects: 100% (32238/32238), 37.48 MiB | 0 bytes/s, done.
+Total 32238 (delta 16197), reused 32238 (delta 16197)
+remote: Resolving deltas: 100% (16197/16197), done.
+To http://root@localhost/devops/airmenzies.git
+ * [new branch]      master -&gt; master
+Branch master set up to track remote branch master from origin.    
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2017/porting-svn-to-git.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2017/porting-svn-to-git.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

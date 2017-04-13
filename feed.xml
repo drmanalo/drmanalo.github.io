@@ -6,9 +6,98 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Sun, 19 Feb 2017 00:47:36 +0000</pubDate>
-    <lastBuildDate>Sun, 19 Feb 2017 00:47:36 +0000</lastBuildDate>
+    <pubDate>Thu, 13 Apr 2017 09:15:42 +0100</pubDate>
+    <lastBuildDate>Thu, 13 Apr 2017 09:15:42 +0100</lastBuildDate>
 
+      <item>
+        <title>Porting subversion To git</title>
+        <link>https://drmanalo.github.io/blog/2017/porting-svn-to-git.html</link>
+        <pubDate>Wed, 12 Apr 2017 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2017/porting-svn-to-git.html</guid>
+        <description>
+  	         &lt;p&gt;Before leaving my current role, I was tasked to migrate existing SVN repositories into git. It is exciting since I never did such thing in the past. Funny enough, I was challenged to install &lt;code&gt;git-all&lt;/code&gt; on one of our unregistered Red Hat box. I&apos;m failing to run this command to make base repository accessible. I can raise a ticket to register the box but I&apos;m worried waiting for resolution would take longer than doing the migration on a different machine.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;rhn-channel --add --channel=rhel-x86_64-server-optional-6
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Anyways, I have to install &lt;code&gt;git-svn&lt;/code&gt; to my personal laptop and do the migration.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo yum install git-svn
+...
+Running transaction
+Installing : git-svn-1.8.3.1-6.el7_2.1.x86_64                                           1/1
+Verifying  : git-svn-1.8.3.1-6.el7_2.1.x86_64                                           1/1
+
+Installed:
+   git-svn.x86_64 0:1.8.3.1-6.el7_2.1                                                                 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;Backup and load svn repository&lt;/h3&gt;
+&lt;p&gt;Since I&apos;m going to do the migration on a my personal laptop, I need to dump all the repositories and load them.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ svnadmin dump /var/svn/ami &amp;gt; airmenzies.dump
+$ svnadmin create /home/drmanalo/svn/airmenzies
+$ svnadmin load /home/drmanalo/svn/airmenzies &amp;lt; airmenzies.dump
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Create committers.txt&lt;/h3&gt;
+&lt;p&gt;Google seach results will give you a one liner to get all the committers.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ svn log -q | awk -F &amp;#39;|&amp;#39; &amp;#39;/^r/ {sub(&amp;quot;^ &amp;quot;, &amp;quot;&amp;quot;, $2); sub(&amp;quot; $&amp;quot;, &amp;quot;&amp;quot;, $2); print $2&amp;quot; = &amp;quot;$2&amp;quot; &amp;lt;&amp;quot;$2&amp;quot;&amp;gt;&amp;quot;}&amp;#39; | sort -u &amp;gt; committers.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We only have half a dozen svn users, so I decided to get it from &lt;code&gt;conf/passwd&lt;/code&gt; file of one of the repositories. Format should be like this.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;root = root &amp;lt;root@centos.dev&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Clone subversion using git-svn&lt;/h3&gt;
+&lt;p&gt;Here, I&apos;m going to clone an existing svn repository into my home drive folder called &lt;code&gt;temp&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ git svn clone file:///home/drmanalo/svn/airmenzies --no-metadata --authors-file=/home/drmanalo/Documents/committers.txt --stdlayout ~/temp
+...
+r1152 = 8ba77ef334b586dc7560e0bf5be0427f1b255fb8 (refs/remotes/trunk)
+Checked out HEAD:
+file:///home/drmanalo/svn/airmenzies/trunk r1152
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Convert svn:ignore properties into .gitignore&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ cd ~/temp
+$ git svn show-ignore -i trunk &amp;gt; .gitignore
+$ git add .gitignore
+$ git commit -m &amp;#39;Convert svn:ignore properties to .gitignore.&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Create a bare git repository&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ git init --bare ~/projects/airmenzies.git
+Initialised empty Git repository in /home/drmanalo/projects/airmenzies.git/
+$ cd ~/projects/airmenzies.git/
+$ git symbolic-ref HEAD refs/heads/trunk
+
+### Push to the bare repository
+
+$ cd ~/temp
+$ git remote add bare ~/projects/airmenzies.git
+$ git config remote.bare.push &amp;#39;refs/remotes/*:refs/head/*&amp;#39;
+
+
+$ git push bare master
+Counting objects: 32238, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (11853/11853), done.
+Writing objects: 100% (32238/32238), 37.48 MiB | 53.16 MiB/s, done.
+Total 32238 (delta 16197), reused 28310 (delta 14223)
+To /home/drmanalo/projects/airmenzies.git
+ * [new branch]      master -&amp;gt; master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can safely delete the &lt;code&gt;~/temp&lt;/code&gt; folder.&lt;/p&gt;
+&lt;h3&gt;Push the bare repository&lt;/h3&gt;
+&lt;p&gt;In this instance, I&apos;m pushing the converted svn to my local &lt;code&gt;gitlab&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ cd ~/projects/airmenzies.git
+$ git remote add origin http://root@localhost/devops/airmenzies.git
+
+$ git push -u origin --all
+Password for &amp;#39;http://root@localhost&amp;#39;:
+Counting objects: 32238, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (9879/9879), done.
+Writing objects: 100% (32238/32238), 37.48 MiB | 0 bytes/s, done.
+Total 32238 (delta 16197), reused 32238 (delta 16197)
+remote: Resolving deltas: 100% (16197/16197), done.
+To http://root@localhost/devops/airmenzies.git
+ * [new branch]      master -&amp;gt; master
+Branch master set up to track remote branch master from origin.    
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
       <item>
         <title>Hello Ofbiz</title>
         <link>https://drmanalo.github.io/blog/2017/hello-ofbiz.html</link>
