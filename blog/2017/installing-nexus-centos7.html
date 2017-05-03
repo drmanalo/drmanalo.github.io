@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Installing Nexus OSS on Centos 7</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Installing Nexus OSS on Centos 7</h1>
+			<p><em>03 May 2017</em></p>
+			<p><p>On my new role, I have found out that we are publishing jars to a private repository. This is to speed up build by telling Maven to get from our private repository first before going out to public. To learn more about Nexus, I'm installing it on my personal laptop running CentOS 7.</p>
+<h3>Download and extract nexus</h3>
+<pre><code>$ wget http://download.sonatype.com/nexus/3/latest-unix.tar.gz
+$ sudo tar xvf latest-unix.tar.gz -C /opt
+$ sudo ln -s /opt/nexus-3.3.1-01/ /opt/nexus
+</code></pre>
+<!-- more -->
+<h3>Setup nexus user</h3>
+<pre><code>$ sudo adduser nexus
+$ sudo chown -R nexus:nexus /opt/nexus
+</code></pre>
+<h3>Running as nexus user</h3>
+<pre><code>$ sudo vim /opt/nexus/bin/nexus.rc
+
+run_as_user=&quot;nexus&quot;   
+:wq
+</code></pre>
+<p>You can tweak VM options through <code>/opt/nexus/bin/nexus.vmoptions</code></p>
+<h3>Running nexus as Linux service</h3>
+<pre><code>$ sudo ln -s /opt/nexus/bin/nexus /etc/init.d/nexus
+$ sudo systemctl enable nexus
+nexus.service is not a native service, redirecting to /sbin/chkconfig.
+Executing /sbin/chkconfig nexus on
+</code></pre>
+<h3>Starting nexus</h3>
+<pre><code>$ sudo systemctl start nexus
+fan noise...
+</code></pre>
+<p>To check, point your browser to <a href="http://localhost:8081">http://localhost:8081</a>. Default username is admin with password admin123.</p></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2017/installing-nexus-centos7.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2017/installing-nexus-centos7.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

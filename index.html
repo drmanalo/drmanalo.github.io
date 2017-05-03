@@ -56,6 +56,19 @@
  	<div class="content container">
     	<ul id="posts">
 					<li>
+								<a href="blog/2017/installing-nexus-centos7.html"><h1 class="post-title">Installing Nexus OSS on Centos 7</h1></a>
+								<span class="post-date">03 May 2017</span>
+								<p>On my new role, I have found out that we are publishing jars to a private repository. This is to speed up build by telling Maven to get from our private repository first before going out to public. To learn more about Nexus, I'm installing it on my personal laptop running CentOS 7.</p>
+<h3>Download and extract nexus</h3>
+<pre><code>$ wget http://download.sonatype.com/nexus/3/latest-unix.tar.gz
+$ sudo tar xvf latest-unix.tar.gz -C /opt
+$ sudo ln -s /opt/nexus-3.3.1-01/ /opt/nexus
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2017/installing-nexus-centos7.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
 								<a href="blog/2017/porting-svn-to-git.html"><h1 class="post-title">Porting subversion To git</h1></a>
 								<span class="post-date">12 April 2017</span>
 								<p>Before leaving my current role, I was tasked to migrate existing SVN repositories into git. It is exciting since I never did such thing in the past. Funny enough, I was challenged to install <code>git-all</code> on one of our unregistered Red Hat box. I'm failing to run this command to make base repository accessible. I can raise a ticket to register the box but I'm worried waiting for resolution would take longer than doing the migration on a different machine.</p>

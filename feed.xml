@@ -6,9 +6,46 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Thu, 13 Apr 2017 09:15:42 +0100</pubDate>
-    <lastBuildDate>Thu, 13 Apr 2017 09:15:42 +0100</lastBuildDate>
+    <pubDate>Thu, 4 May 2017 00:30:09 +0100</pubDate>
+    <lastBuildDate>Thu, 4 May 2017 00:30:09 +0100</lastBuildDate>
 
+      <item>
+        <title>Installing Nexus OSS on Centos 7</title>
+        <link>https://drmanalo.github.io/blog/2017/installing-nexus-centos7.html</link>
+        <pubDate>Wed, 3 May 2017 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2017/installing-nexus-centos7.html</guid>
+        <description>
+  	         &lt;p&gt;On my new role, I have found out that we are publishing jars to a private repository. This is to speed up build by telling Maven to get from our private repository first before going out to public. To learn more about Nexus, I&apos;m installing it on my personal laptop running CentOS 7.&lt;/p&gt;
+&lt;h3&gt;Download and extract nexus&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ wget http://download.sonatype.com/nexus/3/latest-unix.tar.gz
+$ sudo tar xvf latest-unix.tar.gz -C /opt
+$ sudo ln -s /opt/nexus-3.3.1-01/ /opt/nexus
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;Setup nexus user&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo adduser nexus
+$ sudo chown -R nexus:nexus /opt/nexus
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Running as nexus user&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo vim /opt/nexus/bin/nexus.rc
+
+run_as_user=&amp;quot;nexus&amp;quot;   
+:wq
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can tweak VM options through &lt;code&gt;/opt/nexus/bin/nexus.vmoptions&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;Running nexus as Linux service&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo ln -s /opt/nexus/bin/nexus /etc/init.d/nexus
+$ sudo systemctl enable nexus
+nexus.service is not a native service, redirecting to /sbin/chkconfig.
+Executing /sbin/chkconfig nexus on
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Starting nexus&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo systemctl start nexus
+fan noise...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To check, point your browser to &lt;a href=&quot;http://localhost:8081&quot;&gt;http://localhost:8081&lt;/a&gt;. Default username is admin with password admin123.&lt;/p&gt;
+  	    </description>
+      </item>
       <item>
         <title>Porting subversion To git</title>
         <link>https://drmanalo.github.io/blog/2017/porting-svn-to-git.html</link>
