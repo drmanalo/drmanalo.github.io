@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Spring Boot with Angular Setup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Spring Boot with Angular Setup</h1>
+			<p><em>17 June 2017</em></p>
+			<p><p>We were given the opportunity to replace an existing mobile app by a responsive website. Mobile apps are great but since we are paying a monthly subscription to third-party, we are better off building a responsive website supported in all platform. We have iOS and Android version of the app but having it build once then run on different platforms is an added benefit.</p>
+<p>For this setup, we need <code>springboot-cli</code> and <code>ng-cli</code>. I won't detail how to have them installed but in my setup I used <code>sdkman</code> for springboot-cli and <code>npm</code> for ng-cli.</p>
+<h3>sping init</h3>
+<pre><code>$ spring init --dependencies=web,h2,jpa,actuator,devtools mobile
+Using service at https://start.spring.io
+Project extracted to &#39;/home/drmanalo/idea/mobile&#39;
+</code></pre>
+<!-- more -->
+<h3>ng init</h3>
+<pre><code>$ ng new --skip-git angular2
+installing ng
+create .editorconfig
+create README.md
+create src/app/app.component.css
+create src/app/app.component.html
+create src/app/app.component.spec.ts
+create src/app/app.component.ts
+create src/app/app.module.ts
+create src/assets/.gitkeep
+create src/environments/environment.prod.ts
+create src/environments/environment.ts
+create src/favicon.ico
+create src/index.html
+create src/main.ts
+create src/polyfills.ts
+create src/styles.css
+create src/test.ts
+create src/tsconfig.app.json
+create src/tsconfig.spec.json
+create src/typings.d.ts
+create .angular-cli.json
+create e2e/app.e2e-spec.ts
+create e2e/app.po.ts
+create e2e/tsconfig.e2e.json
+create karma.conf.js
+create package.json
+create protractor.conf.js
+create tsconfig.json
+create tslint.json
+Installing packages for tooling via npm.
+Installed packages for tooling via npm.
+Project &#39;angular2&#39; successfully created.
+</code></pre>
+<h3>Custom java configuration</h3>
+<p>Edit <code>pom.xml</code>. Add this plugin to the existing <code>&lt;build&gt;&lt;plugins&gt;</code>.</p>
+<pre><code>&lt;plugin&gt;
+    &lt;groupId&gt;com.github.eirslett&lt;/groupId&gt;
+    &lt;artifactId&gt;frontend-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;${frontend-plugin.version}&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;workingDirectory&gt;src/main/angular2&lt;/workingDirectory&gt;
+        &lt;nodeDownloadRoot&gt;https://nodejs.org/dist/&lt;/nodeDownloadRoot&gt;
+        &lt;nodeVersion&gt;${node.version}&lt;/nodeVersion&gt;
+        &lt;npmVersion&gt;${npm.version}&lt;/npmVersion&gt;
+        &lt;installDirectory&gt;target&lt;/installDirectory&gt;
+    &lt;/configuration&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;id&gt;install node and npm&lt;/id&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;install-node-and-npm&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;phase&gt;generate-resources&lt;/phase&gt;
+        &lt;/execution&gt;
+        &lt;execution&gt;
+            &lt;id&gt;npm install&lt;/id&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;npm&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;configuration&gt;
+                &lt;arguments&gt;install&lt;/arguments&gt;
+                &lt;installDirectory&gt;target&lt;/installDirectory&gt;
+            &lt;/configuration&gt;
+        &lt;/execution&gt;
+        &lt;execution&gt;
+            &lt;id&gt;angular cli build&lt;/id&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;npm&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;phase&gt;generate-resources&lt;/phase&gt;
+            &lt;configuration&gt;
+                &lt;arguments&gt;run build&lt;/arguments&gt;
+            &lt;/configuration&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+</code></pre>
+<h3>Custom angular configuration</h3>
+<p>Edit <code>src/main/angular2/angular-cli.json</code>. Whenever you're building angular, its <code>outDir</code> has to use <code>../resources/static/</code> as its target directory.</p>
+<pre><code>&quot;apps&quot;: [
+    {
+      &quot;root&quot;: &quot;src&quot;,
+      &quot;outDir&quot;: &quot;../resources/static/&quot;,
+      &quot;assets&quot;: [
+        &quot;assets&quot;,
+        &quot;favicon.ico&quot;
+      ],
+</code></pre>
+<p>Create a file called <code>proxy.conf.json</code> inside <code>src/main/angular2</code> folder. It should contain this proxy settings.</p>
+<pre><code>{
+  &quot;/api&quot;: {
+    &quot;target&quot;: &quot;http://localhost:8082&quot;,
+    &quot;secure&quot;: false
+  }
+}
+</code></pre>
+<p>Edit <code>src/main/angular2/package.json</code>. Modify the start script to use <code>proxy.conf.json</code> every time.</p>
+<pre><code>&quot;scripts&quot;: {
+    &quot;ng&quot;: &quot;ng&quot;,
+    &quot;start&quot;: &quot;ng serve --proxy-config proxy.conf.json&quot;,
+    &quot;build&quot;: &quot;ng build&quot;,
+    &quot;test&quot;: &quot;ng test&quot;,
+    &quot;lint&quot;: &quot;ng lint&quot;,
+    &quot;e2e&quot;: &quot;ng e2e&quot;
+  },
+</code></pre>
+<h3>Running the application</h3>
+<p>To run Angular with live reload, issue <code>ng serve</code> on src/main/angular2 folder where <code>angular-cli.json</code> is.</p>
+<p>To run Spring Boot (this doesn't support live reload yet), issue <code>mvn spring-boot:run</code> on the root folder where <code>pom.xml</code> is.</p></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2017/spring-boot-angular.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2017/spring-boot-angular.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

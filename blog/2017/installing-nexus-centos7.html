@@ -86,7 +86,31 @@ Executing /sbin/chkconfig nexus on
 <pre><code>$ sudo systemctl start nexus
 fan noise...
 </code></pre>
-<p>To check, point your browser to <a href="http://localhost:8081">http://localhost:8081</a>. Default username is admin with password admin123.</p></p>
+<p>To check, point your browser to <a href="http://localhost:8081">http://localhost:8081</a>. Default username is admin with password admin123.</p>
+<h3>Running behind reverse proxy</h3>
+<pre><code>$ vim /opt/sonatype-work/nexus3/etc/nexus.properties
+nexus-context-path=/nexus
+:wq
+</code></pre>
+<p>Add <code>nexus.conf</code> to existing <code>/etc/httpd/conf.d</code>. Here's what the file should contain.</p>
+<pre><code>ProxyRequests Off
+ProxyPreserveHost On
+
+&lt;VirtualHost 127.0.0.1:80&gt;
+    ServerName centos.dev
+    ServerAdmin admin@centos.dev
+    ProxyPass /nexus http://localhost:8081/nexus
+    ProxyPassReverse /nexus http://localhost:8081/nexus
+    ErrorLog /var/log/nexus/error.log
+    CustomLog /var/log/nexus/access.log common
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Make the log folder as define on <code>ErrorLog</code> and <code>CustomLog</code> directives then test the configuration.</p>
+<pre><code>$ sudo mkdir /var/log/nexus
+$ apachectl configtest
+Syntax OK
+$ sudo systemctl httpd restart
+</code></pre></p>
 		</div>
 	</div>
 

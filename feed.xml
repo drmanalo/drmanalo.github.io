@@ -6,9 +6,136 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Thu, 4 May 2017 00:30:09 +0100</pubDate>
-    <lastBuildDate>Thu, 4 May 2017 00:30:09 +0100</lastBuildDate>
+    <pubDate>Sun, 18 Jun 2017 12:17:02 +0100</pubDate>
+    <lastBuildDate>Sun, 18 Jun 2017 12:17:02 +0100</lastBuildDate>
 
+      <item>
+        <title>Spring Boot with Angular Setup</title>
+        <link>https://drmanalo.github.io/blog/2017/spring-boot-angular.html</link>
+        <pubDate>Sat, 17 Jun 2017 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2017/spring-boot-angular.html</guid>
+        <description>
+  	         &lt;p&gt;We were given the opportunity to replace an existing mobile app by a responsive website. Mobile apps are great but since we are paying a monthly subscription to third-party, we are better off building a responsive website supported in all platform. We have iOS and Android version of the app but having it build once then run on different platforms is an added benefit.&lt;/p&gt;
+&lt;p&gt;For this setup, we need &lt;code&gt;springboot-cli&lt;/code&gt; and &lt;code&gt;ng-cli&lt;/code&gt;. I won&apos;t detail how to have them installed but in my setup I used &lt;code&gt;sdkman&lt;/code&gt; for springboot-cli and &lt;code&gt;npm&lt;/code&gt; for ng-cli.&lt;/p&gt;
+&lt;h3&gt;sping init&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ spring init --dependencies=web,h2,jpa,actuator,devtools mobile
+Using service at https://start.spring.io
+Project extracted to &amp;#39;/home/drmanalo/idea/mobile&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;ng init&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ ng new --skip-git angular2
+installing ng
+create .editorconfig
+create README.md
+create src/app/app.component.css
+create src/app/app.component.html
+create src/app/app.component.spec.ts
+create src/app/app.component.ts
+create src/app/app.module.ts
+create src/assets/.gitkeep
+create src/environments/environment.prod.ts
+create src/environments/environment.ts
+create src/favicon.ico
+create src/index.html
+create src/main.ts
+create src/polyfills.ts
+create src/styles.css
+create src/test.ts
+create src/tsconfig.app.json
+create src/tsconfig.spec.json
+create src/typings.d.ts
+create .angular-cli.json
+create e2e/app.e2e-spec.ts
+create e2e/app.po.ts
+create e2e/tsconfig.e2e.json
+create karma.conf.js
+create package.json
+create protractor.conf.js
+create tsconfig.json
+create tslint.json
+Installing packages for tooling via npm.
+Installed packages for tooling via npm.
+Project &amp;#39;angular2&amp;#39; successfully created.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Custom java configuration&lt;/h3&gt;
+&lt;p&gt;Edit &lt;code&gt;pom.xml&lt;/code&gt;. Add this plugin to the existing &lt;code&gt;&amp;lt;build&amp;gt;&amp;lt;plugins&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;plugin&amp;gt;
+    &amp;lt;groupId&amp;gt;com.github.eirslett&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;frontend-maven-plugin&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;${frontend-plugin.version}&amp;lt;/version&amp;gt;
+    &amp;lt;configuration&amp;gt;
+        &amp;lt;workingDirectory&amp;gt;src/main/angular2&amp;lt;/workingDirectory&amp;gt;
+        &amp;lt;nodeDownloadRoot&amp;gt;https://nodejs.org/dist/&amp;lt;/nodeDownloadRoot&amp;gt;
+        &amp;lt;nodeVersion&amp;gt;${node.version}&amp;lt;/nodeVersion&amp;gt;
+        &amp;lt;npmVersion&amp;gt;${npm.version}&amp;lt;/npmVersion&amp;gt;
+        &amp;lt;installDirectory&amp;gt;target&amp;lt;/installDirectory&amp;gt;
+    &amp;lt;/configuration&amp;gt;
+    &amp;lt;executions&amp;gt;
+        &amp;lt;execution&amp;gt;
+            &amp;lt;id&amp;gt;install node and npm&amp;lt;/id&amp;gt;
+            &amp;lt;goals&amp;gt;
+                &amp;lt;goal&amp;gt;install-node-and-npm&amp;lt;/goal&amp;gt;
+            &amp;lt;/goals&amp;gt;
+            &amp;lt;phase&amp;gt;generate-resources&amp;lt;/phase&amp;gt;
+        &amp;lt;/execution&amp;gt;
+        &amp;lt;execution&amp;gt;
+            &amp;lt;id&amp;gt;npm install&amp;lt;/id&amp;gt;
+            &amp;lt;goals&amp;gt;
+                &amp;lt;goal&amp;gt;npm&amp;lt;/goal&amp;gt;
+            &amp;lt;/goals&amp;gt;
+            &amp;lt;configuration&amp;gt;
+                &amp;lt;arguments&amp;gt;install&amp;lt;/arguments&amp;gt;
+                &amp;lt;installDirectory&amp;gt;target&amp;lt;/installDirectory&amp;gt;
+            &amp;lt;/configuration&amp;gt;
+        &amp;lt;/execution&amp;gt;
+        &amp;lt;execution&amp;gt;
+            &amp;lt;id&amp;gt;angular cli build&amp;lt;/id&amp;gt;
+            &amp;lt;goals&amp;gt;
+                &amp;lt;goal&amp;gt;npm&amp;lt;/goal&amp;gt;
+            &amp;lt;/goals&amp;gt;
+            &amp;lt;phase&amp;gt;generate-resources&amp;lt;/phase&amp;gt;
+            &amp;lt;configuration&amp;gt;
+                &amp;lt;arguments&amp;gt;run build&amp;lt;/arguments&amp;gt;
+            &amp;lt;/configuration&amp;gt;
+        &amp;lt;/execution&amp;gt;
+    &amp;lt;/executions&amp;gt;
+&amp;lt;/plugin&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Custom angular configuration&lt;/h3&gt;
+&lt;p&gt;Edit &lt;code&gt;src/main/angular2/angular-cli.json&lt;/code&gt;. Whenever you&apos;re building angular, its &lt;code&gt;outDir&lt;/code&gt; has to use &lt;code&gt;../resources/static/&lt;/code&gt; as its target directory.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;apps&amp;quot;: [
+    {
+      &amp;quot;root&amp;quot;: &amp;quot;src&amp;quot;,
+      &amp;quot;outDir&amp;quot;: &amp;quot;../resources/static/&amp;quot;,
+      &amp;quot;assets&amp;quot;: [
+        &amp;quot;assets&amp;quot;,
+        &amp;quot;favicon.ico&amp;quot;
+      ],
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Create a file called &lt;code&gt;proxy.conf.json&lt;/code&gt; inside &lt;code&gt;src/main/angular2&lt;/code&gt; folder. It should contain this proxy settings.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;/api&amp;quot;: {
+    &amp;quot;target&amp;quot;: &amp;quot;http://localhost:8082&amp;quot;,
+    &amp;quot;secure&amp;quot;: false
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Edit &lt;code&gt;src/main/angular2/package.json&lt;/code&gt;. Modify the start script to use &lt;code&gt;proxy.conf.json&lt;/code&gt; every time.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;scripts&amp;quot;: {
+    &amp;quot;ng&amp;quot;: &amp;quot;ng&amp;quot;,
+    &amp;quot;start&amp;quot;: &amp;quot;ng serve --proxy-config proxy.conf.json&amp;quot;,
+    &amp;quot;build&amp;quot;: &amp;quot;ng build&amp;quot;,
+    &amp;quot;test&amp;quot;: &amp;quot;ng test&amp;quot;,
+    &amp;quot;lint&amp;quot;: &amp;quot;ng lint&amp;quot;,
+    &amp;quot;e2e&amp;quot;: &amp;quot;ng e2e&amp;quot;
+  },
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Running the application&lt;/h3&gt;
+&lt;p&gt;To run Angular with live reload, issue &lt;code&gt;ng serve&lt;/code&gt; on src/main/angular2 folder where &lt;code&gt;angular-cli.json&lt;/code&gt; is.&lt;/p&gt;
+&lt;p&gt;To run Spring Boot (this doesn&apos;t support live reload yet), issue &lt;code&gt;mvn spring-boot:run&lt;/code&gt; on the root folder where &lt;code&gt;pom.xml&lt;/code&gt; is.&lt;/p&gt;
+  	    </description>
+      </item>
       <item>
         <title>Installing Nexus OSS on Centos 7</title>
         <link>https://drmanalo.github.io/blog/2017/installing-nexus-centos7.html</link>
@@ -44,6 +171,30 @@ Executing /sbin/chkconfig nexus on
 fan noise...
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;To check, point your browser to &lt;a href=&quot;http://localhost:8081&quot;&gt;http://localhost:8081&lt;/a&gt;. Default username is admin with password admin123.&lt;/p&gt;
+&lt;h3&gt;Running behind reverse proxy&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ vim /opt/sonatype-work/nexus3/etc/nexus.properties
+nexus-context-path=/nexus
+:wq
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Add &lt;code&gt;nexus.conf&lt;/code&gt; to existing &lt;code&gt;/etc/httpd/conf.d&lt;/code&gt;. Here&apos;s what the file should contain.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ProxyRequests Off
+ProxyPreserveHost On
+
+&amp;lt;VirtualHost 127.0.0.1:80&amp;gt;
+    ServerName centos.dev
+    ServerAdmin admin@centos.dev
+    ProxyPass /nexus http://localhost:8081/nexus
+    ProxyPassReverse /nexus http://localhost:8081/nexus
+    ErrorLog /var/log/nexus/error.log
+    CustomLog /var/log/nexus/access.log common
+&amp;lt;/VirtualHost&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Make the log folder as define on &lt;code&gt;ErrorLog&lt;/code&gt; and &lt;code&gt;CustomLog&lt;/code&gt; directives then test the configuration.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo mkdir /var/log/nexus
+$ apachectl configtest
+Syntax OK
+$ sudo systemctl httpd restart
+&lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>
       <item>

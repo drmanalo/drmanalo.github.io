@@ -56,6 +56,20 @@
  	<div class="content container">
     	<ul id="posts">
 					<li>
+								<a href="blog/2017/spring-boot-angular.html"><h1 class="post-title">Spring Boot with Angular Setup</h1></a>
+								<span class="post-date">17 June 2017</span>
+								<p>We were given the opportunity to replace an existing mobile app by a responsive website. Mobile apps are great but since we are paying a monthly subscription to third-party, we are better off building a responsive website supported in all platform. We have iOS and Android version of the app but having it build once then run on different platforms is an added benefit.</p>
+<p>For this setup, we need <code>springboot-cli</code> and <code>ng-cli</code>. I won't detail how to have them installed but in my setup I used <code>sdkman</code> for springboot-cli and <code>npm</code> for ng-cli.</p>
+<h3>sping init</h3>
+<pre><code>$ spring init --dependencies=web,h2,jpa,actuator,devtools mobile
+Using service at https://start.spring.io
+Project extracted to &#39;/home/drmanalo/idea/mobile&#39;
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2017/spring-boot-angular.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
 								<a href="blog/2017/installing-nexus-centos7.html"><h1 class="post-title">Installing Nexus OSS on Centos 7</h1></a>
 								<span class="post-date">03 May 2017</span>
 								<p>On my new role, I have found out that we are publishing jars to a private repository. This is to speed up build by telling Maven to get from our private repository first before going out to public. To learn more about Nexus, I'm installing it on my personal laptop running CentOS 7.</p>
