@@ -56,6 +56,18 @@
  	<div class="content container">
     	<ul id="posts">
 					<li>
+								<a href="blog/2017/monitor-remote-jvm.html"><h1 class="post-title">Profiling Remote Java Application</h1></a>
+								<span class="post-date">29 September 2017</span>
+								<p><code>jvisualvm</code> is a tool that provides a visual interface for viewing detailed information about Java technology-based applications while they are running. You can his to view data related to your local applications and those running on remote hosts. You can also capture data about JVM software instances and save the data to your local system.</p>
+<p>There are couple of ways to use it, one is using <code>jstatd</code> and the other is by JMX (Java management Extensions). I tried jstatd first but didn't work. The later worked on my CentOS machine using the visualvm I downloaded from <a href="https://visualvm.github.io/download.html">visualvm.github.io</a>.</p>
+<h2>By using jstatd</h2>
+<h3>Grant jstatd full security permission</h3>
+<p>Create a file called <code>jstatd.all.policy</code>. If in production, make sure your server port are locked down to your local IP.</p>
+
+								<a class="btn btn-default" href="blog/2017/monitor-remote-jvm.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
 								<a href="blog/2017/spring-boot-angular.html"><h1 class="post-title">Spring Boot with Angular Setup</h1></a>
 								<span class="post-date">17 June 2017</span>
 								<p>We were given the opportunity to replace an existing mobile app by a responsive website. Mobile apps are great but since we are paying a monthly subscription to third-party, we are better off building a responsive website supported in all platform. We have iOS and Android version of the app but having it build once then run on different platforms is an added benefit.</p>

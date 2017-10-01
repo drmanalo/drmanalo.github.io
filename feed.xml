@@ -6,9 +6,66 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Sun, 18 Jun 2017 12:17:02 +0100</pubDate>
-    <lastBuildDate>Sun, 18 Jun 2017 12:17:02 +0100</lastBuildDate>
+    <pubDate>Sun, 1 Oct 2017 01:03:24 +0100</pubDate>
+    <lastBuildDate>Sun, 1 Oct 2017 01:03:24 +0100</lastBuildDate>
 
+      <item>
+        <title>Profiling Remote Java Application</title>
+        <link>https://drmanalo.github.io/blog/2017/monitor-remote-jvm.html</link>
+        <pubDate>Fri, 29 Sep 2017 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2017/monitor-remote-jvm.html</guid>
+        <description>
+  	         &lt;p&gt;&lt;code&gt;jvisualvm&lt;/code&gt; is a tool that provides a visual interface for viewing detailed information about Java technology-based applications while they are running. You can his to view data related to your local applications and those running on remote hosts. You can also capture data about JVM software instances and save the data to your local system.&lt;/p&gt;
+&lt;p&gt;There are couple of ways to use it, one is using &lt;code&gt;jstatd&lt;/code&gt; and the other is by JMX (Java management Extensions). I tried jstatd first but didn&apos;t work. The later worked on my CentOS machine using the visualvm I downloaded from &lt;a href=&quot;https://visualvm.github.io/download.html&quot;&gt;visualvm.github.io&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;By using jstatd&lt;/h2&gt;
+&lt;h3&gt;Grant jstatd full security permission&lt;/h3&gt;
+&lt;p&gt;Create a file called &lt;code&gt;jstatd.all.policy&lt;/code&gt;. If in production, make sure your server port are locked down to your local IP.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code&gt;grant codebase &amp;quot;file:/opt/java8/lib/tools.jar&amp;quot; {
+    permission java.security.AllPermission;
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Please use the full-path of your JDK&apos;s tools.jar. The above policy should avoid you from getting this access denied message&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Could not create remote object
+access denied (&amp;quot;java.util.PropertyPermission&amp;quot; &amp;quot;java.rmi.server.ignoreSubClasses&amp;quot; &amp;quot;write&amp;quot;)
+java.security.AccessControlException: access denied (&amp;quot;java.util.PropertyPermission&amp;quot; &amp;quot;java.rmi.server.ignoreSubClasses&amp;quot; &amp;quot;write&amp;quot;)
+        at java.security.AccessControlContext.checkPermission(AccessControlContext.java:472)
+        at java.security.AccessController.checkPermission(AccessController.java:884)
+        at java.lang.SecurityManager.checkPermission(SecurityManager.java:549)
+        at java.lang.System.setProperty(System.java:792)
+        at sun.tools.jstatd.Jstatd.main(Jstatd.java:139)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Run jstatd&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;jstatd -J-Djava.security.policy=/home/user/jstatd.all.policy -J-Djava.rmi.server.hostname=192.168.1.1 -J-Djava.net.preferIPv4Stack=true -J-Djava.rmi.server.logCalls=true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Replace &lt;code&gt;/home/user/jstatd.all.policy&lt;/code&gt; by your actual file and &lt;strong&gt;192.168.1.1&lt;/strong&gt; by the remote IP of your target machine.&lt;/p&gt;
+&lt;h2&gt;By using JMX&lt;/h2&gt;
+&lt;h3&gt;Add some JVM arguments&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;-Dcom.sun.management.jmxremote=true
+-Dcom.sun.management.jmxremote.ssl=false
+-Dcom.sun.management.jmxremote.authenticate=false
+-Dcom.sun.management.jmxremote.port=1098
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If running CentOS, run this to open up port 1098.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo firewall-cmd --zone=public --add-port=1098/tcp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Setup SSH tunnel for SOCKS&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;ssh -v -D 9696 user@my.remote.server.com
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Replace user by your login and my.remote.server.com by your own hostname or IP address. Since I&apos;m running SSH in verbose mode, you should see debug messages like below.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;debug1: channel 7: free: direct-tcpip: listening port 6969 for remote.ip port 1099, connect from 127.0.0.1 port 48500 to 127.0.0.1 port 6969, nchannels 8
+debug1: channel 3: free: direct-tcpip: listening port 6969 for remote.ip port 36258, connect from 127.0.0.1 port 48486 to 127.0.0.1 port 6969, nchannels 7
+debug1: channel 4: free: direct-tcpip: listening port 6969 for remote.ip port 37289, connect from 127.0.0.1 port 48488 to 127.0.0.1 port 6969, nchannels 6
+debug1: channel 6: free: direct-tcpip: listening port 6969 for remote.ip port 36258, connect from 127.0.0.1 port 48492 to 127.0.0.1 port 6969, nchannels 5
+debug1: Connection to port 6969 forwarding to socks port 0 requested.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Configure VisualVM to use SOCKS&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;/images/visualvm_socks_proxy.png&quot; alt=&quot;VisualVM Options&quot; /&gt;&lt;/p&gt;
+&lt;h3&gt;Connect VisualVM to the remote&lt;/h3&gt;
+&lt;p&gt;Add a remote host by clicking File -&amp;gt; Add Remote Host.&lt;/p&gt;
+&lt;p&gt;Right-click on the remote host you have added and select Add JMX Connection then type the JMX port you have chosen.&lt;/p&gt;
+  	    </description>
+      </item>
       <item>
         <title>Spring Boot with Angular Setup</title>
         <link>https://drmanalo.github.io/blog/2017/spring-boot-angular.html</link>
