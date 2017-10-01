@@ -95,7 +95,7 @@ java.security.AccessControlException: access denied (&quot;java.util.PropertyPer
 <h3>Setup SSH tunnel for SOCKS</h3>
 <pre><code>ssh -v -D 9696 user@my.remote.server.com
 </code></pre>
-<p>Replace user by your login and my.remote.server.com by your own hostname or IP address. Since I'm running SSH in verbose mode, you should see debug messages like below.</p>
+<p>Replace user by your login and my.remote.server.com by your own hostname or IP address. Since I'm running SSH in verbose mode, I should see debug messages like below.</p>
 <pre><code>debug1: channel 7: free: direct-tcpip: listening port 6969 for remote.ip port 1099, connect from 127.0.0.1 port 48500 to 127.0.0.1 port 6969, nchannels 8
 debug1: channel 3: free: direct-tcpip: listening port 6969 for remote.ip port 36258, connect from 127.0.0.1 port 48486 to 127.0.0.1 port 6969, nchannels 7
 debug1: channel 4: free: direct-tcpip: listening port 6969 for remote.ip port 37289, connect from 127.0.0.1 port 48488 to 127.0.0.1 port 6969, nchannels 6
