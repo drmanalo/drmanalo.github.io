@@ -88,25 +88,24 @@ java.security.AccessControlException: access denied (&quot;java.util.PropertyPer
 -Dcom.sun.management.jmxremote.ssl=false
 -Dcom.sun.management.jmxremote.authenticate=false
 -Dcom.sun.management.jmxremote.port=1098
+-Dcom.sun.management.jmxremote.rmi.port=1098
+-Djava.rmi.server.hostname=localhost
 </code></pre>
 <p>If running CentOS, run this to open up port 1098.</p>
 <pre><code>sudo firewall-cmd --zone=public --add-port=1098/tcp
 </code></pre>
-<h3>Setup SSH tunnel for SOCKS</h3>
-<pre><code>ssh -v -D 9696 user@my.remote.server.com
+<h3>Launch SSH with local port forwarding</h3>
+<pre><code>ssh -v -L 1098:localhost:1098 user@my.remote.server.com
 </code></pre>
-<p>Replace user by your login and my.remote.server.com by your own hostname or IP address. Since I'm running SSH in verbose mode, I should see debug messages like below.</p>
-<pre><code>debug1: channel 7: free: direct-tcpip: listening port 6969 for remote.ip port 1099, connect from 127.0.0.1 port 48500 to 127.0.0.1 port 6969, nchannels 8
-debug1: channel 3: free: direct-tcpip: listening port 6969 for remote.ip port 36258, connect from 127.0.0.1 port 48486 to 127.0.0.1 port 6969, nchannels 7
-debug1: channel 4: free: direct-tcpip: listening port 6969 for remote.ip port 37289, connect from 127.0.0.1 port 48488 to 127.0.0.1 port 6969, nchannels 6
-debug1: channel 6: free: direct-tcpip: listening port 6969 for remote.ip port 36258, connect from 127.0.0.1 port 48492 to 127.0.0.1 port 6969, nchannels 5
-debug1: Connection to port 6969 forwarding to socks port 0 requested.
+<p>Replace user by your login and my.remote.server.com by your own hostname or IP address. Since I'm running SSH in verbose mode, you should see debug messages like below.</p>
+<pre><code>debug1: channel 6: free: direct-tcpip: listening port 1098 for localhost port 1098, connect from 127.0.0.1 port 8077 to 127.0.0.1 port 9001, nchannels 9
+debug1: channel 8: free: direct-tcpip: listening port 1098 for localhost port 1098, connect from 127.0.0.1 port 8078 to 127.0.0.1 port 9001, nchannels 8
+debug1: channel 4: free: direct-tcpip: listening port 1098 for localhost port 1098, connect from 127.0.0.1 port 8073 to 127.0.0.1 port 9001, nchannels 7
 </code></pre>
-<h3>Configure VisualVM to use SOCKS</h3>
-<p><img src="/images/visualvm_socks_proxy.png" alt="VisualVM Options" /></p>
-<h3>Connect VisualVM to the remote</h3>
-<p>Add a remote host by clicking File -&gt; Add Remote Host.</p>
-<p>Right-click on the remote host you have added and select Add JMX Connection then type the JMX port you have chosen.</p></p>
+<h3>Connect VisualVM to Local</h3>
+<p>Right-click on Local -&gt; Add JMX Connection. On connection type localhost:1098</p>
+<h3>Alternative to VisualVM</h3>
+<p>Run <code>jconsole</code>. On Remote Process, type localhost:1098</p></p>
 		</div>
 	</div>
 

@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Sun, 1 Oct 2017 01:03:24 +0100</pubDate>
-    <lastBuildDate>Sun, 1 Oct 2017 01:03:24 +0100</lastBuildDate>
+    <pubDate>Wed, 4 Oct 2017 22:46:19 +0100</pubDate>
+    <lastBuildDate>Wed, 4 Oct 2017 22:46:19 +0100</lastBuildDate>
 
       <item>
         <title>Profiling Remote Java Application</title>
@@ -45,25 +45,24 @@ java.security.AccessControlException: access denied (&amp;quot;java.util.Propert
 -Dcom.sun.management.jmxremote.ssl=false
 -Dcom.sun.management.jmxremote.authenticate=false
 -Dcom.sun.management.jmxremote.port=1098
+-Dcom.sun.management.jmxremote.rmi.port=1098
+-Djava.rmi.server.hostname=localhost
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If running CentOS, run this to open up port 1098.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;sudo firewall-cmd --zone=public --add-port=1098/tcp
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Setup SSH tunnel for SOCKS&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;ssh -v -D 9696 user@my.remote.server.com
+&lt;h3&gt;Launch SSH with local port forwarding&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;ssh -v -L 1098:localhost:1098 user@my.remote.server.com
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Replace user by your login and my.remote.server.com by your own hostname or IP address. Since I&apos;m running SSH in verbose mode, you should see debug messages like below.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;debug1: channel 7: free: direct-tcpip: listening port 6969 for remote.ip port 1099, connect from 127.0.0.1 port 48500 to 127.0.0.1 port 6969, nchannels 8
-debug1: channel 3: free: direct-tcpip: listening port 6969 for remote.ip port 36258, connect from 127.0.0.1 port 48486 to 127.0.0.1 port 6969, nchannels 7
-debug1: channel 4: free: direct-tcpip: listening port 6969 for remote.ip port 37289, connect from 127.0.0.1 port 48488 to 127.0.0.1 port 6969, nchannels 6
-debug1: channel 6: free: direct-tcpip: listening port 6969 for remote.ip port 36258, connect from 127.0.0.1 port 48492 to 127.0.0.1 port 6969, nchannels 5
-debug1: Connection to port 6969 forwarding to socks port 0 requested.
+&lt;pre&gt;&lt;code&gt;debug1: channel 6: free: direct-tcpip: listening port 1098 for localhost port 1098, connect from 127.0.0.1 port 8077 to 127.0.0.1 port 9001, nchannels 9
+debug1: channel 8: free: direct-tcpip: listening port 1098 for localhost port 1098, connect from 127.0.0.1 port 8078 to 127.0.0.1 port 9001, nchannels 8
+debug1: channel 4: free: direct-tcpip: listening port 1098 for localhost port 1098, connect from 127.0.0.1 port 8073 to 127.0.0.1 port 9001, nchannels 7
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Configure VisualVM to use SOCKS&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;/images/visualvm_socks_proxy.png&quot; alt=&quot;VisualVM Options&quot; /&gt;&lt;/p&gt;
-&lt;h3&gt;Connect VisualVM to the remote&lt;/h3&gt;
-&lt;p&gt;Add a remote host by clicking File -&amp;gt; Add Remote Host.&lt;/p&gt;
-&lt;p&gt;Right-click on the remote host you have added and select Add JMX Connection then type the JMX port you have chosen.&lt;/p&gt;
+&lt;h3&gt;Connect VisualVM to Local&lt;/h3&gt;
+&lt;p&gt;Right-click on Local -&amp;gt; Add JMX Connection. On connection type localhost:1098&lt;/p&gt;
+&lt;h3&gt;Alternative to VisualVM&lt;/h3&gt;
+&lt;p&gt;Run &lt;code&gt;jconsole&lt;/code&gt;. On Remote Process, type localhost:1098&lt;/p&gt;
   	    </description>
       </item>
       <item>
