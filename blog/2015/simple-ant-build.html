@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,130 +58,122 @@
 		<div class="post">
 			<h1>Simple Ant Build</h1>
 			<p><em>22 June 2015</em></p>
-			<p><p>This is a simple Ant build script I'm using for my Symfony2 blog. This has the following dependencies:</p>
-<ul>
-  <li>
-  <p>
-  <a href="http://phpunit.de/" target="_new">PHPUnit</a></p></li>
-  <li>
-  <a href="http://pear.php.net/package/PHP_CodeSniffer/" target="_new">PHP_CodeSniffer</a></li>
-  <li>
-  <a href="https://github.com/sebastianbergmann/phploc" target="_new">PHPLOC</a></li>
-  <li>
-  <a href="http://pdepend.org/" target="_new">PHP_Depend</a></li>
-  <li>
-  <a href="http://phpmd.org/" target="_new">PHPMD</a></li>
-  <li>
-  <a href="https://github.com/sebastianbergmann/phpcpd" target="_new">PHPCPD</a></li>
-  <li>
-  <a href="http://phpdox.de/" target="_new">phpDox</a></li>
-</ul>
-<!-- more -->
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;project name=&quot;Symblog Project&quot; default=&quot;build&quot;&gt;
+			<p><p>This is a simple Ant build script I'm using for my Symfony2 blog. This has the following dependencies:</p> 
+<ul> 
+ <li> <p><a href="http://phpunit.de/" target="_new">PHPUnit</a></p> </li> 
+ <li> <p><a href="http://pear.php.net/package/PHP_CodeSniffer/" target="_new">PHP_CodeSniffer</a></p> </li> 
+ <li> <p><a href="https://github.com/sebastianbergmann/phploc" target="_new">PHPLOC</a></p> </li> 
+ <li> <p><a href="http://pdepend.org/" target="_new">PHP_Depend</a></p> </li> 
+ <li> <p><a href="http://phpmd.org/" target="_new">PHPMD</a></p> </li> 
+ <li> <p><a href="https://github.com/sebastianbergmann/phpcpd" target="_new">PHPCPD</a></p> </li> 
+ <li> <p><a href="http://phpdox.de/" target="_new">phpDox</a></p> </li> 
+</ul> 
+<!-- more --> 
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project name="Symblog Project" default="build"&gt;
 
-	&lt;target name=&quot;build&quot;
-		depends=&quot;clean,prepare,lint,phploc,pdepend,phpunit,assetic,assets,cache&quot;&gt;
-		&lt;zip destfile=&quot;${basedir}/build/target/symblog.zip&quot;&gt;
-			&lt;zipfileset dir=&quot;${basedir}/app&quot; prefix=&quot;app&quot;&gt;
-				&lt;exclude name=&quot;**/DoctrineMigrations/**&quot;/&gt;
-				&lt;exclude name=&quot;**/cache/**&quot;/&gt;
-				&lt;exclude name=&quot;**/logs/**&quot;/&gt;
-				&lt;exclude name=&quot;**/phpunit.*&quot;/&gt;
+	&lt;target name="build"
+		depends="clean,prepare,lint,phploc,pdepend,phpunit,assetic,assets,cache"&gt;
+		&lt;zip destfile="${basedir}/build/target/symblog.zip"&gt;
+			&lt;zipfileset dir="${basedir}/app" prefix="app"&gt;
+				&lt;exclude name="**/DoctrineMigrations/**"/&gt;
+				&lt;exclude name="**/cache/**"/&gt;
+				&lt;exclude name="**/logs/**"/&gt;
+				&lt;exclude name="**/phpunit.*"/&gt;
 			&lt;/zipfileset&gt;
-			&lt;zipfileset dir=&quot;${basedir}/bin&quot; prefix=&quot;bin&quot; /&gt;
-			&lt;zipfileset dir=&quot;${basedir}/src&quot; prefix=&quot;src&quot;&gt;
-				&lt;exclude name=&quot;**/Tests/**&quot;/&gt;
-				&lt;exclude name=&quot;**/DataFixtures/**&quot;/&gt;
+			&lt;zipfileset dir="${basedir}/bin" prefix="bin" /&gt;
+			&lt;zipfileset dir="${basedir}/src" prefix="src"&gt;
+				&lt;exclude name="**/Tests/**"/&gt;
+				&lt;exclude name="**/DataFixtures/**"/&gt;
 			&lt;/zipfileset&gt;
-			&lt;zipfileset dir=&quot;${basedir}/vendor&quot; prefix=&quot;vendor&quot; /&gt;
-			&lt;zipfileset dir=&quot;${basedir}/web&quot; prefix=&quot;web&quot; /&gt;
+			&lt;zipfileset dir="${basedir}/vendor" prefix="vendor" /&gt;
+			&lt;zipfileset dir="${basedir}/web" prefix="web" /&gt;
 		&lt;/zip&gt;
-		&lt;echo message=&quot;Finished build!&quot; /&gt;
+		&lt;echo message="Finished build!" /&gt;
 	&lt;/target&gt;
 
-	&lt;target name=&quot;clean&quot; description=&quot;Cleanup build artifacts&quot;&gt;
-		&lt;delete dir=&quot;${basedir}/build/coverage&quot; /&gt;
-		&lt;delete dir=&quot;${basedir}/build/logs&quot; /&gt;
-		&lt;delete dir=&quot;${basedir}/build/pdepend&quot; /&gt;
-		&lt;delete dir=&quot;${basedir}/build/target&quot; /&gt;
-		&lt;echo message=&quot;Artifacts deleted.&quot; /&gt;
+	&lt;target name="clean" description="Cleanup build artifacts"&gt;
+		&lt;delete dir="${basedir}/build/coverage" /&gt;
+		&lt;delete dir="${basedir}/build/logs" /&gt;
+		&lt;delete dir="${basedir}/build/pdepend" /&gt;
+		&lt;delete dir="${basedir}/build/target" /&gt;
+		&lt;echo message="Artifacts deleted." /&gt;
 	&lt;/target&gt;
 
-	&lt;target name=&quot;prepare&quot; depends=&quot;clean&quot; description=&quot;Prepare for build&quot;&gt;
-		&lt;mkdir dir=&quot;${basedir}/build/coverage&quot; /&gt;
-		&lt;mkdir dir=&quot;${basedir}/build/logs&quot; /&gt;
-		&lt;mkdir dir=&quot;${basedir}/build/pdepend&quot; /&gt;
-		&lt;mkdir dir=&quot;${basedir}/build/target&quot; /&gt;
-		&lt;echo message=&quot;Artifacts prepared.&quot; /&gt;
+	&lt;target name="prepare" depends="clean" description="Prepare for build"&gt;
+		&lt;mkdir dir="${basedir}/build/coverage" /&gt;
+		&lt;mkdir dir="${basedir}/build/logs" /&gt;
+		&lt;mkdir dir="${basedir}/build/pdepend" /&gt;
+		&lt;mkdir dir="${basedir}/build/target" /&gt;
+		&lt;echo message="Artifacts prepared." /&gt;
 	&lt;/target&gt;
 
-	&lt;target name=&quot;lint&quot; description=&quot;Perform syntax check of sourcecode files&quot;&gt;
-		&lt;apply executable=&quot;php&quot; failonerror=&quot;true&quot;&gt;
-			&lt;arg value=&quot;-l&quot; /&gt;
-			&lt;fileset dir=&quot;${basedir}/src&quot;&gt;
-				&lt;include name=&quot;**/*.php&quot; /&gt;
+	&lt;target name="lint" description="Perform syntax check of sourcecode files"&gt;
+		&lt;apply executable="php" failonerror="true"&gt;
+			&lt;arg value="-l" /&gt;
+			&lt;fileset dir="${basedir}/src"&gt;
+				&lt;include name="**/*.php" /&gt;
 				&lt;modified /&gt;
 			&lt;/fileset&gt;
-			&lt;fileset dir=&quot;${basedir}/src/Drm/BlogBundle/Tests&quot;&gt;
-				&lt;include name=&quot;**/*.php&quot; /&gt;
+			&lt;fileset dir="${basedir}/src/Drm/BlogBundle/Tests"&gt;
+				&lt;include name="**/*.php" /&gt;
 				&lt;modified /&gt;
 			&lt;/fileset&gt;
 		&lt;/apply&gt;
-		&lt;echo message=&quot;Syntax checked using lint.&quot; /&gt;
+		&lt;echo message="Syntax checked using lint." /&gt;
 	&lt;/target&gt;
 
-	&lt;target name=&quot;phploc&quot; description=&quot;Measure project size using PHPLOC&quot;&gt;
-		&lt;exec executable=&quot;phploc&quot;&gt;
-			&lt;arg value=&quot;--count-tests&quot; /&gt;
-			&lt;arg value=&quot;--log-csv&quot; /&gt;
-			&lt;arg value=&quot;${basedir}/build/logs/phploc.csv&quot; /&gt;
-			&lt;arg path=&quot;${basedir}/src&quot; /&gt;
+	&lt;target name="phploc" description="Measure project size using PHPLOC"&gt;
+		&lt;exec executable="phploc"&gt;
+			&lt;arg value="--count-tests" /&gt;
+			&lt;arg value="--log-csv" /&gt;
+			&lt;arg value="${basedir}/build/logs/phploc.csv" /&gt;
+			&lt;arg path="${basedir}/src" /&gt;
 		&lt;/exec&gt;
-		&lt;echo message=&quot;Project measured using PHPLOC.&quot; /&gt;
+		&lt;echo message="Project measured using PHPLOC." /&gt;
 	&lt;/target&gt;
 
-	&lt;target name=&quot;pdepend&quot; description=&quot;Calculate software metrics using PHP_Depend&quot;&gt;
-		&lt;exec executable=&quot;pdepend&quot;&gt;
-			&lt;arg value=&quot;--jdepend-xml=${basedir}/build/logs/jdepend.xml&quot; /&gt;
-			&lt;arg value=&quot;--jdepend-chart=${basedir}/build/pdepend/dependencies.svg&quot; /&gt;
+	&lt;target name="pdepend" description="Calculate software metrics using PHP_Depend"&gt;
+		&lt;exec executable="pdepend"&gt;
+			&lt;arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" /&gt;
+			&lt;arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" /&gt;
 			&lt;arg
-				value=&quot;--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg&quot; /&gt;
-			&lt;arg path=&quot;${basedir}/src&quot; /&gt;
+				value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" /&gt;
+			&lt;arg path="${basedir}/src" /&gt;
 		&lt;/exec&gt;
-		&lt;echo message=&quot;Software metrics calculated using PHP-DEPEND.&quot; /&gt;
+		&lt;echo message="Software metrics calculated using PHP-DEPEND." /&gt;
 	&lt;/target&gt;
 
-	&lt;target name=&quot;phpunit&quot; description=&quot;Run unit tests with code coverage&quot;&gt;
-		&lt;exec executable=&quot;phpunit&quot; failonerror=&quot;true&quot;&gt;
-			&lt;arg value=&quot;-c&quot; /&gt;
-			&lt;arg value=&quot;app/&quot; /&gt;
-			&lt;arg value=&quot;--coverage-html=${basedir}/build/coverage/&quot; /&gt;
-		&lt;/exec&gt;
-	&lt;/target&gt;
-
-	&lt;target name=&quot;assetic&quot; description=&quot;Dump assets&quot;&gt;
-		&lt;exec executable=&quot;${basedir}/app/console&quot;&gt;
-			&lt;arg value=&quot;--env=prod&quot; /&gt;
-			&lt;arg value=&quot;assetic:dump&quot; /&gt;
+	&lt;target name="phpunit" description="Run unit tests with code coverage"&gt;
+		&lt;exec executable="phpunit" failonerror="true"&gt;
+			&lt;arg value="-c" /&gt;
+			&lt;arg value="app/" /&gt;
+			&lt;arg value="--coverage-html=${basedir}/build/coverage/" /&gt;
 		&lt;/exec&gt;
 	&lt;/target&gt;
 
-	&lt;target name=&quot;assets&quot; description=&quot;Install assets&quot;&gt;
-		&lt;exec executable=&quot;${basedir}/app/console&quot;&gt;
-			&lt;arg value=&quot;assets:install&quot; /&gt;
-			&lt;arg value=&quot;--symlink&quot; /&gt;
-			&lt;arg value=&quot;${basedir}/web&quot; /&gt;
+	&lt;target name="assetic" description="Dump assets"&gt;
+		&lt;exec executable="${basedir}/app/console"&gt;
+			&lt;arg value="--env=prod" /&gt;
+			&lt;arg value="assetic:dump" /&gt;
 		&lt;/exec&gt;
-		&lt;echo message=&quot;Assets installed using symlink.&quot; /&gt;
 	&lt;/target&gt;
 
-	&lt;target name=&quot;cache&quot; description=&quot;Cleanup cache&quot;&gt;
-		&lt;exec executable=&quot;${basedir}/app/console&quot;&gt;
-			&lt;arg value=&quot;cache:clear&quot; /&gt;
-			&lt;arg value=&quot;--env=prod&quot; /&gt;
+	&lt;target name="assets" description="Install assets"&gt;
+		&lt;exec executable="${basedir}/app/console"&gt;
+			&lt;arg value="assets:install" /&gt;
+			&lt;arg value="--symlink" /&gt;
+			&lt;arg value="${basedir}/web" /&gt;
 		&lt;/exec&gt;
-		&lt;echo message=&quot;Production cache cleared.&quot; /&gt;
+		&lt;echo message="Assets installed using symlink." /&gt;
+	&lt;/target&gt;
+
+	&lt;target name="cache" description="Cleanup cache"&gt;
+		&lt;exec executable="${basedir}/app/console"&gt;
+			&lt;arg value="cache:clear" /&gt;
+			&lt;arg value="--env=prod" /&gt;
+		&lt;/exec&gt;
+		&lt;echo message="Production cache cleared." /&gt;
 	&lt;/target&gt;
 
 &lt;/project&gt;

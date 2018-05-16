@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,10 +58,10 @@
 		<div class="post">
 			<h1>Fixing Unable to Mount NTFS Drive</h1>
 			<p><em>18 January 2016</em></p>
-			<p><p>I was trying to mount a GPT NTFS drive and get <strong>Error mounting /dev/sdb1 at /media/drmanalo/DATA: Command-line mount -t "ntfs" -o</strong></p>
-<h3>Culprit</h3>
-<p>Windows 8 is using hibernation mode which writes RAM contents to the hard drive before powering off to be able to restore to the same state as it was before shutdown.</p>
-<h3>Workaround</h3>
+			<p><p>I was trying to mount a GPT NTFS drive and get <strong>Error mounting /dev/sdb1 at /media/drmanalo/DATA: Command-line mount -t "ntfs" -o</strong></p> 
+<h3>Culprit</h3> 
+<p>Windows 8 is using hibernation mode which writes RAM contents to the hard drive before powering off to be able to restore to the same state as it was before shutdown.</p> 
+<h3>Workaround</h3> 
 <pre><code>$ sudo ntfsfix /dev/sdb1
 Mounting volume... The disk contains an unclean file system (0, 0).
 Metadata kept in Windows cache, refused to mount.

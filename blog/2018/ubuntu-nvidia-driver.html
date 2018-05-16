@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>ASA Dialup VPN Configuration</title>
+    <title>Nvidia Driver for Ubuntu 16</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -56,53 +56,37 @@
 
 	<div class="content container">
 		<div class="post">
-			<h1>ASA Dialup VPN Configuration</h1>
-			<p><em>07 June 2014</em></p>
-			<p><p>This Cisco dialup VPN configuration worked for ASA 5505 running on version 8.4(7). All upper case letters are labels and should be changed according to your standards and taste. IP addresses are representational.</p> 
-<h3>Network Object Mapping</h3> 
-<pre><code>object network OBJ_VPN_ENDPOINT1
-subnet 10.175.0.0 255.255.128.0
-description OBJ_VPN_ENDPOINT1 is a label
-</code></pre> 
-<h3>DHCP Pool</h3> 
-<pre><code>ip local pool VPN_DHCP_POOL1 10.0.20.10-10.0.20.14
-</code></pre> 
+			<h1>Nvidia Driver for Ubuntu 16</h1>
+			<p><em>08 February 2018</em></p>
+			<p><p>My company laptop comes like a present to me. It has 16GB of RAM and couple of SSDs on it. It's running Windows 10 Home Edition but I don't have issue with that since I'm going to use Linux. I'm originally CentOS but we will use Ubuntu going forward to make it a smooth Linux transition for non-seasoned Linux users.</p> 
+<p>The only issue I encountered with this laptop while installing Ubuntu is the graphics driver. The laptop has multiple graphics card (Intel and Nvidia) and the Nvidia driver is not supported on Ubuntu being proprietary.</p> 
+<p><img src="https://drmanalo.github.io/images/inspiron.png" alt="Ubuntu About"></p> 
 <!-- more --> 
-<h3>Access Control List</h3> 
-<pre><code>access-list ACL_SPLIT_TUNNEL standard permit 10.175.0.0 255.255.128.0
-access-list OUTSIDE-INSIDE extended permit ip object VPN_DHCP_POOL1 object OBJ_VPN_ENDPOINT1
+<h3>Run this script</h3> 
+<p>I got this one from the internet but forgot to document the website. Credit belongs to the original author.</p> 
+<pre><code>#!/bin/sh
+
+if lspci | grep VGA | grep -q NVIDIA; then
+    echo 'Installing NVIDIA driver'
+    echo $sudoPW | sudo -S sudo add-apt-repository -ys ppa:graphics-drivers/ppa &gt; /dev/null 2&gt;&amp;1
+    echo $sudoPW | sudo -S sudo apt update &gt; /dev/null 2&gt;&amp;1
+    echo $sudoPW | sudo -S sudo apt-fast install -y nvidia-378 &gt; /dev/null 2&gt;&amp;1
+
+    cat &lt;&lt;EOT &gt;&gt; /etc/modprobe.d/blacklist-nouveau.conf
+blacklist nouveau
+blacklist lbm-nouveau
+options nouveau modeset=0
+alias nouveau off
+alias lbm-nouveau off
+EOT
+
+    echo $sudoPW | sudo -S sh -c "echo 'options nouveau modeset=0' &gt;&gt; /etc/modprobe.d/nouveau-kms.conf"
+    echo 'Updating initramfs'
+    sudo update-initramfs -u
+fi
 </code></pre> 
-<h3>Network Address Translation</h3> 
-<pre><code>  nat (outside,outside) source static VPN_DHCP_POOL1 VPN_DHCP_POOL1 destination
-    static OBJ_VPN_ENDPOINT1 OBJ_VPN_ENDPOINT1
-    description NAT EXEMPTION FOR VPN CLIENT IPs TO VPN ENDPOINTS
-</code></pre> 
-<h3>Crypto Map</h3> 
-<pre><code>crypto dynamic-map DYN_CMAP_OUTSIDE 1 set ikev1 transform-set 3DES_SHA
-crypto dynamic-map DYN_CMAP_OUTSIDE 1 set reverse-route
-crypto map CMAP_OUTSIDE 99 ipsec-isakmp dynamic DYN_CMAP_OUTSIDE
-</code></pre> 
-<h3>Group Policy</h3> 
-<pre><code>group-policy GPOLICY_POLICY1 internal
-group-policy GPOLICY_POLICY1 attributes
- dns-server value 8.8.8.8
- vpn-tunnel-protocol ikev1 ikev2
- split-tunnel-policy tunnelspecified
- split-tunnel-network-list value ACL_SPLIT_TUNNEL
-</code></pre> 
-<h3>Tunnel Group</h3> 
-<pre><code>tunnel-group DIALUP_TUNNEL_GROUP type remote-access
-tunnel-group DIALUP_TUNNEL_GROUP general-attributes
- address-pool VPN_DHCP_POOL1
- default-group-policy GPOLICY_POLICY1
-tunnel-group DIALUP_TUNNEL_GROUP ipsec-attributes
- ikev1 pre-shared-key ********
-</code></pre> 
-<h3>Dialup Credentials</h3> 
-<pre><code>username USERNAME password INSECURE encrypted
-username USERNAME attributes
- service-type remote-access
-</code></pre></p>
+<h3>Reboot your machine making sure safe boot is off</h3> 
+<p>Safe boot is a BIOS feature and it comes on different flavours. Just look for Safe boot and make sure it's disabled.</p></p>
 		</div>
 	</div>
 
@@ -110,8 +94,8 @@ username USERNAME attributes
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2014/asa-vpn-dialup-config.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2014/asa-vpn-dialup-config.html';
+		var disqus_identifier = 'blog/2018/ubuntu-nvidia-driver.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2018/ubuntu-nvidia-driver.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,20 +58,20 @@
 		<div class="post">
 			<h1>Installing Java 1.8 on Centos</h1>
 			<p><em>21 May 2016</em></p>
-			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p>
-<p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
-<h3>Downloading java 1.8</h3>
+			<p><p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p> 
+<p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p> 
+<h3>Downloading java 1.8</h3> 
 <pre><code>$ cd /opt/
-$ wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz&quot;
+$ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"
 $ tar xzf jdk-8u91-linux-x64.tar.gz
-</code></pre>
-<!-- more -->
-<h3>Install using alternatives</h3>
+</code></pre> 
+<!-- more --> 
+<h3>Install using alternatives</h3> 
 <pre><code>$ cd /opt/jdk1.8.0_91/
 $ alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 2
 $ alternatives --config java
 
-There are 3 programs that provides &#39;java&#39;.
+There are 3 programs that provides 'java'.
 
   Selection    Command
 -----------------------------------------------
@@ -80,22 +80,22 @@ There are 3 programs that provides &#39;java&#39;.
    3           /opt/jdk1.8.0_91/bin/java
 
 Enter to keep the current selection[+], or type selection number: 3
-</code></pre>
-<p>Installing <code>javac</code> and <code>jar</code> as well.</p>
+</code></pre> 
+<p>Installing <code>javac</code> and <code>jar</code> as well.</p> 
 <pre><code>$ alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_91/bin/jar 2
 $ alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 2
 $ alternatives --set jar /opt/jdk1.8.0_91/bin/jar
 $ alternatives --set javac /opt/jdk1.8.0_91/bin/javac
-</code></pre>
-<h3>Setting up environment variables</h3>
-<p>The following steps are optional.</p>
+</code></pre> 
+<h3>Setting up environment variables</h3> 
+<p>The following steps are optional.</p> 
 <pre><code>export JAVA_HOME=/opt/jdk1.8.0_91
 export JRE_HOME=/opt/jdk1.8.0_91/jre
 export PATH=$PATH:/opt/jdk1.8.0_91/bin:/opt/jdk1.8.0_91/jre/bin
-</code></pre>
-<h3>Verifying your version of java</h3>
+</code></pre> 
+<h3>Verifying your version of java</h3> 
 <pre><code>$ java -version
-java version &quot;1.8.0_91&quot;
+java version "1.8.0_91"
 Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
 Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
 </code></pre></p>

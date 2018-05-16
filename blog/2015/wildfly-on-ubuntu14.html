@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,7 +58,7 @@
 		<div class="post">
 			<h1>Wildfly on Ubuntu 14</h1>
 			<p><em>25 August 2015</em></p>
-			<p><p>I installed JBoss Application Server 7 but it won't start on my Ubuntu machine. If I will run <code>$JBOSS_HOME/bin/standalone.sh</code>,<br/>here's how far I can get.</p>
+			<p><p>I installed JBoss Application Server 7 but it won't start on my Ubuntu machine. If I will run <code>$JBOSS_HOME/bin/standalone.sh</code>,<br> here's how far I can get.</p> 
 <pre><code>=========================================================================
 
   JBoss Bootstrap Environment
@@ -77,12 +77,12 @@
 Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; support was removed in 8.0
 23:41:04,456 INFO  [org.jboss.modules] JBoss Modules version 1.1.1.GA
 23:41:05,336 INFO  [org.jboss.msc] JBoss MSC version 1.0.2.GA
-23:41:05,525 INFO  [org.jboss.as] JBAS015899: JBoss AS 7.1.1.Final &quot;Brontes&quot; starting
-</code></pre>
-<p>A bit of Googling suggested it is a Java 8 related issue and shouldn't happen if I'm going to downgrade to Java 7. Stackoverflow did suggest I can use Wildfly 8 for my latest version of Java.</p>
-<!-- more -->
-<p>I found <a href="http://sukharevd.net/wildfly-8-installation.html">Dmitriy Sukharev's blog</a> with details on how to install Wildfly 8 quickly. He has the installation script on his dropbox but I verbatim it in case the URL change.</p>
-<h3>wildfly-install.sh</h3>
+23:41:05,525 INFO  [org.jboss.as] JBAS015899: JBoss AS 7.1.1.Final "Brontes" starting
+</code></pre> 
+<p>A bit of Googling suggested it is a Java 8 related issue and shouldn't happen if I'm going to downgrade to Java 7. Stackoverflow did suggest I can use Wildfly 8 for my latest version of Java.</p> 
+<!-- more --> 
+<p>I found <a href="http://sukharevd.net/wildfly-8-installation.html">Dmitriy Sukharev's blog</a> with details on how to install Wildfly 8 quickly. He has the installation script on his dropbox but I verbatim it in case the URL change.</p> 
+<h3>wildfly-install.sh</h3> 
 <pre><code>#!/bin/bash
 #title           :wildfly-install.sh
 #description     :The script to install Wildfly 8.x
@@ -100,36 +100,36 @@ INSTALL_DIR=/opt
 WILDFLY_FULL_DIR=$INSTALL_DIR/$WILDFLY_FILENAME
 WILDFLY_DIR=$INSTALL_DIR/wildfly
 
-WILDFLY_USER=&quot;wildfly&quot;
-WILDFLY_SERVICE=&quot;wildfly&quot;
+WILDFLY_USER="wildfly"
+WILDFLY_SERVICE="wildfly"
 
 WILDFLY_STARTUP_TIMEOUT=240
 WILDFLY_SHUTDOWN_TIMEOUT=30
 
-SCRIPT_DIR=&quot;$( cd &quot;$( dirname &quot;${BASH_SOURCE[0]}&quot; )&quot; &amp;&amp; pwd )&quot;
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &amp;&amp; pwd )"
 
 if [[ $EUID -ne 0 ]]; then
-   echo &quot;This script must be run as root.&quot;
+   echo "This script must be run as root."
    exit 1
 fi
 
-echo &quot;Downloading: $WILDFLY_DOWNLOAD_ADDRESS...&quot;
-[ -e &quot;$WILDFLY_ARCHIVE_NAME&quot; ] &amp;&amp; echo &#39;Wildfly archive already exists.&#39;
-if [ ! -e &quot;$WILDFLY_ARCHIVE_NAME&quot; ]; then
+echo "Downloading: $WILDFLY_DOWNLOAD_ADDRESS..."
+[ -e "$WILDFLY_ARCHIVE_NAME" ] &amp;&amp; echo 'Wildfly archive already exists.'
+if [ ! -e "$WILDFLY_ARCHIVE_NAME" ]; then
   wget -q $WILDFLY_DOWNLOAD_ADDRESS
   if [ $? -ne 0 ]; then
-    echo &quot;Not possible to download Wildfly.&quot;
+    echo "Not possible to download Wildfly."
     exit 1
   fi
 fi
 
-echo &quot;Cleaning up...&quot;
-rm -f &quot;$WILDFLY_DIR&quot;
-rm -rf &quot;$WILDFLY_FULL_DIR&quot;
-rm -rf &quot;/var/run/$WILDFLY_SERVICE/&quot;
-rm -f &quot;/etc/init.d/$WILDFLY_SERVICE&quot;
+echo "Cleaning up..."
+rm -f "$WILDFLY_DIR"
+rm -rf "$WILDFLY_FULL_DIR"
+rm -rf "/var/run/$WILDFLY_SERVICE/"
+rm -f "/etc/init.d/$WILDFLY_SERVICE"
 
-echo &quot;Installation...&quot;
+echo "Installation..."
 mkdir $WILDFLY_FULL_DIR
 tar -xzf $WILDFLY_ARCHIVE_NAME -C $INSTALL_DIR
 ln -s $WILDFLY_FULL_DIR/ $WILDFLY_DIR
@@ -137,11 +137,11 @@ useradd -s /sbin/nologin $WILDFLY_USER
 chown -R $WILDFLY_USER:$WILDFLY_USER $WILDFLY_DIR
 chown -R $WILDFLY_USER:$WILDFLY_USER $WILDFLY_DIR/
 
-echo &quot;Registrating Wildfly as service...&quot;
+echo "Registrating Wildfly as service..."
 # if Debian-like distribution
 if [ -r /lib/lsb/init-functions ]; then
     cp $WILDFLY_DIR/bin/init.d/wildfly-init-debian.sh /etc/init.d/$WILDFLY_SERVICE
-    sed -i -e &#39;s,NAME=wildfly,NAME=&#39;$WILDFLY_SERVICE&#39;,g&#39; /etc/init.d/$WILDFLY_SERVICE
+    sed -i -e 's,NAME=wildfly,NAME='$WILDFLY_SERVICE',g' /etc/init.d/$WILDFLY_SERVICE
     WILDFLY_SERVICE_CONF=/etc/default/$WILDFLY_SERVICE
 fi
 
@@ -153,7 +153,7 @@ fi
 
 # if neither Debian nor RHEL like distribution
 if [ ! -r /lib/lsb/init-functions -a ! -r /etc/init.d/functions ]; then
-cat &gt; /etc/init.d/$WILDFLY_SERVICE &lt;&lt; &quot;EOF&quot;
+cat &gt; /etc/init.d/$WILDFLY_SERVICE &lt;&lt; "EOF"
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          ${WILDFLY_SERVICE}
@@ -167,62 +167,62 @@ cat &gt; /etc/init.d/$WILDFLY_SERVICE &lt;&lt; &quot;EOF&quot;
 WILDFLY_USER=${WILDFLY_USER}
 WILDFLY_DIR=${WILDFLY_DIR}
 
-case &quot;$1&quot; in
+case "$1" in
 start)
-echo &quot;Starting ${WILDFLY_FILENAME}...&quot;
+echo "Starting ${WILDFLY_FILENAME}..."
 start-stop-daemon --start --background --chuid $WILDFLY_USER --exec $WILDFLY_DIR/bin/standalone.sh
 exit $?
 ;;
 stop)
-echo &quot;Stopping ${WILDFLY_FILENAME}...&quot;
+echo "Stopping ${WILDFLY_FILENAME}..."
 
 start-stop-daemon --start --quiet --background --chuid $WILDFLY_USER --exec $WILDFLY_DIR/bin/jboss-cli.sh -- --connect command=:shutdown
 exit $?
 ;;
 log)
-echo &quot;Showing server.log...&quot;
+echo "Showing server.log..."
 tail -500f $WILDFLY_DIR/standalone/log/server.log
 ;;
 *)
-echo &quot;Usage: /etc/init.d/wildfly {start|stop}&quot;
+echo "Usage: /etc/init.d/wildfly {start|stop}"
 exit 1
 ;;
 esac
 exit 0
 EOF
-sed -i -e &#39;s,${WILDFLY_USER},&#39;$WILDFLY_USER&#39;,g; s,${WILDFLY_FILENAME},&#39;$WILDFLY_FILENAME&#39;,g; s,${WILDFLY_SERVICE},&#39;$WILDFLY_SERVICE&#39;,g; s,${WILDFLY_DIR},&#39;$WILDFLY_DIR&#39;,g&#39; /etc/init.d/$WILDFLY_SERVICE
+sed -i -e 's,${WILDFLY_USER},'$WILDFLY_USER',g; s,${WILDFLY_FILENAME},'$WILDFLY_FILENAME',g; s,${WILDFLY_SERVICE},'$WILDFLY_SERVICE',g; s,${WILDFLY_DIR},'$WILDFLY_DIR',g' /etc/init.d/$WILDFLY_SERVICE
 fi
 
 chmod 755 /etc/init.d/$WILDFLY_SERVICE
 
-if [ ! -z &quot;$WILDFLY_SERVICE_CONF&quot; ]; then
-    echo &quot;Configuring service...&quot;
-    echo JBOSS_HOME=\&quot;$WILDFLY_DIR\&quot; &gt; $WILDFLY_SERVICE_CONF
+if [ ! -z "$WILDFLY_SERVICE_CONF" ]; then
+    echo "Configuring service..."
+    echo JBOSS_HOME=\"$WILDFLY_DIR\" &gt; $WILDFLY_SERVICE_CONF
     echo JBOSS_USER=$WILDFLY_USER &gt;&gt; $WILDFLY_SERVICE_CONF
     echo STARTUP_WAIT=$WILDFLY_STARTUP_TIMEOUT &gt;&gt; $WILDFLY_SERVICE_CONF
     echo SHUTDOWN_WAIT=$WILDFLY_SHUTDOWN_TIMEOUT &gt;&gt; $WILDFLY_SERVICE_CONF
 fi
 
-echo &quot;Configuring application server...&quot;
-sed -i -e &#39;s,&lt;deployment-scanner path=&quot;deployments&quot; relative-to=&quot;jboss.server.base.dir&quot; scan-interval=&quot;5000&quot;/&gt;,&lt;deployment-scanner path=&quot;deployments&quot; relative-to=&quot;jboss.server.base.dir&quot; scan-interval=&quot;5000&quot; deployment-timeout=&quot;&#39;$WILDFLY_STARTUP_TIMEOUT&#39;&quot;/&gt;,g&#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
-sed -i -e &#39;s,&lt;inet-address value=&quot;${jboss.bind.address:127.0.0.1}&quot;/&gt;,&lt;any-address/&gt;,g&#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
-sed -i -e &#39;s,&lt;socket-binding name=&quot;ajp&quot; port=&quot;${jboss.ajp.port:8009}&quot;/&gt;,&lt;socket-binding name=&quot;ajp&quot; port=&quot;${jboss.ajp.port:28009}&quot;/&gt;,g&#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
-sed -i -e &#39;s,&lt;socket-binding name=&quot;http&quot; port=&quot;${jboss.http.port:8080}&quot;/&gt;,&lt;socket-binding name=&quot;http&quot; port=&quot;${jboss.http.port:28080}&quot;/&gt;,g&#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
-sed -i -e &#39;s,&lt;socket-binding name=&quot;https&quot; port=&quot;${jboss.https.port:8443}&quot;/&gt;,&lt;socket-binding name=&quot;https&quot; port=&quot;${jboss.https.port:28443}&quot;/&gt;,g&#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
-sed -i -e &#39;s,&lt;socket-binding name=&quot;osgi-http&quot; interface=&quot;management&quot; port=&quot;8090&quot;/&gt;,&lt;socket-binding name=&quot;osgi-http&quot; interface=&quot;management&quot; port=&quot;28090&quot;/&gt;,g&#39; $WILDFLY_DIR/standalone/configuration/standalone.xml
+echo "Configuring application server..."
+sed -i -e 's,&lt;deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000"/&gt;,&lt;deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" deployment-timeout="'$WILDFLY_STARTUP_TIMEOUT'"/&gt;,g' $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e 's,&lt;inet-address value="${jboss.bind.address:127.0.0.1}"/&gt;,&lt;any-address/&gt;,g' $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e 's,&lt;socket-binding name="ajp" port="${jboss.ajp.port:8009}"/&gt;,&lt;socket-binding name="ajp" port="${jboss.ajp.port:28009}"/&gt;,g' $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e 's,&lt;socket-binding name="http" port="${jboss.http.port:8080}"/&gt;,&lt;socket-binding name="http" port="${jboss.http.port:28080}"/&gt;,g' $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e 's,&lt;socket-binding name="https" port="${jboss.https.port:8443}"/&gt;,&lt;socket-binding name="https" port="${jboss.https.port:28443}"/&gt;,g' $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e 's,&lt;socket-binding name="osgi-http" interface="management" port="8090"/&gt;,&lt;socket-binding name="osgi-http" interface="management" port="28090"/&gt;,g' $WILDFLY_DIR/standalone/configuration/standalone.xml
 
 service $WILDFLY_SERVICE start
 
-echo &quot;Done.&quot;
-</code></pre>
-<p>Once you have the above script, run it using</p>
+echo "Done."
+</code></pre> 
+<p>Once you have the above script, run it using</p> 
 <pre><code>sudo bash wildfly-install.sh
-</code></pre>
-<p>After installation standard Wildfly welcome page is available at <a href="http://localhost:28080">http://localhost:28080</a>.</p>
-<h3>Wildfly as service</h3>
+</code></pre> 
+<p>After installation standard Wildfly welcome page is available at <a href="http://localhost:28080">http://localhost:28080</a>.</p> 
+<h3>Wildfly as service</h3> 
 <pre><code>sudo update-rc.d wildfly defaults
-</code></pre>
-<p>To manually run wildfly</p>
+</code></pre> 
+<p>To manually run wildfly</p> 
 <pre><code>sudo service wildfly start
 </code></pre></p>
 		</div>

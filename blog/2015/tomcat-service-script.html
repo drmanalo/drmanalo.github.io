@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,8 +58,8 @@
 		<div class="post">
 			<h1>Tomcat Service Script</h1>
 			<p><em>22 July 2015</em></p>
-			<p><p>I copied this startup script from <a href="https://www.liferay.com/en_GB/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts">liferay</a>. You can use this script start and stop your tomcat instance just like any CentOS standard services.</p>
-<!-- more -->
+			<p><p>I copied this startup script from <a href="https://www.liferay.com/en_GB/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts">liferay</a>. You can use this script start and stop your tomcat instance just like any CentOS standard services.</p> 
+<!-- more --> 
 <pre><code>#!/bin/bash
 #
 # tomcat8 This shell script takes care of starting and stopping tomcat8
@@ -77,7 +77,7 @@ TOMCAT_HOME=/usr/local/apache-tomcat-8.0.5
 SHUTDOWN_WAIT=20
 
 export JAVA_HOME=/usr/java/latest
-export JAVA_OPTS=&quot;-XX:+DoEscapeAnalysis \
+export JAVA_OPTS="-XX:+DoEscapeAnalysis \
         -XX:+UseConcMarkSweepGC \
         -XX:+CMSClassUnloadingEnabled \
         -XX:+UseParNewGC \
@@ -87,21 +87,21 @@ export JAVA_OPTS=&quot;-XX:+DoEscapeAnalysis \
         -XX:PermSize=64m \
         -XX:MaxPermSize=256m \
         -Xms512m \
-        -Xmx512m&quot;
+        -Xmx512m"
 export PATH=$JAVA_HOME/bin:$PATH
 
 tomcat_pid() {
-	echo `ps aux | grep $TOMCAT_HOME | grep -v grep | awk &#39;{ print $2 }&#39;`
+	echo `ps aux | grep $TOMCAT_HOME | grep -v grep | awk '{ print $2 }'`
 }
 
 start() {
 	pid=$(tomcat_pid)
-	if [ -n &quot;$pid&quot; ]
+	if [ -n "$pid" ]
 	then
-		echo &quot;tomcat8 is already running (pid: $pid)&quot;
+		echo "tomcat8 is already running (pid: $pid)"
 	else
 		# Start tomcat
-		echo &quot;Starting tomcat8...&quot;
+		echo "Starting tomcat8..."
 		ulimit -n 100000
 		umask 007
 		/bin/sh $TOMCAT_HOME/bin/startup.sh
@@ -112,26 +112,26 @@ start() {
 
 stop() {
 	pid=$(tomcat_pid)
-	if [ -n &quot;$pid&quot; ]
+	if [ -n "$pid" ]
 	then
-		echo &quot;Stopping tomcat8...&quot;
+		echo "Stopping tomcat8..."
 	/bin/sh $TOMCAT_HOME/bin/shutdown.sh
 
 	let kwait=$SHUTDOWN_WAIT
 	count=0;
-	until [ `ps -p $pid | grep -c $pid` = &#39;0&#39; ] || [ $count -gt $kwait ]
+	until [ `ps -p $pid | grep -c $pid` = '0' ] || [ $count -gt $kwait ]
 	do
-		echo -n -e &quot;waiting for processes to exit\n&quot;;
+		echo -n -e "waiting for processes to exit\n";
 		sleep 1
 		let count=$count+1;
 	done
 
 	if [ $count -gt $kwait ]; then
-		echo -n -e &quot;killing processes which didn&#39;t stop after $SHUTDOWN_WAIT seconds\n&quot;
+		echo -n -e "killing processes which didn't stop after $SHUTDOWN_WAIT seconds\n"
 		kill -9 $pid
 	fi
 	else
-		echo &quot;tomcat8 is not running&quot;
+		echo "tomcat8 is not running"
 	fi
 
 	return 0
@@ -150,22 +150,22 @@ case $1 in
 	;;
 	status)
 		pid=$(tomcat_pid)
-		if [ -n &quot;$pid&quot; ]
+		if [ -n "$pid" ]
 		then
-			echo &quot;tomcat8 is running with pid: $pid&quot;
+			echo "tomcat8 is running with pid: $pid"
 		else
-			echo &quot;tomcat8 is not running&quot;
+			echo "tomcat8 is not running"
 		fi
 	;;
 	*)
-		echo &quot;Usage: $0 {start|stop|restart|status}&quot;
+		echo "Usage: $0 {start|stop|restart|status}"
 		exit 1
 	;;
 esac
 
 exit 0
-</code></pre>
-<h3>Start tomcat Automatically</h3>
+</code></pre> 
+<h3>Start tomcat Automatically</h3> 
 <pre><code># chkconfig --add tomcat8
 # chkconfig tomcat8 on
 </code></pre></p>

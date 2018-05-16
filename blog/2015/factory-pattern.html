@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,9 +58,9 @@
 		<div class="post">
 			<h1>Factory Pattern</h1>
 			<p><em>20 May 2015</em></p>
-			<p><p>From my Java best practices training, my instructor gave us an example of the factory pattern using Shape object with draw() method. The Shape interface is further implemented by a base class called ShapeFactory which decides what kind of shape it is going to create using some business intelligence you put into the factory.</p>
-<p>The example is spot on but I found another good example from our hands-on exercise which I'm about to share. Not just because I'm a Star Wars fan but the way factory is being used.</p>
-<h3>The Robot</h3>
+			<p><p>From my Java best practices training, my instructor gave us an example of the factory pattern using Shape object with draw() method. The Shape interface is further implemented by a base class called ShapeFactory which decides what kind of shape it is going to create using some business intelligence you put into the factory.</p> 
+<p>The example is spot on but I found another good example from our hands-on exercise which I'm about to share. Not just because I'm a Star Wars fan but the way factory is being used.</p> 
+<h3>The Robot</h3> 
 <pre><code>package com.robots;
 
 import java.awt.Color;
@@ -88,9 +88,9 @@ public interface Robot {
 	int getSerial();
 
 }
-</code></pre>
-<!-- more -->
-<h3>The Robot Factory</h3>
+</code></pre> 
+<!-- more --> 
+<h3>The Robot Factory</h3> 
 <pre><code>package com.robots;
 
 public final class RobotFactory {
@@ -108,8 +108,8 @@ public final class RobotFactory {
 	}
 
 }
-</code></pre>
-<h3>The Basic Robot</h3>
+</code></pre> 
+<h3>The Basic Robot</h3> 
 <pre><code>package com.robots;
 
 import java.awt.Color;
@@ -127,7 +127,7 @@ public abstract class BasicRobot implements Robot {
 	// All Robots share the same fuel source.
 	private static final Fuel fuel = new Fuel();
 
-	// All robots share the same &#39;force&#39;.
+	// All robots share the same 'force'.
 	private static final Force theForce = new Force();
 
 	private Color color;
@@ -223,9 +223,9 @@ public abstract class BasicRobot implements Robot {
 					e.printStackTrace();
 				} finally {
 
-					System.out.println(&quot;Ending Force is &quot; + BasicRobot.getTheForce().getForceStrength());
-					System.out.println(&quot;Ending Fuel is &quot; + BasicRobot.getFuel().getAmount());
-					System.out.println(getName() + &quot;  Done!&quot;);
+					System.out.println("Ending Force is " + BasicRobot.getTheForce().getForceStrength());
+					System.out.println("Ending Fuel is " + BasicRobot.getFuel().getAmount());
+					System.out.println(getName() + "  Done!");
 				}// End of finally block.
 
 			}
@@ -255,8 +255,8 @@ public abstract class BasicRobot implements Robot {
 	}
 
 }
-</code></pre>
-<h3>C3PO</h3>
+</code></pre> 
+<h3>C3PO</h3> 
 <pre><code>package com.robots;
 
 import java.awt.Color;
@@ -272,16 +272,16 @@ public final class C3PO extends BasicRobot {
 	private final int serial;
 
 	public C3PO() {
-		parts.add(new Motor(485575, &quot;Lucinet silent motor - leg&quot;, 24));
-		parts.add(new Motor(485576, &quot;Lucinet silent motor - leg&quot;, 24));
-		parts.add(new Motor(485577, &quot;Lucinet silent motor - neck&quot;, 24));
-		parts.add(new Motor(485578, &quot;Lucinet silent motor - arm&quot;, 24));
-		parts.add(new Motor(485579, &quot;Lucinet silent motor - arm&quot;, 24));
-		parts.add(new Pulley(485579, &quot;Lucinet pulley system&quot;, 100));
+		parts.add(new Motor(485575, "Lucinet silent motor - leg", 24));
+		parts.add(new Motor(485576, "Lucinet silent motor - leg", 24));
+		parts.add(new Motor(485577, "Lucinet silent motor - neck", 24));
+		parts.add(new Motor(485578, "Lucinet silent motor - arm", 24));
+		parts.add(new Motor(485579, "Lucinet silent motor - arm", 24));
+		parts.add(new Pulley(485579, "Lucinet pulley system", 100));
 		setColor(new Color(251, 232, 123));
-		// Using &quot;lastSerial++&quot; would be unsafe since lastSerial is shared.
+		// Using "lastSerial++" would be unsafe since lastSerial is shared.
 		serial = lastSerial.incrementAndGet();
-		setName(&quot;C3PO &quot; + serial);
+		setName("C3PO " + serial);
 	}
 
 	public int getSerial() {
@@ -289,12 +289,12 @@ public final class C3PO extends BasicRobot {
 	}
 
 	public void speak() {
-		System.out.println(&quot;I am C3PO, human cyborg relations droid!&quot;);
+		System.out.println("I am C3PO, human cyborg relations droid!");
 	}
 
 }
-</code></pre>
-<h3>R2D2</h3>
+</code></pre> 
+<h3>R2D2</h3> 
 <pre><code>package com.robots;
 
 import java.awt.Color;
@@ -311,15 +311,15 @@ public final class R2D2 extends BasicRobot {
 	private final int serial;
 
 	public R2D2() {
-		parts.add(new Motor(123456, &quot;Chubb high torque motor&quot;, 120));
-		parts.add(new Pulley(334563, &quot;Low resistance pully&quot;, 100));
-		parts.add(new Wheel(884457, &quot;Rubber skinned alloy wheel&quot;, 200));
-		parts.add(new Wheel(884458, &quot;Rubber skinned alloy wheel&quot;, 200));
-		parts.add(new Wheel(884459, &quot;Rubber skinned alloy wheel&quot;, 200));
+		parts.add(new Motor(123456, "Chubb high torque motor", 120));
+		parts.add(new Pulley(334563, "Low resistance pully", 100));
+		parts.add(new Wheel(884457, "Rubber skinned alloy wheel", 200));
+		parts.add(new Wheel(884458, "Rubber skinned alloy wheel", 200));
+		parts.add(new Wheel(884459, "Rubber skinned alloy wheel", 200));
 		setColor(new Color(98, 98, 249));
 		// Using lastSerial++ would be unsage since lastSerial is shared.
 		serial = lastSerial.incrementAndGet();
-		setName(&quot;R2D2 &quot; + serial);
+		setName("R2D2 " + serial);
 	}
 
 	public int getSerial() {
@@ -327,7 +327,7 @@ public final class R2D2 extends BasicRobot {
 	}
 
 	public void beep() {
-		System.out.println(&quot;bi bi bib be bi bi be bi&quot;);
+		System.out.println("bi bi bib be bi bi be bi");
 	}
 
 }

@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,9 +58,9 @@
 		<div class="post">
 			<h1>Hello Angular Typescript</h1>
 			<p><em>29 December 2016</em></p>
-			<p><p><strong>Angular</strong> is one of many open source frameworks for developing web applications. I may have not seen all of them but this is the closest I think to Java and its metadata approach to programming. Another Javascript framework I wanted to use is <strong>nodejs</strong> but this is more than just a framework or library but a runtime environment if you like.</p>
-<h3>Angular Toolset</h3>
-<p>You will get this with any language you wanted to use, you need to set up its environment. <code>node</code> and <code>npm</code> is a must when writing Angular.</p>
+			<p><p><strong>Angular</strong> is one of many open source frameworks for developing web applications. I may have not seen all of them but this is the closest I think to Java and its metadata approach to programming. Another Javascript framework I wanted to use is <strong>nodejs</strong> but this is more than just a framework or library but a runtime environment if you like.</p> 
+<h3>Angular Toolset</h3> 
+<p>You will get this with any language you wanted to use, you need to set up its environment. <code>node</code> and <code>npm</code> is a must when writing Angular.</p> 
 <pre><code>$ curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
 Fetched 313 kB in 0s (484 kB/s)    
 
@@ -74,111 +74,111 @@ v7.3.0
 
 $ npm -v
 3.10.10
-</code></pre>
-<!-- more -->
-<h3>Creating hello angular project</h3>
+</code></pre> 
+<!-- more --> 
+<h3>Creating hello angular project</h3> 
 <pre><code>$ mkdir hello-typescript
 
 $ cd hello-typescript
 
 $ npm init -y
-</code></pre>
-<p><code>npm init</code> will create the starter <code>package.json</code> where I'm going to add the project dependencies. This is the <code>pom.xml</code> or the <code>build.gradle</code> or the <code>build.sbt</code> of the JVM world if you know what I mean.</p>
-<h3>Folder Structure</h3>
-<p>This is my hello-typescript folder structure. This will grow once you run <code>npm install</code>.</p>
+</code></pre> 
+<p><code>npm init</code> will create the starter <code>package.json</code> where I'm going to add the project dependencies. This is the <code>pom.xml</code> or the <code>build.gradle</code> or the <code>build.sbt</code> of the JVM world if you know what I mean.</p> 
+<h3>Folder Structure</h3> 
+<p>This is my hello-typescript folder structure. This will grow once you run <code>npm install</code>.</p> 
 <pre><code>├── app
-│   ├── app.component.ts
-│   ├── app.module.ts
-│   └── main.ts
+│&nbsp;&nbsp; ├── app.component.ts
+│&nbsp;&nbsp; ├── app.module.ts
+│&nbsp;&nbsp; └── main.ts
 ├── index.html
 ├── package.json
 ├── systemjs.config.js
 └── tsconfig.json
-</code></pre>
-<h3>package.json</h3>
-<p>The <code>private: true</code> will prevent the package from being accidentally published to the npm registry.</p>
+</code></pre> 
+<h3>package.json</h3> 
+<p>The <code>private: true</code> will prevent the package from being accidentally published to the npm registry.</p> 
 <pre><code>{
-  &quot;name&quot;:         &quot;hello-typescript&quot;,
-  &quot;version&quot;:      &quot;1.0.0&quot;,
-  &quot;description&quot;:  &quot;Hello angular typescript project&quot;,
-  &quot;private&quot;:      true,
-  &quot;main&quot;:         &quot;index.js&quot;,
-  &quot;scripts&quot;: {
-    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;,
-    &quot;start&quot;: &quot;live-server&quot;
+  "name":         "hello-typescript",
+  "version":      "1.0.0",
+  "description":  "Hello angular typescript project",
+  "private":      true,
+  "main":         "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" &amp;&amp; exit 1",
+    "start": "live-server"
   },
-  &quot;keywords&quot;: [],
-  &quot;author&quot;: &quot;&quot;,
-  &quot;license&quot;: &quot;ISC&quot;,
-  &quot;dependencies&quot;: {
-    &quot;@angular/common&quot;: &quot;2.0.0&quot;,
-    &quot;@angular/compiler&quot;: &quot;2.0.0&quot;,
-    &quot;@angular/core&quot;: &quot;2.0.0&quot;,
-    &quot;@angular/forms&quot;: &quot;2.0.0&quot;,
-    &quot;@angular/http&quot;: &quot;2.0.0&quot;,
-    &quot;@angular/platform-browser&quot;: &quot;2.0.0&quot;,
-    &quot;@angular/platform-browser-dynamic&quot;: &quot;2.0.0&quot;,
-    &quot;@angular/router&quot;: &quot;3.0.0&quot;,
-    &quot;core-js&quot;: &quot;^2.4.0&quot;,
-    &quot;rxjs&quot;: &quot;5.0.0-beta.12&quot;,
-    &quot;systemjs&quot;: &quot;0.19.37&quot;,
-    &quot;zone.js&quot;: &quot;0.6.21&quot;
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@angular/common": "2.0.0",
+    "@angular/compiler": "2.0.0",
+    "@angular/core": "2.0.0",
+    "@angular/forms": "2.0.0",
+    "@angular/http": "2.0.0",
+    "@angular/platform-browser": "2.0.0",
+    "@angular/platform-browser-dynamic": "2.0.0",
+    "@angular/router": "3.0.0",
+    "core-js": "^2.4.0",
+    "rxjs": "5.0.0-beta.12",
+    "systemjs": "0.19.37",
+    "zone.js": "0.6.21"
   },
-  &quot;devDependencies&quot;: {
-    &quot;live-server&quot;: &quot;0.8.2&quot;,
-    &quot;typescript&quot;: &quot;^2.0.0&quot;
+  "devDependencies": {
+    "live-server": "0.8.2",
+    "typescript": "^2.0.0"
   }
 }
-</code></pre>
-<h3>tsconfig.js</h3>
+</code></pre> 
+<h3>tsconfig.js</h3> 
 <pre><code>{
-  &quot;compilerOptions&quot;: {
-    &quot;target&quot;: &quot;ES5&quot;,
-    &quot;module&quot;: &quot;commonjs&quot;,
-    &quot;experimentalDecorators&quot;: true,
-    &quot;noImplicitAny&quot;: true
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "noImplicitAny": true
   }
 }
-</code></pre>
-<p>This is the Typescript configuration where you specify your <code>transpiler</code> output. <code>ES5</code> is chosen since no browser can natively load ECMAScript 6 modules.</p>
-<h3>systemjs.config.js</h3>
+</code></pre> 
+<p>This is the Typescript configuration where you specify your <code>transpiler</code> output. <code>ES5</code> is chosen since no browser can natively load ECMAScript 6 modules.</p> 
+<h3>systemjs.config.js</h3> 
 <pre><code>System.config({
-    transpiler: &#39;typescript&#39;,
+    transpiler: 'typescript',
     typescriptOptions: {emitDecoratorMetadata: true},
     map: {
-      &#39;@angular&#39;: &#39;node_modules/@angular&#39;,
-      &#39;rxjs&#39;    : &#39;node_modules/rxjs&#39;
+      '@angular': 'node_modules/@angular',
+      'rxjs'    : 'node_modules/rxjs'
     },
     paths: {
-      &#39;node_modules/@angular/*&#39;: &#39;node_modules/@angular/*/bundles&#39;
+      'node_modules/@angular/*': 'node_modules/@angular/*/bundles'
     },
     meta: {
-      &#39;@angular/*&#39;: {&#39;format&#39;: &#39;cjs&#39;}
+      '@angular/*': {'format': 'cjs'}
     },
     packages: {
-      &#39;app&#39;                              : {main: &#39;main&#39;, defaultExtension: &#39;ts&#39;},
-      &#39;rxjs&#39;                             : {main: &#39;Rx&#39;},
-      &#39;@angular/core&#39;                    : {main: &#39;core.umd.min.js&#39;},
-      &#39;@angular/common&#39;                  : {main: &#39;common.umd.min.js&#39;},
-      &#39;@angular/compiler&#39;                : {main: &#39;compiler.umd.min.js&#39;},
-      &#39;@angular/platform-browser&#39;        : {main: &#39;platform-browser.umd.min.js&#39;},
-      &#39;@angular/platform-browser-dynamic&#39;: {main: &#39;platform-browser-dynamic.umd.min.js&#39;}
+      'app'                              : {main: 'main', defaultExtension: 'ts'},
+      'rxjs'                             : {main: 'Rx'},
+      '@angular/core'                    : {main: 'core.umd.min.js'},
+      '@angular/common'                  : {main: 'common.umd.min.js'},
+      '@angular/compiler'                : {main: 'compiler.umd.min.js'},
+      '@angular/platform-browser'        : {main: 'platform-browser.umd.min.js'},
+      '@angular/platform-browser-dynamic': {main: 'platform-browser-dynamic.umd.min.js'}
     }
 });
-</code></pre>
-<p><code>systemjs</code> is a module loader that can import at run time in any of the popular formats used today. This allows you to use import statements to load even third-party code. It solves the issue with the loading order of scripts and makes sure the application loads only those modules that it actually uses.</p>
-<h3>The app folder</h3>
-<p>It contains the following files:</p>
-<ul>
-  <li>app.component.ts — The only component of your app</li>
-  <li>app.module.ts — The declaration of the module that will include your component</li>
-  <li>main.ts — The bootstrap of the module</li>
-</ul>
-<h3>app.component.ts</h3>
-<pre><code>import { Component } from &#39;@angular/core&#39;;
+</code></pre> 
+<p><code>systemjs</code> is a module loader that can import at run time in any of the popular formats used today. This allows you to use import statements to load even third-party code. It solves the issue with the loading order of scripts and makes sure the application loads only those modules that it actually uses.</p> 
+<h3>The app folder</h3> 
+<p>It contains the following files:</p> 
+<ul> 
+ <li>app.component.ts — The only component of your app</li> 
+ <li>app.module.ts — The declaration of the module that will include your component</li> 
+ <li>main.ts — The bootstrap of the module</li> 
+</ul> 
+<h3>app.component.ts</h3> 
+<pre><code>import { Component } from '@angular/core';
 
 @Component({
-    selector: &#39;app&#39;,
+    selector: 'app',
     template: `&lt;h1&gt;Hello {{ name }}!&lt;/h1&gt;`
 })
 
@@ -186,14 +186,14 @@ export class AppComponent {
     name: string;
 
     constructor() {
-        this.name = &#39;Angular 2&#39;;
+        this.name = 'Angular 2';
     }
 }
-</code></pre>
-<h3>app.module.ts</h3>
-<pre><code>import { NgModule }      from &#39;@angular/core&#39;;
-import { BrowserModule } from &#39;@angular/platform-browser&#39;;
-import { AppComponent }  from &#39;./app.component&#39;;
+</code></pre> 
+<h3>app.module.ts</h3> 
+<pre><code>import { NgModule }      from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent }  from './app.component';
 
 @NgModule({
     imports:      [ BrowserModule ],
@@ -202,28 +202,28 @@ import { AppComponent }  from &#39;./app.component&#39;;
 })
 
 export class AppModule { }
-</code></pre>
-<h3>main.ts</h3>
-<pre><code>import { platformBrowserDynamic } from &#39;@angular/platform-browser-dynamic&#39;;
-import { AppModule }  from &#39;./app.module&#39;;
+</code></pre> 
+<h3>main.ts</h3> 
+<pre><code>import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { AppModule }  from './app.module';
 
 platformBrowserDynamic().bootstrapModule(AppModule);
-</code></pre>
-<h3>index.html</h3>
+</code></pre> 
+<h3>index.html</h3> 
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
   &lt;title&gt;Hello typescript project&lt;/title&gt;
-  &lt;meta charset=&quot;UTF-8&quot;&gt;
-  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
 
-  &lt;script src=&quot;node_modules/typescript/lib/typescript.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;node_modules/core-js/client/shim.min.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;node_modules/zone.js/dist/zone.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;node_modules/systemjs/dist/system.src.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;systemjs.config.js&quot;&gt;&lt;/script&gt;
+  &lt;script src="node_modules/typescript/lib/typescript.js"&gt;&lt;/script&gt;
+  &lt;script src="node_modules/core-js/client/shim.min.js"&gt;&lt;/script&gt;
+  &lt;script src="node_modules/zone.js/dist/zone.js"&gt;&lt;/script&gt;
+  &lt;script src="node_modules/systemjs/dist/system.src.js"&gt;&lt;/script&gt;
+  &lt;script src="systemjs.config.js"&gt;&lt;/script&gt;
   &lt;script&gt;
-    System.import(&#39;app&#39;).catch(function(err){ console.error(err); });
+    System.import('app').catch(function(err){ console.error(err); });
   &lt;/script&gt;
 &lt;/head&gt;
 
@@ -231,8 +231,8 @@ platformBrowserDynamic().bootstrapModule(AppModule);
   &lt;app&gt;Loading...&lt;/app&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-</code></pre>
-<h3>Running hello-typescript</h3>
+</code></pre> 
+<h3>Running hello-typescript</h3> 
 <pre><code>$ npm install
 
 $ npm start
@@ -240,7 +240,7 @@ $ npm start
 &gt; hello-typescript@1.0.0 start /home/drmanalo/angular/hello-typescript
 &gt; live-server
 
-Serving &quot;/home/drmanalo/angular/hello-typescript&quot; at http://127.0.0.1:8080
+Serving "/home/drmanalo/angular/hello-typescript" at http://127.0.0.1:8080
 </code></pre></p>
 		</div>
 	</div>

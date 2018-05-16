@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>ASA Dialup VPN Configuration</title>
+    <title>Migrating to MySQL Enterprise</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -56,53 +56,48 @@
 
 	<div class="content container">
 		<div class="post">
-			<h1>ASA Dialup VPN Configuration</h1>
-			<p><em>07 June 2014</em></p>
-			<p><p>This Cisco dialup VPN configuration worked for ASA 5505 running on version 8.4(7). All upper case letters are labels and should be changed according to your standards and taste. IP addresses are representational.</p> 
-<h3>Network Object Mapping</h3> 
-<pre><code>object network OBJ_VPN_ENDPOINT1
-subnet 10.175.0.0 255.255.128.0
-description OBJ_VPN_ENDPOINT1 is a label
-</code></pre> 
-<h3>DHCP Pool</h3> 
-<pre><code>ip local pool VPN_DHCP_POOL1 10.0.20.10-10.0.20.14
-</code></pre> 
+			<h1>Migrating to MySQL Enterprise</h1>
+			<p><em>08 May 2018</em></p>
+			<p><p>We are migrating to MySQL Enterprise from community version. Currently I'm upgrading from 5.7.22 to 8.0.11. It's my bad not reading the <a href="https://dev.mysql.com/doc/refman/8.0/en/upgrading-strategies.html">upgrade strategy</a> from Oracle themselves so I ended up with some issues.</p> 
+<p>What I did was uninstall the community version using <code>yum remove</code> and install the following RPMs. I got them from Oracle website as trial.</p> 
+<ul> 
+ <li>mysql-commercial-client-8.0.11-1.1.el7.x86_64.rpm</li> 
+ <li>mysql-commercial-common-8.0.11-1.1.el7.x86_64.rpm</li> 
+ <li>mysql-commercial-libs-8.0.11-1.1.el7.x86_64.rpm</li> 
+ <li>mysql-commercial-server-8.0.11-1.1.el7.x86_64.rpm</li> 
+</ul> 
 <!-- more --> 
-<h3>Access Control List</h3> 
-<pre><code>access-list ACL_SPLIT_TUNNEL standard permit 10.175.0.0 255.255.128.0
-access-list OUTSIDE-INSIDE extended permit ip object VPN_DHCP_POOL1 object OBJ_VPN_ENDPOINT1
+<h3>ISSUE #1: User specified as a definer does not exist</h3> 
+<p>After starting <code>mysqld</code> service and logging in as root, I got error with permissions I'm assuming.</p> 
+<pre><code>mysql&gt; show databases;
+ERROR 1449 (HY000): The user specified as a definer ('mysql.infoschema'@'localhost') does not exist
 </code></pre> 
-<h3>Network Address Translation</h3> 
-<pre><code>  nat (outside,outside) source static VPN_DHCP_POOL1 VPN_DHCP_POOL1 destination
-    static OBJ_VPN_ENDPOINT1 OBJ_VPN_ENDPOINT1
-    description NAT EXEMPTION FOR VPN CLIENT IPs TO VPN ENDPOINTS
+<h3>Solution</h3> 
+<p>I set innodb_fast_shutdown to 1 as per upgrade strategy. Value 1 means InnoDB skips full purge at shutdown.</p> 
+<pre><code>mysql&gt; set global innodb_fast_shutdown=1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; \q
+Bye
+# mysql_upgrade -u root -p
+Enter password: 
+Checking if update is needed.
+Checking server version.
+Running queries to upgrade MySQL server.
+Upgrading system table data.
+Checking system database.
+...
+Found outdated sys schema version 1.5.1.
+Upgrading the sys schema.
+Checking databases
+...
+Upgrade process completed successfully.
+Checking if update is needed.
 </code></pre> 
-<h3>Crypto Map</h3> 
-<pre><code>crypto dynamic-map DYN_CMAP_OUTSIDE 1 set ikev1 transform-set 3DES_SHA
-crypto dynamic-map DYN_CMAP_OUTSIDE 1 set reverse-route
-crypto map CMAP_OUTSIDE 99 ipsec-isakmp dynamic DYN_CMAP_OUTSIDE
-</code></pre> 
-<h3>Group Policy</h3> 
-<pre><code>group-policy GPOLICY_POLICY1 internal
-group-policy GPOLICY_POLICY1 attributes
- dns-server value 8.8.8.8
- vpn-tunnel-protocol ikev1 ikev2
- split-tunnel-policy tunnelspecified
- split-tunnel-network-list value ACL_SPLIT_TUNNEL
-</code></pre> 
-<h3>Tunnel Group</h3> 
-<pre><code>tunnel-group DIALUP_TUNNEL_GROUP type remote-access
-tunnel-group DIALUP_TUNNEL_GROUP general-attributes
- address-pool VPN_DHCP_POOL1
- default-group-policy GPOLICY_POLICY1
-tunnel-group DIALUP_TUNNEL_GROUP ipsec-attributes
- ikev1 pre-shared-key ********
-</code></pre> 
-<h3>Dialup Credentials</h3> 
-<pre><code>username USERNAME password INSECURE encrypted
-username USERNAME attributes
- service-type remote-access
-</code></pre></p>
+<h3>Conclusion</h3> 
+<p>I don't know what <code>mysql_upgrade</code> is doing behind the scene but it's definitely fixing what seemed to have lost on user root.</p> 
+<h3>TODO</h3> 
+<p>I will update this post if I will encounter any migration-related issue.</p></p>
 		</div>
 	</div>
 
@@ -110,8 +105,8 @@ username USERNAME attributes
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2014/asa-vpn-dialup-config.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2014/asa-vpn-dialup-config.html';
+		var disqus_identifier = 'blog/2018/update-to-mysql-enterprise.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2018/update-to-mysql-enterprise.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

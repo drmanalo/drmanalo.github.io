@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,53 +58,53 @@
 		<div class="post">
 			<h1>Profiling Remote Java Application</h1>
 			<p><em>29 September 2017</em></p>
-			<p><p><code>jvisualvm</code> is a tool that provides a visual interface for viewing detailed information about Java technology-based applications while they are running. You can his to view data related to your local applications and those running on remote hosts. You can also capture data about JVM software instances and save the data to your local system.</p>
-<p>There are couple of ways to use it, one is using <code>jstatd</code> and the other is by JMX (Java management Extensions). I tried jstatd first but didn't work. The later worked on my CentOS machine using the visualvm I downloaded from <a href="https://visualvm.github.io/download.html">visualvm.github.io</a>.</p>
-<h2>By using jstatd</h2>
-<h3>Grant jstatd full security permission</h3>
-<p>Create a file called <code>jstatd.all.policy</code>. If in production, make sure your server port are locked down to your local IP.</p>
-<!-- more -->
-<pre><code>grant codebase &quot;file:/opt/java8/lib/tools.jar&quot; {
+			<p><p><code>jvisualvm</code> is a tool that provides a visual interface for viewing detailed information about Java technology-based applications while they are running. You can his to view data related to your local applications and those running on remote hosts. You can also capture data about JVM software instances and save the data to your local system.</p> 
+<p>There are couple of ways to use it, one is using <code>jstatd</code> and the other is by JMX (Java management Extensions). I tried jstatd first but didn't work. The later worked on my CentOS machine using the visualvm I downloaded from <a href="https://visualvm.github.io/download.html">visualvm.github.io</a>.</p> 
+<h2>By using jstatd</h2> 
+<h3>Grant jstatd full security permission</h3> 
+<p>Create a file called <code>jstatd.all.policy</code>. If in production, make sure your server port are locked down to your local IP.</p> 
+<!-- more --> 
+<pre><code>grant codebase "file:/opt/java8/lib/tools.jar" {
     permission java.security.AllPermission;
 };
-</code></pre>
-<p>Please use the full-path of your JDK's tools.jar. The above policy should avoid you from getting this access denied message</p>
+</code></pre> 
+<p>Please use the full-path of your JDK's tools.jar. The above policy should avoid you from getting this access denied message</p> 
 <pre><code>Could not create remote object
-access denied (&quot;java.util.PropertyPermission&quot; &quot;java.rmi.server.ignoreSubClasses&quot; &quot;write&quot;)
-java.security.AccessControlException: access denied (&quot;java.util.PropertyPermission&quot; &quot;java.rmi.server.ignoreSubClasses&quot; &quot;write&quot;)
+access denied ("java.util.PropertyPermission" "java.rmi.server.ignoreSubClasses" "write")
+java.security.AccessControlException: access denied ("java.util.PropertyPermission" "java.rmi.server.ignoreSubClasses" "write")
         at java.security.AccessControlContext.checkPermission(AccessControlContext.java:472)
         at java.security.AccessController.checkPermission(AccessController.java:884)
         at java.lang.SecurityManager.checkPermission(SecurityManager.java:549)
         at java.lang.System.setProperty(System.java:792)
         at sun.tools.jstatd.Jstatd.main(Jstatd.java:139)
-</code></pre>
-<h3>Run jstatd</h3>
+</code></pre> 
+<h3>Run jstatd</h3> 
 <pre><code>jstatd -J-Djava.security.policy=/home/user/jstatd.all.policy -J-Djava.rmi.server.hostname=192.168.1.1 -J-Djava.net.preferIPv4Stack=true -J-Djava.rmi.server.logCalls=true
-</code></pre>
-<p>Replace <code>/home/user/jstatd.all.policy</code> by your actual file and <strong>192.168.1.1</strong> by the remote IP of your target machine.</p>
-<h2>By using JMX</h2>
-<h3>Add some JVM arguments</h3>
+</code></pre> 
+<p>Replace <code>/home/user/jstatd.all.policy</code> by your actual file and <strong>192.168.1.1</strong> by the remote IP of your target machine.</p> 
+<h2>By using JMX</h2> 
+<h3>Add some JVM arguments</h3> 
 <pre><code>-Dcom.sun.management.jmxremote=true
 -Dcom.sun.management.jmxremote.ssl=false
 -Dcom.sun.management.jmxremote.authenticate=false
 -Dcom.sun.management.jmxremote.port=1098
 -Dcom.sun.management.jmxremote.rmi.port=1098
 -Djava.rmi.server.hostname=localhost
-</code></pre>
-<p>If running CentOS, run this to open up port 1098.</p>
+</code></pre> 
+<p>If running CentOS, run this to open up port 1098.</p> 
 <pre><code>sudo firewall-cmd --zone=public --add-port=1098/tcp
-</code></pre>
-<h3>Launch SSH with local port forwarding</h3>
+</code></pre> 
+<h3>Launch SSH with local port forwarding</h3> 
 <pre><code>ssh -v -L 1098:localhost:1098 user@my.remote.server.com
-</code></pre>
-<p>Replace user by your login and my.remote.server.com by your own hostname or IP address. Since I'm running SSH in verbose mode, you should see debug messages like below.</p>
+</code></pre> 
+<p>Replace user by your login and my.remote.server.com by your own hostname or IP address. Since I'm running SSH in verbose mode, you should see debug messages like below.</p> 
 <pre><code>debug1: channel 6: free: direct-tcpip: listening port 1098 for localhost port 1098, connect from 127.0.0.1 port 8077 to 127.0.0.1 port 9001, nchannels 9
 debug1: channel 8: free: direct-tcpip: listening port 1098 for localhost port 1098, connect from 127.0.0.1 port 8078 to 127.0.0.1 port 9001, nchannels 8
 debug1: channel 4: free: direct-tcpip: listening port 1098 for localhost port 1098, connect from 127.0.0.1 port 8073 to 127.0.0.1 port 9001, nchannels 7
-</code></pre>
-<h3>Connect VisualVM to Local</h3>
-<p>Right-click on Local -&gt; Add JMX Connection. On connection type localhost:1098</p>
-<h3>Alternative to VisualVM</h3>
+</code></pre> 
+<h3>Connect VisualVM to Local</h3> 
+<p>Right-click on Local -&gt; Add JMX Connection. On connection type localhost:1098</p> 
+<h3>Alternative to VisualVM</h3> 
 <p>Run <code>jconsole</code>. On Remote Process, type localhost:1098</p></p>
 		</div>
 	</div>

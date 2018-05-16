@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,87 +58,79 @@
 		<div class="post">
 			<h1>Blogging With JBake</h1>
 			<p><em>01 May 2016</em></p>
-			<p><p>I have an existing <strong>Octopress</strong> blog which is probably near its useful days. Octopress which is <strong>Jekyll</strong> underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I'm a <strong>Ruby</strong> guy, I will certainly stick with Octopress or Jekyll. But I'm not, being a Java developer. One of the biggest reason why I'm switching to <code>jbake</code> is being able to run it on JVM. <strong>JBake</strong> is not as mature as Jekyll, it's Github inception was 17th of July 2012.</p>
-<!-- more -->
-<h3>Prerequisites</h3>
-<ul>
-  <li>
-  <p><a href="http://oracle.com/technetwork/java/javase/downloads/index.html">JDK</a> - the oven</p></li>
-  <li>
-  <p><a href="https://git-scm.com/">git</a> - the stupid content tracker</p></li>
-  <li>
-  <p><a href="http://sdkman.io">sdkman</a> - to easily install Software Development Kits<br/> <code>$ curl -s &quot;https://get.sdkman.io&quot; | bash</code></p></li>
-  <li>
-  <p><a href="https://github.com/pledbrook/lazybones">lazybones</a> - template generator<br/> <code>$ sdk install lazybones</code></p></li>
-  <li>
-  <p><a href="http://gradle.org/">gradle</a> - for the optional github deployment script<br/> <code>$ sdk install gradle</code></p></li>
-</ul>
-<h3>Setting up your bakery</h3>
-<p>I followed <a href="http://coffeaelectronica.com/blog/2015/baking-with-groovy-and-github.html">CoffeaElectronica</a> to initially setup my bakery.</p>
+			<p><p>I have an existing <strong>Octopress</strong> blog which is probably near its useful days. Octopress which is <strong>Jekyll</strong> underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I'm a <strong>Ruby</strong> guy, I will certainly stick with Octopress or Jekyll. But I'm not, being a Java developer. One of the biggest reason why I'm switching to <code>jbake</code> is being able to run it on JVM. <strong>JBake</strong> is not as mature as Jekyll, it's Github inception was 17th of July 2012.</p> 
+<!-- more --> 
+<h3>Prerequisites</h3> 
+<ul> 
+ <li> <p><a href="http://oracle.com/technetwork/java/javase/downloads/index.html">JDK</a> - the oven</p> </li> 
+ <li> <p><a href="https://git-scm.com/">git</a> - the stupid content tracker</p> </li> 
+ <li> <p><a href="http://sdkman.io">sdkman</a> - to easily install Software Development Kits<br> <code>$ curl -s "https://get.sdkman.io" | bash</code></p> </li> 
+ <li> <p><a href="https://github.com/pledbrook/lazybones">lazybones</a> - template generator<br> <code>$ sdk install lazybones</code></p> </li> 
+ <li> <p><a href="http://gradle.org/">gradle</a> - for the optional github deployment script<br> <code>$ sdk install gradle</code></p> </li> 
+</ul> 
+<h3>Setting up your bakery</h3> 
+<p>I followed <a href="http://coffeaelectronica.com/blog/2015/baking-with-groovy-and-github.html">CoffeaElectronica</a> to initially setup my bakery.</p> 
 <pre><code>$ lazybones create jbake-groovy blog
-Creating project from template jbake-groovy (latest) in &#39;blog&#39;
-Define value for &#39;JBake Plugin Version&#39; [0.2]:
-Define value for &#39;JBake Version&#39; [2.3.2]: 2.4.0
-Define value for &#39;Gradle version&#39; [2.3]: 2.9
+Creating project from template jbake-groovy (latest) in 'blog'
+Define value for 'JBake Plugin Version' [0.2]:
+Define value for 'JBake Version' [2.3.2]: 2.4.0
+Define value for 'Gradle version' [2.3]: 2.9
 GitHub project: [username/projectname.git]: drmanalo/dhon.github.io.git
-</code></pre>
-<p>Then I cloned one of knes1 repositories <code>git clone https://github.com/knes1/tehartikli-jbake-template.git</code> since it has the Freemarker templates that I wanted for my blog. After cloning, I placed the cloned template into <code>src/jbake</code> replacing all existing folders there. I also deleted the initial contents under <code>content/blog/2013</code> folder which are initial posts on <strong>HTML</strong>, <strong>Markdown</strong> and <strong>AsciiDoc</strong> format to show you how to write your posts.</p>
-<p>I changed the <code>build.gradle</code> slightly to support Freemarker.</p>
+</code></pre> 
+<p>Then I cloned one of knes1 repositories <code>git clone https://github.com/knes1/tehartikli-jbake-template.git</code> since it has the Freemarker templates that I wanted for my blog. After cloning, I placed the cloned template into <code>src/jbake</code> replacing all existing folders there. I also deleted the initial contents under <code>content/blog/2013</code> folder which are initial posts on <strong>HTML</strong>, <strong>Markdown</strong> and <strong>AsciiDoc</strong> format to show you how to write your posts.</p> 
+<p>I changed the <code>build.gradle</code> slightly to support Freemarker.</p> 
 <pre><code>buildscript {
     repositories {
         jcenter()
     }
 
     dependencies {
-        classpath &#39;me.champeau.gradle:jbake-gradle-plugin:0.2&#39;
-        classpath &#39;org.jbake:jbake-core:2.3.1&#39;
-        classpath &#39;org.pegdown:pegdown:1.4.2&#39;
-        classpath &#39;org.asciidoctor:asciidoctorj:1.5.2&#39;
-        classpath &#39;org.freemarker:freemarker:2.3.19&#39;
+        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2'
+        classpath 'org.jbake:jbake-core:2.3.1'
+        classpath 'org.pegdown:pegdown:1.4.2'
+        classpath 'org.asciidoctor:asciidoctorj:1.5.2'
+        classpath 'org.freemarker:freemarker:2.3.19'
     }
 }
 
-apply plugin: &#39;me.champeau.jbake&#39;
+apply plugin: 'me.champeau.jbake'
 
 task publish(type: GradleBuild) {
-    buildFile = &#39;publish.gradle&#39;
-    tasks = [&#39;publishGhPages&#39;]
+    buildFile = 'publish.gradle'
+    tasks = ['publishGhPages']
 }
-</code></pre>
-<h3>Header of every recipe</h3>
+</code></pre> 
+<h3>Header of every recipe</h3> 
 <pre><code>title=Disclaimer
 date=2015-05-01
 type=page
 keywords=drmanalo,disclaimer
 status=published
-~~~~~
-</code></pre>
-<p>On the above snippet type could be either <code>post</code> or <code>page</code>. The difference on how it will be baked is purely based on your moulder which happen to be the files inside <code>templates</code> folder.</p>
-<h3>Baking your recipe</h3>
-<pre><code>$ gradle jbake
-:jbake
+</code></pre> 
+<pre><code>
+On the above snippet type could be either ``post`` or ``page``. The difference on how it will be baked is purely based on your moulder which happen to be the files inside ``templates`` folder.
 
-BUILD SUCCESSFUL
+### Baking your recipe
 
-Total time: 5.542 secs
-</code></pre>
-<h3>Previewing your posts</h3>
-<pre><code>$ groovy serve.groovy
-Starting Jetty, press Ctrl+C to stop.
-2016-05-07 15:17:10.455:INFO:oejs.Server:jetty-7.6.15.v20140411
-2016-05-07 15:17:10.496:INFO:oejsh.ContextHandler:started o.e.j.s.ServletContextHandler{/,file:/home/drmanalo/workspace/blog/}
-2016-05-07 15:17:10.520:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:8080
-</code></pre>
-<h3>Publishing to github</h3>
-<p>This requires your associated <code>SSH key</code> for the configured github username.</p>
-<pre><code>$ gradle publish
-:publish
-:dhon.github.io:publishGhPages
+</code></pre> 
+<p>$ gradle jbake<br> :jbake</p> 
+<p>BUILD SUCCESSFUL</p> 
+<p>Total time: 5.542 secs</p> 
+<pre><code>
+### Previewing your posts
 
-BUILD SUCCESSFUL
+</code></pre> 
+<p>$ groovy serve.groovy<br> Starting Jetty, press Ctrl+C to stop.<br> 2016-05-07 15:17:10.455:INFO:oejs.Server:jetty-7.6.15.v20140411<br> 2016-05-07 15:17:10.496:INFO:oejsh.ContextHandler:started o.e.j.s.ServletContextHandler{/,file:/home/drmanalo/workspace/blog/}<br> 2016-05-07 15:17:10.520:INFO:oejs.AbstractConnector:Started <a href="mailto:SelectChannelConnector@0.0.0.0">SelectChannelConnector@0.0.0.0</a>:8080</p> 
+<pre><code>
+### Publishing to github
 
-Total time: 14.107 secs
-</code></pre></p>
+This requires your associated ``SSH key`` for the configured github username.
+
+</code></pre> 
+<p>$ gradle publish<br> :publish<br> :dhon.github.io:publishGhPages</p> 
+<p>BUILD SUCCESSFUL</p> 
+<p>Total time: 14.107 secs</p> 
+<pre><code></code></pre></p>
 		</div>
 	</div>
 

@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,17 +58,17 @@
 		<div class="post">
 			<h1>Observer Pattern</h1>
 			<p><em>20 May 2015</em></p>
-			<p><p><strong>Observer Pattern</strong> has been around Java since version JDK 1.0. One of the nice thing about having it inside the language is you only have to subclass it and just worry about its implementation logic.</p>
-<p>Here are the key benefits of the observer pattern.</p>
-<ul>
-  <li>Neither <code>Observer</code> nor <code>Observable</code> know class type of the other</li>
-  <li><code>Observable</code> can communicate with any <code>Observer</code></li>
-  <li><code>Observer</code> can register for state change events on any <code>Observable</code></li>
-  <li>Any object that changes state of <code>Observable</code> indirectly broadcasts to all registered <code>Observers</code></li>
-</ul>
-<p>This is from one of our exercises which is a card game called Tehi. This is not the complete program but what it shows here is how are you going to use the observer pattern. First you will notice CardDeck extends <code>Observable</code> and the abstract CardViewer implements <code>Observer</code>. The concrete classes FutureCardsViewer and PastCardViewers then has update method which is the glue that attached them to the <code>Observable</code>.</p>
-<!-- more -->
-<h3>Card Deck</h3>
+			<p><p><strong>Observer Pattern</strong> has been around Java since version JDK 1.0. One of the nice thing about having it inside the language is you only have to subclass it and just worry about its implementation logic.</p> 
+<p>Here are the key benefits of the observer pattern.</p> 
+<ul> 
+ <li>Neither <code>Observer</code> nor <code>Observable</code> know class type of the other</li> 
+ <li><code>Observable</code> can communicate with any <code>Observer</code></li> 
+ <li><code>Observer</code> can register for state change events on any <code>Observable</code></li> 
+ <li>Any object that changes state of <code>Observable</code> indirectly broadcasts to all registered <code>Observers</code></li> 
+</ul> 
+<p>This is from one of our exercises which is a card game called Tehi. This is not the complete program but what it shows here is how are you going to use the observer pattern. First you will notice CardDeck extends <code>Observable</code> and the abstract CardViewer implements <code>Observer</code>. The concrete classes FutureCardsViewer and PastCardViewers then has update method which is the glue that attached them to the <code>Observable</code>.</p> 
+<!-- more --> 
+<h3>Card Deck</h3> 
 <pre><code>package com.tehi;
 
 import java.util.Arrays;
@@ -102,7 +102,7 @@ public final class CardDeck extends Observable {
 		try {
 			card = cardStack.pop();
 		} catch (NoSuchElementException e) {
-			throw new IllegalStateException(&quot;Ran out of cards!&quot;);
+			throw new IllegalStateException("Ran out of cards!");
 		}
 		setChanged();
 		notifyObservers(getRanksDealt());
@@ -184,8 +184,8 @@ public final class CardDeck extends Observable {
 		return (size()==0)?true:false;
 	}
 }
-</code></pre>
-<h3>Cards Viewer</h3>
+</code></pre> 
+<h3>Cards Viewer</h3> 
 <pre><code>package com.tehi;
 
 import java.awt.BorderLayout;
@@ -197,7 +197,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-@SuppressWarnings(&quot;serial&quot;)
+@SuppressWarnings("serial")
 public abstract class CardsViewer extends JPanel implements Observer {
 
 	private JPanel centerPanel = new JPanel();
@@ -209,7 +209,7 @@ public abstract class CardsViewer extends JPanel implements Observer {
 		centerPanel.setLayout(new GridLayout(4, 13));
 		for (int i = 0; i &lt; 4; i++) {
 			for (int j = 0; j &lt; 13; j++) {
-				tiles[i][j] = new JLabel(&quot;&quot;, JLabel.CENTER);
+				tiles[i][j] = new JLabel("", JLabel.CENTER);
 				tiles[i][j].setText(Rank.convertIntToRank(j + 1).getName());
 				centerPanel.add(tiles[i][j]);
 			}
@@ -223,8 +223,8 @@ public abstract class CardsViewer extends JPanel implements Observer {
 	 */
 	protected abstract void updateChart(int[] data);
 }
-</code></pre>
-<h3>Future Cards Viewer</h3>
+</code></pre> 
+<h3>Future Cards Viewer</h3> 
 <pre><code>package com.tehi;
 
 import java.util.Observable;
@@ -255,7 +255,7 @@ public class FutureCardsViewer extends CardsViewer {
 		for (int j = 0; j &lt; ranksNotDealt.length; j++) {
 			int numberOfcardsDealt = ranksNotDealt[j];
 			for (int i = 0; i &lt; 4 - numberOfcardsDealt; i++) {
-				tiles[i][j].setText(&quot;&quot;);
+				tiles[i][j].setText("");
 			}
 			for (int i = 4 - numberOfcardsDealt; i &lt; 4; i++) {
 				tiles[i][j].setText(Rank.convertIntToRank(j + 1).getName());
@@ -263,8 +263,8 @@ public class FutureCardsViewer extends CardsViewer {
 		}
 	}
 }
-</code></pre>
-<h3>Past Cards Viewer</h3>
+</code></pre> 
+<h3>Past Cards Viewer</h3> 
 <pre><code>package com.tehi;
 
 import java.util.Observable;
@@ -294,7 +294,7 @@ public class PastCardsViewer extends CardsViewer {
 		for (int j = 0; j &lt; ranksDealt.length; j++) {
 			int numberOfcardsDealt = ranksDealt[j];
 			for (int i = 0; i &lt; 4 - numberOfcardsDealt; i++) {
-				tiles[i][j].setText(&quot;&quot;);
+				tiles[i][j].setText("");
 			}
 			for (int i = 4 - numberOfcardsDealt; i &lt; 4; i++) {
 				tiles[i][j].setText(Rank.convertIntToRank(j + 1).getName());

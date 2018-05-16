@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,7 +58,7 @@
 		<div class="post">
 			<h1>Exceptional Exceptions</h1>
 			<p><em>11 June 2016</em></p>
-			<p><p>Creating an exception in Java is a very slow operation. Expect that throwing an exception will cost you around 1-5 microseconds. Nearly all this time is spent on filling in the exception thread stack. The deeper the stack trace is, the more time it will take to populate it. If you take a peek on <code>java.lang.Throwable</code> source, you will see the answer staring into your face.</p>
+			<p><p>Creating an exception in Java is a very slow operation. Expect that throwing an exception will cost you around 1-5 microseconds. Nearly all this time is spent on filling in the exception thread stack. The deeper the stack trace is, the more time it will take to populate it. If you take a peek on <code>java.lang.Throwable</code> source, you will see the answer staring into your face.</p> 
 <pre><code>public Throwable() {
     fillInStackTrace();
 }
@@ -73,10 +73,10 @@ public synchronized Throwable fillInStackTrace() {
 }
 
 private native Throwable fillInStackTrace(int dummy);
-</code></pre>
-<p>Usually we throw an exception in case of unexpected problems. This means that we don’t use exceptions as part of the the repetitive if-then-else mess.</p>
-<!-- more -->
-<h3>Creating the project</h3>
+</code></pre> 
+<p>Usually we throw an exception in case of unexpected problems. This means that we don’t use exceptions as part of the the repetitive if-then-else mess.</p> 
+<!-- more --> 
+<h3>Creating the project</h3> 
 <pre><code>$ mvn archetype:generate \
           -DinteractiveMode=false \
           -DarchetypeGroupId=org.openjdk.jmh \
@@ -84,8 +84,8 @@ private native Throwable fillInStackTrace(int dummy);
           -DgroupId=com.prototype \
           -DartifactId=benchmark \
           -Dversion=1.0
-</code></pre>
-<h3>Writing the benchmark</h3>
+</code></pre> 
+<h3>Writing the benchmark</h3> 
 <pre><code>package com.prototype;
 
 import java.util.concurrent.TimeUnit;
@@ -112,8 +112,8 @@ public class ExceptionBenchmark {
 	}
 
 }
-</code></pre>
-<h3>Compiling</h3>
+</code></pre> 
+<h3>Compiling</h3> 
 <pre><code>$ mvn clean install
 [INFO] Scanning for projects...
 [INFO]                                                                         
@@ -125,7 +125,7 @@ public class ExceptionBenchmark {
 [INFO] Deleting /home/drmanalo/workspace/benchmark/target
 [INFO]
 [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ benchmark ---
-[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
 [INFO] skip non existing resourceDirectory /home/drmanalo/workspace/benchmark/src/main/resources
 [INFO]
 [INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ benchmark ---
@@ -133,7 +133,7 @@ public class ExceptionBenchmark {
 [INFO] Compiling 1 source file to /home/drmanalo/workspace/benchmark/target/classes
 [INFO]
 [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ benchmark ---
-[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
 [INFO] skip non existing resourceDirectory /home/drmanalo/workspace/benchmark/src/test/resources
 [INFO]
 [INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ benchmark ---
@@ -162,8 +162,8 @@ public class ExceptionBenchmark {
 [INFO] Final Memory: 24M/203M
 [INFO] ------------------------------------------------------------------------
 
-</code></pre>
-<h3>Running the benchmarks</h3>
+</code></pre> 
+<h3>Running the benchmarks</h3> 
 <pre><code>$ java -jar target/benchmarks.jar
 # JMH 1.12 (released 82 days ago)
 # VM version: JDK 1.8.0_91, VM 25.91-b14
@@ -242,14 +242,14 @@ Iteration  17: 1.006 us/op
 Iteration  18: 1.001 us/op
 Iteration  19: 0.999 us/op
 Iteration  20: 0.998 us/op
-</code></pre>
-<h3>and the test results...</h3>
-<pre><code>Result &quot;baseline&quot;:
+</code></pre> 
+<h3>and the test results...</h3> 
+<pre><code>Result "baseline":
   0.004 ±(99.9%) 0.001 us/op [Average]
   (min, avg, max) = (0.004, 0.004, 0.005), stdev = 0.001
   CI (99.9%): [0.004, 0.004] (assumes normal distribution)
 
-Result &quot;exceptional&quot;:
+Result "exceptional":
   1.017 ±(99.9%) 0.015 us/op [Average]
   (min, avg, max) = (0.944, 1.017, 1.594), stdev = 0.062
   CI (99.9%): [1.002, 1.032] (assumes normal distribution)

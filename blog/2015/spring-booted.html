@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.5.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,13 +58,13 @@
 		<div class="post">
 			<h1>Spring Booted</h1>
 			<p><em>22 October 2015</em></p>
-			<p><blockquote>
-  <p><strong>Spring Boot</strong> is an exciting new way to develop Spring applications with minimal friction from the framework itself. Auto-configuration eliminates much of the boilerplate configuration that infests traditional Spring applications. Spring Boot starters enable you to specify build dependencies by what they offer rather than explicit library names and version. The Spring Boot CLI takes Spring Boot’s frictionless development model to a whole new level by enabling quick and easy development with Groovy from the command line. Finally, the Actuator lets you look inside your running application to see what and how Spring Boot has done.</p>
-</blockquote>
-<p>Above is an excerpt from <strong>Craig Walls'</strong> <a href="https://www.manning.com/books/spring-boot-in-action">Spring Boot in Action</a> which perfectly describe my feelings with the traditional Spring configuration and how Spring Boot modernise it.</p>
-<p>My favourite part of Spring Boot is its CLI so I'll try creating a new project using CLI.</p>
-<!-- more -->
-<h3>Installing Spring Boot CLI</h3>
+			<p><blockquote> 
+ <p><strong>Spring Boot</strong> is an exciting new way to develop Spring applications with minimal friction from the framework itself. Auto-configuration eliminates much of the boilerplate configuration that infests traditional Spring applications. Spring Boot starters enable you to specify build dependencies by what they offer rather than explicit library names and version. The Spring Boot CLI takes Spring Boot’s frictionless development model to a whole new level by enabling quick and easy development with Groovy from the command line. Finally, the Actuator lets you look inside your running application to see what and how Spring Boot has done.</p> 
+</blockquote> 
+<p>Above is an excerpt from <strong>Craig Walls'</strong> <a href="https://www.manning.com/books/spring-boot-in-action">Spring Boot in Action</a> which perfectly describe my feelings with the traditional Spring configuration and how Spring Boot modernise it.</p> 
+<p>My favourite part of Spring Boot is its CLI so I'll try creating a new project using CLI.</p> 
+<!-- more --> 
+<h3>Installing Spring Boot CLI</h3> 
 <pre><code>$ sdk install springboot
 
 Downloading: springboot 1.3.5.RELEASE
@@ -78,9 +78,9 @@ Done installing!
 Do you want springboot 1.3.5.RELEASE to be set as default? (Y/n):
 
 Setting springboot 1.3.5.RELEASE as default.
-</code></pre>
-<h3>Installing gradle</h3>
-<p>This is optional. You will need <code>gradle</code> if you don't want to use the default project type <code>maven</code>.</p>
+</code></pre> 
+<h3>Installing gradle</h3> 
+<p>This is optional. You will need <code>gradle</code> if you don't want to use the default project type <code>maven</code>.</p> 
 <pre><code>$ sdk install gradle
 
 Downloading: gradle 2.13
@@ -94,11 +94,11 @@ Done installing!
 Do you want gradle 2.13 to be set as default? (Y/n):
 
 Setting gradle 2.13 as default.
-</code></pre>
-<h3>Spring shell</h3>
+</code></pre> 
+<h3>Spring shell</h3> 
 <pre><code>$ spring shell
 Spring Boot (v1.3.5.RELEASE)
-Hit TAB to complete. Type &#39;help&#39; and hit RETURN for help, and &#39;exit&#39; to quit.
+Hit TAB to complete. Type 'help' and hit RETURN for help, and 'exit' to quit.
 
 $ help
 usage:
@@ -119,7 +119,7 @@ Available commands are:
     Run a spring groovy script test
 
   grab                
-    Download a spring groovy script&#39;s dependencies to ./repository
+    Download a spring groovy script's dependencies to ./repository
 
   jar [options] &lt;jar-name&gt; &lt;files&gt;
     Create a self-contained executable jar file from a Spring Groovy script
@@ -137,7 +137,7 @@ Available commands are:
     Initialize a new project using Spring Initializr (start.spring.io)
 
   prompt                
-    Change the prompt used with the current &#39;shell&#39; command. Execute with no arguments to return to the previous value.
+    Change the prompt used with the current 'shell' command. Execute with no arguments to return to the previous value.
 
   clear                
     Clear the screen
@@ -151,16 +151,16 @@ Common options:
     Print additional status information for the command you are running
 
 
-See &#39;help &lt;command&gt;&#39; for more information on a specific command.
-</code></pre>
-<h3>spring init at a glance</h3>
+See 'help &lt;command&gt;' for more information on a specific command.
+</code></pre> 
+<h3>spring init at a glance</h3> 
 <pre><code>$ spring init -l
 
   .   ____          _            __ _ _
- /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+  '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
 
 :: Service capabilities ::  https://start.spring.io
@@ -176,7 +176,7 @@ Supported dependencies
 | aop                               | Aspect-oriented programming including spring-aop and AspectJ                                                                                                           |                             |
 | artemis                           | Java Message Service API via Apache Artemis                                                                                                                            | &gt;= 1.3.0.M2                 |
 | batch                             | Spring Batch including HSQLDB database                                                                                                                                 |                             |
-| cache                             | Spring&#39;s Cache abstraction                                                                                                                                             | &gt;= 1.3.0.M1                 |
+| cache                             | Spring's Cache abstraction                                                                                                                                             | &gt;= 1.3.0.M1                 |
 | cloud-aws                         | AWS native services from spring-cloud-aws                                                                                                                              | &gt;= 1.2.3.RELEASE            |
 | cloud-aws-jdbc                    | Relational databases on AWS with RDS and spring-cloud-aws-jdbc                                                                                                         | &gt;= 1.2.3.RELEASE            |
 | cloud-aws-messaging               | Messaging on AWS with SQS and spring-cloud-aws-messaging                                                                                                               | &gt;= 1.2.3.RELEASE            |
@@ -288,38 +288,38 @@ Parameters
 | description | project description                      | Demo project for Spring Boot |
 | packageName | root package                             | com.example                  |
 +-------------+------------------------------------------+------------------------------+
-</code></pre>
-<h3>Creating my first project</h3>
+</code></pre> 
+<h3>Creating my first project</h3> 
 <pre><code>$ spring init --dependencies web,h2,data-jpa,jdbc,groovy-templates,security --build gradle --packaging jar --extract
 Using service at https://start.spring.io
-Project extracted to &#39;/home/drmanalo/workspace/paluwagan&#39;
+Project extracted to '/home/drmanalo/workspace/paluwagan'
 
 $ tree
 .
 ├── build.gradle
 ├── gradle
-│   └── wrapper
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
+│&nbsp;&nbsp; └── wrapper
+│&nbsp;&nbsp;     ├── gradle-wrapper.jar
+│&nbsp;&nbsp;     └── gradle-wrapper.properties
 ├── gradlew
 ├── gradlew.bat
 └── src
     ├── main
-    │   ├── java
-    │   │   └── com
-    │   │       └── example
-    │   │           └── DemoApplication.java
-    │   └── resources
-    │       ├── application.properties
-    │       ├── static
-    │       └── templates
+    │&nbsp;&nbsp; ├── java
+    │&nbsp;&nbsp; │&nbsp;&nbsp; └── com
+    │&nbsp;&nbsp; │&nbsp;&nbsp;     └── example
+    │&nbsp;&nbsp; │&nbsp;&nbsp;         └── DemoApplication.java
+    │&nbsp;&nbsp; └── resources
+    │&nbsp;&nbsp;     ├── application.properties
+    │&nbsp;&nbsp;     ├── static
+    │&nbsp;&nbsp;     └── templates
     └── test
         └── java
             └── com
                 └── example
                     └── DemoApplicationTests.java
-</code></pre>
-<h3>Running the application</h3>
+</code></pre> 
+<h3>Running the application</h3> 
 <pre><code>$ gradle bootRun
 
 Started DemoApplication in 4.605 seconds (JVM running for 4.954)
