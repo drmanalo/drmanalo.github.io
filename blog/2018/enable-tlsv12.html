@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Enabling TLSv1.2 on CentOS 5</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Enabling TLSv1.2 on CentOS 5</h1>
+			<p><em>18 June 2018</em></p>
+			<p><p>We have a legacy IVR (Interactive Voice Response) software running an <a href="https://asterisk.org">Asterisk PBX Server</a>. It executes AGI (Asterisk Gateway Interface) compliant protocol to launch external programs written in Python to control telephony channel, play audio, read DTMF (Dual Tone Multi Frequency) digits, etc. We ran into an issue when the payment gateway stopped supporting lower versions of TLS (Transport Layer Security). It requires TLSv1.2 as minimum version.</p> 
+<h3>Issue</h3> 
+<pre><code>$ curl -Ivvv https://secure.payment.com
+* About to connect() to secure.payment.com port 443
+*   Trying 185.n.n.n... connected
+* Connected to secure.payment.com (185.n.n.n) port 443
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* SSLv2, Client hello (1):
+Unknown SSL protocol error in connection to secure.payment.com:443 
+* Closing connection #0
+curl: (35) Unknown SSL protocol error in connection to secure.payment.com:443
+</code></pre> 
+<!-- more --> 
+<h3>Workaround</h3> 
+<p>You need to build OpenSSL and cURL using your current CentOS.</p> 
+<pre><code>$ wget https://www.openssl.org/source/openssl-1.0.2a.tar.gz --no-check-certificate
+
+Resolving www.openssl.org... 23.214.162.69, 2a02:26f0:f6:199::c1e, 2a02:26f0:f6:1be::c1e
+Connecting to www.openssl.org|23.214.162.69|:443... connected.
+WARNING: cannot verify www.openssl.org's certificate, issued by `/C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3':
+  Unable to locally verify the issuer's authority.
+HTTP request sent, awaiting response... 200 OK
+Length: 5262089 (5.0M) [application/x-gzip]
+Saving to: `openssl-1.0.2a.tar.gz'
+
+100%[============================================================&gt;] 5,262,089   3.14M/s   in 1.6s    
+</code></pre> 
+<pre><code>$ wget http://curl.haxx.se/download/curl-7.42.1.tar.gz
+
+Resolving curl.haxx.se (curl.haxx.se)... 151.101.2.49, 151.101.66.49, 151.101.130.49, ...
+Connecting to curl.haxx.se (curl.haxx.se)|151.101.2.49|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://curl.haxx.se/download/curl-7.42.1.tar.gz [following]
+
+Connecting to curl.haxx.se (curl.haxx.se)|151.101.2.49|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 4291533 (4.1M) [application/x-gzip]
+Saving to: ‘curl-7.42.1.tar.gz’
+
+100%[===========================================================&gt;]   4.09M  4.33MB/s    in 0.9s
+</code></pre> 
+<h3>Build OpenSSL</h3> 
+<pre><code>$ ./config -fpic shared
+Operating system: x86_64-whatever-linux2
+Configuring for linux-x86_64
+Configuring for linux-x86_64
+    no-ec_nistp_64_gcc_128 [default]  OPENSSL_NO_EC_NISTP_64_GCC_128 (skip dir)
+    no-gmp          [default]  OPENSSL_NO_GMP (skip dir)
+    no-jpake        [experimental] OPENSSL_NO_JPAKE (skip dir)
+    no-krb5         [krb5-flavor not specified] OPENSSL_NO_KRB5
+    no-libunbound   [experimental] OPENSSL_NO_LIBUNBOUND (skip dir)
+    no-md2          [default]  OPENSSL_NO_MD2 (skip dir)
+    no-rc5          [default]  OPENSSL_NO_RC5 (skip dir)
+    no-rfc3779      [default]  OPENSSL_NO_RFC3779 (skip dir)
+    no-sctp         [default]  OPENSSL_NO_SCTP (skip dir)
+    no-ssl-trace    [default]  OPENSSL_NO_SSL_TRACE (skip dir)
+    no-store        [experimental] OPENSSL_NO_STORE (skip dir)
+    no-unit-test    [default]  OPENSSL_NO_UNIT_TEST (skip dir)
+    no-zlib         [default] 
+    no-zlib-dynamic [default] 
+...
+Configured for linux-x86_64.
+</code></pre> 
+<pre><code>$ sudo make &amp;&amp; make build
+...
+cp libcrypto.pc /usr/local/ssl/lib/pkgconfig
+chmod 644 /usr/local/ssl/lib/pkgconfig/libcrypto.pc
+cp libssl.pc /usr/local/ssl/lib/pkgconfig
+chmod 644 /usr/local/ssl/lib/pkgconfig/libssl.pc
+cp openssl.pc /usr/local/ssl/lib/pkgconfig
+chmod 644 /usr/local/ssl/lib/pkgconfig/openssl.pc
+
+$ sudo /sbin/ldconfig
+</code></pre> 
+<h3>Build cURL</h3> 
+<pre><code>$ sudo ./configure --with-ssl=/usr/local/ssl
+...
+configure: Configured to build curl/libcurl:
+
+  curl version:     7.42.1
+  Host setup:       x86_64-unknown-linux-gnu
+  Install prefix:   /usr/local
+  Compiler:         gcc
+  SSL support:      enabled (OpenSSL)
+  SSH support:      no      (--with-libssh2)
+  zlib support:     enabled
+  GSS-API support:  no      (--with-gssapi)
+  TLS-SRP support:  enabled
+  resolver:         default (--enable-ares / --enable-threaded-resolver)
+  IPv6 support:     no      (--enable-ipv6)
+  Unix sockets support: enabled
+  IDN support:      no      (--with-{libidn,winidn})
+  Build libcurl:    Shared=yes, Static=yes
+  Built-in manual:  enabled
+  --libcurl option: enabled (--disable-libcurl-option)
+  Verbose errors:   enabled (--disable-verbose)
+  SSPI support:     no      (--enable-sspi)
+  ca cert bundle:   /etc/pki/tls/certs/ca-bundle.crt
+  ca cert path:     no
+  LDAP support:     no      (--enable-ldap / --with-ldap-lib / --with-lber-lib)
+  LDAPS support:    no      (--enable-ldaps)
+  RTSP support:     enabled
+  RTMP support:     no      (--with-librtmp)
+  metalink support: no      (--with-libmetalink)
+  HTTP2 support:    disabled (--with-nghttp2)
+  Protocols:        DICT FILE FTP FTPS GOPHER HTTP HTTPS IMAP IMAPS POP3 POP3S RTSP SMB SMBS SMTP SMTPS TELNET TFTP
+
+$ sudo make &amp;&amp; make install
+</code></pre> 
+<h3>Test the workaround</h3> 
+<pre><code>curl -Ivvv https://secure.payment.com
+*   Trying 185.n.n.n...
+* Connected to secure.payment.com (185.n.n.n) port 443 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.2, TLS Unknown, Unknown (22):
+* TLSv1.2, TLS handshake, Client hello (1):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Server hello (2):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, CERT (11):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Server key exchange (12):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Server finished (14):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Client key exchange (16):
+* SSLv2, Unknown (20):
+* TLSv1.2, TLS change cipher, Client hello (1):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Finished (20):
+* SSLv2, Unknown (20):
+* TLSv1.2, TLS change cipher, Client hello (1):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server accepted to use http/1.1
+* Server certificate:
+*    subject: jurisdictionC=GB; businessCategory=Private Organization; serialNumber=03539217; C=GB; ST=London; L=London; O=Pay360 Limited; CN=secure.payment.com
+*    start date: 2017-03-16 00:00:00 GMT
+*    expire date: 2019-03-16 23:59:59 GMT
+*    subjectAltName: secure.payment.com matched
+*    issuer: C=US; O=Symantec Corporation; OU=Symantec Trust Network; CN=Symantec Class 3 EV SSL CA - G3
+*    SSL certificate verify ok.
+</code></pre> 
+<p>Next challenge is updating Python. Having <code>curl</code> working can be a good fallback if Python 2.7.9 upgrade fails.</p> 
+<p><strong>Credit</strong> goes <a href="https://miteshshah.github.io/linux/centos/how-to-enable-openssl-1-0-2-a-tlsv1-1-and-tlsv1-2-on-centos-5-and-rhel5/">to this blog</a></p></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2018/enable-tlsv12.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2018/enable-tlsv12.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

@@ -6,9 +6,451 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Wed, 16 May 2018 18:27:18 +0100</pubDate>
-    <lastBuildDate>Wed, 16 May 2018 18:27:18 +0100</lastBuildDate>
+    <pubDate>Thu, 1 Nov 2018 14:46:10 +0000</pubDate>
+    <lastBuildDate>Thu, 1 Nov 2018 14:46:10 +0000</lastBuildDate>
 
+      <item>
+        <title>Start Learning WebSocket</title>
+        <link>https://drmanalo.github.io/blog/2018/beginning-websocket.html</link>
+        <pubDate>Sat, 3 Nov 2018 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2018/beginning-websocket.html</guid>
+        <description>
+  	         &lt;p&gt;This is from &lt;a href=&quot;http://spring.io/guides/gs/messaging-stomp-websocket&quot;&gt;Spring Guides&lt;/a&gt; and it&apos;s their &quot;hello websocket&quot; application. This sends messages back and forth between a browser and the server using WebSocket.&lt;/p&gt; 
+&lt;h2&gt;From scratch&lt;/h2&gt; 
+&lt;pre&gt;&lt;code&gt;$ spring init --dependencies=websocket --build=gradle --groupId=com.prototype websocket
+Using service at https://start.spring.io
+Project extracted to &apos;~/idea/websocket&apos;
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;p&gt;Then I download all dependencies using &lt;code&gt;gradle build&lt;/code&gt;&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;$ cd ~/idea/websocket
+$ ./gradlew clean build
+Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-websocket/2.1.0.RELEASE/spring-boot-starter-websocket-2.1.0.RELEASE.pom
+Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starters/2.1.0.RELEASE/spring-boot-starters-2.1.0.RELEASE.pom
+Download https://repo.maven.apache.org/maven2/org/springframework/spring-websocket/5.1.2.RELEASE/spring-websocket-5.1.2.RELEASE.pom
+Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-web/2.1.0.RELEASE/spring-boot-starter-web-2.1.0.RELEASE.pom
+
+.....
+
+&amp;gt; Task :test
+2018-11-03 11:56:46.459  INFO 12650 --- [       Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService &apos;applicationTaskExecutor&apos;
+
+BUILD SUCCESSFUL in 26s
+6 actionable tasks: 5 executed, 1 up-to-date
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;!-- more --&gt; 
+&lt;h2&gt;Create a resource representation class&lt;/h2&gt; 
+&lt;pre&gt;&lt;code&gt;package com.prototype.websocket.resource;
+
+public class HelloMessage {
+
+    private String name;
+
+    public HelloMessage() {
+    }
+
+    public HelloMessage(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;pre&gt;&lt;code&gt;package com.prototype.websocket.resource;
+
+public class Greeting {
+
+    private String content;
+
+    public Greeting() {
+    }
+
+    public Greeting(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h2&gt;Create a message-handling controller&lt;/h2&gt; 
+&lt;pre&gt;&lt;code&gt;package com.prototype.websocket.controller;
+
+import com.prototype.websocket.resource.Greeting;
+import com.prototype.websocket.resource.HelloMessage;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.util.HtmlUtils;
+
+@Controller
+public class GreetingController {
+
+    @MessageMapping(&quot;/hello&quot;)
+    @SendTo(&quot;/topic/greetings&quot;)
+    public Greeting greeting(HelloMessage message) throws InterruptedException {
+        Thread.sleep(1000);
+        return new Greeting(&quot;Hello, &quot; + HtmlUtils.htmlEscape(message.getName()) + &quot;!&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h2&gt;Configure Spring for STOMP messaging&lt;/h2&gt; 
+&lt;pre&gt;&lt;code&gt;package com.prototype.websocket;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint(&quot;/gs-guide-websocket&quot;).withSockJS();
+    }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker(&quot;/topic&quot;);
+        registry.setApplicationDestinationPrefixes(&quot;/app&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h2&gt;Create a browser client&lt;/h2&gt; 
+&lt;p&gt;At this point I need dependencies from &lt;code&gt;webjars&lt;/code&gt; so I changed my &lt;code&gt;build.gradle&lt;/code&gt; into this.&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;dependencies {
+	compile(&quot;org.webjars:webjars-locator-core&quot;)
+	compile(&quot;org.webjars:sockjs-client:1.0.2&quot;)
+	compile(&quot;org.webjars:stomp-websocket:2.3.3&quot;)
+	compile(&quot;org.webjars:bootstrap:3.3.7&quot;)
+	compile(&quot;org.webjars:jquery:3.1.0&quot;)
+	implementation(&apos;org.springframework.boot:spring-boot-starter-websocket&apos;)
+	testImplementation(&apos;org.springframework.boot:spring-boot-starter-test&apos;)
+}
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;p&gt;I created this on &lt;code&gt;src/main/resources/static/index.html&lt;/code&gt;&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;Hello WebSocket&amp;lt;/title&amp;gt;
+    &amp;lt;link href=&quot;/webjars/bootstrap/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&amp;gt;
+    &amp;lt;link href=&quot;/main.css&quot; rel=&quot;stylesheet&quot;&amp;gt;
+    &amp;lt;script src=&quot;/webjars/jquery/jquery.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&quot;/webjars/sockjs-client/sockjs.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&quot;/webjars/stomp-websocket/stomp.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&quot;/app.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;noscript&amp;gt;&amp;lt;h2 style=&quot;color: #ff0000&quot;&amp;gt;Seems your browser doesn&apos;t support Javascript! Websocket relies on Javascript being
+    enabled. Please enable Javascript and reload this page!&amp;lt;/h2&amp;gt;&amp;lt;/noscript&amp;gt;
+&amp;lt;div id=&quot;main-content&quot; class=&quot;container&quot;&amp;gt;
+    &amp;lt;div class=&quot;row&quot;&amp;gt;
+        &amp;lt;div class=&quot;col-md-6&quot;&amp;gt;
+            &amp;lt;form class=&quot;form-inline&quot;&amp;gt;
+                &amp;lt;div class=&quot;form-group&quot;&amp;gt;
+                    &amp;lt;label for=&quot;connect&quot;&amp;gt;WebSocket connection:&amp;lt;/label&amp;gt;
+                    &amp;lt;button id=&quot;connect&quot; class=&quot;btn btn-default&quot; type=&quot;submit&quot;&amp;gt;Connect&amp;lt;/button&amp;gt;
+                    &amp;lt;button id=&quot;disconnect&quot; class=&quot;btn btn-default&quot; type=&quot;submit&quot; disabled=&quot;disabled&quot;&amp;gt;Disconnect
+                    &amp;lt;/button&amp;gt;
+                &amp;lt;/div&amp;gt;
+            &amp;lt;/form&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;div class=&quot;col-md-6&quot;&amp;gt;
+            &amp;lt;form class=&quot;form-inline&quot;&amp;gt;
+                &amp;lt;div class=&quot;form-group&quot;&amp;gt;
+                    &amp;lt;label for=&quot;name&quot;&amp;gt;What is your name?&amp;lt;/label&amp;gt;
+                    &amp;lt;input type=&quot;text&quot; id=&quot;name&quot; class=&quot;form-control&quot; placeholder=&quot;Your name here...&quot;&amp;gt;
+                &amp;lt;/div&amp;gt;
+                &amp;lt;button id=&quot;send&quot; class=&quot;btn btn-default&quot; type=&quot;submit&quot;&amp;gt;Send&amp;lt;/button&amp;gt;
+            &amp;lt;/form&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div class=&quot;row&quot;&amp;gt;
+        &amp;lt;div class=&quot;col-md-12&quot;&amp;gt;
+            &amp;lt;table id=&quot;conversation&quot; class=&quot;table table-striped&quot;&amp;gt;
+                &amp;lt;thead&amp;gt;
+                &amp;lt;tr&amp;gt;
+                    &amp;lt;th&amp;gt;Greetings&amp;lt;/th&amp;gt;
+                &amp;lt;/tr&amp;gt;
+                &amp;lt;/thead&amp;gt;
+                &amp;lt;tbody id=&quot;greetings&quot;&amp;gt;
+                &amp;lt;/tbody&amp;gt;
+            &amp;lt;/table&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;p&gt;On &lt;code&gt;src/main/resources/static/app.js&lt;/code&gt;&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;var stompClient = null;
+
+function setConnected(connected) {
+    $(&quot;#connect&quot;).prop(&quot;disabled&quot;, connected);
+    $(&quot;#disconnect&quot;).prop(&quot;disabled&quot;, !connected);
+    if (connected) {
+        $(&quot;#conversation&quot;).show();
+    }
+    else {
+        $(&quot;#conversation&quot;).hide();
+    }
+    $(&quot;#greetings&quot;).html(&quot;&quot;);
+}
+
+function connect() {
+    var socket = new SockJS(&apos;/gs-guide-websocket&apos;);
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        setConnected(true);
+        console.log(&apos;Connected: &apos; + frame);
+        stompClient.subscribe(&apos;/topic/greetings&apos;, function (greeting) {
+            showGreeting(JSON.parse(greeting.body).content);
+        });
+    });
+}
+
+function disconnect() {
+    if (stompClient !== null) {
+        stompClient.disconnect();
+    }
+    setConnected(false);
+    console.log(&quot;Disconnected&quot;);
+}
+
+function sendName() {
+    stompClient.send(&quot;/app/hello&quot;, {}, JSON.stringify({&apos;name&apos;: $(&quot;#name&quot;).val()}));
+}
+
+function showGreeting(message) {
+    $(&quot;#greetings&quot;).append(&quot;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&quot; + message + &quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&quot;);
+}
+
+$(function () {
+    $(&quot;form&quot;).on(&apos;submit&apos;, function (e) {
+        e.preventDefault();
+    });
+    $( &quot;#connect&quot; ).click(function() { connect(); });
+    $( &quot;#disconnect&quot; ).click(function() { disconnect(); });
+    $( &quot;#send&quot; ).click(function() { sendName(); });
+});
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h2&gt;Build an executable jar&lt;/h2&gt; 
+&lt;pre&gt;&lt;code&gt;./gradlew build
+
+&amp;gt; Task :test
+2018-11-03 12:42:12.969  INFO 15320 --- [       Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2018-11-03 12:42:12.969  INFO 15320 --- [       Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]]
+2018-11-03 12:42:12.969  INFO 15320 --- [       Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2018-11-03 12:42:12.970  INFO 15320 --- [       Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService &apos;brokerChannelExecutor&apos;
+2018-11-03 12:42:12.971  INFO 15320 --- [       Thread-5] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService &apos;messageBrokerTaskScheduler&apos;
+2018-11-03 12:42:12.971  INFO 15320 --- [       Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService &apos;clientOutboundChannelExecutor&apos;
+2018-11-03 12:42:12.971  INFO 15320 --- [       Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService &apos;clientInboundChannelExecutor&apos;
+
+BUILD SUCCESSFUL in 3s
+5 actionable tasks: 5 executed
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;p&gt;Then run it&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;$ java -jar build/libs/websocket-0.0.1-SNAPSHOT.jar
+
+.....
+2018-11-03 12:43:59.868  INFO 15575 --- [           main] c.p.websocket.WebSocketApplication       : Started WebSocketApplication in 2.049 seconds (JVM running for 2.506)
+
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h2&gt;Test the chat service&lt;/h2&gt; 
+&lt;p&gt;Open multiple browser tabs pointing it to &lt;a href=&quot;http://localhost:8080&quot;&gt;http://localhost:8080&lt;/a&gt; then click Connect button. Enter name and click Send. Since all the chat pages are subscribed to the same &lt;code&gt;/topic/greetings&lt;/code&gt;, they should receive the same message.&lt;/p&gt; 
+&lt;p&gt;When I clicked F12 on my browser, I noticed 404 due to missing CSS.&lt;/p&gt; 
+&lt;p&gt;Add this to &lt;code&gt;src/main/resources/static/main.css&lt;/code&gt;&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;body {
+    background-color: #f5f5f5;
+}
+
+#main-content {
+    max-width: 940px;
+    padding: 2em 3em;
+    margin: 0 auto 20px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;p&gt;Then I reran the project using &lt;code&gt;gradle bootRun&lt;/code&gt;&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Enabling TLSv1.2 on CentOS 5</title>
+        <link>https://drmanalo.github.io/blog/2018/enable-tlsv12.html</link>
+        <pubDate>Mon, 18 Jun 2018 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2018/enable-tlsv12.html</guid>
+        <description>
+  	         &lt;p&gt;We have a legacy IVR (Interactive Voice Response) software running an &lt;a href=&quot;https://asterisk.org&quot;&gt;Asterisk PBX Server&lt;/a&gt;. It executes AGI (Asterisk Gateway Interface) compliant protocol to launch external programs written in Python to control telephony channel, play audio, read DTMF (Dual Tone Multi Frequency) digits, etc. We ran into an issue when the payment gateway stopped supporting lower versions of TLS (Transport Layer Security). It requires TLSv1.2 as minimum version.&lt;/p&gt; 
+&lt;h3&gt;Issue&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;$ curl -Ivvv https://secure.payment.com
+* About to connect() to secure.payment.com port 443
+*   Trying 185.n.n.n... connected
+* Connected to secure.payment.com (185.n.n.n) port 443
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* SSLv2, Client hello (1):
+Unknown SSL protocol error in connection to secure.payment.com:443 
+* Closing connection #0
+curl: (35) Unknown SSL protocol error in connection to secure.payment.com:443
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;!-- more --&gt; 
+&lt;h3&gt;Workaround&lt;/h3&gt; 
+&lt;p&gt;You need to build OpenSSL and cURL using your current CentOS.&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;$ wget https://www.openssl.org/source/openssl-1.0.2a.tar.gz --no-check-certificate
+
+Resolving www.openssl.org... 23.214.162.69, 2a02:26f0:f6:199::c1e, 2a02:26f0:f6:1be::c1e
+Connecting to www.openssl.org|23.214.162.69|:443... connected.
+WARNING: cannot verify www.openssl.org&apos;s certificate, issued by `/C=US/O=Let&apos;s Encrypt/CN=Let&apos;s Encrypt Authority X3&apos;:
+  Unable to locally verify the issuer&apos;s authority.
+HTTP request sent, awaiting response... 200 OK
+Length: 5262089 (5.0M) [application/x-gzip]
+Saving to: `openssl-1.0.2a.tar.gz&apos;
+
+100%[============================================================&amp;gt;] 5,262,089   3.14M/s   in 1.6s    
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;pre&gt;&lt;code&gt;$ wget http://curl.haxx.se/download/curl-7.42.1.tar.gz
+
+Resolving curl.haxx.se (curl.haxx.se)... 151.101.2.49, 151.101.66.49, 151.101.130.49, ...
+Connecting to curl.haxx.se (curl.haxx.se)|151.101.2.49|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://curl.haxx.se/download/curl-7.42.1.tar.gz [following]
+
+Connecting to curl.haxx.se (curl.haxx.se)|151.101.2.49|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 4291533 (4.1M) [application/x-gzip]
+Saving to: ‘curl-7.42.1.tar.gz’
+
+100%[===========================================================&amp;gt;]   4.09M  4.33MB/s    in 0.9s
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Build OpenSSL&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;$ ./config -fpic shared
+Operating system: x86_64-whatever-linux2
+Configuring for linux-x86_64
+Configuring for linux-x86_64
+    no-ec_nistp_64_gcc_128 [default]  OPENSSL_NO_EC_NISTP_64_GCC_128 (skip dir)
+    no-gmp          [default]  OPENSSL_NO_GMP (skip dir)
+    no-jpake        [experimental] OPENSSL_NO_JPAKE (skip dir)
+    no-krb5         [krb5-flavor not specified] OPENSSL_NO_KRB5
+    no-libunbound   [experimental] OPENSSL_NO_LIBUNBOUND (skip dir)
+    no-md2          [default]  OPENSSL_NO_MD2 (skip dir)
+    no-rc5          [default]  OPENSSL_NO_RC5 (skip dir)
+    no-rfc3779      [default]  OPENSSL_NO_RFC3779 (skip dir)
+    no-sctp         [default]  OPENSSL_NO_SCTP (skip dir)
+    no-ssl-trace    [default]  OPENSSL_NO_SSL_TRACE (skip dir)
+    no-store        [experimental] OPENSSL_NO_STORE (skip dir)
+    no-unit-test    [default]  OPENSSL_NO_UNIT_TEST (skip dir)
+    no-zlib         [default] 
+    no-zlib-dynamic [default] 
+...
+Configured for linux-x86_64.
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo make &amp;amp;&amp;amp; make build
+...
+cp libcrypto.pc /usr/local/ssl/lib/pkgconfig
+chmod 644 /usr/local/ssl/lib/pkgconfig/libcrypto.pc
+cp libssl.pc /usr/local/ssl/lib/pkgconfig
+chmod 644 /usr/local/ssl/lib/pkgconfig/libssl.pc
+cp openssl.pc /usr/local/ssl/lib/pkgconfig
+chmod 644 /usr/local/ssl/lib/pkgconfig/openssl.pc
+
+$ sudo /sbin/ldconfig
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Build cURL&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo ./configure --with-ssl=/usr/local/ssl
+...
+configure: Configured to build curl/libcurl:
+
+  curl version:     7.42.1
+  Host setup:       x86_64-unknown-linux-gnu
+  Install prefix:   /usr/local
+  Compiler:         gcc
+  SSL support:      enabled (OpenSSL)
+  SSH support:      no      (--with-libssh2)
+  zlib support:     enabled
+  GSS-API support:  no      (--with-gssapi)
+  TLS-SRP support:  enabled
+  resolver:         default (--enable-ares / --enable-threaded-resolver)
+  IPv6 support:     no      (--enable-ipv6)
+  Unix sockets support: enabled
+  IDN support:      no      (--with-{libidn,winidn})
+  Build libcurl:    Shared=yes, Static=yes
+  Built-in manual:  enabled
+  --libcurl option: enabled (--disable-libcurl-option)
+  Verbose errors:   enabled (--disable-verbose)
+  SSPI support:     no      (--enable-sspi)
+  ca cert bundle:   /etc/pki/tls/certs/ca-bundle.crt
+  ca cert path:     no
+  LDAP support:     no      (--enable-ldap / --with-ldap-lib / --with-lber-lib)
+  LDAPS support:    no      (--enable-ldaps)
+  RTSP support:     enabled
+  RTMP support:     no      (--with-librtmp)
+  metalink support: no      (--with-libmetalink)
+  HTTP2 support:    disabled (--with-nghttp2)
+  Protocols:        DICT FILE FTP FTPS GOPHER HTTP HTTPS IMAP IMAPS POP3 POP3S RTSP SMB SMBS SMTP SMTPS TELNET TFTP
+
+$ sudo make &amp;amp;&amp;amp; make install
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Test the workaround&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;curl -Ivvv https://secure.payment.com
+*   Trying 185.n.n.n...
+* Connected to secure.payment.com (185.n.n.n) port 443 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.2, TLS Unknown, Unknown (22):
+* TLSv1.2, TLS handshake, Client hello (1):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Server hello (2):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, CERT (11):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Server key exchange (12):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Server finished (14):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Client key exchange (16):
+* SSLv2, Unknown (20):
+* TLSv1.2, TLS change cipher, Client hello (1):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Finished (20):
+* SSLv2, Unknown (20):
+* TLSv1.2, TLS change cipher, Client hello (1):
+* SSLv2, Unknown (22):
+* TLSv1.2, TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server accepted to use http/1.1
+* Server certificate:
+*    subject: jurisdictionC=GB; businessCategory=Private Organization; serialNumber=03539217; C=GB; ST=London; L=London; O=Pay360 Limited; CN=secure.payment.com
+*    start date: 2017-03-16 00:00:00 GMT
+*    expire date: 2019-03-16 23:59:59 GMT
+*    subjectAltName: secure.payment.com matched
+*    issuer: C=US; O=Symantec Corporation; OU=Symantec Trust Network; CN=Symantec Class 3 EV SSL CA - G3
+*    SSL certificate verify ok.
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;p&gt;Next challenge is updating Python. Having &lt;code&gt;curl&lt;/code&gt; working can be a good fallback if Python 2.7.9 upgrade fails.&lt;/p&gt; 
+&lt;p&gt;&lt;strong&gt;Credit&lt;/strong&gt; goes &lt;a href=&quot;https://miteshshah.github.io/linux/centos/how-to-enable-openssl-1-0-2-a-tlsv1-1-and-tlsv1-2-on-centos-5-and-rhel5/&quot;&gt;to this blog&lt;/a&gt;&lt;/p&gt;
+  	    </description>
+      </item>
       <item>
         <title>Migrating to MySQL Enterprise</title>
         <link>https://drmanalo.github.io/blog/2018/update-to-mysql-enterprise.html</link>
@@ -55,6 +497,77 @@ Checking if update is needed.
 &lt;p&gt;I don&apos;t know what &lt;code&gt;mysql_upgrade&lt;/code&gt; is doing behind the scene but it&apos;s definitely fixing what seemed to have lost on user root.&lt;/p&gt; 
 &lt;h3&gt;TODO&lt;/h3&gt; 
 &lt;p&gt;I will update this post if I will encounter any migration-related issue.&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>MySQL Enterprise Install</title>
+        <link>https://drmanalo.github.io/blog/2018/mysql-enterprise.html</link>
+        <pubDate>Sat, 14 Apr 2018 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2018/mysql-enterprise.html</guid>
+        <description>
+  	         &lt;p&gt;We are moving from community to commercial. Sounds posh but if it doesn&apos;t, I always like the sound of going to fully supported not partially supported. Honestly, I don&apos;t know the extra benefits but here I am trying to install it on my local machine. If you want to try it, you can download the packages from &lt;a href=&quot;https://edelivery.oracle.com/osdc/faces/SoftwareDelivery&quot;&gt;Oracle Software Delivery Cloud&lt;/a&gt;. Please read the print since until now, I&apos;m not sure how MySQL Enterprise is going to expire.&lt;/p&gt; 
+&lt;!-- more --&gt; 
+&lt;h3&gt;Install dependencies&lt;/h3&gt; 
+&lt;p&gt;Once you have the packages, you just need to extract them. Then install &lt;code&gt;libaio&lt;/code&gt;.&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo apt install libaio1
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+You might want to run &apos;apt-get -f install&apos; to correct these:
+The following packages have unmet dependencies:
+...
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Mitigate unmet dependencies&lt;/h3&gt; 
+&lt;p&gt;This might not happen on your machine but a quick &lt;code&gt;apt-get -f install&lt;/code&gt; should fix it.&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get -f install
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+Correcting dependencies... Done
+The following additional packages will be installed:
+  libaio1 libmecab2
+The following packages will be REMOVED:
+...
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Preconfiguration&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo dpkg-preconfigure mysql-commercial-server_*.deb
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Installation&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo dpkg -i mysql-{common,commercial-client,client,commercial-server,server}_*.deb
+(Reading database ... 301743 files and directories currently installed.)
+Preparing to unpack mysql-common_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
+Unpacking mysql-common (8.0.11+commercial-1ubuntu16.04) over (8.0.11+commercial-1ubuntu16.04) ...
+Preparing to unpack mysql-commercial-client_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
+Unpacking mysql-commercial-client (8.0.11+commercial-1ubuntu16.04) over (8.0.11+commercial-1ubuntu16.04) ...
+Selecting previously unselected package mysql-client.
+Preparing to unpack mysql-client_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
+Unpacking mysql-client (8.0.11+commercial-1ubuntu16.04) ...
+Selecting previously unselected package mysql-commercial-server.
+Preparing to unpack mysql-commercial-server_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
+Unpacking mysql-commercial-server (8.0.11+commercial-1ubuntu16.04) ...
+Selecting previously unselected package mysql-server.
+Preparing to unpack mysql-server_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
+Unpacking mysql-server (8.0.11+commercial-1ubuntu16.04) ...
+Setting up mysql-common (8.0.11+commercial-1ubuntu16.04) ...
+Setting up mysql-commercial-client (8.0.11+commercial-1ubuntu16.04) ...
+Setting up mysql-client (8.0.11+commercial-1ubuntu16.04) ...
+Setting up mysql-commercial-server (8.0.11+commercial-1ubuntu16.04) ...
+Installing new version of config file /etc/apparmor.d/usr.sbin.mysqld ...
+Installing new version of config file /etc/init.d/mysql ...
+Installing new version of config file /etc/mysql/mysql.cnf ...
+Installing new version of config file /etc/mysql/mysql.conf.d/mysqld.cnf ...
+update-alternatives: using /etc/mysql/mysql.cnf to provide /etc/mysql/my.cnf (my.cnf) in auto mode
+Setting up mysql-server (8.0.11+commercial-1ubuntu16.04) ...
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Test your installation&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;$ mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.11-commercial MySQL Enterprise Server - Commercial
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+&lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>
       <item>

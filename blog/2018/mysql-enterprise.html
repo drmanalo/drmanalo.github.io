@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>MySQL Enterprise Install</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>MySQL Enterprise Install</h1>
+			<p><em>14 April 2018</em></p>
+			<p><p>We are moving from community to commercial. Sounds posh but if it doesn't, I always like the sound of going to fully supported not partially supported. Honestly, I don't know the extra benefits but here I am trying to install it on my local machine. If you want to try it, you can download the packages from <a href="https://edelivery.oracle.com/osdc/faces/SoftwareDelivery">Oracle Software Delivery Cloud</a>. Please read the print since until now, I'm not sure how MySQL Enterprise is going to expire.</p> 
+<!-- more --> 
+<h3>Install dependencies</h3> 
+<p>Once you have the packages, you just need to extract them. Then install <code>libaio</code>.</p> 
+<pre><code>$ sudo apt install libaio1
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+You might want to run 'apt-get -f install' to correct these:
+The following packages have unmet dependencies:
+...
+</code></pre> 
+<h3>Mitigate unmet dependencies</h3> 
+<p>This might not happen on your machine but a quick <code>apt-get -f install</code> should fix it.</p> 
+<pre><code>$ sudo apt-get -f install
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+Correcting dependencies... Done
+The following additional packages will be installed:
+  libaio1 libmecab2
+The following packages will be REMOVED:
+...
+</code></pre> 
+<h3>Preconfiguration</h3> 
+<pre><code>$ sudo dpkg-preconfigure mysql-commercial-server_*.deb
+</code></pre> 
+<h3>Installation</h3> 
+<pre><code>$ sudo dpkg -i mysql-{common,commercial-client,client,commercial-server,server}_*.deb
+(Reading database ... 301743 files and directories currently installed.)
+Preparing to unpack mysql-common_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
+Unpacking mysql-common (8.0.11+commercial-1ubuntu16.04) over (8.0.11+commercial-1ubuntu16.04) ...
+Preparing to unpack mysql-commercial-client_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
+Unpacking mysql-commercial-client (8.0.11+commercial-1ubuntu16.04) over (8.0.11+commercial-1ubuntu16.04) ...
+Selecting previously unselected package mysql-client.
+Preparing to unpack mysql-client_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
+Unpacking mysql-client (8.0.11+commercial-1ubuntu16.04) ...
+Selecting previously unselected package mysql-commercial-server.
+Preparing to unpack mysql-commercial-server_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
+Unpacking mysql-commercial-server (8.0.11+commercial-1ubuntu16.04) ...
+Selecting previously unselected package mysql-server.
+Preparing to unpack mysql-server_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
+Unpacking mysql-server (8.0.11+commercial-1ubuntu16.04) ...
+Setting up mysql-common (8.0.11+commercial-1ubuntu16.04) ...
+Setting up mysql-commercial-client (8.0.11+commercial-1ubuntu16.04) ...
+Setting up mysql-client (8.0.11+commercial-1ubuntu16.04) ...
+Setting up mysql-commercial-server (8.0.11+commercial-1ubuntu16.04) ...
+Installing new version of config file /etc/apparmor.d/usr.sbin.mysqld ...
+Installing new version of config file /etc/init.d/mysql ...
+Installing new version of config file /etc/mysql/mysql.cnf ...
+Installing new version of config file /etc/mysql/mysql.conf.d/mysqld.cnf ...
+update-alternatives: using /etc/mysql/mysql.cnf to provide /etc/mysql/my.cnf (my.cnf) in auto mode
+Setting up mysql-server (8.0.11+commercial-1ubuntu16.04) ...
+</code></pre> 
+<h3>Test your installation</h3> 
+<pre><code>$ mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.11-commercial MySQL Enterprise Server - Commercial
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2018/mysql-enterprise.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2018/mysql-enterprise.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

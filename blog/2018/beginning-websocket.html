@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Start Learning WebSocket</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Start Learning WebSocket</h1>
+			<p><em>03 November 2018</em></p>
+			<p><p>This is from <a href="http://spring.io/guides/gs/messaging-stomp-websocket">Spring Guides</a> and it's their "hello websocket" application. This sends messages back and forth between a browser and the server using WebSocket.</p> 
+<h2>From scratch</h2> 
+<pre><code>$ spring init --dependencies=websocket --build=gradle --groupId=com.prototype websocket
+Using service at https://start.spring.io
+Project extracted to '~/idea/websocket'
+</code></pre> 
+<p>Then I download all dependencies using <code>gradle build</code></p> 
+<pre><code>$ cd ~/idea/websocket
+$ ./gradlew clean build
+Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-websocket/2.1.0.RELEASE/spring-boot-starter-websocket-2.1.0.RELEASE.pom
+Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starters/2.1.0.RELEASE/spring-boot-starters-2.1.0.RELEASE.pom
+Download https://repo.maven.apache.org/maven2/org/springframework/spring-websocket/5.1.2.RELEASE/spring-websocket-5.1.2.RELEASE.pom
+Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-web/2.1.0.RELEASE/spring-boot-starter-web-2.1.0.RELEASE.pom
+
+.....
+
+&gt; Task :test
+2018-11-03 11:56:46.459  INFO 12650 --- [       Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+
+BUILD SUCCESSFUL in 26s
+6 actionable tasks: 5 executed, 1 up-to-date
+</code></pre> 
+<!-- more --> 
+<h2>Create a resource representation class</h2> 
+<pre><code>package com.prototype.websocket.resource;
+
+public class HelloMessage {
+
+    private String name;
+
+    public HelloMessage() {
+    }
+
+    public HelloMessage(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+</code></pre> 
+<pre><code>package com.prototype.websocket.resource;
+
+public class Greeting {
+
+    private String content;
+
+    public Greeting() {
+    }
+
+    public Greeting(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+}
+</code></pre> 
+<h2>Create a message-handling controller</h2> 
+<pre><code>package com.prototype.websocket.controller;
+
+import com.prototype.websocket.resource.Greeting;
+import com.prototype.websocket.resource.HelloMessage;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.util.HtmlUtils;
+
+@Controller
+public class GreetingController {
+
+    @MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    public Greeting greeting(HelloMessage message) throws InterruptedException {
+        Thread.sleep(1000);
+        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+    }
+}
+</code></pre> 
+<h2>Configure Spring for STOMP messaging</h2> 
+<pre><code>package com.prototype.websocket;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/gs-guide-websocket").withSockJS();
+    }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/topic");
+        registry.setApplicationDestinationPrefixes("/app");
+    }
+}
+</code></pre> 
+<h2>Create a browser client</h2> 
+<p>At this point I need dependencies from <code>webjars</code> so I changed my <code>build.gradle</code> into this.</p> 
+<pre><code>dependencies {
+	compile("org.webjars:webjars-locator-core")
+	compile("org.webjars:sockjs-client:1.0.2")
+	compile("org.webjars:stomp-websocket:2.3.3")
+	compile("org.webjars:bootstrap:3.3.7")
+	compile("org.webjars:jquery:3.1.0")
+	implementation('org.springframework.boot:spring-boot-starter-websocket')
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
+</code></pre> 
+<p>I created this on <code>src/main/resources/static/index.html</code></p> 
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Hello WebSocket&lt;/title&gt;
+    &lt;link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet"&gt;
+    &lt;link href="/main.css" rel="stylesheet"&gt;
+    &lt;script src="/webjars/jquery/jquery.min.js"&gt;&lt;/script&gt;
+    &lt;script src="/webjars/sockjs-client/sockjs.min.js"&gt;&lt;/script&gt;
+    &lt;script src="/webjars/stomp-websocket/stomp.min.js"&gt;&lt;/script&gt;
+    &lt;script src="/app.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;noscript&gt;&lt;h2 style="color: #ff0000"&gt;Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable Javascript and reload this page!&lt;/h2&gt;&lt;/noscript&gt;
+&lt;div id="main-content" class="container"&gt;
+    &lt;div class="row"&gt;
+        &lt;div class="col-md-6"&gt;
+            &lt;form class="form-inline"&gt;
+                &lt;div class="form-group"&gt;
+                    &lt;label for="connect"&gt;WebSocket connection:&lt;/label&gt;
+                    &lt;button id="connect" class="btn btn-default" type="submit"&gt;Connect&lt;/button&gt;
+                    &lt;button id="disconnect" class="btn btn-default" type="submit" disabled="disabled"&gt;Disconnect
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+        &lt;div class="col-md-6"&gt;
+            &lt;form class="form-inline"&gt;
+                &lt;div class="form-group"&gt;
+                    &lt;label for="name"&gt;What is your name?&lt;/label&gt;
+                    &lt;input type="text" id="name" class="form-control" placeholder="Your name here..."&gt;
+                &lt;/div&gt;
+                &lt;button id="send" class="btn btn-default" type="submit"&gt;Send&lt;/button&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="row"&gt;
+        &lt;div class="col-md-12"&gt;
+            &lt;table id="conversation" class="table table-striped"&gt;
+                &lt;thead&gt;
+                &lt;tr&gt;
+                    &lt;th&gt;Greetings&lt;/th&gt;
+                &lt;/tr&gt;
+                &lt;/thead&gt;
+                &lt;tbody id="greetings"&gt;
+                &lt;/tbody&gt;
+            &lt;/table&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre> 
+<p>On <code>src/main/resources/static/app.js</code></p> 
+<pre><code>var stompClient = null;
+
+function setConnected(connected) {
+    $("#connect").prop("disabled", connected);
+    $("#disconnect").prop("disabled", !connected);
+    if (connected) {
+        $("#conversation").show();
+    }
+    else {
+        $("#conversation").hide();
+    }
+    $("#greetings").html("");
+}
+
+function connect() {
+    var socket = new SockJS('/gs-guide-websocket');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        setConnected(true);
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/greetings', function (greeting) {
+            showGreeting(JSON.parse(greeting.body).content);
+        });
+    });
+}
+
+function disconnect() {
+    if (stompClient !== null) {
+        stompClient.disconnect();
+    }
+    setConnected(false);
+    console.log("Disconnected");
+}
+
+function sendName() {
+    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+}
+
+function showGreeting(message) {
+    $("#greetings").append("&lt;tr&gt;&lt;td&gt;" + message + "&lt;/td&gt;&lt;/tr&gt;");
+}
+
+$(function () {
+    $("form").on('submit', function (e) {
+        e.preventDefault();
+    });
+    $( "#connect" ).click(function() { connect(); });
+    $( "#disconnect" ).click(function() { disconnect(); });
+    $( "#send" ).click(function() { sendName(); });
+});
+</code></pre> 
+<h2>Build an executable jar</h2> 
+<pre><code>./gradlew build
+
+&gt; Task :test
+2018-11-03 12:42:12.969  INFO 15320 --- [       Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2018-11-03 12:42:12.969  INFO 15320 --- [       Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]]
+2018-11-03 12:42:12.969  INFO 15320 --- [       Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2018-11-03 12:42:12.970  INFO 15320 --- [       Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'brokerChannelExecutor'
+2018-11-03 12:42:12.971  INFO 15320 --- [       Thread-5] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'messageBrokerTaskScheduler'
+2018-11-03 12:42:12.971  INFO 15320 --- [       Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'clientOutboundChannelExecutor'
+2018-11-03 12:42:12.971  INFO 15320 --- [       Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'clientInboundChannelExecutor'
+
+BUILD SUCCESSFUL in 3s
+5 actionable tasks: 5 executed
+</code></pre> 
+<p>Then run it</p> 
+<pre><code>$ java -jar build/libs/websocket-0.0.1-SNAPSHOT.jar
+
+.....
+2018-11-03 12:43:59.868  INFO 15575 --- [           main] c.p.websocket.WebSocketApplication       : Started WebSocketApplication in 2.049 seconds (JVM running for 2.506)
+
+</code></pre> 
+<h2>Test the chat service</h2> 
+<p>Open multiple browser tabs pointing it to <a href="http://localhost:8080">http://localhost:8080</a> then click Connect button. Enter name and click Send. Since all the chat pages are subscribed to the same <code>/topic/greetings</code>, they should receive the same message.</p> 
+<p>When I clicked F12 on my browser, I noticed 404 due to missing CSS.</p> 
+<p>Add this to <code>src/main/resources/static/main.css</code></p> 
+<pre><code>body {
+    background-color: #f5f5f5;
+}
+
+#main-content {
+    max-width: 940px;
+    padding: 2em 3em;
+    margin: 0 auto 20px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+</code></pre> 
+<p>Then I reran the project using <code>gradle bootRun</code></p></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2018/beginning-websocket.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2018/beginning-websocket.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

@@ -56,6 +56,56 @@
  	<div class="content container">
     	<ul id="posts">
 					<li>
+								<a href="blog/2018/beginning-websocket.html"><h1 class="post-title">Start Learning WebSocket</h1></a>
+								<span class="post-date">03 November 2018</span>
+								<p>This is from <a href="http://spring.io/guides/gs/messaging-stomp-websocket">Spring Guides</a> and it's their "hello websocket" application. This sends messages back and forth between a browser and the server using WebSocket.</p> 
+<h2>From scratch</h2> 
+<pre><code>$ spring init --dependencies=websocket --build=gradle --groupId=com.prototype websocket
+Using service at https://start.spring.io
+Project extracted to '~/idea/websocket'
+</code></pre> 
+<p>Then I download all dependencies using <code>gradle build</code></p> 
+<pre><code>$ cd ~/idea/websocket
+$ ./gradlew clean build
+Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-websocket/2.1.0.RELEASE/spring-boot-starter-websocket-2.1.0.RELEASE.pom
+Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starters/2.1.0.RELEASE/spring-boot-starters-2.1.0.RELEASE.pom
+Download https://repo.maven.apache.org/maven2/org/springframework/spring-websocket/5.1.2.RELEASE/spring-websocket-5.1.2.RELEASE.pom
+Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-web/2.1.0.RELEASE/spring-boot-starter-web-2.1.0.RELEASE.pom
+
+.....
+
+&gt; Task :test
+2018-11-03 11:56:46.459  INFO 12650 --- [       Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+
+BUILD SUCCESSFUL in 26s
+6 actionable tasks: 5 executed, 1 up-to-date
+</code></pre> 
+
+								<a class="btn btn-default" href="blog/2018/beginning-websocket.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2018/enable-tlsv12.html"><h1 class="post-title">Enabling TLSv1.2 on CentOS 5</h1></a>
+								<span class="post-date">18 June 2018</span>
+								<p>We have a legacy IVR (Interactive Voice Response) software running an <a href="https://asterisk.org">Asterisk PBX Server</a>. It executes AGI (Asterisk Gateway Interface) compliant protocol to launch external programs written in Python to control telephony channel, play audio, read DTMF (Dual Tone Multi Frequency) digits, etc. We ran into an issue when the payment gateway stopped supporting lower versions of TLS (Transport Layer Security). It requires TLSv1.2 as minimum version.</p> 
+<h3>Issue</h3> 
+<pre><code>$ curl -Ivvv https://secure.payment.com
+* About to connect() to secure.payment.com port 443
+*   Trying 185.n.n.n... connected
+* Connected to secure.payment.com (185.n.n.n) port 443
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* SSLv2, Client hello (1):
+Unknown SSL protocol error in connection to secure.payment.com:443 
+* Closing connection #0
+curl: (35) Unknown SSL protocol error in connection to secure.payment.com:443
+</code></pre> 
+
+								<a class="btn btn-default" href="blog/2018/enable-tlsv12.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
 								<a href="blog/2018/update-to-mysql-enterprise.html"><h1 class="post-title">Migrating to MySQL Enterprise</h1></a>
 								<span class="post-date">08 May 2018</span>
 								<p>We are migrating to MySQL Enterprise from community version. Currently I'm upgrading from 5.7.22 to 8.0.11. It's my bad not reading the <a href="https://dev.mysql.com/doc/refman/8.0/en/upgrading-strategies.html">upgrade strategy</a> from Oracle themselves so I ended up with some issues.</p> 
@@ -68,6 +118,14 @@
 </ul> 
 
 								<a class="btn btn-default" href="blog/2018/update-to-mysql-enterprise.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2018/mysql-enterprise.html"><h1 class="post-title">MySQL Enterprise Install</h1></a>
+								<span class="post-date">14 April 2018</span>
+								<p>We are moving from community to commercial. Sounds posh but if it doesn't, I always like the sound of going to fully supported not partially supported. Honestly, I don't know the extra benefits but here I am trying to install it on my local machine. If you want to try it, you can download the packages from <a href="https://edelivery.oracle.com/osdc/faces/SoftwareDelivery">Oracle Software Delivery Cloud</a>. Please read the print since until now, I'm not sure how MySQL Enterprise is going to expire.</p> 
+
+								<a class="btn btn-default" href="blog/2018/mysql-enterprise.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>
