@@ -6,9 +6,40 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Thu, 1 Nov 2018 14:46:10 +0000</pubDate>
-    <lastBuildDate>Thu, 1 Nov 2018 14:46:10 +0000</lastBuildDate>
+    <pubDate>Thu, 31 Jan 2019 15:50:31 +0000</pubDate>
+    <lastBuildDate>Thu, 31 Jan 2019 15:50:31 +0000</lastBuildDate>
 
+      <item>
+        <title>Enable L2TP over IPSec on Ubuntu</title>
+        <link>https://drmanalo.github.io/blog/2018/enable-l2tp-over-ipsec.html</link>
+        <pubDate>Fri, 30 Nov 2018 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2018/enable-l2tp-over-ipsec.html</guid>
+        <description>
+  	         &lt;p&gt;If you&apos;re running the latest Ubuntu 18.04, then you don&apos;t need to add the PPA repository. If on lower version of Ubuntu, please add this PPA.&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo add-apt-repository ppa:nm-l2tp/network-manager-l2tp  
+$ sudo apt-get update
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Install network manager l2tp&lt;/h3&gt; 
+&lt;p&gt;&lt;code&gt;network-manager-l2tp-gnome&lt;/code&gt; is required if running gnome&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install network-manager-l2tp
+$ sudo apt-get install network-manager-l2tp-gnome
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;!-- more --&gt; 
+&lt;h3&gt;Add your dialer&lt;/h3&gt; 
+&lt;ol&gt; 
+ &lt;li&gt;Navigate to Settings &amp;gt; Network &amp;gt; VPN.&lt;/li&gt; 
+ &lt;li&gt;Click the + button and Select Layer 2 Tunneling Protocol (L2TP) then click Create.&lt;/li&gt; 
+ &lt;li&gt;Fill up Name, Gateway and Username fields.&lt;/li&gt; 
+ &lt;li&gt;On the Password field, select your preference on how to supply the password.&lt;/li&gt; 
+ &lt;li&gt;Configure IPSec settings as described. &lt;img src=&quot;https://drmanalo.github.io/images/ipsec_settings.png&quot; alt=&quot;IPSec Settings&quot;&gt;&lt;/li&gt; 
+&lt;/ol&gt; 
+&lt;h3&gt;Disable xl2tpd&lt;/h3&gt; 
+&lt;p&gt;I have to disable &lt;code&gt;xl2tpd&lt;/code&gt; on my machine.&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;sudo service xl2tpd stop
+sudo systemctl disable xl2tpd
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
       <item>
         <title>Start Learning WebSocket</title>
         <link>https://drmanalo.github.io/blog/2018/beginning-websocket.html</link>
