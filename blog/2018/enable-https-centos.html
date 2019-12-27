@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Enabling HTTPS on Apache</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Enabling HTTPS on Apache</h1>
+			<p><em>03 November 2018</em></p>
+			<p><p>This assumes that Apache httpd is already running on the target Linux machine.</p> 
+<p>Install <code>mod_sll</code> and <code>openssl</code>. mod_ssl provides cryptography for Apache web server using SSL and TLS protocols while openssl is a toolkit that includes certificate management tool and share libraries which gives us various cryptogrpahic algorithms.</p> 
+<!-- more --> 
+<h3>Install dependencies</h3> 
+<pre><code>$ sudo yum install mod_ssl openssl
+
+=================================================================================================================================================
+ Package                            Arch                         Version                                        Repository                  Size
+=================================================================================================================================================
+Installing:
+ mod_ssl                            x86_64                       1:2.4.6-88.el7.centos                          base                       112 k
+Updating:
+ openssl                            x86_64                       1:1.0.2k-16.el7                                base                       493 k
+Updating for dependencies:
+ httpd                              x86_64                       2.4.6-88.el7.centos                            base                       2.7 M
+ httpd-tools                        x86_64                       2.4.6-88.el7.centos                            base                        90 k
+ openssl-libs                       x86_64                       1:1.0.2k-16.el7                                base                       1.2 M
+
+Transaction Summary
+=================================================================================================================================================
+Install  1 Package
+Upgrade  1 Package (+3 Dependent packages)
+</code></pre> 
+<h3>Generate your private key</h3> 
+<p><code>$ sudo openssl genrsa -out ca.key 2048</code></p> 
+<h3>Generate Certificate Signing Request (CSR)</h3> 
+<p><code>$ sudo openssl req -new -key ca.key -out ca.csr</code></p> 
+<h3>Generate your self-signed certificate</h3> 
+<p><code>$ sudo openssl x509 -req -days 365 -in ca.csr -signkey ca.key -out ca.crt</code></p> 
+<h3>Copy the generated files</h3> 
+<pre><code>sudo cp ca.crt /etc/pki/tls/certs
+sudo cp ca.key /etc/pki/tls/private/ca.key
+sudo cp ca.csr /etc/pki/tls/private/ca.csr
+</code></pre> 
+<h3>Edit ssl.conf</h3> 
+<p>Open <code>/etc/httpd/conf.d/ssl.conf</code> file and change the following lines to:</p> 
+<pre><code>SSLCertificateFile /etc/pki/tls/certs/ca.crt
+SSLCertificateKeyFile /etc/pki/tls/private/ca.key
+# Requrired by Java when using a server certificate chain
+SSLCertificateChainFile /etc/pki/tls/certs/gd_bundle-g2-g1.crt
+</code></pre></p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2018/enable-https-centos.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2018/enable-https-centos.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

@@ -56,6 +56,22 @@
  	<div class="content container">
     	<ul id="posts">
 					<li>
+								<a href="blog/2019/letsencrypt-apache-centos.html"><h1 class="post-title">Using LetsEncrypt with CentOS on Apache</h1></a>
+								<span class="post-date">24 February 2019</span>
+								<p>From <a href="https://letsencrypt.org">letsencrypt.org</a>:</p> 
+<blockquote> 
+ <p>To enable HTTPS on your website, you need to get a certificate from a Certificate Authority (CA). Let's Encrypt is a CA. In order to get a certificate for your website's domain from Let's Encrypt, you have to demonstrate control over the domain. With Let's Encrypt, you do this using software that uses the <a href="https://ietf-wg-acme.github.io/acme">ACME protocol</a>, which typically runs on your web host.</p> 
+</blockquote> 
+<p>You will need SSH access to your web host to install a <code>certbot</code> client. <code>certbot</code> will automate certificate issuance and installation with no downtime.</p> 
+<h3>Install certbot</h3> 
+<p>On my machine, it added more Python dependencies.</p> 
+<pre><code>$ sudo yum install certbot python2-certbot-apache
+</code></pre> 
+
+								<a class="btn btn-default" href="blog/2019/letsencrypt-apache-centos.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
 								<a href="blog/2018/enable-l2tp-over-ipsec.html"><h1 class="post-title">Enable L2TP over IPSec on Ubuntu</h1></a>
 								<span class="post-date">30 November 2018</span>
 								<p>If you're running the latest Ubuntu 18.04, then you don't need to add the PPA repository. If on lower version of Ubuntu, please add this PPA.</p> 
@@ -98,6 +114,15 @@ BUILD SUCCESSFUL in 26s
 </code></pre> 
 
 								<a class="btn btn-default" href="blog/2018/beginning-websocket.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2018/enable-https-centos.html"><h1 class="post-title">Enabling HTTPS on Apache</h1></a>
+								<span class="post-date">03 November 2018</span>
+								<p>This assumes that Apache httpd is already running on the target Linux machine.</p> 
+<p>Install <code>mod_sll</code> and <code>openssl</code>. mod_ssl provides cryptography for Apache web server using SSL and TLS protocols while openssl is a toolkit that includes certificate management tool and share libraries which gives us various cryptogrpahic algorithms.</p> 
+
+								<a class="btn btn-default" href="blog/2018/enable-https-centos.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>

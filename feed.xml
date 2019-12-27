@@ -6,9 +6,85 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Thu, 31 Jan 2019 15:50:31 +0000</pubDate>
-    <lastBuildDate>Thu, 31 Jan 2019 15:50:31 +0000</lastBuildDate>
+    <pubDate>Fri, 27 Dec 2019 11:51:04 +0000</pubDate>
+    <lastBuildDate>Fri, 27 Dec 2019 11:51:04 +0000</lastBuildDate>
 
+      <item>
+        <title>Using LetsEncrypt with CentOS on Apache</title>
+        <link>https://drmanalo.github.io/blog/2019/letsencrypt-apache-centos.html</link>
+        <pubDate>Sun, 24 Feb 2019 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2019/letsencrypt-apache-centos.html</guid>
+        <description>
+  	         &lt;p&gt;From &lt;a href=&quot;https://letsencrypt.org&quot;&gt;letsencrypt.org&lt;/a&gt;:&lt;/p&gt; 
+&lt;blockquote&gt; 
+ &lt;p&gt;To enable HTTPS on your website, you need to get a certificate from a Certificate Authority (CA). Let&apos;s Encrypt is a CA. In order to get a certificate for your website&apos;s domain from Let&apos;s Encrypt, you have to demonstrate control over the domain. With Let&apos;s Encrypt, you do this using software that uses the &lt;a href=&quot;https://ietf-wg-acme.github.io/acme&quot;&gt;ACME protocol&lt;/a&gt;, which typically runs on your web host.&lt;/p&gt; 
+&lt;/blockquote&gt; 
+&lt;p&gt;You will need SSH access to your web host to install a &lt;code&gt;certbot&lt;/code&gt; client. &lt;code&gt;certbot&lt;/code&gt; will automate certificate issuance and installation with no downtime.&lt;/p&gt; 
+&lt;h3&gt;Install certbot&lt;/h3&gt; 
+&lt;p&gt;On my machine, it added more Python dependencies.&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo yum install certbot python2-certbot-apache
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;!-- more --&gt; 
+&lt;h3&gt;Run certbot&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo certbot certonly --manual --preferred-challenges=dns -d *.yourdomain.com
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Plugins selected: Authenticator manual, Installer None
+Starting new HTTPS connection (1): acme-v02.api.letsencrypt.org
+Obtaining a new certificate
+Performing the following challenges:
+dns-01 challenge for yourdomain.com
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+NOTE: The IP of this machine will be publicly logged as having requested this
+certificate. If you&apos;re running certbot in manual mode on a machine that is not
+your server, please ensure you&apos;re okay with that.
+
+Are you OK with your IP being logged?
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+(Y)es/(N)o: Y
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Add a TXT record to your DNS&lt;/h3&gt; 
+&lt;p&gt;This is part of the certbot script&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Please deploy a DNS TXT record under the name
+_acme-challenge.yourdomain.com with the following value:
+
+RandomTextFromCommandLine_AUywrQH1pxx88NTKG7OgUod
+
+Before continuing, verify the record is deployed.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Verify the TXT record&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;$ nslookup -type=TXT _acme-challenge.yourdomain.com
+Server:		127.0.1.1
+Address:	127.0.1.1#53
+
+Non-authoritative answer:
+_acme-challenge.yourdomain.com	text = &quot;RandomTextFromCommandLine_AUywrQH1pxx88NTKG7OgUod&quot;
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Hit Enter to continue&lt;/h3&gt; 
+&lt;p&gt;Press Enter if you&apos;re seeing your TXT record. It might take a while for the TXT record to propagate. Please be patient.&lt;/p&gt; 
+&lt;p&gt;Eventually the certificate will be issued and you should see something similar to this.&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;Waiting for verification...
+Cleaning up challenges
+Resetting dropped connection: acme-v02.api.letsencrypt.org
+
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/yourdomain.com/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/yourdomain.com/privkey.pem
+   Your cert will expire on 2019-05-25. To obtain a new or tweaked
+   version of this certificate in the future, simply run certbot
+   again. To non-interactively renew *all* of your certificates, run
+   &quot;certbot renew&quot;
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let&apos;s Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+&lt;/code&gt;&lt;/pre&gt;
+  	    </description>
+      </item>
       <item>
         <title>Enable L2TP over IPSec on Ubuntu</title>
         <link>https://drmanalo.github.io/blog/2018/enable-l2tp-over-ipsec.html</link>
@@ -320,6 +396,55 @@ BUILD SUCCESSFUL in 3s
 }
 &lt;/code&gt;&lt;/pre&gt; 
 &lt;p&gt;Then I reran the project using &lt;code&gt;gradle bootRun&lt;/code&gt;&lt;/p&gt;
+  	    </description>
+      </item>
+      <item>
+        <title>Enabling HTTPS on Apache</title>
+        <link>https://drmanalo.github.io/blog/2018/enable-https-centos.html</link>
+        <pubDate>Sat, 3 Nov 2018 00:00:00 +0000</pubDate>
+        <guid isPermaLink="false">blog/2018/enable-https-centos.html</guid>
+        <description>
+  	         &lt;p&gt;This assumes that Apache httpd is already running on the target Linux machine.&lt;/p&gt; 
+&lt;p&gt;Install &lt;code&gt;mod_sll&lt;/code&gt; and &lt;code&gt;openssl&lt;/code&gt;. mod_ssl provides cryptography for Apache web server using SSL and TLS protocols while openssl is a toolkit that includes certificate management tool and share libraries which gives us various cryptogrpahic algorithms.&lt;/p&gt; 
+&lt;!-- more --&gt; 
+&lt;h3&gt;Install dependencies&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;$ sudo yum install mod_ssl openssl
+
+=================================================================================================================================================
+ Package                            Arch                         Version                                        Repository                  Size
+=================================================================================================================================================
+Installing:
+ mod_ssl                            x86_64                       1:2.4.6-88.el7.centos                          base                       112 k
+Updating:
+ openssl                            x86_64                       1:1.0.2k-16.el7                                base                       493 k
+Updating for dependencies:
+ httpd                              x86_64                       2.4.6-88.el7.centos                            base                       2.7 M
+ httpd-tools                        x86_64                       2.4.6-88.el7.centos                            base                        90 k
+ openssl-libs                       x86_64                       1:1.0.2k-16.el7                                base                       1.2 M
+
+Transaction Summary
+=================================================================================================================================================
+Install  1 Package
+Upgrade  1 Package (+3 Dependent packages)
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Generate your private key&lt;/h3&gt; 
+&lt;p&gt;&lt;code&gt;$ sudo openssl genrsa -out ca.key 2048&lt;/code&gt;&lt;/p&gt; 
+&lt;h3&gt;Generate Certificate Signing Request (CSR)&lt;/h3&gt; 
+&lt;p&gt;&lt;code&gt;$ sudo openssl req -new -key ca.key -out ca.csr&lt;/code&gt;&lt;/p&gt; 
+&lt;h3&gt;Generate your self-signed certificate&lt;/h3&gt; 
+&lt;p&gt;&lt;code&gt;$ sudo openssl x509 -req -days 365 -in ca.csr -signkey ca.key -out ca.crt&lt;/code&gt;&lt;/p&gt; 
+&lt;h3&gt;Copy the generated files&lt;/h3&gt; 
+&lt;pre&gt;&lt;code&gt;sudo cp ca.crt /etc/pki/tls/certs
+sudo cp ca.key /etc/pki/tls/private/ca.key
+sudo cp ca.csr /etc/pki/tls/private/ca.csr
+&lt;/code&gt;&lt;/pre&gt; 
+&lt;h3&gt;Edit ssl.conf&lt;/h3&gt; 
+&lt;p&gt;Open &lt;code&gt;/etc/httpd/conf.d/ssl.conf&lt;/code&gt; file and change the following lines to:&lt;/p&gt; 
+&lt;pre&gt;&lt;code&gt;SSLCertificateFile /etc/pki/tls/certs/ca.crt
+SSLCertificateKeyFile /etc/pki/tls/private/ca.key
+# Requrired by Java when using a server certificate chain
+SSLCertificateChainFile /etc/pki/tls/certs/gd_bundle-g2-g1.crt
+&lt;/code&gt;&lt;/pre&gt;
   	    </description>
       </item>
       <item>
