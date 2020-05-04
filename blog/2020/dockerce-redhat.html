@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Adding Local JAR to Maven</title>
+    <title>Installing Docker CE on Red Hat 8</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Dhonnee Manalo">
@@ -56,39 +56,36 @@
 
 	<div class="content container">
 		<div class="post">
-			<h1>Adding Local JAR to Maven</h1>
-			<p><em>13 September 2014</em></p>
-			<p><p>Oracle JDBC is not available from Maven's online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.</p>
-<p>After downloading the JAR, you have to open your console and issue <code>mvn install:install-file</code>. Please refer below for the complete syntax. <strong>-Dfile requires fullpath.</strong></p>
+			<h1>Installing Docker CE on Red Hat 8</h1>
+			<p><em>26 April 2020</em></p>
+			<p><p>Docker is an open source project which allows us to deploy applications inside containers. A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and realiably from one computing environment to another. A docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system librarries and settings.</p>
+<p>Wtih the release of RHEL 8 and CentOS 8, docker package has been removed from their default repositories. docker has been replaced with <code>podman</code> and <code>buildah</code>. By using external reposity, it's still possible to install Docker CE (Community Edition).</p>
 <!-- more -->
-<h3>mvn install</h3>
-<pre><code>$ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0 -Dpackaging=jar
-[INFO] Scanning for projects...
-[INFO]
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Maven Stub Project (No POM) 1
-[INFO] ------------------------------------------------------------------------
-[INFO]
-[INFO] --- maven-install-plugin:2.4:install-file (default-cli) @ standalone-pom ---
-[INFO] Installing /home/drmanalo/java/ojdbc6.jar to /home/drmanalo/.m2/repository/com/oracle/ojdb6/11.2.0/ojdb6-11.2.0.jar
-[INFO] Installing /tmp/mvninstall6607716975508685322.pom to /home/drmanalo/.m2/repository/com/oracle/ojdb6/11.2.0/ojdb6-11.2.0.pom
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 0.687 s
-[INFO] Finished at: 2014-09-09T15:11:54+01:00
-[INFO] Final Memory: 5M/106M
-[INFO] ------------------------------------------------------------------------
+<h3>Add external repository</h3>
+<pre><code>$ sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+Adding repo from: https://download.docker.com/linux/centos/docker-ce.repo
 </code></pre>
-<h3>pom.xml</h3>
-<p>Within your POM's dependencies, you need to add the dependency after mvn install.</p>
-<pre><code>&lt;dependency&gt;
-	&lt;groupId&gt;com.oracle&lt;/groupId&gt;
-	&lt;artifactId&gt;ojdbc6&lt;/artifactId&gt;
-	&lt;version&gt;11.2.0&lt;/version&gt;
-&lt;dependency&gt;
+<h3>Install using --nobest option</h3>
+<p>Without using --nobest, the first best canditate at the time of writing is bound to fail.</p>
+<pre><code>$ sudo dnf install docker-ce --nobest
+....
+Installed:
+ docker-ce-3:18.09.1-3.el7.x86_64                                         containerd.io-1.2.0-3.el7.x86_64        docker-ce-cli-1:19.03.8-3.el7.x86_64
+ container-selinux-2:2.124.0-1.module+el8.2.0+6368+cf16aa14.noarch        libcgroup-0.41-19.el8.x86_64            libnetfilter_conntrack-1.0.6-5.el8.x86_64
+ libnfnetlink-1.0.1-13.el8.x86_64                                         iptables-1.8.2-16.el8.x86_64            policycoreutils-python-utils-2.9-3.el8_1.1.noarch
+ libnftnl-1.1.5-4.el8.x86_64
+
+Skipped:
+ docker-ce-3:19.03.8-3.el7.x86_64
 </code></pre>
-<p>If you have a remote build server, you have to do the <code>mvn install</code> bit to add the dependency knowing you are using different maven local repository. There is another solution posted on <a href="http://blog.valdaris.com/post/custom-jar/" target="_new">this blog</a> but I haven't tried this approach. I'm referring to <strong>Installing the jar by using install-plugin</strong>. Perhaps this is the way to go but for the time being I'm happy with <code>maven install:install-file</code>.</p>
+<h3>Enable and start docker daemon</h3>
+<pre><code>$ sudo systemctl enable --now docker
+Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /usr/lib/systemd/system/docker.service.
+$ sudo systemctl is-active docker
+active
+$ sudo systemctl is-enabled docker
+enabled
+</code></pre>
 </p>
 		</div>
 	</div>
@@ -97,8 +94,8 @@
 	<script type="text/javascript">
 	    /* * * CONFIGURATION VARIABLES * * */
 	    var disqus_shortname = '';
-		var disqus_identifier = 'blog/2014/adding-local-jar-to-maven.html';
-	    var disqus_url = 'https://drmanalo.github.ioblog/2014/adding-local-jar-to-maven.html';
+		var disqus_identifier = 'blog/2020/dockerce-redhat.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2020/dockerce-redhat.html';
 
 	    /* * * DON'T EDIT BELOW THIS LINE * * */
 	    (function() {

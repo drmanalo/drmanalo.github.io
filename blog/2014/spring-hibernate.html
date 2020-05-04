@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,8 +58,8 @@
 		<div class="post">
 			<h1>Spring Persistence with Hibernate</h1>
 			<p><em>03 September 2014</em></p>
-			<p><p>After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I'm going to use H2 to avoid 3rd party database dependency.</p> 
-<p>Just like my previous post, I'm going to use <code>maven-archetype-generate</code> and will add Spring dependencies later on.</p> 
+			<p><p>After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I'm going to use H2 to avoid 3rd party database dependency.</p>
+<p>Just like my previous post, I'm going to use <code>maven-archetype-generate</code> and will add Spring dependencies later on.</p>
 <pre><code>$ mvn archetype:generate -DgroupId=com.manalo.prototype -DartifactId=persistence -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 [INFO] Scanning for projects...
 [INFO]
@@ -90,9 +90,9 @@
 [INFO] Finished at: Thu Sep 04 23:17:16 BST 2014
 [INFO] Final Memory: 14M/150M
 [INFO] ------------------------------------------------------------------------
-</code></pre> 
-<!-- more --> 
-<h3>mvn eclipse:eclipse</h3> 
+</code></pre>
+<!-- more -->
+<h3>mvn eclipse:eclipse</h3>
 <pre><code>$ mvn eclipse:eclipse
 [INFO] Scanning for projects...
 [INFO]
@@ -108,7 +108,7 @@
 [INFO] Using Eclipse Workspace: /home/drmanalo/workspace
 [INFO] Adding default classpath container: org.eclipse.jdt.launching.JRE_CONTAINER
 [INFO] Not writing settings - defaults suffice
-[INFO] Wrote Eclipse project for "persistence" to /home/drmanalo/workspace/persistence.
+[INFO] Wrote Eclipse project for &quot;persistence&quot; to /home/drmanalo/workspace/persistence.
 [INFO]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
@@ -117,11 +117,11 @@
 [INFO] Finished at: Thu Sep 04 23:23:07 BST 2014
 [INFO] Final Memory: 9M/150M
 [INFO] ------------------------------------------------------------------------
-</code></pre> 
-<h3>pom.xml</h3> 
-<p>Here's my complete <code>pom.xml</code> with added dependencies apart from Spring persistence.</p> 
-<pre><code>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
+</code></pre>
+<h3>pom.xml</h3>
+<p>Here's my complete <code>pom.xml</code> with added dependencies apart from Spring persistence.</p>
+<pre><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+	xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
 
 	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
 	&lt;groupId&gt;com.manalo.prototype&lt;/groupId&gt;
@@ -225,28 +225,28 @@
 	&lt;/build&gt;
 
 &lt;/project&gt;
-</code></pre> 
-<h3>Spring Configurations</h3> 
-<p>This contains database connection, connection pooling and Hibernate configurations. I defined the packages where Spring should look for its beans using <strong>context:component-scan</strong> elements.</p> 
-<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
+</code></pre>
+<h3>Spring Configurations</h3>
+<p>This contains database connection, connection pooling and Hibernate configurations. I defined the packages where Spring should look for its beans using <strong>context:component-scan</strong> elements.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+	xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
+	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-3.0.xsd
     http://www.springframework.org/schema/tx
-    http://www.springframework.org/schema/tx/spring-tx.xsd"&gt;
+    http://www.springframework.org/schema/tx/spring-tx.xsd&quot;&gt;
 
 	&lt;tx:annotation-driven /&gt;
 
-	&lt;context:component-scan base-package="com.manalo.dao" /&gt;
-	&lt;context:component-scan base-package="com.manalo.service" /&gt;
+	&lt;context:component-scan base-package=&quot;com.manalo.dao&quot; /&gt;
+	&lt;context:component-scan base-package=&quot;com.manalo.service&quot; /&gt;
 
 	&lt;!-- Load application properties --&gt;
-	&lt;bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"&gt;
-		&lt;property name="locations"&gt;
+	&lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+		&lt;property name=&quot;locations&quot;&gt;
 			&lt;list&gt;
 				&lt;value&gt;classpath:application.properties&lt;/value&gt;
 			&lt;/list&gt;
@@ -254,43 +254,43 @@
 	&lt;/bean&gt;
 
 	&lt;!-- DB connection --&gt;
-	&lt;bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
-		destroy-method="close"&gt;
-		&lt;property name="driverClassName" value="${db.driver}" /&gt;
-		&lt;property name="url" value="${db.url}" /&gt;
-		&lt;property name="username" value="${db.user}" /&gt;
-		&lt;property name="password" value="${db.pass}" /&gt;
+	&lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp2.BasicDataSource&quot;
+		destroy-method=&quot;close&quot;&gt;
+		&lt;property name=&quot;driverClassName&quot; value=&quot;${db.driver}&quot; /&gt;
+		&lt;property name=&quot;url&quot; value=&quot;${db.url}&quot; /&gt;
+		&lt;property name=&quot;username&quot; value=&quot;${db.user}&quot; /&gt;
+		&lt;property name=&quot;password&quot; value=&quot;${db.pass}&quot; /&gt;
 	&lt;/bean&gt;
 
 	&lt;!-- Hibernate configuration --&gt;
-	&lt;bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" &gt;
-		&lt;property name="dataSource" ref="dataSource" /&gt;
-		&lt;property name="hibernateProperties"&gt;
+	&lt;bean id=&quot;sessionFactory&quot;
+		class=&quot;org.springframework.orm.hibernate4.LocalSessionFactoryBean&quot; &gt;
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+		&lt;property name=&quot;hibernateProperties&quot;&gt;
 			&lt;props&gt;
-				&lt;prop key="hibernate.dialect"&gt;org.hibernate.dialect.MySQLDialect&lt;/prop&gt;
-				&lt;prop key="hibernate.show_sql"&gt;${hibernate.show_sql}&lt;/prop&gt;
-				&lt;prop key="hibernate.hbm2ddl.auto"&gt;${hibernate.hbm2ddl.auto}&lt;/prop&gt;
-				&lt;prop key="hibernate.cache.use_second_level_cache"&gt;false&lt;/prop&gt;
-				&lt;prop key="hibernate.cache.use_query_cache"&gt;false&lt;/prop&gt;
-				&lt;prop key="hibernate.generate_statistics"&gt;false&lt;/prop&gt;
-				&lt;prop key="hibernate.cache.use_structured_entries"&gt;false&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.dialect&quot;&gt;org.hibernate.dialect.MySQLDialect&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.show_sql&quot;&gt;${hibernate.show_sql}&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.hbm2ddl.auto&quot;&gt;${hibernate.hbm2ddl.auto}&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.cache.use_second_level_cache&quot;&gt;false&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.cache.use_query_cache&quot;&gt;false&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.generate_statistics&quot;&gt;false&lt;/prop&gt;
+				&lt;prop key=&quot;hibernate.cache.use_structured_entries&quot;&gt;false&lt;/prop&gt;
 			&lt;/props&gt;
 		&lt;/property&gt;
-		&lt;property name="packagesToScan" value="com.manalo.domain" /&gt;
+		&lt;property name=&quot;packagesToScan&quot; value=&quot;com.manalo.domain&quot; /&gt;
 	&lt;/bean&gt;
 
 	&lt;!-- Transaction manager --&gt;
-	&lt;bean id="transactionManager"
-		class="org.springframework.orm.hibernate4.HibernateTransactionManager"&gt;
-		&lt;property name="dataSource" ref="dataSource" /&gt;
-		&lt;property name="sessionFactory" ref="sessionFactory" /&gt;
+	&lt;bean id=&quot;transactionManager&quot;
+		class=&quot;org.springframework.orm.hibernate4.HibernateTransactionManager&quot;&gt;
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+		&lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot; /&gt;
 	&lt;/bean&gt;
 
 &lt;/beans&gt;
-</code></pre> 
-<h3>application.properties</h3> 
-<p>I put this under <code>src/main/resources</code> which has to be added in your classpath in order for <code>PropertyPlaceholderConfigurer</code> to find it.</p> 
+</code></pre>
+<h3>application.properties</h3>
+<p>I put this under <code>src/main/resources</code> which has to be added in your classpath in order for <code>PropertyPlaceholderConfigurer</code> to find it.</p>
 <pre><code># Embedded H2 database
 db.driver=org.h2.Driver
 db.user=testuser
@@ -312,9 +312,9 @@ db.pool.maxidletime=14400
 hibernate.hbm2ddl.auto=create
 hibernate.show_sql=true
 hibernate.dialect=org.hibernate.dialect.MySQLDialect
-</code></pre> 
-<h3>log4j.properties</h3> 
-<p>As this is part of <em>convention over configuration</em>, you have to name this file as <code>log4j.properties</code> and should also be within your classpath.</p> 
+</code></pre>
+<h3>log4j.properties</h3>
+<p>As this is part of <em>convention over configuration</em>, you have to name this file as <code>log4j.properties</code> and should also be within your classpath.</p>
 <pre><code># Root logger
 log4j.rootLogger=INFO, file
 log4j.logger.com.manalo=DEBUG, stdout
@@ -332,47 +332,47 @@ log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.Target=System.out
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %5p %c{1}:%L - %m%n
-</code></pre> 
-<h3>Database Config</h3> 
-<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-	xsi:schemaLocation="
+</code></pre>
+<h3>Database Config</h3>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+	xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+	xmlns:jdbc=&quot;http://www.springframework.org/schema/jdbc&quot;
+	xsi:schemaLocation=&quot;
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
        http://www.springframework.org/schema/jdbc
-       http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd"&gt;
+       http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd&quot;&gt;
 
 	&lt;!-- Use a web browser to access http://localhost:11111 to view H2 console
 		that allows db queries to be run and be viewed. Parameters url, username
 		and password should be same as JDBC connection. e.g. jdbc:h2:mem:test, testuser,
 		password --&gt;
-	&lt;bean id="org.h2.tools.Server-WebServer" class="org.h2.tools.Server"
-		factory-method="createWebServer" depends-on="dataSource" init-method="start"
-		lazy-init="false"&gt;
-		&lt;constructor-arg value="-web,-webPort,11111" /&gt;
+	&lt;bean id=&quot;org.h2.tools.Server-WebServer&quot; class=&quot;org.h2.tools.Server&quot;
+		factory-method=&quot;createWebServer&quot; depends-on=&quot;dataSource&quot; init-method=&quot;start&quot;
+		lazy-init=&quot;false&quot;&gt;
+		&lt;constructor-arg value=&quot;-web,-webPort,11111&quot; /&gt;
 	&lt;/bean&gt;
 
-	&lt;jdbc:initialize-database data-source="dataSource"&gt;
-		&lt;jdbc:script location="classpath:/initialise.sql"&gt;&lt;/jdbc:script&gt;
+	&lt;jdbc:initialize-database data-source=&quot;dataSource&quot;&gt;
+		&lt;jdbc:script location=&quot;classpath:/initialise.sql&quot;&gt;&lt;/jdbc:script&gt;
 	&lt;/jdbc:initialize-database&gt;
 
 &lt;/beans&gt;
-</code></pre> 
-<h3>initialise.sql</h3> 
-<p>You will notice this file is being loaded using <code>jdbc:script</code> element.</p> 
+</code></pre>
+<h3>initialise.sql</h3>
+<p>You will notice this file is being loaded using <code>jdbc:script</code> element.</p>
 <pre><code>CREATE TABLE user (
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   	username VARCHAR (32) NOT NULL,
   	password VARCHAR (255) NOT NULL,
   	UNIQUE (USERNAME)
 );
-</code></pre> 
-<h3>Domain Object</h3> 
+</code></pre>
+<h3>Domain Object</h3>
 <pre><code>package com.manalo.domain;
 
 import javax.persistence.Column;
@@ -422,8 +422,8 @@ public class User {
 	}
 
 }
-</code></pre> 
-<h3>Data Access Component</h3> 
+</code></pre>
+<h3>Data Access Component</h3>
 <pre><code>package com.manalo.dao;
 
 import java.util.List;
@@ -453,23 +453,23 @@ public class UserDao {
 
 	public User getUserByUserName(String username) {
 
-		String hql = "from User where username = :username";
+		String hql = &quot;from User where username = :username&quot;;
 
 		Query query = getSession().createQuery(hql);
-		query.setString("username", username);
+		query.setString(&quot;username&quot;, username);
 
 		return (User) query.uniqueResult();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(&quot;unchecked&quot;)
 	public List&lt;User&gt; getUsers() {
 		Criteria criteria = getSession().createCriteria(User.class);
 		return criteria.list();
 	}
 
 }
-</code></pre> 
-<h3>Service Layer</h3> 
+</code></pre>
+<h3>Service Layer</h3>
 <pre><code>package com.manalo.service;
 
 import java.util.List;
@@ -501,8 +501,8 @@ public class UserManager {
 	}
 
 }
-</code></pre> 
-<h3>App.java</h3> 
+</code></pre>
+<h3>App.java</h3>
 <pre><code>package com.manalo.prototype;
 
 import java.util.List;
@@ -520,7 +520,7 @@ public class App {
 		/**
 		 * Order of xml files to be loaded is important
 		 */
-		final String[] CONFIG_FILES = { "database-init.xml", "spring-core.xml" };
+		final String[] CONFIG_FILES = { &quot;database-init.xml&quot;, &quot;spring-core.xml&quot; };
 
 		AbstractXmlApplicationContext context = new ClassPathXmlApplicationContext(CONFIG_FILES);
 
@@ -528,28 +528,28 @@ public class App {
 
 		User user = new User();
 
-		user.setUsername("drmanalo");
-		user.setPassword("secret");
+		user.setUsername(&quot;drmanalo&quot;);
+		user.setPassword(&quot;secret&quot;);
 
 		userManager.addUser(user);
 
-		user = userManager.getUserByUserName("drmanalo");
+		user = userManager.getUserByUserName(&quot;drmanalo&quot;);
 
-		System.out.println("Id:       " + user.getId());
-		System.out.println("Username: " + user.getUsername());
-		System.out.println("Password: " + user.getPassword());
+		System.out.println(&quot;Id:       &quot; + user.getId());
+		System.out.println(&quot;Username: &quot; + user.getUsername());
+		System.out.println(&quot;Password: &quot; + user.getPassword());
 
 		List&lt;User&gt; users = userManager.getUsers();
 
-		System.out.println("Number of users: " + users.size());
+		System.out.println(&quot;Number of users: &quot; + users.size());
 
 		context.close();
 
 	}
 }
-</code></pre> 
-<h3>Running the application</h3> 
-<p>Within Eclipse, right-click App.java -&gt; Run As -&gt; Java Application. You should see this within Eclipse's console. There are extra noises since log4j is doing its job.</p> 
+</code></pre>
+<h3>Running the application</h3>
+<p>Within Eclipse, right-click App.java -&gt; Run As -&gt; Java Application. You should see this within Eclipse's console. There are extra noises since log4j is doing its job.</p>
 <pre><code>Hibernate: drop table if exists User
 Hibernate: create table User (id integer not null auto_increment, password varchar(255) not null, username varchar(255) not null, primary key (id))
 23:06:01,825  INFO SchemaExport:405 - HHH000230: Schema export complete
@@ -560,8 +560,9 @@ Username: drmanalo
 Password: secret
 Hibernate: select this_.id as id0_0_, this_.password as password0_0_, this_.username as username0_0_ from User this_
 Number of users: 1
-</code></pre> 
-<p><strong><a href="/downloads/persistence.zip">Download source</a></strong></p></p>
+</code></pre>
+<p><strong><a href="/downloads/persistence.zip">Download source</a></strong></p>
+</p>
 		</div>
 	</div>
 

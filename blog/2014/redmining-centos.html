@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -59,18 +59,18 @@
 			<h1>Redmining CentOS</h1>
 			<p><em>25 October 2014</em></p>
 			<p><blockquote>
-  Redmine is a flexible project management web application written using Ruby on Rails framework. 
-</blockquote> 
-<p>To install redmine, you have to check if you have <code>ruby</code> installed. To install ruby with ease, use <a href="https://rvm.io/">RVM</a></p> 
+Redmine is a flexible project management web application written using Ruby on Rails framework.
+</blockquote>
+<p>To install redmine, you have to check if you have <code>ruby</code> installed. To install ruby with ease, use <a href="https://rvm.io/">RVM</a></p>
 <pre><code>$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 $ curl -sSL https://get.rvm.io | bash -s stable
 $ source ~/.rvm/scripts/rvm
 $ rvm install ruby 2.3.1
 $ ruby -v
 ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
-</code></pre> 
-<!-- more --> 
-<h3>Install rubygems</h3> 
+</code></pre>
+<!-- more -->
+<h3>Install rubygems</h3>
 <pre><code>$ sudo yum install rubygems
 ...
 ================================================================================
@@ -94,8 +94,8 @@ Install  1 Package (+8 Dependent packages)
 
 Installed:
   rubygems.noarch 0:2.0.14-20.el7
-</code></pre> 
-<h3>Install passenger</h3> 
+</code></pre>
+<h3>Install passenger</h3>
 <pre><code>$ gem install passenger
 Fetching: daemon_controller-1.2.0.gem (100%)
 Successfully installed daemon_controller-1.2.0
@@ -108,14 +108,14 @@ Parsing documentation for passenger-4.0.53
 Installing ri documentation for passenger-4.0.53
 Done installing documentation for daemon_controller, passenger after 3 seconds
 2 gems installed
-</code></pre> 
-<h3>Try running passenger-install-apache2-module</h3> 
-<p>I followed all the recommended suggestions before moving on.</p> 
-<pre><code>sudo chmod o+x "/home/drmanalo"
-sudo chown -R drmanalo "/home/drmanalo/.rvm/gems/ruby-2.1.2"
-</code></pre> 
-<h3>Then check for failed dependencies</h3> 
-<p>This script has its own intelligence of resolving dependencies but I prefer the manual method. Pay attention to <code>Found: no</code></p> 
+</code></pre>
+<h3>Try running passenger-install-apache2-module</h3>
+<p>I followed all the recommended suggestions before moving on.</p>
+<pre><code>sudo chmod o+x &quot;/home/drmanalo&quot;
+sudo chown -R drmanalo &quot;/home/drmanalo/.rvm/gems/ruby-2.1.2&quot;
+</code></pre>
+<h3>Then check for failed dependencies</h3>
+<p>This script has its own intelligence of resolving dependencies but I prefer the manual method. Pay attention to <code>Found: no</code></p>
 <pre><code>Checking for required software...
 
  * Checking for C compiler...
@@ -155,8 +155,8 @@ sudo chown -R drmanalo "/home/drmanalo/.rvm/gems/ruby-2.1.2"
       Found: no
  * Checking for Apache Portable Runtime Utility (APU) development headers...
       Found: no
-</code></pre> 
-<h4>Resolving all the negatives</h4> 
+</code></pre>
+<h4>Resolving all the negatives</h4>
 <pre><code>$ yum install curl-devel
 ================================================================================
  Package               Arch           Version                Repository    Size
@@ -195,8 +195,8 @@ Installed:
 Dependency Installed:
   cyrus-sasl-devel.x86_64 0:2.1.26-17.el7    expat-devel.x86_64 0:2.1.0-8.el7
   openldap-devel.x86_64 0:2.4.39-3.el7
-</code></pre> 
-<h4>Retrying passenger</h4> 
+</code></pre>
+<h4>Retrying passenger</h4>
 <pre><code>$ passenger-install-apache2-module
 Welcome to the Phusion Passenger Apache 2 module installer, v4.0.53.
 --------------------------------------------
@@ -228,25 +228,37 @@ applications on Apache, with a minimum amount of configuration!
 Press ENTER to continue.
 --------------------------------------------
 Phusion Passenger is a trademark of Hongli Lai &amp; Ninh Bui.
-</code></pre> 
-<h3>Add passenger.conf to /etc/http/conf.d</h3> 
-<p>Please bear in mind the absolute paths going to my home folder. I inherited this when I first install <code>ruby</code> for my Octopress. After adding this config file, run <code>systemctl restart httpd</code></p> 
+</code></pre>
+<h3>Add passenger.conf to /etc/http/conf.d</h3>
+<p>Please bear in mind the absolute paths going to my home folder. I inherited this when I first install <code>ruby</code> for my Octopress. After adding this config file, run <code>systemctl restart httpd</code></p>
 <pre><code>LoadModule passenger_module /home/drmanalo/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.53/buildout/apache2/mod_passenger.so
    &lt;IfModule mod_passenger.c&gt;
      PassengerRoot /home/drmanalo/.rvm/gems/ruby-2.1.2/gems/passenger-4.0.53
      PassengerDefaultRuby /home/drmanalo/.rvm/gems/ruby-2.1.2/wrappers/ruby
    &lt;/IfModule&gt;
-</code></pre> 
-<p>After installing passenger, I created my redmine database and granted the right privileges. I won't detail it here for security reasons.</p> 
-<h3>Passenger install on elementary OS 0.2.1</h3> 
-<p>This is not CentOS related but I'm documenting here the extra step I made to have passenger-install-apache-module on elementary OS.</p> 
-<ul> 
- <li> <p>To install Curl development headers with SSL support:<br> Please run <code>apt-get install libcurl4-openssl-dev</code> or libcurl4-gnutls-dev, whichever you prefer.</p> </li> 
- <li> <p>To install Apache 2 development headers:<br> Please install it with <code>apt-get install apache2-threaded-dev</code></p> </li> 
- <li> <p>To install Apache Portable Runtime (APR) development headers:<br> Please install it with <code>apt-get install libapr1-dev</code></p> </li> 
- <li> <p>To install Apache Portable Runtime Utility (APU) development headers:<br> Please install it with <code>apt-get install libaprutil1-dev</code></p> </li> 
-</ul> 
-<h3>Installing redmine 2.6</h3> 
+</code></pre>
+<p>After installing passenger, I created my redmine database and granted the right privileges. I won't detail it here for security reasons.</p>
+<h3>Passenger install on elementary OS 0.2.1</h3>
+<p>This is not CentOS related but I'm documenting here the extra step I made to have passenger-install-apache-module on elementary OS.</p>
+<ul>
+<li>
+<p>To install Curl development headers with SSL support:<br />
+Please run <code>apt-get install libcurl4-openssl-dev</code> or libcurl4-gnutls-dev, whichever you prefer.</p>
+</li>
+<li>
+<p>To install Apache 2 development headers:<br />
+Please install it with <code>apt-get install apache2-threaded-dev</code></p>
+</li>
+<li>
+<p>To install Apache Portable Runtime (APR) development headers:<br />
+Please install it with <code>apt-get install libapr1-dev</code></p>
+</li>
+<li>
+<p>To install Apache Portable Runtime Utility (APU) development headers:<br />
+Please install it with <code>apt-get install libaprutil1-dev</code></p>
+</li>
+</ul>
+<h3>Installing redmine 2.6</h3>
 <pre><code>$ svn co http://svn.redmine.org/redmine/branches/2.6-stable redmine-2.6
 
 $ mv redmine-2.6 redmine
@@ -259,8 +271,8 @@ $ cp database.yml.example database.yml
 
 # Put the right database settings
 $ vim database.yml
-</code></pre> 
-<h3>Setting up rails</h3> 
+</code></pre>
+<h3>Setting up rails</h3>
 <pre><code>$ cd /var/www/redmine
 
 $ gem install bundler
@@ -311,8 +323,8 @@ $ RAILS_ENV=production rake redmine:load_default_data
 Select language: ar, az, bg, bs, ca, cs, da, de, el, en, en-GB, es, et, eu, fa, fi, fr, gl, he, hr, hu, id, it, ja, ko, lt, lv, mk, mn, nl, no, pl, pt, pt-BR, ro, ru, sk, sl, sq, sr, sr-YU, sv, th, tr, uk, vi, zh, zh-TW [en] en-GB
 ====================================
 Default configuration data loaded.
-</code></pre> 
-<h3>Activate Fast CGI</h3> 
+</code></pre>
+<h3>Activate Fast CGI</h3>
 <pre><code>$ yum install mod_fcgid
 ================================================================================
  Package            Arch            Version                 Repository     Size
@@ -329,8 +341,8 @@ Installed:
 $ cp dispatch.fcgi.example dispatch.fcgi
 
 $ cp htaccess.fcgi.example .htaccess
-</code></pre> 
-<h3>Configure attachments folder</h3> 
+</code></pre>
+<h3>Configure attachments folder</h3>
 <pre><code>$ cp configuration.yml.example configuration.yml
 
 $ cd /var/www/redmine/config
@@ -338,7 +350,7 @@ $ cd /var/www/redmine/config
 $ cp configuration.yml.example configuration.yml
 
 $ vim configuration.yml
-</code></pre> 
+</code></pre>
 <pre><code># Absolute path to the directory where attachments are stored.
   # The default is the 'files' directory in your Redmine instance.
   # Your Redmine instance needs to have write permission on this
@@ -347,28 +359,29 @@ $ vim configuration.yml
   # attachments_storage_path: /var/redmine/files
   # attachments_storage_path: D:/redmine/files
  attachments_storage_path: /opt/redmine/files
-</code></pre> 
-<h3>Create the vhost config file</h3> 
-<p>Create <code>redmine.conf</code> under <code>/etc/httpd/conf.d</code></p> 
+</code></pre>
+<h3>Create the vhost config file</h3>
+<p>Create <code>redmine.conf</code> under <code>/etc/httpd/conf.d</code></p>
 <pre><code>&lt;VirtualHost *:80&gt;
     ServerName redmine.local
     ServerAdmin drmanalo@somewhere.net
     DocumentRoot /var/www/redmine/public/
     ErrorLog logs/redmine_error_log
-    &lt;Directory "/var/www/redmine/public/"&gt;
+    &lt;Directory &quot;/var/www/redmine/public/&quot;&gt;
         Options Indexes ExecCGI FollowSymLinks
         Order allow,deny
         Allow from all
         AllowOverride all
     &lt;/Directory&gt;
 &lt;/VirtualHost&gt;
-</code></pre> 
-<h3>Running redmine</h3> 
-<p>Setup the right folder permissions first.</p> 
+</code></pre>
+<h3>Running redmine</h3>
+<p>Setup the right folder permissions first.</p>
 <pre><code>$ sudo chown -R apache:apache /var/www/redmine
 $ sudo chmod -R 755 /var/www/redmine
 $ sys restart httpd
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

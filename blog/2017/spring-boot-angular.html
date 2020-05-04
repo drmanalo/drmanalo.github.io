@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,15 +58,15 @@
 		<div class="post">
 			<h1>Spring Boot with Angular Setup</h1>
 			<p><em>17 June 2017</em></p>
-			<p><p>We were given the opportunity to replace an existing mobile app by a responsive website. Mobile apps are great but since we are paying a monthly subscription to third-party, we are better off building a responsive website supported in all platform. We have iOS and Android version of the app but having it build once then run on different platforms is an added benefit.</p> 
-<p>For this setup, we need <code>springboot-cli</code> and <code>ng-cli</code>. I won't detail how to have them installed but in my setup I used <code>sdkman</code> for springboot-cli and <code>npm</code> for ng-cli.</p> 
-<h3>sping init</h3> 
+			<p><p>We were given the opportunity to replace an existing mobile app by a responsive website. Mobile apps are great but since we are paying a monthly subscription to third-party, we are better off building a responsive website supported in all platform. We have iOS and Android version of the app but having it build once then run on different platforms is an added benefit.</p>
+<p>For this setup, we need <code>springboot-cli</code> and <code>ng-cli</code>. I won't detail how to have them installed but in my setup I used <code>sdkman</code> for springboot-cli and <code>npm</code> for ng-cli.</p>
+<h3>sping init</h3>
 <pre><code>$ spring init --dependencies=web,h2,jpa,actuator,devtools mobile
 Using service at https://start.spring.io
 Project extracted to '/home/drmanalo/idea/mobile'
-</code></pre> 
-<!-- more --> 
-<h3>ng init</h3> 
+</code></pre>
+<!-- more -->
+<h3>ng init</h3>
 <pre><code>$ ng new --skip-git angular2
 installing ng
 create .editorconfig
@@ -100,9 +100,9 @@ create tslint.json
 Installing packages for tooling via npm.
 Installed packages for tooling via npm.
 Project 'angular2' successfully created.
-</code></pre> 
-<h3>Custom java configuration</h3> 
-<p>Edit <code>pom.xml</code>. Add this plugin to the existing <code>&lt;build&gt;&lt;plugins&gt;</code>.</p> 
+</code></pre>
+<h3>Custom java configuration</h3>
+<p>Edit <code>pom.xml</code>. Add this plugin to the existing <code>&lt;build&gt;&lt;plugins&gt;</code>.</p>
 <pre><code>&lt;plugin&gt;
     &lt;groupId&gt;com.github.eirslett&lt;/groupId&gt;
     &lt;artifactId&gt;frontend-maven-plugin&lt;/artifactId&gt;
@@ -144,39 +144,40 @@ Project 'angular2' successfully created.
         &lt;/execution&gt;
     &lt;/executions&gt;
 &lt;/plugin&gt;
-</code></pre> 
-<h3>Custom angular configuration</h3> 
-<p>Edit <code>src/main/angular2/angular-cli.json</code>. Whenever you're building angular, its <code>outDir</code> has to use <code>../resources/static/</code> as its target directory.</p> 
-<pre><code>"apps": [
+</code></pre>
+<h3>Custom angular configuration</h3>
+<p>Edit <code>src/main/angular2/angular-cli.json</code>. Whenever you're building angular, its <code>outDir</code> has to use  <code>../resources/static/</code> as its target directory.</p>
+<pre><code>&quot;apps&quot;: [
     {
-      "root": "src",
-      "outDir": "../resources/static/",
-      "assets": [
-        "assets",
-        "favicon.ico"
+      &quot;root&quot;: &quot;src&quot;,
+      &quot;outDir&quot;: &quot;../resources/static/&quot;,
+      &quot;assets&quot;: [
+        &quot;assets&quot;,
+        &quot;favicon.ico&quot;
       ],
-</code></pre> 
-<p>Create a file called <code>proxy.conf.json</code> inside <code>src/main/angular2</code> folder. It should contain this proxy settings.</p> 
+</code></pre>
+<p>Create a file called <code>proxy.conf.json</code> inside <code>src/main/angular2</code> folder. It should contain this proxy settings.</p>
 <pre><code>{
-  "/api": {
-    "target": "http://localhost:8082",
-    "secure": false
+  &quot;/api&quot;: {
+    &quot;target&quot;: &quot;http://localhost:8082&quot;,
+    &quot;secure&quot;: false
   }
 }
-</code></pre> 
-<p>Edit <code>src/main/angular2/package.json</code>. Modify the start script to use <code>proxy.conf.json</code> every time.</p> 
-<pre><code>"scripts": {
-    "ng": "ng",
-    "start": "ng serve --proxy-config proxy.conf.json",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+</code></pre>
+<p>Edit <code>src/main/angular2/package.json</code>. Modify the start script to use <code>proxy.conf.json</code> every time.</p>
+<pre><code>&quot;scripts&quot;: {
+    &quot;ng&quot;: &quot;ng&quot;,
+    &quot;start&quot;: &quot;ng serve --proxy-config proxy.conf.json&quot;,
+    &quot;build&quot;: &quot;ng build&quot;,
+    &quot;test&quot;: &quot;ng test&quot;,
+    &quot;lint&quot;: &quot;ng lint&quot;,
+    &quot;e2e&quot;: &quot;ng e2e&quot;
   },
-</code></pre> 
-<h3>Running the application</h3> 
-<p>To run Angular with live reload, issue <code>ng serve</code> on src/main/angular2 folder where <code>angular-cli.json</code> is.</p> 
-<p>To run Spring Boot (this doesn't support live reload yet), issue <code>mvn spring-boot:run</code> on the root folder where <code>pom.xml</code> is.</p></p>
+</code></pre>
+<h3>Running the application</h3>
+<p>To run Angular with live reload, issue <code>ng serve</code> on src/main/angular2 folder where <code>angular-cli.json</code> is.</p>
+<p>To run Spring Boot (this doesn't support live reload yet), issue <code>mvn spring-boot:run</code> on the root folder where <code>pom.xml</code> is.</p>
+</p>
 		</div>
 	</div>
 

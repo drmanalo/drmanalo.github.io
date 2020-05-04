@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,12 +58,12 @@
 		<div class="post">
 			<h1>Nvidia Driver for Ubuntu 16</h1>
 			<p><em>08 February 2018</em></p>
-			<p><p>My company laptop comes like a present to me. It has 16GB of RAM and couple of SSDs on it. It's running Windows 10 Home Edition but I don't have issue with that since I'm going to use Linux. I'm originally CentOS but we will use Ubuntu going forward to make it a smooth Linux transition for non-seasoned Linux users.</p> 
-<p>The only issue I encountered with this laptop while installing Ubuntu is the graphics driver. The laptop has multiple graphics card (Intel and Nvidia) and the Nvidia driver is not supported on Ubuntu being proprietary.</p> 
-<p><img src="https://drmanalo.github.io/images/inspiron.png" alt="Ubuntu About"></p> 
-<!-- more --> 
-<h3>Run this script</h3> 
-<p>I got this one from the internet but forgot to document the website. Credit belongs to the original author.</p> 
+			<p><p>My company laptop comes like a present to me. It has 16GB of RAM and couple of SSDs on it. It's running Windows 10 Home Edition but I don't have issue with that since I'm going to use Linux. I'm originally CentOS but we will use Ubuntu going forward to make it a smooth Linux transition for non-seasoned Linux users.</p>
+<p>The only issue I encountered with this laptop while installing Ubuntu is the graphics driver. The laptop has multiple graphics card (Intel and Nvidia) and the Nvidia driver is not supported on Ubuntu being proprietary.</p>
+<p><img src="/images/inspiron.png" alt="Ubuntu About" /></p>
+<!-- more -->
+<h3>Run this script</h3>
+<p>I got this one from the internet but forgot to document the website. Credit belongs to the original author.</p>
 <pre><code>#!/bin/sh
 
 if lspci | grep VGA | grep -q NVIDIA; then
@@ -80,13 +80,14 @@ alias nouveau off
 alias lbm-nouveau off
 EOT
 
-    echo $sudoPW | sudo -S sh -c "echo 'options nouveau modeset=0' &gt;&gt; /etc/modprobe.d/nouveau-kms.conf"
+    echo $sudoPW | sudo -S sh -c &quot;echo 'options nouveau modeset=0' &gt;&gt; /etc/modprobe.d/nouveau-kms.conf&quot;
     echo 'Updating initramfs'
     sudo update-initramfs -u
 fi
-</code></pre> 
-<h3>Reboot your machine making sure safe boot is off</h3> 
-<p>Safe boot is a BIOS feature and it comes on different flavours. Just look for Safe boot and make sure it's disabled.</p></p>
+</code></pre>
+<h3>Reboot your machine making sure safe boot is off</h3>
+<p>Safe boot is a BIOS feature and it comes on different flavours. Just look for Safe boot and make sure it's disabled.</p>
+</p>
 		</div>
 	</div>
 

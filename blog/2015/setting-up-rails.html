@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,17 +58,17 @@
 		<div class="post">
 			<h1>Setting Up Rails</h1>
 			<p><em>26 April 2015</em></p>
-			<p><p>I bought the Web Designer Issue 233 being interested with jQuery effects but it turned out that I will find something far more interesting. I found a gem inside the magazine, it was a ruby! This issue discussed how to start learning rails. As rails website define it, Ruby on Rails® is an open-source web framework that’s optimised for programmer happiness and sustainable productivity. It lets you write beautiful code by favouring convention over configuration.</p> 
-<p>To be able to setup rails, we need to setup the dependencies first. The first requirement is ruby of course.</p> 
-<h3>Installing ruby</h3> 
+			<p><p>I bought the Web Designer Issue 233 being interested with jQuery effects but it turned out that I will find something far more interesting. I found a gem inside the magazine, it was a ruby! This issue discussed how to start learning rails. As rails website define it, Ruby on Rails® is an open-source web framework that’s optimised for programmer happiness and sustainable productivity. It lets you write beautiful code by favouring convention over configuration.</p>
+<p>To be able to setup rails, we need to setup the dependencies first. The first requirement is ruby of course.</p>
+<h3>Installing ruby</h3>
 <pre><code>$ apt-add-repository ppa:brightbox/ruby-ng
 $ apt-get update
 $ apt-get install ruby2.2
 $ ruby -v
   ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-linux-gnu]
-</code></pre> 
-<!-- more --> 
-<h3>Installing database options</h3> 
+</code></pre>
+<!-- more -->
+<h3>Installing database options</h3>
 <pre><code>$ apt-get install sqlite3 libsqlite3-dev
 $ sqlite3 --version
   3.8.2 2013-12-06 14:53:30 27392118af4c38c5203a04b8013e1afdb1cebd0d
@@ -76,17 +76,18 @@ $ sqlite3 --version
 $ apt-get install postgresql-9.3
 $ psql --version
   psql (PostgreSQL) 9.3.6
-</code></pre> 
-<h3>Other dependencies</h3> 
+</code></pre>
+<h3>Other dependencies</h3>
 <pre><code>$ apt-get install nodejs
 $ apt-get install ruby2.2-dev libssl-dev libreadline-dev
 $ apt-get install libyaml-dev libxml2-dev libxslt1-dev libcurl4-openssl-dev
-</code></pre> 
-<h3>Finally</h3> 
+</code></pre>
+<h3>Finally</h3>
 <pre><code>$ gem install rails -v 4.2.0
 $ rails -v
   Rails 4.2.0
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

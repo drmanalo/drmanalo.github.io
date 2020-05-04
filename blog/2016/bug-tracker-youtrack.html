@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,24 +58,25 @@
 		<div class="post">
 			<h1>Bug Tracker YouTrack</h1>
 			<p><em>20 February 2016</em></p>
-			<p><p>I've been using Redmine as help desk and bug tracker since it has all the features/plugins you could ask for for a help desk or a bug tracker. But tracking bugs and issues has changed lately. When fixing bugs, you need to put in your estimate so you will have a pretty good idea how much effort you are putting into it. This is probably one of the reasons why <a href="http://www.redminecrm.com">RedmineCRM</a> premium plugins exists. The lack of planning tools in RedmineCRM pushed me further to use <a href="http://www.acunote.com">Acunote</a>. This is hosted online and free for a team of 5 users but 5 is very<br> limiting. Acunote also lacks the tooling support you will get from Jira, FogBugz and the likes.</p> 
-<p>Since I don't need enterprise solution at the moment so I'll give YouTrack a try. It's free for the first 10 users so I actually doubled what Acunote is offering for free. As with Jira, FogBugz or Acunote, it has hosted solution too.</p> 
-<h3>Downloading YouTrack</h3> 
+			<p><p>I've been using Redmine as help desk and bug tracker since it has all the features/plugins you could ask for for a help desk or a bug tracker. But tracking bugs and issues has changed lately. When fixing bugs, you need to put in your estimate so you will have a pretty good idea how much effort you are putting into it. This is probably one of the reasons why <a href="http://www.redminecrm.com">RedmineCRM</a> premium plugins exists. The lack of planning tools in RedmineCRM pushed me further to use <a href="http://www.acunote.com">Acunote</a>. This is hosted online and free for a team of 5 users but 5 is very<br />
+limiting. Acunote also lacks the tooling support you will get from Jira, FogBugz and the likes.</p>
+<p>Since I don't need enterprise solution at the moment so I'll give YouTrack a try. It's free for the first 10 users so I actually doubled what Acunote is offering for free. As with Jira, FogBugz or Acunote, it has hosted solution too.</p>
+<h3>Downloading YouTrack</h3>
 <pre><code>$ wget https://download.jetbrains.com/charisma/youtrack-6.0.12634.jar
 HTTP request sent, awaiting response... 200 OK
 Length: 111007822 (106M) [binary/octet-stream]
 Saving to: ‘youtrack-6.0.12634.jar’
 100%[======================================&gt;] 111,007,822 4.93MB/s   in 26s
-</code></pre> 
-<!-- more --> 
-<h3>Running YouTrack</h3> 
-<p>You can run youtrack by executing this</p> 
+</code></pre>
+<!-- more -->
+<h3>Running YouTrack</h3>
+<p>You can run youtrack by executing this</p>
 <pre><code>$ java -Xmx1g -XX:MaxPermSize=250m -Djava.awt.headless=true -jar youtrack-6.0.12634.jar localhost:8112/youtrack
-</code></pre> 
-<p>This will automatically open your browser to <a href="http://localhost:8112/youtrack">http://localhost:8112/youtrack</a>. After adding the root account, you can start creating your first project.</p> 
-<p><img src="https://drmanalo.github.io/images/youtrack.png" alt="YouTrack agile board"></p> 
-<p><strong>NOTE:</strong> These scripts are optional.</p> 
-<h3>/etc/init.d/youtrack</h3> 
+</code></pre>
+<p>This will automatically open your browser to <a href="http://localhost:8112/youtrack">http://localhost:8112/youtrack</a>. After adding the root account, you can start creating your first project.</p>
+<p><img src="/images/youtrack.png" alt="YouTrack agile board" /></p>
+<p><strong>NOTE:</strong> These scripts are optional.</p>
+<h3>/etc/init.d/youtrack</h3>
 <pre><code>#! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          youtrack
@@ -97,36 +98,36 @@ OWNER=drmanalo
 SCRIPT=/opt/$NAME/$NAME.sh
 
 d_start() {
-    su $OWNER -l -c "$SCRIPT start"
+    su $OWNER -l -c &quot;$SCRIPT start&quot;
 }
 
 d_stop() {
-    su $OWNER -l -c "$SCRIPT stop"
+    su $OWNER -l -c &quot;$SCRIPT stop&quot;
 }
 
-case "$1" in
+case &quot;$1&quot; in
   start)
-    echo "Starting $NAME..."
+    echo &quot;Starting $NAME...&quot;
     d_start
     ;;
     stop)
-    echo "Stopping $NAME..."
+    echo &quot;Stopping $NAME...&quot;
     d_stop
     ;;
   restart|force-reload)
-    echo "Restarting $NAME..."
+    echo &quot;Restarting $NAME...&quot;
     d_stop
     d_start
     ;;
   *)
-    echo "Usage: sudo /etc/init.d/youtrack {start|stop|restart}" &gt;&amp;2
+    echo &quot;Usage: sudo /etc/init.d/youtrack {start|stop|restart}&quot; &gt;&amp;2
     exit 1
     ;;
 esac
 
 exit 0
-</code></pre> 
-<h3>/opt/youtrack/youtrack.sh</h3> 
+</code></pre>
+<h3>/opt/youtrack/youtrack.sh</h3>
 <pre><code>#! /bin/sh
 
 export HOME=/home/drmanalo
@@ -135,16 +136,16 @@ export JAVA_HOME=/opt/jdk/jdk1.8.0_05
 NAME=youtrack
 PORT=8112
 INSTALL_FOLDER=/opt/$NAME
-JAR=$INSTALL_FOLDER/`ls -Lt $INSTALL_FOLDER/*.jar | grep -o "$NAME-[^/]*.jar" | head -1`
+JAR=$INSTALL_FOLDER/`ls -Lt $INSTALL_FOLDER/*.jar | grep -o &quot;$NAME-[^/]*.jar&quot; | head -1`
 LOG=$INSTALL_FOLDER/$NAME-$PORT.log
 PID=$INSTALL_FOLDER/$NAME-$PORT.pid
 
 d_start() {
     if [ -f $PID ]; then
         PID_VALUE=`cat $PID`
-        if [ ! -z "$PID_VALUE" ]; then
+        if [ ! -z &quot;$PID_VALUE&quot; ]; then
             PID_VALUE=`ps ax | grep $PID_VALUE | grep -v grep | awk '{print $1}'`
-            if [ ! -z "$PID_VALUE" ]; then
+            if [ ! -z &quot;$PID_VALUE&quot; ]; then
                 exit 1;
             fi
         fi
@@ -160,19 +161,19 @@ d_start() {
 d_stop() {
     if [ -f $PID ]; then
         PID_VALUE=`cat $PID`
-        if [ ! -z "$PID_VALUE" ]; then
+        if [ ! -z &quot;$PID_VALUE&quot; ]; then
             PID_VALUE=`ps ax | grep $PID_VALUE | grep -v grep | awk '{print $1}'`
-            if [ ! -z "$PID_VALUE" ]; then
+            if [ ! -z &quot;$PID_VALUE&quot; ]; then
                 kill $PID_VALUE
                 WAIT_TIME=0
-                while [ `ps ax | grep $PID_VALUE | grep -v grep | wc -l` -ne 0 -a "$WAIT_TIME" -lt 2 ]
+                while [ `ps ax | grep $PID_VALUE | grep -v grep | wc -l` -ne 0 -a &quot;$WAIT_TIME&quot; -lt 2 ]
                 do
                     sleep 1
                     WAIT_TIME=$(expr $WAIT_TIME + 1)
                 done
                 if [ `ps ax | grep $PID_VALUE | grep -v grep | wc -l` -ne 0 ]; then
                     WAIT_TIME=0
-                    while [ `ps ax | grep $PID_VALUE | grep -v grep | wc -l` -ne 0 -a "$WAIT_TIME" -lt 15 ]
+                    while [ `ps ax | grep $PID_VALUE | grep -v grep | wc -l` -ne 0 -a &quot;$WAIT_TIME&quot; -lt 15 ]
                     do
                         sleep 1
                         WAIT_TIME=$(expr $WAIT_TIME + 1)
@@ -188,7 +189,7 @@ d_stop() {
     fi
 }
 
-case "$1" in
+case &quot;$1&quot; in
     start)
         d_start
     ;;
@@ -196,14 +197,14 @@ case "$1" in
         d_stop
     ;;
     *)
-        echo "Usage: $0 {start|stop|restart}" &gt;&amp;2
+        echo &quot;Usage: $0 {start|stop|restart}&quot; &gt;&amp;2
         exit 1
     ;;
 esac
 
 exit 0
-</code></pre> 
-<h3>YouTrack as service</h3> 
+</code></pre>
+<h3>YouTrack as service</h3>
 <pre><code>$ sudo update-rc.d youtrack defaults
 Adding system startup for /etc/init.d/youtrack ...
    /etc/rc0.d/K20youtrack -&gt; ../init.d/youtrack
@@ -213,7 +214,8 @@ Adding system startup for /etc/init.d/youtrack ...
    /etc/rc3.d/S20youtrack -&gt; ../init.d/youtrack
    /etc/rc4.d/S20youtrack -&gt; ../init.d/youtrack
    /etc/rc5.d/S20youtrack -&gt; ../init.d/youtrack
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

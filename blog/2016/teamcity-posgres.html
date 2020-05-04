@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,13 +58,13 @@
 		<div class="post">
 			<h1>TeamCity With Postgres</h1>
 			<p><em>26 January 2016</em></p>
-			<p><p>Recently, I've been looking for a Jenkins alternative and the closest I found is TeamCity. It's not free as in free speech compared to Jenkins but the twenty build configs and three build agents is more than enough for my small projects.</p> 
-<p>TeamCity promised to work out-of-the-box just like Jenkins does so I'll give it a go. It's using Tomcat by default so I'm expecting a flat learning curve here.</p> 
-<p><img src="https://drmanalo.github.io/images/teamcity_login.png" alt="TeamCity login screen"></p> 
-<!-- more --> 
-<h3>Download TeamCity</h3> 
-<p>Download TeamCity from <a href="https://www.jetbrains.com/teamcity/download">https://www.jetbrains.com/teamcity/download</a> and extract it to your chosen destination. I extracted mine in <code>/opt</code> folder.</p> 
-<h3>Run TeamCity</h3> 
+			<p><p>Recently, I've been looking for a Jenkins alternative and the closest I found is TeamCity. It's not free as in free speech compared to Jenkins but the twenty build configs and three build agents is more than enough for my small projects.</p>
+<p>TeamCity promised to work out-of-the-box just like Jenkins does so I'll give it a go. It's using Tomcat by default so I'm expecting a flat learning curve here.</p>
+<p><img src="/images/teamcity_login.png" alt="TeamCity login screen" /></p>
+<!-- more -->
+<h3>Download TeamCity</h3>
+<p>Download TeamCity from <a href="https://www.jetbrains.com/teamcity/download">https://www.jetbrains.com/teamcity/download</a> and extract it to your chosen destination. I extracted mine in <code>/opt</code> folder.</p>
+<h3>Run TeamCity</h3>
 <pre><code>$ ./bin/runAll.sh start
 Using CATALINA_BASE:   /opt/TeamCity
 Using CATALINA_HOME:   /opt/TeamCity
@@ -79,34 +79,35 @@ Starting TeamCity Build Agent Launcher...
 Agent home directory is /opt/TeamCity/buildAgent
 Current Java runtime version is 1.8
 Lock file: /opt/TeamCity/buildAgent/logs/buildAgent.properties.lock
-</code></pre> 
-<h3>Check the application</h3> 
-<p>Just browse <a href="http://localhost:8111">http://localhost:8111</a>. To change the server port, in the <code>&lt;TeamCity Home&gt;/conf/server.xml</code> file, change the port number in the HTTP/1.1 connector</p> 
-<pre><code>&lt;Connector port="8111" protocol="HTTP/1.1"
-    connectionTimeout="20000"
-    redirectPort="8443"
-    enableLookup="false"
-    useBodyEncodingForURI="true"
+</code></pre>
+<h3>Check the application</h3>
+<p>Just browse <a href="http://localhost:8111">http://localhost:8111</a>. To change the server port, in the <code>&lt;TeamCity Home&gt;/conf/server.xml</code> file, change the port number in the HTTP/1.1 connector</p>
+<pre><code>&lt;Connector port=&quot;8111&quot; protocol=&quot;HTTP/1.1&quot;
+    connectionTimeout=&quot;20000&quot;
+    redirectPort=&quot;8443&quot;
+    enableLookup=&quot;false&quot;
+    useBodyEncodingForURI=&quot;true&quot;
 /&gt;
-</code></pre> 
-<h3>Download JDBC driver</h3> 
-<p>In one of the setup screens, you have to choose your database backend. I'm using Postgres so I have to download the JDBC driver and put it on this directory. <code>.BuildServer</code> is the default install folder TeamCity has created in your home folder.</p> 
+</code></pre>
+<h3>Download JDBC driver</h3>
+<p>In one of the setup screens, you have to choose your database backend. I'm using Postgres so I have to download the JDBC driver and put it on this directory. <code>.BuildServer</code> is the default install folder TeamCity has created in your home folder.</p>
 <pre><code>~/.BuildServer$ tree lib
 lib
 └── jdbc
     └── postgresql-9.3-1103.jdbc41.jar
-</code></pre> 
-<h3>Create the database backend</h3> 
+</code></pre>
+<h3>Create the database backend</h3>
 <pre><code>$ sudo -u postgres psql postgres
 psql (9.3.9)
-Type "help" for help.
+Type &quot;help&quot; for help.
 
 postgres=# create user teamcity with createdb encrypted password 'TeamCity';
 postgres=# create database teamcity with owner teamcity;
-</code></pre> 
-<h3>Fiddle the application</h3> 
-<p>After an hour of fiddling, I have a successful build. The real challenge is deploying the artifacts. But I'm sure my friend Google has answer.</p> 
-<p><img src="https://drmanalo.github.io/images/teamcity.png" alt="TeamCity project screen"></p></p>
+</code></pre>
+<h3>Fiddle the application</h3>
+<p>After an hour of fiddling, I have a successful build. The real challenge is deploying the artifacts. But I'm sure my friend Google has answer.</p>
+<p><img src="/images/teamcity.png" alt="TeamCity project screen" /></p>
+</p>
 		</div>
 	</div>
 

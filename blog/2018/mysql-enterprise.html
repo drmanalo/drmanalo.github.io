@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,10 +58,10 @@
 		<div class="post">
 			<h1>MySQL Enterprise Install</h1>
 			<p><em>14 April 2018</em></p>
-			<p><p>We are moving from community to commercial. Sounds posh but if it doesn't, I always like the sound of going to fully supported not partially supported. Honestly, I don't know the extra benefits but here I am trying to install it on my local machine. If you want to try it, you can download the packages from <a href="https://edelivery.oracle.com/osdc/faces/SoftwareDelivery">Oracle Software Delivery Cloud</a>. Please read the print since until now, I'm not sure how MySQL Enterprise is going to expire.</p> 
-<!-- more --> 
-<h3>Install dependencies</h3> 
-<p>Once you have the packages, you just need to extract them. Then install <code>libaio</code>.</p> 
+			<p><p>We are moving from community to commercial. Sounds posh but if it doesn't, I always like the sound of going to fully supported not partially supported. Honestly, I don't know the extra benefits but here I am trying to install it on my local machine. If you want to try it, you can download the packages from <a href="https://edelivery.oracle.com/osdc/faces/SoftwareDelivery">Oracle Software Delivery Cloud</a>. Please read the print since until now, I'm not sure how MySQL Enterprise is going to expire.</p>
+<!-- more -->
+<h3>Install dependencies</h3>
+<p>Once you have the packages, you just need to extract them. Then install <code>libaio</code>.</p>
 <pre><code>$ sudo apt install libaio1
 Reading package lists... Done
 Building dependency tree       
@@ -69,9 +69,9 @@ Reading state information... Done
 You might want to run 'apt-get -f install' to correct these:
 The following packages have unmet dependencies:
 ...
-</code></pre> 
-<h3>Mitigate unmet dependencies</h3> 
-<p>This might not happen on your machine but a quick <code>apt-get -f install</code> should fix it.</p> 
+</code></pre>
+<h3>Mitigate unmet dependencies</h3>
+<p>This might not happen on your machine but a quick <code>apt-get -f install</code> should fix it.</p>
 <pre><code>$ sudo apt-get -f install
 Reading package lists... Done
 Building dependency tree       
@@ -81,11 +81,11 @@ The following additional packages will be installed:
   libaio1 libmecab2
 The following packages will be REMOVED:
 ...
-</code></pre> 
-<h3>Preconfiguration</h3> 
+</code></pre>
+<h3>Preconfiguration</h3>
 <pre><code>$ sudo dpkg-preconfigure mysql-commercial-server_*.deb
-</code></pre> 
-<h3>Installation</h3> 
+</code></pre>
+<h3>Installation</h3>
 <pre><code>$ sudo dpkg -i mysql-{common,commercial-client,client,commercial-server,server}_*.deb
 (Reading database ... 301743 files and directories currently installed.)
 Preparing to unpack mysql-common_8.0.11+commercial-1ubuntu16.04_amd64.deb ...
@@ -111,8 +111,8 @@ Installing new version of config file /etc/mysql/mysql.cnf ...
 Installing new version of config file /etc/mysql/mysql.conf.d/mysqld.cnf ...
 update-alternatives: using /etc/mysql/mysql.cnf to provide /etc/mysql/my.cnf (my.cnf) in auto mode
 Setting up mysql-server (8.0.11+commercial-1ubuntu16.04) ...
-</code></pre> 
-<h3>Test your installation</h3> 
+</code></pre>
+<h3>Test your installation</h3>
 <pre><code>$ mysql -uroot -p
 Enter password: 
 Welcome to the MySQL monitor.  Commands end with ; or \g.
@@ -120,7 +120,8 @@ Your MySQL connection id is 9
 Server version: 8.0.11-commercial MySQL Enterprise Server - Commercial
 
 Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

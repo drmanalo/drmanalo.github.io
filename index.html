@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -56,17 +56,35 @@
  	<div class="content container">
     	<ul id="posts">
 					<li>
+								<a href="blog/2020/dockerce-redhat.html"><h1 class="post-title">Installing Docker CE on Red Hat 8</h1></a>
+								<span class="post-date">26 April 2020</span>
+								<p>Docker is an open source project which allows us to deploy applications inside containers. A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and realiably from one computing environment to another. A docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system librarries and settings.</p>
+<p>Wtih the release of RHEL 8 and CentOS 8, docker package has been removed from their default repositories. docker has been replaced with <code>podman</code> and <code>buildah</code>. By using external reposity, it's still possible to install Docker CE (Community Edition).</p>
+
+								<a class="btn btn-default" href="blog/2020/dockerce-redhat.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2020/ssh-through-aws-ssm.html"><h1 class="post-title">Using SSH through AWS Session Manager</h1></a>
+								<span class="post-date">18 April 2020</span>
+								<p>We are planning to use AWS for our Java applications which is a step forward from the dedicated hosting that we currently have. Being on a corporate world, security is pretty tight and common ports are locked down including SSH port. This is a challenge since I have to SCP to deploy my jar and war files.</p>
+<p>Luckily AWS allows to tunnel SSH through their session manager. I followed <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html">this guide</a> to setup my connection. There are prerequisites to comply with and you need to have the correct role provisioned to your AWS login.</p>
+
+								<a class="btn btn-default" href="blog/2020/ssh-through-aws-ssm.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
 								<a href="blog/2019/letsencrypt-apache-centos.html"><h1 class="post-title">Using LetsEncrypt with CentOS on Apache</h1></a>
 								<span class="post-date">24 February 2019</span>
-								<p>From <a href="https://letsencrypt.org">letsencrypt.org</a>:</p> 
-<blockquote> 
- <p>To enable HTTPS on your website, you need to get a certificate from a Certificate Authority (CA). Let's Encrypt is a CA. In order to get a certificate for your website's domain from Let's Encrypt, you have to demonstrate control over the domain. With Let's Encrypt, you do this using software that uses the <a href="https://ietf-wg-acme.github.io/acme">ACME protocol</a>, which typically runs on your web host.</p> 
-</blockquote> 
-<p>You will need SSH access to your web host to install a <code>certbot</code> client. <code>certbot</code> will automate certificate issuance and installation with no downtime.</p> 
-<h3>Install certbot</h3> 
-<p>On my machine, it added more Python dependencies.</p> 
+								<p>From <a href="https://letsencrypt.org">letsencrypt.org</a>:</p>
+<blockquote>
+<p>To enable HTTPS on your website, you need to get a certificate from a Certificate Authority (CA). Let's Encrypt is a CA. In order to get a certificate for your website's domain from Let's Encrypt, you have to demonstrate control over the domain. With Let's Encrypt, you do this using software that uses the <a href="https://ietf-wg-acme.github.io/acme">ACME protocol</a>, which typically runs on your web host.</p>
+</blockquote>
+<p>You will need SSH access to your web host to install a <code>certbot</code> client. <code>certbot</code> will automate certificate issuance and installation with no downtime.</p>
+<h3>Install certbot</h3>
+<p>On my machine, it added more Python dependencies.</p>
 <pre><code>$ sudo yum install certbot python2-certbot-apache
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2019/letsencrypt-apache-centos.html">Read More →</a>
 								<hr class="spacer"/>
@@ -74,15 +92,15 @@
 					<li>
 								<a href="blog/2018/enable-l2tp-over-ipsec.html"><h1 class="post-title">Enable L2TP over IPSec on Ubuntu</h1></a>
 								<span class="post-date">30 November 2018</span>
-								<p>If you're running the latest Ubuntu 18.04, then you don't need to add the PPA repository. If on lower version of Ubuntu, please add this PPA.</p> 
+								<p>If you're running the latest Ubuntu 18.04, then you don't need to add the PPA repository. If on lower version of Ubuntu, please add this PPA.</p>
 <pre><code>$ sudo add-apt-repository ppa:nm-l2tp/network-manager-l2tp  
 $ sudo apt-get update
-</code></pre> 
-<h3>Install network manager l2tp</h3> 
-<p><code>network-manager-l2tp-gnome</code> is required if running gnome</p> 
+</code></pre>
+<h3>Install network manager l2tp</h3>
+<p><code>network-manager-l2tp-gnome</code> is required if running gnome</p>
 <pre><code>$ sudo apt-get install network-manager-l2tp
 $ sudo apt-get install network-manager-l2tp-gnome
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2018/enable-l2tp-over-ipsec.html">Read More →</a>
 								<hr class="spacer"/>
@@ -90,13 +108,13 @@ $ sudo apt-get install network-manager-l2tp-gnome
 					<li>
 								<a href="blog/2018/beginning-websocket.html"><h1 class="post-title">Start Learning WebSocket</h1></a>
 								<span class="post-date">03 November 2018</span>
-								<p>This is from <a href="http://spring.io/guides/gs/messaging-stomp-websocket">Spring Guides</a> and it's their "hello websocket" application. This sends messages back and forth between a browser and the server using WebSocket.</p> 
-<h2>From scratch</h2> 
+								<p>This is from <a href="http://spring.io/guides/gs/messaging-stomp-websocket">Spring Guides</a> and it's their &quot;hello websocket&quot; application. This sends messages back and forth between a browser and the server using WebSocket.</p>
+<h2>From scratch</h2>
 <pre><code>$ spring init --dependencies=websocket --build=gradle --groupId=com.prototype websocket
 Using service at https://start.spring.io
 Project extracted to '~/idea/websocket'
-</code></pre> 
-<p>Then I download all dependencies using <code>gradle build</code></p> 
+</code></pre>
+<p>Then I download all dependencies using <code>gradle build</code></p>
 <pre><code>$ cd ~/idea/websocket
 $ ./gradlew clean build
 Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-websocket/2.1.0.RELEASE/spring-boot-starter-websocket-2.1.0.RELEASE.pom
@@ -111,7 +129,7 @@ Download https://repo.maven.apache.org/maven2/org/springframework/boot/spring-bo
 
 BUILD SUCCESSFUL in 26s
 6 actionable tasks: 5 executed, 1 up-to-date
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2018/beginning-websocket.html">Read More →</a>
 								<hr class="spacer"/>
@@ -119,8 +137,8 @@ BUILD SUCCESSFUL in 26s
 					<li>
 								<a href="blog/2018/enable-https-centos.html"><h1 class="post-title">Enabling HTTPS on Apache</h1></a>
 								<span class="post-date">03 November 2018</span>
-								<p>This assumes that Apache httpd is already running on the target Linux machine.</p> 
-<p>Install <code>mod_sll</code> and <code>openssl</code>. mod_ssl provides cryptography for Apache web server using SSL and TLS protocols while openssl is a toolkit that includes certificate management tool and share libraries which gives us various cryptogrpahic algorithms.</p> 
+								<p>This assumes that Apache httpd is already running on the target Linux machine.</p>
+<p>Install <code>mod_sll</code> and <code>openssl</code>. mod_ssl provides cryptography for Apache web server using SSL and TLS protocols while openssl is a toolkit that includes certificate management tool and share libraries which gives us various cryptogrpahic algorithms.</p>
 
 								<a class="btn btn-default" href="blog/2018/enable-https-centos.html">Read More →</a>
 								<hr class="spacer"/>
@@ -128,8 +146,8 @@ BUILD SUCCESSFUL in 26s
 					<li>
 								<a href="blog/2018/enable-tlsv12.html"><h1 class="post-title">Enabling TLSv1.2 on CentOS 5</h1></a>
 								<span class="post-date">18 June 2018</span>
-								<p>We have a legacy IVR (Interactive Voice Response) software running an <a href="https://asterisk.org">Asterisk PBX Server</a>. It executes AGI (Asterisk Gateway Interface) compliant protocol to launch external programs written in Python to control telephony channel, play audio, read DTMF (Dual Tone Multi Frequency) digits, etc. We ran into an issue when the payment gateway stopped supporting lower versions of TLS (Transport Layer Security). It requires TLSv1.2 as minimum version.</p> 
-<h3>Issue</h3> 
+								<p>We have a legacy IVR (Interactive Voice Response) software running an <a href="https://asterisk.org">Asterisk PBX Server</a>. It executes AGI (Asterisk Gateway Interface) compliant protocol to launch external programs written in Python to control telephony channel, play audio, read DTMF (Dual Tone Multi Frequency) digits, etc. We ran into an issue when the payment gateway stopped supporting lower versions of TLS (Transport Layer Security). It requires TLSv1.2 as minimum version.</p>
+<h3>Issue</h3>
 <pre><code>$ curl -Ivvv https://secure.payment.com
 * About to connect() to secure.payment.com port 443
 *   Trying 185.n.n.n... connected
@@ -141,7 +159,7 @@ BUILD SUCCESSFUL in 26s
 Unknown SSL protocol error in connection to secure.payment.com:443 
 * Closing connection #0
 curl: (35) Unknown SSL protocol error in connection to secure.payment.com:443
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2018/enable-tlsv12.html">Read More →</a>
 								<hr class="spacer"/>
@@ -149,14 +167,14 @@ curl: (35) Unknown SSL protocol error in connection to secure.payment.com:443
 					<li>
 								<a href="blog/2018/update-to-mysql-enterprise.html"><h1 class="post-title">Migrating to MySQL Enterprise</h1></a>
 								<span class="post-date">08 May 2018</span>
-								<p>We are migrating to MySQL Enterprise from community version. Currently I'm upgrading from 5.7.22 to 8.0.11. It's my bad not reading the <a href="https://dev.mysql.com/doc/refman/8.0/en/upgrading-strategies.html">upgrade strategy</a> from Oracle themselves so I ended up with some issues.</p> 
-<p>What I did was uninstall the community version using <code>yum remove</code> and install the following RPMs. I got them from Oracle website as trial.</p> 
-<ul> 
- <li>mysql-commercial-client-8.0.11-1.1.el7.x86_64.rpm</li> 
- <li>mysql-commercial-common-8.0.11-1.1.el7.x86_64.rpm</li> 
- <li>mysql-commercial-libs-8.0.11-1.1.el7.x86_64.rpm</li> 
- <li>mysql-commercial-server-8.0.11-1.1.el7.x86_64.rpm</li> 
-</ul> 
+								<p>We are migrating to MySQL Enterprise from community version. Currently I'm upgrading from 5.7.22 to 8.0.11. It's my bad not reading the <a href="https://dev.mysql.com/doc/refman/8.0/en/upgrading-strategies.html">upgrade strategy</a> from Oracle themselves  so I ended up with some issues.</p>
+<p>What I did was uninstall the community version using <code>yum remove</code> and install the following RPMs. I got them from Oracle website as trial.</p>
+<ul>
+<li>mysql-commercial-client-8.0.11-1.1.el7.x86_64.rpm</li>
+<li>mysql-commercial-common-8.0.11-1.1.el7.x86_64.rpm</li>
+<li>mysql-commercial-libs-8.0.11-1.1.el7.x86_64.rpm</li>
+<li>mysql-commercial-server-8.0.11-1.1.el7.x86_64.rpm</li>
+</ul>
 
 								<a class="btn btn-default" href="blog/2018/update-to-mysql-enterprise.html">Read More →</a>
 								<hr class="spacer"/>
@@ -164,7 +182,7 @@ curl: (35) Unknown SSL protocol error in connection to secure.payment.com:443
 					<li>
 								<a href="blog/2018/mysql-enterprise.html"><h1 class="post-title">MySQL Enterprise Install</h1></a>
 								<span class="post-date">14 April 2018</span>
-								<p>We are moving from community to commercial. Sounds posh but if it doesn't, I always like the sound of going to fully supported not partially supported. Honestly, I don't know the extra benefits but here I am trying to install it on my local machine. If you want to try it, you can download the packages from <a href="https://edelivery.oracle.com/osdc/faces/SoftwareDelivery">Oracle Software Delivery Cloud</a>. Please read the print since until now, I'm not sure how MySQL Enterprise is going to expire.</p> 
+								<p>We are moving from community to commercial. Sounds posh but if it doesn't, I always like the sound of going to fully supported not partially supported. Honestly, I don't know the extra benefits but here I am trying to install it on my local machine. If you want to try it, you can download the packages from <a href="https://edelivery.oracle.com/osdc/faces/SoftwareDelivery">Oracle Software Delivery Cloud</a>. Please read the print since until now, I'm not sure how MySQL Enterprise is going to expire.</p>
 
 								<a class="btn btn-default" href="blog/2018/mysql-enterprise.html">Read More →</a>
 								<hr class="spacer"/>
@@ -172,9 +190,9 @@ curl: (35) Unknown SSL protocol error in connection to secure.payment.com:443
 					<li>
 								<a href="blog/2018/ubuntu-nvidia-driver.html"><h1 class="post-title">Nvidia Driver for Ubuntu 16</h1></a>
 								<span class="post-date">08 February 2018</span>
-								<p>My company laptop comes like a present to me. It has 16GB of RAM and couple of SSDs on it. It's running Windows 10 Home Edition but I don't have issue with that since I'm going to use Linux. I'm originally CentOS but we will use Ubuntu going forward to make it a smooth Linux transition for non-seasoned Linux users.</p> 
-<p>The only issue I encountered with this laptop while installing Ubuntu is the graphics driver. The laptop has multiple graphics card (Intel and Nvidia) and the Nvidia driver is not supported on Ubuntu being proprietary.</p> 
-<p><img src="https://drmanalo.github.io/images/inspiron.png" alt="Ubuntu About"></p> 
+								<p>My company laptop comes like a present to me. It has 16GB of RAM and couple of SSDs on it. It's running Windows 10 Home Edition but I don't have issue with that since I'm going to use Linux. I'm originally CentOS but we will use Ubuntu going forward to make it a smooth Linux transition for non-seasoned Linux users.</p>
+<p>The only issue I encountered with this laptop while installing Ubuntu is the graphics driver. The laptop has multiple graphics card (Intel and Nvidia) and the Nvidia driver is not supported on Ubuntu being proprietary.</p>
+<p><img src="/images/inspiron.png" alt="Ubuntu About" /></p>
 
 								<a class="btn btn-default" href="blog/2018/ubuntu-nvidia-driver.html">Read More →</a>
 								<hr class="spacer"/>
@@ -182,11 +200,11 @@ curl: (35) Unknown SSL protocol error in connection to secure.payment.com:443
 					<li>
 								<a href="blog/2017/monitor-remote-jvm.html"><h1 class="post-title">Profiling Remote Java Application</h1></a>
 								<span class="post-date">29 September 2017</span>
-								<p><code>jvisualvm</code> is a tool that provides a visual interface for viewing detailed information about Java technology-based applications while they are running. You can his to view data related to your local applications and those running on remote hosts. You can also capture data about JVM software instances and save the data to your local system.</p> 
-<p>There are couple of ways to use it, one is using <code>jstatd</code> and the other is by JMX (Java management Extensions). I tried jstatd first but didn't work. The later worked on my CentOS machine using the visualvm I downloaded from <a href="https://visualvm.github.io/download.html">visualvm.github.io</a>.</p> 
-<h2>By using jstatd</h2> 
-<h3>Grant jstatd full security permission</h3> 
-<p>Create a file called <code>jstatd.all.policy</code>. If in production, make sure your server port are locked down to your local IP.</p> 
+								<p><code>jvisualvm</code> is a tool that provides a visual interface for viewing detailed information about Java technology-based applications while they are running. You can his to view data related to your local applications and those running on remote hosts. You can also capture data about JVM software instances and save the data to your local system.</p>
+<p>There are couple of ways to use it, one is using <code>jstatd</code> and the other is by JMX (Java management Extensions). I tried jstatd first but didn't work. The later worked on my CentOS machine using the visualvm I downloaded from <a href="https://visualvm.github.io/download.html">visualvm.github.io</a>.</p>
+<h2>By using jstatd</h2>
+<h3>Grant jstatd full security permission</h3>
+<p>Create a file called <code>jstatd.all.policy</code>. If in production, make sure your server port are locked down to your local IP.</p>
 
 								<a class="btn btn-default" href="blog/2017/monitor-remote-jvm.html">Read More →</a>
 								<hr class="spacer"/>
@@ -194,13 +212,13 @@ curl: (35) Unknown SSL protocol error in connection to secure.payment.com:443
 					<li>
 								<a href="blog/2017/spring-boot-angular.html"><h1 class="post-title">Spring Boot with Angular Setup</h1></a>
 								<span class="post-date">17 June 2017</span>
-								<p>We were given the opportunity to replace an existing mobile app by a responsive website. Mobile apps are great but since we are paying a monthly subscription to third-party, we are better off building a responsive website supported in all platform. We have iOS and Android version of the app but having it build once then run on different platforms is an added benefit.</p> 
-<p>For this setup, we need <code>springboot-cli</code> and <code>ng-cli</code>. I won't detail how to have them installed but in my setup I used <code>sdkman</code> for springboot-cli and <code>npm</code> for ng-cli.</p> 
-<h3>sping init</h3> 
+								<p>We were given the opportunity to replace an existing mobile app by a responsive website. Mobile apps are great but since we are paying a monthly subscription to third-party, we are better off building a responsive website supported in all platform. We have iOS and Android version of the app but having it build once then run on different platforms is an added benefit.</p>
+<p>For this setup, we need <code>springboot-cli</code> and <code>ng-cli</code>. I won't detail how to have them installed but in my setup I used <code>sdkman</code> for springboot-cli and <code>npm</code> for ng-cli.</p>
+<h3>sping init</h3>
 <pre><code>$ spring init --dependencies=web,h2,jpa,actuator,devtools mobile
 Using service at https://start.spring.io
 Project extracted to '/home/drmanalo/idea/mobile'
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2017/spring-boot-angular.html">Read More →</a>
 								<hr class="spacer"/>
@@ -208,12 +226,12 @@ Project extracted to '/home/drmanalo/idea/mobile'
 					<li>
 								<a href="blog/2017/installing-nexus-centos7.html"><h1 class="post-title">Installing Nexus OSS on Centos 7</h1></a>
 								<span class="post-date">03 May 2017</span>
-								<p>On my new role, I have found out that we are publishing jars to a private repository. This is to speed up build by telling Maven to get from our private repository first before going out to public. To learn more about Nexus, I'm installing it on my personal laptop running CentOS 7.</p> 
-<h3>Download and extract nexus</h3> 
+								<p>On my new role, I have found out that we are publishing jars to a private repository. This is to speed up build by telling Maven to get from our private repository first before going out to public. To learn more about Nexus, I'm installing it on my personal laptop running CentOS 7.</p>
+<h3>Download and extract nexus</h3>
 <pre><code>$ wget http://download.sonatype.com/nexus/3/latest-unix.tar.gz
 $ sudo tar xvf latest-unix.tar.gz -C /opt
 $ sudo ln -s /opt/nexus-3.3.1-01/ /opt/nexus
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2017/installing-nexus-centos7.html">Read More →</a>
 								<hr class="spacer"/>
@@ -221,10 +239,10 @@ $ sudo ln -s /opt/nexus-3.3.1-01/ /opt/nexus
 					<li>
 								<a href="blog/2017/porting-svn-to-git.html"><h1 class="post-title">Porting subversion To git</h1></a>
 								<span class="post-date">12 April 2017</span>
-								<p>Before leaving my current role, I was tasked to migrate existing SVN repositories into git. It is exciting since I never did such thing in the past. Funny enough, I was challenged to install <code>git-all</code> on one of our unregistered Red Hat box. I'm failing to run this command to make base repository accessible. I can raise a ticket to register the box but I'm worried waiting for resolution would take longer than doing the migration on a different machine.</p> 
+								<p>Before leaving my current role, I was tasked to migrate existing SVN repositories into git. It is exciting since I never did such thing in the past. Funny enough, I was challenged to install <code>git-all</code> on one of our unregistered Red Hat box. I'm failing to run this command to make base repository accessible. I can raise a ticket to register the box but I'm worried waiting for resolution would take longer than doing the migration on a different machine.</p>
 <pre><code>rhn-channel --add --channel=rhel-x86_64-server-optional-6
-</code></pre> 
-<p>Anyways, I have to install <code>git-svn</code> to my personal laptop and do the migration.</p> 
+</code></pre>
+<p>Anyways, I have to install <code>git-svn</code> to my personal laptop and do the migration.</p>
 <pre><code>$ sudo yum install git-svn
 ...
 Running transaction
@@ -233,7 +251,7 @@ Verifying  : git-svn-1.8.3.1-6.el7_2.1.x86_64                                   
 
 Installed:
    git-svn.x86_64 0:1.8.3.1-6.el7_2.1                                                                 
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2017/porting-svn-to-git.html">Read More →</a>
 								<hr class="spacer"/>
@@ -241,14 +259,14 @@ Installed:
 					<li>
 								<a href="blog/2017/hello-ofbiz.html"><h1 class="post-title">Hello Ofbiz</h1></a>
 								<span class="post-date">01 February 2017</span>
-								<p>Just recently, I was tasked to support Apache Ofbiz (Open for Business) something not very exciting. The application is built on release 4 making Google search less efficient. The current release 16 is not that popular either let alone legacy versions. To have a better understanding of the framework, I'm going to follow this <a href="https://cwiki.apache.org/confluence/display/OFBIZ/OFBiz+Tutorial+-+A+Beginners+Development+Guide">OFBiz Tutorial</a>.</p> 
-<p>Just like any JVM application, you will need a JDK to run Ofbiz. It's build tool is <code>ant</code> being Apache. Newer releases has <code>maven</code>, <code>ivy</code> and <code>gradle</code> as build tool.</p> 
-<h3>Downloading ofbiz</h3> 
+								<p>Just recently, I was tasked to support Apache Ofbiz (Open for Business) something not very exciting. The application is built on release 4 making Google search less efficient. The current release 16 is not that popular either let alone legacy versions. To have a better understanding of the framework, I'm going to follow this <a href="https://cwiki.apache.org/confluence/display/OFBIZ/OFBiz+Tutorial+-+A+Beginners+Development+Guide">OFBiz Tutorial</a>.</p>
+<p>Just like any JVM application, you will need a JDK to run Ofbiz. It's build tool is <code>ant</code> being Apache. Newer releases has <code>maven</code>, <code>ivy</code> and <code>gradle</code> as build tool.</p>
+<h3>Downloading ofbiz</h3>
 <pre><code>$ svn co http://svn.apache.org/repos/asf/ofbiz/branches/release15.12 ofbiz.15.12
 ...
 U   ofbiz.15.12
 Checked out revision 1781334.
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2017/hello-ofbiz.html">Read More →</a>
 								<hr class="spacer"/>
@@ -256,9 +274,9 @@ Checked out revision 1781334.
 					<li>
 								<a href="blog/2016/hello-angular-typescript.html"><h1 class="post-title">Hello Angular Typescript</h1></a>
 								<span class="post-date">29 December 2016</span>
-								<p><strong>Angular</strong> is one of many open source frameworks for developing web applications. I may have not seen all of them but this is the closest I think to Java and its metadata approach to programming. Another Javascript framework I wanted to use is <strong>nodejs</strong> but this is more than just a framework or library but a runtime environment if you like.</p> 
-<h3>Angular Toolset</h3> 
-<p>You will get this with any language you wanted to use, you need to set up its environment. <code>node</code> and <code>npm</code> is a must when writing Angular.</p> 
+								<p><strong>Angular</strong> is one of many open source frameworks for developing web applications. I may have not seen all of them but this is the closest I think to Java and its metadata approach to programming. Another Javascript framework I wanted to use is <strong>nodejs</strong> but this is more than just a framework or library but a runtime environment if you like.</p>
+<h3>Angular Toolset</h3>
+<p>You will get this with any language you wanted to use, you need to set up its environment. <code>node</code> and <code>npm</code> is a must when writing Angular.</p>
 <pre><code>$ curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
 Fetched 313 kB in 0s (484 kB/s)    
 
@@ -272,7 +290,7 @@ v7.3.0
 
 $ npm -v
 3.10.10
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2016/hello-angular-typescript.html">Read More →</a>
 								<hr class="spacer"/>
@@ -280,14 +298,14 @@ $ npm -v
 					<li>
 								<a href="blog/2016/spring-boot-soap-client.html"><h1 class="post-title">Spring Boot SOAP Client</h1></a>
 								<span class="post-date">18 June 2016</span>
-								<p>This is how I implemented "Consuming a SOAP Web Service" from <a href="https://spring.io/guides/gs/consuming-web-service/">Spring Guides</a>. For the RESTful world, SOAP is dead but it's pretty much alive and <a href="https://github.com/spring-projects/spring-boot/tree/master/spring-boot-starters/spring-boot-starter-ws">Spring</a> is developing features for it. I'm not yet sure why the web service we are integrating to has extra requirements not available in REST but if you're wondering why companies are using SOAP, here is a good <a href="http://spf13.com/post/soap-vs-rest">REST vs SOAP article</a>.</p> 
-<p>To get started with SOAP, I have to add this to my existing Spring Boot POM.</p> 
+								<p>This is how I implemented &quot;Consuming a SOAP Web Service&quot; from <a href="https://spring.io/guides/gs/consuming-web-service/">Spring Guides</a>. For the RESTful world, SOAP is dead but it's pretty much alive and <a href="https://github.com/spring-projects/spring-boot/tree/master/spring-boot-starters/spring-boot-starter-ws">Spring</a> is developing features for it. I'm not yet sure why the web service we are integrating to has extra requirements not available in REST but if you're wondering why companies are using SOAP, here is a good <a href="http://spf13.com/post/soap-vs-rest">REST vs SOAP article</a>.</p>
+<p>To get started with SOAP, I have to add this to my existing Spring Boot POM.</p>
 <pre><code>&lt;dependency&gt;
   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
   &lt;artifactId&gt;spring-boot-starter-ws&lt;/artifactId&gt;
 &lt;/dependency&gt;
-</code></pre> 
-<p>The above Spring Boot starter will add the following dependencies.</p> 
+</code></pre>
+<p>The above Spring Boot starter will add the following dependencies.</p>
 
 								<a class="btn btn-default" href="blog/2016/spring-boot-soap-client.html">Read More →</a>
 								<hr class="spacer"/>
@@ -295,7 +313,7 @@ $ npm -v
 					<li>
 								<a href="blog/2016/exceptional-exceptions.html"><h1 class="post-title">Exceptional Exceptions</h1></a>
 								<span class="post-date">11 June 2016</span>
-								<p>Creating an exception in Java is a very slow operation. Expect that throwing an exception will cost you around 1-5 microseconds. Nearly all this time is spent on filling in the exception thread stack. The deeper the stack trace is, the more time it will take to populate it. If you take a peek on <code>java.lang.Throwable</code> source, you will see the answer staring into your face.</p> 
+								<p>Creating an exception in Java is a very slow operation. Expect that throwing an exception will cost you around 1-5 microseconds. Nearly all this time is spent on filling in the exception thread stack. The deeper the stack trace is, the more time it will take to populate it. If you take a peek on <code>java.lang.Throwable</code> source, you will see the answer staring into your face.</p>
 <pre><code>public Throwable() {
     fillInStackTrace();
 }
@@ -310,8 +328,8 @@ public synchronized Throwable fillInStackTrace() {
 }
 
 private native Throwable fillInStackTrace(int dummy);
-</code></pre> 
-<p>Usually we throw an exception in case of unexpected problems. This means that we don’t use exceptions as part of the the repetitive if-then-else mess.</p> 
+</code></pre>
+<p>Usually we throw an exception in case of unexpected problems. This means that we don’t use exceptions as part of the the repetitive if-then-else mess.</p>
 
 								<a class="btn btn-default" href="blog/2016/exceptional-exceptions.html">Read More →</a>
 								<hr class="spacer"/>
@@ -319,17 +337,17 @@ private native Throwable fillInStackTrace(int dummy);
 					<li>
 								<a href="blog/2016/pimping-centos7.html"><h1 class="post-title">Pimping CentOS 7</h1></a>
 								<span class="post-date">04 June 2016</span>
-								<p>Before you are able to tweak your CentOS installation, you will need additional yum repositories.</p> 
+								<p>Before you are able to tweak your CentOS installation, you will need additional yum repositories.</p>
 <pre><code># yum install epel-release
 # rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 # rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
 # rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
 # yum update
-</code></pre> 
-<h3>Fancy icons</h3> 
-<p>Download and extract <a href="/downloads/Super-Flat-Remix-master.zip">Super Flat Remix GNOME icons</a>. After extracting, move folder <code>Super Flat Remix</code> into your <code>~/.icons</code> folder.</p> 
-<h3>Fancy themes</h3> 
-<p>Download and extract <a href="/downloads/175666-OSX-Arc-White.zip">OSX Arc White theme</a>. After extracting, move folder <code>OSX-Arc-White</code> into your <code>~/.themes</code> folder.</p> 
+</code></pre>
+<h3>Fancy icons</h3>
+<p>Download and extract <a href="/downloads/Super-Flat-Remix-master.zip">Super Flat Remix GNOME icons</a>. After extracting, move folder <code>Super Flat Remix</code> into your <code>~/.icons</code> folder.</p>
+<h3>Fancy themes</h3>
+<p>Download and extract <a href="/downloads/175666-OSX-Arc-White.zip">OSX Arc White theme</a>. After extracting, move folder <code>OSX-Arc-White</code> into your <code>~/.themes</code> folder.</p>
 
 								<a class="btn btn-default" href="blog/2016/pimping-centos7.html">Read More →</a>
 								<hr class="spacer"/>
@@ -337,8 +355,8 @@ private native Throwable fillInStackTrace(int dummy);
 					<li>
 								<a href="blog/2016/adding-windows-loader-to-grub2.html"><h1 class="post-title">Adding Windows Loader To grub2</h1></a>
 								<span class="post-date">30 May 2016</span>
-								<p>I recently switched from ElementaryOS to CentOS. The install process went smoothly despite an initial issue while using a bootable SD card. I cannot detail the issue here but Google suggested using a DVD rather than SD card or any USB drive. Everything are working perfectly except I cannot go back to my Windows. It's embarassing to admit that we are using Windows for our open-source development but this is the reality. So when I'm away from work and testing things out, I'm rebooting to my CentOS and switch to Windows when I'm at work.</p> 
-<p>This is not grub2 specific issue by the way, grub2 should be able to add the loader but it has no knowledge of how to read <strong>ntfs</strong> partitions. The solution is install <code>ntfs-3g</code> and rebuild grub2 after.</p> 
+								<p>I recently switched from ElementaryOS to CentOS. The install process went smoothly despite an initial issue while using a bootable SD card. I cannot detail the issue here but Google suggested using a DVD rather than SD card or any USB drive. Everything are working perfectly except I cannot go back to my Windows. It's embarassing to admit that we are using Windows for our open-source development but this is the reality. So when I'm away from work and testing things out, I'm rebooting to my CentOS and switch to Windows when I'm at work.</p>
+<p>This is not grub2 specific issue by the way, grub2 should be able to add the loader but it has no knowledge of how to read <strong>ntfs</strong> partitions. The solution is install <code>ntfs-3g</code> and rebuild grub2 after.</p>
 <pre><code>$ yum info ntfs-3g
 Installed Packages
 Name        : ntfs-3g
@@ -350,7 +368,7 @@ Size        : 659 k
 Repo        : installed
 From repo   : epel
 Summary     : Linux NTFS userspace driver
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2016/adding-windows-loader-to-grub2.html">Read More →</a>
 								<hr class="spacer"/>
@@ -358,13 +376,13 @@ Summary     : Linux NTFS userspace driver
 					<li>
 								<a href="blog/2016/java8-on-centos7.html"><h1 class="post-title">Installing Java 1.8 on Centos</h1></a>
 								<span class="post-date">21 May 2016</span>
-								<p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p> 
-<p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p> 
-<h3>Downloading java 1.8</h3> 
+								<p>We are moving to enterprise Linux from Ubuntu to Red Hat, finally a dream come true for me being able to have some enterprise <code>nix</code> experience. To prepare myself, I removed my ElementaryOS and installed CentOS. If I have enough cash I'll probably get one of those Linux Developer Suite.</p>
+<p>As an exercise, I'm installing Java 1.8 and hopefully install more <code>dockers</code> to my CentOS in the near future. A quick Google took me to <a href="http://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/">techadmin's blog</a>.</p>
+<h3>Downloading java 1.8</h3>
 <pre><code>$ cd /opt/
-$ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"
+$ wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz&quot;
 $ tar xzf jdk-8u91-linux-x64.tar.gz
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2016/java8-on-centos7.html">Read More →</a>
 								<hr class="spacer"/>
@@ -372,7 +390,7 @@ $ tar xzf jdk-8u91-linux-x64.tar.gz
 					<li>
 								<a href="blog/2016/my-bashrc.html"><h1 class="post-title">My bashrc</h1></a>
 								<span class="post-date">08 May 2016</span>
-								<p>This is a backup of my <code>.bashrc</code>. I'm keeping it safe in case I'm rebuilding my machine.</p> 
+								<p>This is a backup of my <code>.bashrc</code>. I'm keeping it safe in case I'm rebuilding my machine.</p>
 <pre><code># .bashrc
 
 # Source global definitions
@@ -386,12 +404,12 @@ fi
 # User specific aliases and functions
 
 # THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/kodi/.sdkman"
-[[ -s "/home/kodi/.sdkman/bin/sdkman-init.sh" ]] &amp;&amp; source "/home/kodi/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR=&quot;/home/kodi/.sdkman&quot;
+[[ -s &quot;/home/kodi/.sdkman/bin/sdkman-init.sh&quot; ]] &amp;&amp; source &quot;/home/kodi/.sdkman/bin/sdkman-init.sh&quot;
 
 # Strong red prompt
-export PS1="\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]"
-</code></pre> 
+export PS1=&quot;\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]&quot;
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2016/my-bashrc.html">Read More →</a>
 								<hr class="spacer"/>
@@ -399,7 +417,7 @@ export PS1="\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]"
 					<li>
 								<a href="blog/2016/blogging-with-jbake.html"><h1 class="post-title">Blogging With JBake</h1></a>
 								<span class="post-date">01 May 2016</span>
-								<p>I have an existing <strong>Octopress</strong> blog which is probably near its useful days. Octopress which is <strong>Jekyll</strong> underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I'm a <strong>Ruby</strong> guy, I will certainly stick with Octopress or Jekyll. But I'm not, being a Java developer. One of the biggest reason why I'm switching to <code>jbake</code> is being able to run it on JVM. <strong>JBake</strong> is not as mature as Jekyll, it's Github inception was 17th of July 2012.</p> 
+								<p>I have an existing <strong>Octopress</strong> blog which is probably near its useful days. Octopress which is <strong>Jekyll</strong> underneath the covers, is still one of the best static site generator. It has more community support and more written plugins. If I'm a <strong>Ruby</strong> guy, I will certainly stick with Octopress or Jekyll. But I'm not, being a Java developer. One of the biggest reason why I'm switching to <code>jbake</code> is being able to run it on JVM. <strong>JBake</strong> is not as mature as Jekyll, it's Github inception was 17th of July 2012.</p>
 
 								<a class="btn btn-default" href="blog/2016/blogging-with-jbake.html">Read More →</a>
 								<hr class="spacer"/>
@@ -407,9 +425,9 @@ export PS1="\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]"
 					<li>
 								<a href="blog/2016/custom-jsp-tags.html"><h1 class="post-title">Custom JSP Tags</h1></a>
 								<span class="post-date">30 April 2016</span>
-								<p>We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.</p> 
-<p>There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside <code>javax.servlet.jsp.tagext</code> and then writing your <code>tld</code> Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you're a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.</p> 
-<p>The other approach is by writing a tag file that goes to <code>WEB-INF/tags</code> folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html">JSP Tags 5</a>.</p> 
+								<p>We are writing a new application and the team agreed to use JSP as view technology with Freemarker for email templates. To type less on our views, I decided to write custom JSP tags.</p>
+<p>There are two approaches in making your custom JSP tag. One is by using a Java class extending one of the classes inside <code>javax.servlet.jsp.tagext</code> and then writing your <code>tld</code> Tag Library Descriptor which calls the class and defines other attributes needed by the custom tag. This is the neat way if you're a Java purist but harder to test since you need a mock servlet implementation with mock JSP writer to do your assertions.</p>
+<p>The other approach is by writing a tag file that goes to <code>WEB-INF/tags</code> folder by convention. The tag file is nothing but JSP code fragments with declared attributes of the required parameters for the tag to be able to perform its sole purpose. This is well-documented here <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPTags5.html">JSP Tags 5</a>.</p>
 
 								<a class="btn btn-default" href="blog/2016/custom-jsp-tags.html">Read More →</a>
 								<hr class="spacer"/>
@@ -417,10 +435,10 @@ export PS1="\[$(tput setaf 1)\]\[$(tput bold)\][\u@\h \W]\\$ \[$(tput sgr0)\]"
 					<li>
 								<a href="blog/2016/groovy-testing.html"><h1 class="post-title">Groovy Testing</h1></a>
 								<span class="post-date">16 March 2016</span>
-								<p>My previous post is all about writing a simple Groovy CRUD application. It includes writing your views in Groovy as well though it doesn't involve where to put the files. But if you're a seasoned Java developer, you should know your way out.</p> 
-<p>What it lacks is how to test your Groovy classes which I'm about to document on this post.</p> 
-<h3>FakeLoader</h3> 
-<p>This is a workaround assuming your Spring Boot application bootstraps more <code>@Configuration</code> and you don't want to include them in your integration tests.</p> 
+								<p>My previous post is all about writing a simple Groovy CRUD application. It includes writing your views in Groovy as well though it doesn't involve where to put the files. But if you're a seasoned Java developer, you should know your way out.</p>
+<p>What it lacks is how to test your Groovy classes which I'm about to document on this post.</p>
+<h3>FakeLoader</h3>
+<p>This is a workaround assuming your Spring Boot application bootstraps more <code>@Configuration</code> and you don't want to include them in your integration tests.</p>
 <pre><code>import org.junit.Test
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.test.context.ActiveProfiles
@@ -428,12 +446,12 @@ import org.springframework.test.context.ActiveProfiles
 /**
  * For integration tests
  */
-@ActiveProfiles("dev")
+@ActiveProfiles(&quot;dev&quot;)
 @SpringBootApplication
 class FakeLoader {
 
 }
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2016/groovy-testing.html">Read More →</a>
 								<hr class="spacer"/>
@@ -441,15 +459,16 @@ class FakeLoader {
 					<li>
 								<a href="blog/2016/bug-tracker-youtrack.html"><h1 class="post-title">Bug Tracker YouTrack</h1></a>
 								<span class="post-date">20 February 2016</span>
-								<p>I've been using Redmine as help desk and bug tracker since it has all the features/plugins you could ask for for a help desk or a bug tracker. But tracking bugs and issues has changed lately. When fixing bugs, you need to put in your estimate so you will have a pretty good idea how much effort you are putting into it. This is probably one of the reasons why <a href="http://www.redminecrm.com">RedmineCRM</a> premium plugins exists. The lack of planning tools in RedmineCRM pushed me further to use <a href="http://www.acunote.com">Acunote</a>. This is hosted online and free for a team of 5 users but 5 is very<br> limiting. Acunote also lacks the tooling support you will get from Jira, FogBugz and the likes.</p> 
-<p>Since I don't need enterprise solution at the moment so I'll give YouTrack a try. It's free for the first 10 users so I actually doubled what Acunote is offering for free. As with Jira, FogBugz or Acunote, it has hosted solution too.</p> 
-<h3>Downloading YouTrack</h3> 
+								<p>I've been using Redmine as help desk and bug tracker since it has all the features/plugins you could ask for for a help desk or a bug tracker. But tracking bugs and issues has changed lately. When fixing bugs, you need to put in your estimate so you will have a pretty good idea how much effort you are putting into it. This is probably one of the reasons why <a href="http://www.redminecrm.com">RedmineCRM</a> premium plugins exists. The lack of planning tools in RedmineCRM pushed me further to use <a href="http://www.acunote.com">Acunote</a>. This is hosted online and free for a team of 5 users but 5 is very<br />
+limiting. Acunote also lacks the tooling support you will get from Jira, FogBugz and the likes.</p>
+<p>Since I don't need enterprise solution at the moment so I'll give YouTrack a try. It's free for the first 10 users so I actually doubled what Acunote is offering for free. As with Jira, FogBugz or Acunote, it has hosted solution too.</p>
+<h3>Downloading YouTrack</h3>
 <pre><code>$ wget https://download.jetbrains.com/charisma/youtrack-6.0.12634.jar
 HTTP request sent, awaiting response... 200 OK
 Length: 111007822 (106M) [binary/octet-stream]
 Saving to: ‘youtrack-6.0.12634.jar’
 100%[======================================&gt;] 111,007,822 4.93MB/s   in 26s
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2016/bug-tracker-youtrack.html">Read More →</a>
 								<hr class="spacer"/>
@@ -457,9 +476,9 @@ Saving to: ‘youtrack-6.0.12634.jar’
 					<li>
 								<a href="blog/2016/teamcity-posgres.html"><h1 class="post-title">TeamCity With Postgres</h1></a>
 								<span class="post-date">26 January 2016</span>
-								<p>Recently, I've been looking for a Jenkins alternative and the closest I found is TeamCity. It's not free as in free speech compared to Jenkins but the twenty build configs and three build agents is more than enough for my small projects.</p> 
-<p>TeamCity promised to work out-of-the-box just like Jenkins does so I'll give it a go. It's using Tomcat by default so I'm expecting a flat learning curve here.</p> 
-<p><img src="https://drmanalo.github.io/images/teamcity_login.png" alt="TeamCity login screen"></p> 
+								<p>Recently, I've been looking for a Jenkins alternative and the closest I found is TeamCity. It's not free as in free speech compared to Jenkins but the twenty build configs and three build agents is more than enough for my small projects.</p>
+<p>TeamCity promised to work out-of-the-box just like Jenkins does so I'll give it a go. It's using Tomcat by default so I'm expecting a flat learning curve here.</p>
+<p><img src="/images/teamcity_login.png" alt="TeamCity login screen" /></p>
 
 								<a class="btn btn-default" href="blog/2016/teamcity-posgres.html">Read More →</a>
 								<hr class="spacer"/>
@@ -467,10 +486,10 @@ Saving to: ‘youtrack-6.0.12634.jar’
 					<li>
 								<a href="blog/2016/unable-to-mount-ntfs-drive.html"><h1 class="post-title">Fixing Unable to Mount NTFS Drive</h1></a>
 								<span class="post-date">18 January 2016</span>
-								<p>I was trying to mount a GPT NTFS drive and get <strong>Error mounting /dev/sdb1 at /media/drmanalo/DATA: Command-line mount -t "ntfs" -o</strong></p> 
-<h3>Culprit</h3> 
-<p>Windows 8 is using hibernation mode which writes RAM contents to the hard drive before powering off to be able to restore to the same state as it was before shutdown.</p> 
-<h3>Workaround</h3> 
+								<p>I was trying to mount a GPT NTFS drive and get <strong>Error mounting /dev/sdb1 at /media/drmanalo/DATA: Command-line mount -t &quot;ntfs&quot; -o</strong></p>
+<h3>Culprit</h3>
+<p>Windows 8 is using hibernation mode which writes RAM contents to the hard drive before powering off to be able to restore to the same state as it was before shutdown.</p>
+<h3>Workaround</h3>
 <pre><code>$ sudo ntfsfix /dev/sdb1
 Mounting volume... The disk contains an unclean file system (0, 0).
 Metadata kept in Windows cache, refused to mount.
@@ -487,19 +506,20 @@ Checking the alternate boot sector... OK
 NTFS volume version is 3.1.
 NTFS partition /dev/sdb1 was processed successfully.
 </code></pre>
+
 								<a class="btn btn-default" href="blog/2016/unable-to-mount-ntfs-drive.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>
 								<a href="blog/2015/personal-package-archive.html"><h1 class="post-title">Personal Package Archive</h1></a>
 								<span class="post-date">28 December 2015</span>
-								<p><strong>Personal Package Archive</strong> is a collection of software not included in Ubuntu repositories by default. Typically these repositories focus on a single program, but they can include more depending on the person maintaining them. With PPAs, Ubuntu users can have access to bleeding-edge software without waiting for the next official release if ever the PPA made it to the official repository.</p> 
-<p>Here are my top PPAs...</p> 
-<h3>Kodi</h3> 
+								<p><strong>Personal Package Archive</strong> is a collection of software not included in Ubuntu repositories by default. Typically these repositories focus on a single program, but they can include more depending on the person maintaining them. With PPAs, Ubuntu users can have access to bleeding-edge software without waiting for the next official release if ever the PPA made it to the official repository.</p>
+<p>Here are my top PPAs...</p>
+<h3>Kodi</h3>
 <pre><code>$ sudo add-apt-repository ppa:team-xbmc/ppa
 $ sudo apt-get update
 $ sudo apt-get install kodi
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2015/personal-package-archive.html">Read More →</a>
 								<hr class="spacer"/>
@@ -507,8 +527,8 @@ $ sudo apt-get install kodi
 					<li>
 								<a href="blog/2015/poormans.mac.html"><h1 class="post-title">Poorman's Mac</h1></a>
 								<span class="post-date">27 December 2015</span>
-								<p>After testing elementary OS using VirtualBox, I am finally installing it to my desktop. Not that I don't like CentOS anymore but it will help me on my job to totally embrace Ubuntu.</p> 
-<p><img src="https://drmanalo.github.io/images/elementary_info.png" alt="Elementary OS Information"></p> 
+								<p>After testing elementary OS using VirtualBox, I am finally installing it to my desktop. Not that I don't like CentOS anymore but it will help me on my job to totally embrace Ubuntu.</p>
+<p><img src="/images/elementary_info.png" alt="Elementary OS Information" /></p>
 
 								<a class="btn btn-default" href="blog/2015/poormans.mac.html">Read More →</a>
 								<hr class="spacer"/>
@@ -516,16 +536,16 @@ $ sudo apt-get install kodi
 					<li>
 								<a href="blog/2015/making-java-groovy.html"><h1 class="post-title">Making Java Groovy</h1></a>
 								<span class="post-date">21 December 2015</span>
-								<p>There is a book of exactly the same title from <a href="https://www.manning.com/books/making-java-groovy">manning.com</a>. I don't have it yet but father Christmas will put it underneath my tree this Christmas.</p> 
-<p>What I do have is Spring Boot in Action which covers mixing Java with Groovy. This is what this post is all about. I am going to create a Spring Boot project but will primarily use <code>groovy</code>.</p> 
-<h3>Creating the project</h3> 
+								<p>There is a book of exactly the same title from <a href="https://www.manning.com/books/making-java-groovy">manning.com</a>. I don't have it yet but father Christmas will put it underneath my tree this Christmas.</p>
+<p>What I do have is Spring Boot in Action which covers mixing Java with Groovy. This is what this post is all about. I am going to create a Spring Boot project but will primarily use <code>groovy</code>.</p>
+<h3>Creating the project</h3>
 <pre><code>$ mkdir paluwagan
 $ cd paluwagan
 $ mkdir static
 $ spring init --dependencies web,h2,data-jpa,jdbc,groovy-templates --build gradle --packaging jar --extract
 Using service at https://start.spring.io
 Project extracted to '/home/drmanalo/workspace/paluwagan'
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2015/making-java-groovy.html">Read More →</a>
 								<hr class="spacer"/>
@@ -533,14 +553,14 @@ Project extracted to '/home/drmanalo/workspace/paluwagan'
 					<li>
 								<a href="blog/2015/firewalld-101.html"><h1 class="post-title">firewalld 101</h1></a>
 								<span class="post-date">20 November 2015</span>
-								<p><strong>firewalld</strong> provides a dynamically managed firewall with support for network/firewall zones to define the trust level of network connections or interfaces. It has support for IPv4, IPv6 firewall settings and for ethernet bridges and has a separation of runtime and permanent configuration options. It also supports an interface for services or applications to add firewall rules directly.</p> 
-<p>The two important concepts of firewalld is <strong>zones</strong> and <strong>services</strong>.</p> 
-<p>A <strong>zone</strong> defines the trust level of the interface used for a connection. There are several pre-defined zones provided by firewalld.zone.</p> 
-<p>A <strong>service</strong> can be a list of local ports and destinations and additionally also a list of firewall helper modules automatically loaded if a service is enabled. Service configuration options and generic information about services are described in firewalld.service. The use of predefined services makes it easier for the user to enable and disable access to a service.</p> 
+								<p><strong>firewalld</strong> provides a dynamically managed firewall with support for network/firewall zones to define the trust level of network connections or interfaces. It has support for IPv4, IPv6 firewall settings and for ethernet bridges and has a separation of runtime and permanent configuration options. It also supports an interface for services or applications to add firewall rules directly.</p>
+<p>The two important concepts of firewalld is <strong>zones</strong> and <strong>services</strong>.</p>
+<p>A <strong>zone</strong> defines the trust level of the interface used for a connection. There are several pre-defined zones provided by firewalld.zone.</p>
+<p>A <strong>service</strong> can be a list of local ports and destinations and additionally also a list of firewall helper modules automatically loaded if a service is enabled. Service configuration options and generic information about services are described in firewalld.service. The use of predefined services makes it easier for the user to enable and disable access to a service.</p>
 <pre><code>$ firewall-cmd --get-zones
 block dmz drop external home internal public trusted work
-</code></pre> 
-<p>In order from least trusted to most trusted, the pre-defined zones within firewalld are:</p> 
+</code></pre>
+<p>In order from least trusted to most trusted, the pre-defined zones within firewalld are:</p>
 
 								<a class="btn btn-default" href="blog/2015/firewalld-101.html">Read More →</a>
 								<hr class="spacer"/>
@@ -548,11 +568,11 @@ block dmz drop external home internal public trusted work
 					<li>
 								<a href="blog/2015/spring-booted.html"><h1 class="post-title">Spring Booted</h1></a>
 								<span class="post-date">22 October 2015</span>
-								<blockquote> 
- <p><strong>Spring Boot</strong> is an exciting new way to develop Spring applications with minimal friction from the framework itself. Auto-configuration eliminates much of the boilerplate configuration that infests traditional Spring applications. Spring Boot starters enable you to specify build dependencies by what they offer rather than explicit library names and version. The Spring Boot CLI takes Spring Boot’s frictionless development model to a whole new level by enabling quick and easy development with Groovy from the command line. Finally, the Actuator lets you look inside your running application to see what and how Spring Boot has done.</p> 
-</blockquote> 
-<p>Above is an excerpt from <strong>Craig Walls'</strong> <a href="https://www.manning.com/books/spring-boot-in-action">Spring Boot in Action</a> which perfectly describe my feelings with the traditional Spring configuration and how Spring Boot modernise it.</p> 
-<p>My favourite part of Spring Boot is its CLI so I'll try creating a new project using CLI.</p> 
+								<blockquote>
+<p><strong>Spring Boot</strong> is an exciting new way to develop Spring applications with minimal friction from the framework itself. Auto-configuration eliminates much of the boilerplate configuration that infests traditional Spring applications. Spring Boot starters enable you to specify build dependencies by what they offer rather than explicit library names and version. The Spring Boot CLI takes Spring Boot’s frictionless development model to a whole new level by enabling quick and easy development with Groovy from the command line. Finally, the Actuator lets you look inside your running application to see what and how Spring Boot has done.</p>
+</blockquote>
+<p>Above is an excerpt from <strong>Craig Walls'</strong> <a href="https://www.manning.com/books/spring-boot-in-action">Spring Boot in Action</a> which perfectly describe my feelings with the traditional Spring configuration and how Spring Boot modernise it.</p>
+<p>My favourite part of Spring Boot is its CLI so I'll try creating a new project using CLI.</p>
 
 								<a class="btn btn-default" href="blog/2015/spring-booted.html">Read More →</a>
 								<hr class="spacer"/>
@@ -560,9 +580,9 @@ block dmz drop external home internal public trusted work
 					<li>
 								<a href="blog/2015/jenkins-on-centos.html"><h1 class="post-title">Jenkins on CentOS</h1></a>
 								<span class="post-date">13 October 2015</span>
-								<p>Jenkins is an opensource and probably the most popular continuous integration tool in the Java community. There are many plugins out there available to make your coding life easier. It supports almost all version control systems and can run all your Maven or Ant tasks.</p> 
-<p>To install and configure Jenkins on CentOS, we have to first make sure that Java is installed on your machine. If not, please refer to this post from <a href="http://www.if-not-true-then-false.com/2010/install-sun-oracle-java-jdk-jre-7-on-fedora-centos-red-hat-rhel/comment-page-2">if-not-true-then-false.com</a></p> 
-<h3>Add Jenkins to your repository</h3> 
+								<p>Jenkins is an opensource and probably the most popular continuous integration tool in the Java community. There are many plugins out there available to make your coding life easier. It supports almost all version control systems and can run all your Maven or Ant tasks.</p>
+<p>To install and configure Jenkins on CentOS, we have to first make sure that Java is installed on your machine. If not, please refer to this post from <a href="http://www.if-not-true-then-false.com/2010/install-sun-oracle-java-jdk-jre-7-on-fedora-centos-red-hat-rhel/comment-page-2">if-not-true-then-false.com</a></p>
+<h3>Add Jenkins to your repository</h3>
 <pre><code>$ sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
 Resolving pkg.jenkins-ci.org (pkg.jenkins-ci.org)... 199.193.196.24
 Connecting to pkg.jenkins-ci.org (pkg.jenkins-ci.org)|199.193.196.24|:80... connected.
@@ -570,7 +590,7 @@ HTTP request sent, awaiting response... 200 OK
 Length: 75 [text/plain]
 Saving to: â€˜/etc/yum.repos.d/jenkins.repoâ€™
 $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2015/jenkins-on-centos.html">Read More →</a>
 								<hr class="spacer"/>
@@ -578,15 +598,15 @@ $ sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 					<li>
 								<a href="blog/2015/lollipop-to.kitkat.html"><h1 class="post-title">From Lollipop To Kitkat</h1></a>
 								<span class="post-date">03 September 2015</span>
-								<p>Android system update is like pushed notifications where you cannot opt out. Rooted device actually can but I'm not rooting my device again since I had a bad experience with it. I kept ignoring this update but I woke up one morning in Android 5.0.2. This update is not compatible with my device as this drives it to the bend hence the reason I want to downgrade.</p> 
-<h3>Download Android debug bridge</h3> 
+								<p>Android system update is like pushed notifications where you cannot opt out. Rooted device actually can but I'm not rooting my device again since I had a bad experience with it. I kept ignoring this update but I woke up one morning in Android 5.0.2. This update is not compatible with my device as this drives it to the bend hence the reason I want to downgrade.</p>
+<h3>Download Android debug bridge</h3>
 <pre><code>$ apt-cache search android-tools
 android-tools-fsutils - Android ext4 utilities with sparse support
 android-tools-adb - Android Debug Bridge CLI tool
 android-tools-adbd - Android Debug Bridge Phone Daemon
 android-tools-fastboot - Android Fastboot protocol CLI tool
-</code></pre> 
-<p>You can only install <code>android-tools-adb</code> for this purpose.</p> 
+</code></pre>
+<p>You can only install <code>android-tools-adb</code> for this purpose.</p>
 
 								<a class="btn btn-default" href="blog/2015/lollipop-to.kitkat.html">Read More →</a>
 								<hr class="spacer"/>
@@ -594,7 +614,8 @@ android-tools-fastboot - Android Fastboot protocol CLI tool
 					<li>
 								<a href="blog/2015/wildfly-on-ubuntu14.html"><h1 class="post-title">Wildfly on Ubuntu 14</h1></a>
 								<span class="post-date">25 August 2015</span>
-								<p>I installed JBoss Application Server 7 but it won't start on my Ubuntu machine. If I will run <code>$JBOSS_HOME/bin/standalone.sh</code>,<br> here's how far I can get.</p> 
+								<p>I installed JBoss Application Server 7 but it won't start on my Ubuntu machine. If I will run <code>$JBOSS_HOME/bin/standalone.sh</code>,<br />
+here's how far I can get.</p>
 <pre><code>=========================================================================
 
   JBoss Bootstrap Environment
@@ -613,9 +634,9 @@ android-tools-fastboot - Android Fastboot protocol CLI tool
 Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; support was removed in 8.0
 23:41:04,456 INFO  [org.jboss.modules] JBoss Modules version 1.1.1.GA
 23:41:05,336 INFO  [org.jboss.msc] JBoss MSC version 1.0.2.GA
-23:41:05,525 INFO  [org.jboss.as] JBAS015899: JBoss AS 7.1.1.Final "Brontes" starting
-</code></pre> 
-<p>A bit of Googling suggested it is a Java 8 related issue and shouldn't happen if I'm going to downgrade to Java 7. Stackoverflow did suggest I can use Wildfly 8 for my latest version of Java.</p> 
+23:41:05,525 INFO  [org.jboss.as] JBAS015899: JBoss AS 7.1.1.Final &quot;Brontes&quot; starting
+</code></pre>
+<p>A bit of Googling suggested it is a Java 8 related issue and shouldn't happen if I'm going to downgrade to Java 7. Stackoverflow did suggest I can use Wildfly 8 for my latest version of Java.</p>
 
 								<a class="btn btn-default" href="blog/2015/wildfly-on-ubuntu14.html">Read More →</a>
 								<hr class="spacer"/>
@@ -623,15 +644,15 @@ Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; sup
 					<li>
 								<a href="blog/2015/oracle11g-xe-ubuntu.html"><h1 class="post-title">Oracle 11g XE on Ubuntu</h1></a>
 								<span class="post-date">08 August 2015</span>
-								<p>Express Editions of Oracle are in rpm (Red Hat Package Manager). But since I turned away from my CentOS, I have to install it on Ubuntu using the hard way I suppose.</p> 
-<p>For the installation of Oracle 11g R2 Express Edition (XE), a couple of additional Linux packages are required. These packages can be installed using apt (goodbye yum).</p> 
-<h3>Installing prerequisites</h3> 
+								<p>Express Editions of Oracle are in rpm (Red Hat Package Manager). But since I turned away from my CentOS, I have to install it on Ubuntu using the hard way I suppose.</p>
+<p>For the installation of Oracle 11g R2 Express Edition (XE), a couple of additional Linux packages are required. These packages can be installed using apt (goodbye yum).</p>
+<h3>Installing prerequisites</h3>
 <pre><code>$ sudo apt-get install alien libaio1 unixodbc
-</code></pre> 
-<h3>Downloading Oracle 11g</h3> 
-<p>Download the Oracle 11g R2 Express Edition from the Oracle website. Make sure you select the Linux x64 version from <a href="http://www.oracle.com/technetwork/products/express-edition/downloads/index.htm">Oracle website</a>. Unzip the file after downloading.</p> 
+</code></pre>
+<h3>Downloading Oracle 11g</h3>
+<p>Download the Oracle 11g R2 Express Edition from the Oracle website. Make sure you select the Linux x64 version from <a href="http://www.oracle.com/technetwork/products/express-edition/downloads/index.htm">Oracle website</a>. Unzip the file after downloading.</p>
 <pre><code>$ unzip oracle-xe-11.2.0-1.0.x86_64.rpm.zip
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2015/oracle11g-xe-ubuntu.html">Read More →</a>
 								<hr class="spacer"/>
@@ -639,7 +660,7 @@ Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; sup
 					<li>
 								<a href="blog/2015/tomcat-service-script.html"><h1 class="post-title">Tomcat Service Script</h1></a>
 								<span class="post-date">22 July 2015</span>
-								<p>I copied this startup script from <a href="https://www.liferay.com/en_GB/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts">liferay</a>. You can use this script start and stop your tomcat instance just like any CentOS standard services.</p> 
+								<p>I copied this startup script from <a href="https://www.liferay.com/en_GB/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts">liferay</a>. You can use this script start and stop your tomcat instance just like any CentOS standard services.</p>
 
 								<a class="btn btn-default" href="blog/2015/tomcat-service-script.html">Read More →</a>
 								<hr class="spacer"/>
@@ -647,8 +668,8 @@ Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; sup
 					<li>
 								<a href="blog/2015/pimping-my-vim.html"><h1 class="post-title">Pimping My vim</h1></a>
 								<span class="post-date">28 June 2015</span>
-								<p><strong>vim</strong> is a versatile and powerful text editor for command-line environments. In <strong>*nix</strong> world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called <code>.vimrc</code> under your home folder.</p> 
-<h3>Creating ~/.vimrc</h3> 
+								<p><strong>vim</strong> is a versatile and powerful text editor for command-line environments. In <strong>*nix</strong> world, it would be very difficult to survive if you cannot edit files/configs without using vi. It was first dubbed as Vi iMitation but was later relabeled Vi IMproved. It is free and open source software and is released under a license that includes some charityware clauses. To pimp your vim, you will need to create a file called <code>.vimrc</code> under your home folder.</p>
+<h3>Creating ~/.vimrc</h3>
 <pre><code>set nocompatible
 syntax on
 set mouse=a
@@ -661,7 +682,7 @@ set number
 set smarttab
 set shiftwidth=4
 colorscheme torte
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2015/pimping-my-vim.html">Read More →</a>
 								<hr class="spacer"/>
@@ -669,16 +690,30 @@ colorscheme torte
 					<li>
 								<a href="blog/2015/simple-ant-build.html"><h1 class="post-title">Simple Ant Build</h1></a>
 								<span class="post-date">22 June 2015</span>
-								<p>This is a simple Ant build script I'm using for my Symfony2 blog. This has the following dependencies:</p> 
-<ul> 
- <li> <p><a href="http://phpunit.de/" target="_new">PHPUnit</a></p> </li> 
- <li> <p><a href="http://pear.php.net/package/PHP_CodeSniffer/" target="_new">PHP_CodeSniffer</a></p> </li> 
- <li> <p><a href="https://github.com/sebastianbergmann/phploc" target="_new">PHPLOC</a></p> </li> 
- <li> <p><a href="http://pdepend.org/" target="_new">PHP_Depend</a></p> </li> 
- <li> <p><a href="http://phpmd.org/" target="_new">PHPMD</a></p> </li> 
- <li> <p><a href="https://github.com/sebastianbergmann/phpcpd" target="_new">PHPCPD</a></p> </li> 
- <li> <p><a href="http://phpdox.de/" target="_new">phpDox</a></p> </li> 
-</ul> 
+								<p>This is a simple Ant build script I'm using for my Symfony2 blog. This has the following dependencies:</p>
+<ul>
+<li>
+<p><a href="http://phpunit.de/" target="_new">PHPUnit</a></p>
+</li>
+<li>
+<p><a href="http://pear.php.net/package/PHP_CodeSniffer/" target="_new">PHP_CodeSniffer</a></p>
+</li>
+<li>
+<p><a href="https://github.com/sebastianbergmann/phploc" target="_new">PHPLOC</a></p>
+</li>
+<li>
+<p><a href="http://pdepend.org/" target="_new">PHP_Depend</a></p>
+</li>
+<li>
+<p><a href="http://phpmd.org/" target="_new">PHPMD</a></p>
+</li>
+<li>
+<p><a href="https://github.com/sebastianbergmann/phpcpd" target="_new">PHPCPD</a></p>
+</li>
+<li>
+<p><a href="http://phpdox.de/" target="_new">phpDox</a></p>
+</li>
+</ul>
 
 								<a class="btn btn-default" href="blog/2015/simple-ant-build.html">Read More →</a>
 								<hr class="spacer"/>
@@ -686,11 +721,11 @@ colorscheme torte
 					<li>
 								<a href="blog/2015/my-first-grails-app.html"><h1 class="post-title">qotd My First Grails App</h1></a>
 								<span class="post-date">11 June 2015</span>
-								<h3>Create an app</h3> 
+								<h3>Create an app</h3>
 <pre><code>$ grails create-app qotd
 | Application created at /home/drmanalo/intellij/qotd
-</code></pre> 
-<h3>Enjoy the fruit of your hardwork</h3> 
+</code></pre>
+<h3>Enjoy the fruit of your hardwork</h3>
 <pre><code>$ cd qotd
 
 $ grails run-app
@@ -703,7 +738,7 @@ Download https://repo.grails.org/grails/core/xml-apis/xml-apis/1.0.b2/xml-apis-1
 &gt; Building 83% &gt; :bootRun &gt; Resolving dependencies ':runtime' &gt; Resolving depend:bootRun
 Download https://repo.grails.org/grails/core/commons-io/commons-io/2.2/commons-io-2.2.jar
 Grails application running at http://localhost:8080
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2015/my-first-grails-app.html">Read More →</a>
 								<hr class="spacer"/>
@@ -711,9 +746,9 @@ Grails application running at http://localhost:8080
 					<li>
 								<a href="blog/2015/factory-pattern.html"><h1 class="post-title">Factory Pattern</h1></a>
 								<span class="post-date">20 May 2015</span>
-								<p>From my Java best practices training, my instructor gave us an example of the factory pattern using Shape object with draw() method. The Shape interface is further implemented by a base class called ShapeFactory which decides what kind of shape it is going to create using some business intelligence you put into the factory.</p> 
-<p>The example is spot on but I found another good example from our hands-on exercise which I'm about to share. Not just because I'm a Star Wars fan but the way factory is being used.</p> 
-<h3>The Robot</h3> 
+								<p>From my Java best practices training, my instructor gave us an example of the factory pattern using Shape object with draw() method. The Shape interface is further implemented by a base class called ShapeFactory which decides what kind of shape it is going to create using some business intelligence you put into the factory.</p>
+<p>The example is spot on but I found another good example from our hands-on exercise which I'm about to share. Not just because I'm a Star Wars fan but the way factory is being used.</p>
+<h3>The Robot</h3>
 <pre><code>package com.robots;
 
 import java.awt.Color;
@@ -741,7 +776,7 @@ public interface Robot {
 	int getSerial();
 
 }
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2015/factory-pattern.html">Read More →</a>
 								<hr class="spacer"/>
@@ -749,15 +784,15 @@ public interface Robot {
 					<li>
 								<a href="blog/2015/observer-pattern.html"><h1 class="post-title">Observer Pattern</h1></a>
 								<span class="post-date">20 May 2015</span>
-								<p><strong>Observer Pattern</strong> has been around Java since version JDK 1.0. One of the nice thing about having it inside the language is you only have to subclass it and just worry about its implementation logic.</p> 
-<p>Here are the key benefits of the observer pattern.</p> 
-<ul> 
- <li>Neither <code>Observer</code> nor <code>Observable</code> know class type of the other</li> 
- <li><code>Observable</code> can communicate with any <code>Observer</code></li> 
- <li><code>Observer</code> can register for state change events on any <code>Observable</code></li> 
- <li>Any object that changes state of <code>Observable</code> indirectly broadcasts to all registered <code>Observers</code></li> 
-</ul> 
-<p>This is from one of our exercises which is a card game called Tehi. This is not the complete program but what it shows here is how are you going to use the observer pattern. First you will notice CardDeck extends <code>Observable</code> and the abstract CardViewer implements <code>Observer</code>. The concrete classes FutureCardsViewer and PastCardViewers then has update method which is the glue that attached them to the <code>Observable</code>.</p> 
+								<p><strong>Observer Pattern</strong> has been around Java since version JDK 1.0. One of the nice thing about having it inside the language is you only have to subclass it and just worry about its implementation logic.</p>
+<p>Here are the key benefits of the observer pattern.</p>
+<ul>
+<li>Neither <code>Observer</code> nor <code>Observable</code> know class type of the other</li>
+<li><code>Observable</code> can communicate with any <code>Observer</code></li>
+<li><code>Observer</code> can register for state change events on any <code>Observable</code></li>
+<li>Any object that changes state of <code>Observable</code> indirectly broadcasts to all registered <code>Observers</code></li>
+</ul>
+<p>This is from one of our exercises which is  a card game called Tehi. This is not the complete program but what it shows here is how are you going to use the observer pattern. First you will notice CardDeck extends <code>Observable</code> and the abstract CardViewer implements <code>Observer</code>. The concrete classes FutureCardsViewer and PastCardViewers then has update method which is the glue that attached them to the <code>Observable</code>.</p>
 
 								<a class="btn btn-default" href="blog/2015/observer-pattern.html">Read More →</a>
 								<hr class="spacer"/>
@@ -765,8 +800,8 @@ public interface Robot {
 					<li>
 								<a href="blog/2015/jvm-garbage-collector-switches.html"><h1 class="post-title">JVM Garbage Collector Switches</h1></a>
 								<span class="post-date">19 May 2015</span>
-								<p>I took this from my Java best practices notes training. This is a verbatim of the switches I used as part of our exercises.</p> 
-<p>In many cases an application can meet performance goals with the default garbage collector. For sufficiently large applications that scale to large numbers of threads, processors, sockets, or a large amount of memory choosing an appropriate garbage collector will make a difference.</p> 
+								<p>I took this from my Java best practices notes training. This is a verbatim of the switches I used as part of our exercises.</p>
+<p>In many cases an application can meet performance goals with the default garbage collector. For sufficiently large applications that scale to large numbers of threads, processors, sockets, or a large amount of memory choosing an appropriate garbage collector will make a difference.</p>
 <pre><code>-XX:+UseSerialGC
 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC
 -XX:+UseG1GC
@@ -775,7 +810,7 @@ public interface Robot {
 -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:GCTimeRatio=9
 -XX:+UseG1GC -Xmx30m
 -XX:+UseSerialGC -Xmx30m
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2015/jvm-garbage-collector-switches.html">Read More →</a>
 								<hr class="spacer"/>
@@ -783,7 +818,7 @@ public interface Robot {
 					<li>
 								<a href="blog/2015/7zip-backup-script.html"><h1 class="post-title">7zip Backup Script</h1></a>
 								<span class="post-date">10 May 2015</span>
-								<p>Here is a simple batch script to backup my project folder every 18:30. I wish I could run this in cron but my development machine is running Windows.</p> 
+								<p>Here is a simple batch script to backup my project folder every 18:30. I wish I could run this in cron but my development machine is running Windows.</p>
 <pre><code>@SETLOCAL
 @ECHO OFF
 
@@ -812,21 +847,22 @@ ECHO Backup finished!
 
 @REM ------- END backup.bat ------------------
 </code></pre>
+
 								<a class="btn btn-default" href="blog/2015/7zip-backup-script.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>
 								<a href="blog/2015/setting-up-rails.html"><h1 class="post-title">Setting Up Rails</h1></a>
 								<span class="post-date">26 April 2015</span>
-								<p>I bought the Web Designer Issue 233 being interested with jQuery effects but it turned out that I will find something far more interesting. I found a gem inside the magazine, it was a ruby! This issue discussed how to start learning rails. As rails website define it, Ruby on Rails® is an open-source web framework that’s optimised for programmer happiness and sustainable productivity. It lets you write beautiful code by favouring convention over configuration.</p> 
-<p>To be able to setup rails, we need to setup the dependencies first. The first requirement is ruby of course.</p> 
-<h3>Installing ruby</h3> 
+								<p>I bought the Web Designer Issue 233 being interested with jQuery effects but it turned out that I will find something far more interesting. I found a gem inside the magazine, it was a ruby! This issue discussed how to start learning rails. As rails website define it, Ruby on Rails® is an open-source web framework that’s optimised for programmer happiness and sustainable productivity. It lets you write beautiful code by favouring convention over configuration.</p>
+<p>To be able to setup rails, we need to setup the dependencies first. The first requirement is ruby of course.</p>
+<h3>Installing ruby</h3>
 <pre><code>$ apt-add-repository ppa:brightbox/ruby-ng
 $ apt-get update
 $ apt-get install ruby2.2
 $ ruby -v
   ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-linux-gnu]
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2015/setting-up-rails.html">Read More →</a>
 								<hr class="spacer"/>
@@ -834,11 +870,11 @@ $ ruby -v
 					<li>
 								<a href="blog/2015/application-context-and-dispatcher-servlet.html"><h1 class="post-title">applicationContext.xml and dispatcher-servlet.xml</h1></a>
 								<span class="post-date">18 April 2015</span>
-								<p>I was trying to improve an existing Spring project to be able to inject Hibernate's SessionFactory but get confused where to put my Hibernate XML configuration. I initially put it within <code>&lt;context-param/&gt;</code> but was surprised Spring is not creating my sessionFactory bean. Then I tried it under <code>&lt;init-param/&gt;</code> but the result is the same, there's no sessionFactory bean. I tried putting my Hibernate configuration on both locations and it worked. I still don't understand why hence I asked my friend Google.</p> 
-<p>I found this post from <a href="http://www.jroller.com/latenightdev/entry/spring_mvc_context_loading">Late Night Developer</a> which helped me understand why there are two places for my custom XML configurations.</p> 
-<blockquote> 
- <p>The most important thing to understand is that there are 2 layers of application contexts, and they each have default XML files to load beans from.</p> 
-</blockquote> 
+								<p>I was trying to improve an existing Spring project to be able to inject Hibernate's SessionFactory but get confused where to put my Hibernate XML configuration. I initially put it within <code>&lt;context-param/&gt;</code> but was surprised Spring is not creating my sessionFactory bean. Then I tried it under <code>&lt;init-param/&gt;</code> but the result is the same, there's no sessionFactory bean. I tried putting my Hibernate configuration on both locations and it worked. I still don't understand why hence I asked my friend Google.</p>
+<p>I found this post from <a href="http://www.jroller.com/latenightdev/entry/spring_mvc_context_loading">Late Night Developer</a> which helped me understand why there are two places for my custom XML configurations.</p>
+<blockquote>
+<p>The most important thing to understand is that there are 2 layers of application contexts, and they each have default XML files to load beans from.</p>
+</blockquote>
 
 								<a class="btn btn-default" href="blog/2015/application-context-and-dispatcher-servlet.html">Read More →</a>
 								<hr class="spacer"/>
@@ -846,9 +882,9 @@ $ ruby -v
 					<li>
 								<a href="blog/2015/freemarker-expression-based-access.html"><h1 class="post-title">Expression-based Access with FreeMarker</h1></a>
 								<span class="post-date">05 April 2015</span>
-								<p>Spring Security 3.0 introduced the ability to use Spring EL expressions as an authorisation mechanism. Expression-based access control is built on the same architecture but allows complicated boolean logic to be encapsulated in a single expression. This comes handy when you want to secure a Controller method or even the entire Controller. JSP has native support for this feature using</p> 
-<p><code>&lt;%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %&gt;</code></p> 
-<p>FreeMarker don't so you need to do more than just importing a tag library.</p> 
+								<p>Spring Security 3.0 introduced the ability to use Spring EL expressions as an authorisation mechanism. Expression-based access control is built on the same architecture but allows complicated boolean logic to be encapsulated in a single expression. This comes handy when you want to secure a Controller method or even the entire Controller. JSP has native support for this feature using</p>
+<p><code>&lt;%@ taglib prefix=&quot;sec&quot; uri=&quot;http://www.springframework.org/security/tags&quot; %&gt;</code></p>
+<p>FreeMarker don't so you need to do more than just importing a tag library.</p>
 
 								<a class="btn btn-default" href="blog/2015/freemarker-expression-based-access.html">Read More →</a>
 								<hr class="spacer"/>
@@ -856,13 +892,13 @@ $ ruby -v
 					<li>
 								<a href="blog/2015/spring-form-binding-with-freemarker.html"><h1 class="post-title">Spring Form Binding with FreeMarker</h1></a>
 								<span class="post-date">04 March 2015</span>
-								<p>I was using FreeMarker with my previous project as my email templating engine but for now I'm using it for all my views. I will show here the macros that bind a Spring form.</p> 
-<p>One might wonder why I'm leaving JSP but the whole truth is I'm typing less with FreeMarker. I read this post from <a href="http://blog.stackhunter.com/2014/01/17/10-reasons-to-replace-your-jsps-with-freemarker-templates/">stackhunter.com</a> and among the 10 reasons mentioned I like these:</p> 
-<ul> 
- <li>No Classloading PermGen Issues</li> 
- <li>JSON Support</li> 
- <li>Not Just for the Web</li> 
-</ul> 
+								<p>I was using FreeMarker with my previous project as my email templating engine but for now I'm using it for all my views. I will show here the macros that bind a Spring form.</p>
+<p>One might wonder why I'm leaving JSP but the whole truth is I'm typing less with FreeMarker. I read this post from <a href="http://blog.stackhunter.com/2014/01/17/10-reasons-to-replace-your-jsps-with-freemarker-templates/">stackhunter.com</a> and among the 10 reasons mentioned I like these:</p>
+<ul>
+<li>No Classloading PermGen Issues</li>
+<li>JSON Support</li>
+<li>Not Just for the Web</li>
+</ul>
 
 								<a class="btn btn-default" href="blog/2015/spring-form-binding-with-freemarker.html">Read More →</a>
 								<hr class="spacer"/>
@@ -870,18 +906,19 @@ $ ruby -v
 					<li>
 								<a href="blog/2015/oracle1489.html"><h1 class="post-title">Workaround for ORA-01489</h1></a>
 								<span class="post-date">08 February 2015</span>
-								<p>Just saw this issue while concatenating fields in Oracle.</p> 
-<h3>Issue</h3> 
+								<p>Just saw this issue while concatenating fields in Oracle.</p>
+<h3>Issue</h3>
 <pre><code>SELECT LISTAGG(column_name, ', ') WITHIN GROUP (ORDER BY column_name) alias FROM table_name;
 
 ORA-01489: result of string concatenation is too long
-01489. 00000 -  "result of string concatenation is too long"
+01489. 00000 -  &quot;result of string concatenation is too long&quot;
 *Cause:    String concatenation result is more than the maximum size.
 *Action:   Make sure that the result is less than the maximum size.
-</code></pre> 
-<h3>Workaround</h3> 
+</code></pre>
+<h3>Workaround</h3>
 <pre><code>SELECT RTRIM(XMLAGG(XMLELEMENT(e, column_name, ',').EXTRACT('//text()') ORDER BY column_name).GETCLOBVAL(), ',') alias FROM table_name;
 </code></pre>
+
 								<a class="btn btn-default" href="blog/2015/oracle1489.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
@@ -889,16 +926,16 @@ ORA-01489: result of string concatenation is too long
 								<a href="blog/2014/redmining-centos.html"><h1 class="post-title">Redmining CentOS</h1></a>
 								<span class="post-date">25 October 2014</span>
 								<blockquote>
-  Redmine is a flexible project management web application written using Ruby on Rails framework. 
-</blockquote> 
-<p>To install redmine, you have to check if you have <code>ruby</code> installed. To install ruby with ease, use <a href="https://rvm.io/">RVM</a></p> 
+Redmine is a flexible project management web application written using Ruby on Rails framework.
+</blockquote>
+<p>To install redmine, you have to check if you have <code>ruby</code> installed. To install ruby with ease, use <a href="https://rvm.io/">RVM</a></p>
 <pre><code>$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 $ curl -sSL https://get.rvm.io | bash -s stable
 $ source ~/.rvm/scripts/rvm
 $ rvm install ruby 2.3.1
 $ ruby -v
 ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2014/redmining-centos.html">Read More →</a>
 								<hr class="spacer"/>
@@ -906,10 +943,10 @@ ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
 					<li>
 								<a href="blog/2014/change-centos-runlevel.html"><h1 class="post-title">Changing Centos7 runlevel</h1></a>
 								<span class="post-date">17 October 2014</span>
-								<p>I installed Centos7 as minimal for a basic LAMP server but then I decided to switch to Gnome instead of pure command line environment. If you're interested how I did it, <strong>groupinstall</strong> has the perfect recipe.</p> 
-<p><img src="https://drmanalo.github.io/images/centos7.png" alt="Centos7"></p> 
-<pre><code>$ yum groupinstall "GNOME Desktop" "Graphical Administration Tools"
-</code></pre> 
+								<p>I installed Centos7 as minimal for a basic LAMP server but then I decided to switch to Gnome instead of pure command line environment. If you're interested how I did it, <strong>groupinstall</strong> has the perfect recipe.</p>
+<p><img src="/images/centos7.png" alt="Centos7" /></p>
+<pre><code>$ yum groupinstall &quot;GNOME Desktop&quot; &quot;Graphical Administration Tools&quot;
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2014/change-centos-runlevel.html">Read More →</a>
 								<hr class="spacer"/>
@@ -917,8 +954,8 @@ ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
 					<li>
 								<a href="blog/2014/adding-local-jar-to-maven.html"><h1 class="post-title">Adding Local JAR to Maven</h1></a>
 								<span class="post-date">13 September 2014</span>
-								<p>Oracle JDBC is not available from Maven's online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.</p> 
-<p>After downloading the JAR, you have to open your console and issue <code>mvn install:install-file</code>. Please refer below for the complete syntax. <strong>-Dfile requires fullpath.</strong></p> 
+								<p>Oracle JDBC is not available from Maven's online repository therefore you have to download it from the Oracle website and add the JAR to your local Maven repository. I will not detail how and where to download it but the last time I checked it, it requires login to Oracle website.</p>
+<p>After downloading the JAR, you have to open your console and issue <code>mvn install:install-file</code>. Please refer below for the complete syntax. <strong>-Dfile requires fullpath.</strong></p>
 
 								<a class="btn btn-default" href="blog/2014/adding-local-jar-to-maven.html">Read More →</a>
 								<hr class="spacer"/>
@@ -926,8 +963,8 @@ ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
 					<li>
 								<a href="blog/2014/spring-hibernate.html"><h1 class="post-title">Spring Persistence with Hibernate</h1></a>
 								<span class="post-date">03 September 2014</span>
-								<p>After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I'm going to use H2 to avoid 3rd party database dependency.</p> 
-<p>Just like my previous post, I'm going to use <code>maven-archetype-generate</code> and will add Spring dependencies later on.</p> 
+								<p>After I prototyped a Spring standalone application with a deployment-friendly runnable jar, I want to prototype another Spring standalone application with added complexity, Hibernate persistence I mean. I'm going to use H2 to avoid 3rd party database dependency.</p>
+<p>Just like my previous post, I'm going to use <code>maven-archetype-generate</code> and will add Spring dependencies later on.</p>
 <pre><code>$ mvn archetype:generate -DgroupId=com.manalo.prototype -DartifactId=persistence -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 [INFO] Scanning for projects...
 [INFO]
@@ -958,7 +995,7 @@ ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
 [INFO] Finished at: Thu Sep 04 23:17:16 BST 2014
 [INFO] Final Memory: 14M/150M
 [INFO] ------------------------------------------------------------------------
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2014/spring-hibernate.html">Read More →</a>
 								<hr class="spacer"/>
@@ -966,9 +1003,9 @@ ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
 					<li>
 								<a href="blog/2014/spring-standalone-project.html"><h1 class="post-title">Spring Standalone Project</h1></a>
 								<span class="post-date">27 August 2014</span>
-								<p>Creating a Spring standalone application is a challenge to me without using Spring Boot. I used to have <code>web.xml</code> to bootstrap my application but being standalone left me thinking which XML or configuration file will bootstrap it.</p> 
-<p>I'm prototyping <code>maven-archetype-generate</code> and will add Spring dependencies later on hoping I will achieve my goal.</p> 
-<h3>mvn archetype:generate</h3> 
+								<p>Creating a Spring standalone application is a challenge to me without using Spring Boot. I used to have <code>web.xml</code> to bootstrap my application but being standalone left me thinking which XML or configuration file will bootstrap it.</p>
+<p>I'm prototyping <code>maven-archetype-generate</code> and will add Spring dependencies later on hoping I will achieve my goal.</p>
+<h3>mvn archetype:generate</h3>
 <pre><code>$ mvn archetype:generate -DgroupId=com.manalo.rabbitmq -DartifactId=rabbitmq -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 [INFO] Scanning for projects...
 [INFO]
@@ -999,7 +1036,7 @@ ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
 [INFO] Finished at: Wed Aug 26 19:34:57 BST 2014
 [INFO] Final Memory: 14M/150M
 [INFO] ------------------------------------------------------------------------
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2014/spring-standalone-project.html">Read More →</a>
 								<hr class="spacer"/>
@@ -1007,10 +1044,10 @@ ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
 					<li>
 								<a href="blog/2014/asa-packet-tracer.html"><h1 class="post-title">ASA Packet Tracer</h1></a>
 								<span class="post-date">28 June 2014</span>
-								<p>Cisco ASA includes a very nice debugging feature called <code>packet-tracer</code>. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I'm using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.</p> 
-<h3>Command syntax</h3> 
+								<p>Cisco ASA includes a very nice debugging feature called <code>packet-tracer</code>. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I'm using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.</p>
+<h3>Command syntax</h3>
 <pre><code>packet-tracer input &lt;source interface&gt; &lt;protocol&gt; &lt;source IP&gt; &lt;source port&gt; &lt;destination IP&gt; &lt;destination port&gt; [detailed]
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2014/asa-packet-tracer.html">Read More →</a>
 								<hr class="spacer"/>
@@ -1018,8 +1055,8 @@ ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
 					<li>
 								<a href="blog/2014/asa-vpn-config.html"><h1 class="post-title">ASA VPN Configuration</h1></a>
 								<span class="post-date">08 June 2014</span>
-								<p>I'm putting here my working VPN configuration for ASA 5505 on ASA Version 8.4(7). All upper case values need changing to suit your business requirements and personal taste. IP addresses are mere examples.</p> 
-<h3>Network Object Mapping</h3> 
+								<p>I'm putting here my working VPN configuration for ASA 5505 on ASA Version 8.4(7). All upper case values need changing to suit your business requirements and personal taste. IP addresses are mere examples.</p>
+<h3>Network Object Mapping</h3>
 <pre><code>object network OBJ_REMOTE_VPN_ENDPOINT
  subnet 172.16.0.0 255.240.0.0
  description OBJ_REMOTE_VPN_ENDPOINT is a label
@@ -1035,7 +1072,7 @@ object network OBJ_INSIDE_HOST1
 object network OBJ_NATTED_INSIDE_HOST1
  host 10.0.7.190
  description OBJ_NATTED_INSIDE_HOST1 is a label
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2014/asa-vpn-config.html">Read More →</a>
 								<hr class="spacer"/>
@@ -1043,15 +1080,15 @@ object network OBJ_NATTED_INSIDE_HOST1
 					<li>
 								<a href="blog/2014/asa-vpn-dialup-config.html"><h1 class="post-title">ASA Dialup VPN Configuration</h1></a>
 								<span class="post-date">07 June 2014</span>
-								<p>This Cisco dialup VPN configuration worked for ASA 5505 running on version 8.4(7). All upper case letters are labels and should be changed according to your standards and taste. IP addresses are representational.</p> 
-<h3>Network Object Mapping</h3> 
+								<p>This Cisco dialup VPN configuration worked for ASA 5505 running on version 8.4(7). All upper case letters are labels and should be changed according to your standards and taste. IP addresses are representational.</p>
+<h3>Network Object Mapping</h3>
 <pre><code>object network OBJ_VPN_ENDPOINT1
 subnet 10.175.0.0 255.255.128.0
 description OBJ_VPN_ENDPOINT1 is a label
-</code></pre> 
-<h3>DHCP Pool</h3> 
+</code></pre>
+<h3>DHCP Pool</h3>
 <pre><code>ip local pool VPN_DHCP_POOL1 10.0.20.10-10.0.20.14
-</code></pre> 
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2014/asa-vpn-dialup-config.html">Read More →</a>
 								<hr class="spacer"/>
@@ -1059,7 +1096,7 @@ description OBJ_VPN_ENDPOINT1 is a label
 					<li>
 								<a href="blog/2014/cisco-dialup-vpn-config.html"><h1 class="post-title">Cisco Dialup VPN Configuration</h1></a>
 								<span class="post-date">13 May 2014</span>
-								<p>This is my working Cisco dialup configuration. IP addresses and wildcard masks are fictitious.</p> 
+								<p>This is my working Cisco dialup configuration. IP addresses and wildcard masks are fictitious.</p>
 
 								<a class="btn btn-default" href="blog/2014/cisco-dialup-vpn-config.html">Read More →</a>
 								<hr class="spacer"/>
@@ -1067,7 +1104,7 @@ description OBJ_VPN_ENDPOINT1 is a label
 					<li>
 								<a href="blog/2014/remove-self-assigned-rsa-key.html"><h1 class="post-title">Removing Self-assigned RSA Key</h1></a>
 								<span class="post-date">01 May 2014</span>
-								<p>When enabling Cisco router's http server, it automatically generates a self-signed certificate which is good but when you decided to turn off the http server, it will then leave a self-signed certificate making running-config a bit messy. Here are the steps to remove the self-signed certificated if it's no longer needed.</p> 
+								<p>When enabling Cisco router's http server, it automatically generates a self-signed certificate which is good but when you decided to turn off the http server, it will then leave a self-signed certificate making running-config a bit messy. Here are the steps to remove the self-signed certificated if it's no longer needed.</p>
 
 								<a class="btn btn-default" href="blog/2014/remove-self-assigned-rsa-key.html">Read More →</a>
 								<hr class="spacer"/>

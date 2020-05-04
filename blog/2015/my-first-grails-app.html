@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,11 +58,11 @@
 		<div class="post">
 			<h1>qotd My First Grails App</h1>
 			<p><em>11 June 2015</em></p>
-			<p><h3>Create an app</h3> 
+			<p><h3>Create an app</h3>
 <pre><code>$ grails create-app qotd
 | Application created at /home/drmanalo/intellij/qotd
-</code></pre> 
-<h3>Enjoy the fruit of your hardwork</h3> 
+</code></pre>
+<h3>Enjoy the fruit of your hardwork</h3>
 <pre><code>$ cd qotd
 
 $ grails run-app
@@ -75,96 +75,97 @@ Download https://repo.grails.org/grails/core/xml-apis/xml-apis/1.0.b2/xml-apis-1
 &gt; Building 83% &gt; :bootRun &gt; Resolving dependencies ':runtime' &gt; Resolving depend:bootRun
 Download https://repo.grails.org/grails/core/commons-io/commons-io/2.2/commons-io-2.2.jar
 Grails application running at http://localhost:8080
-</code></pre> 
-<!-- more --> 
-<p>By typing a one-liner grails command, I have a fully working web application. I wish there is a similar story on Spring framework. To be fair though, Spring Boot has opinionated way of doing things but if you want rapid prototyping, then grails is the answer. If you will inspect the files created by <strong>create-app</strong>, there is a reasonable number of.</p> 
+</code></pre>
+<!-- more -->
+<p>By typing a one-liner grails command, I have a fully working web application. I wish there is a similar story on Spring framework. To be fair though, Spring Boot has opinionated way of doing things but if you want rapid prototyping, then grails is the answer. If you will inspect the files created by <strong>create-app</strong>, there is a reasonable number of.</p>
 <pre><code>$ tree qotd/
 qotd/
 ├── build.gradle
 ├── gradle
-│&nbsp;&nbsp; └── wrapper
-│&nbsp;&nbsp;     ├── gradle-wrapper.jar
-│&nbsp;&nbsp;     └── gradle-wrapper.properties
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
 ├── gradle.properties
 ├── gradlew
 ├── gradlew.bat
 ├── grails-app
-│&nbsp;&nbsp; ├── assets
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── images
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── apple-touch-icon.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── apple-touch-icon-retina.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── favicon.ico
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── grails_logo.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── skin
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── database_add.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── database_delete.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── database_edit.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── database_save.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── database_table.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── exclamation.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── house.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── information.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── shadow.jpg
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── sorted_asc.gif
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; └── sorted_desc.gif
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── spinner.gif
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; └── springsource.png
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── javascripts
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── application.js
-│&nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; └── jquery-2.1.3.js
-│&nbsp;&nbsp; │&nbsp;&nbsp; └── stylesheets
-│&nbsp;&nbsp; │&nbsp;&nbsp;     ├── application.css
-│&nbsp;&nbsp; │&nbsp;&nbsp;     ├── errors.css
-│&nbsp;&nbsp; │&nbsp;&nbsp;     ├── main.css
-│&nbsp;&nbsp; │&nbsp;&nbsp;     └── mobile.css
-│&nbsp;&nbsp; ├── conf
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── application.yml
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── logback.groovy
-│&nbsp;&nbsp; │&nbsp;&nbsp; └── spring
-│&nbsp;&nbsp; │&nbsp;&nbsp;     └── resources.groovy
-│&nbsp;&nbsp; ├── controllers
-│&nbsp;&nbsp; │&nbsp;&nbsp; └── UrlMappings.groovy
-│&nbsp;&nbsp; ├── domain
-│&nbsp;&nbsp; ├── i18n
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_cs_CZ.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_da.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_de.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_es.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_fr.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_it.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_ja.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_nb.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_nl.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_pl.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_pt_BR.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_pt_PT.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_ru.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_sv.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── messages_th.properties
-│&nbsp;&nbsp; │&nbsp;&nbsp; └── messages_zh_CN.properties
-│&nbsp;&nbsp; ├── init
-│&nbsp;&nbsp; │&nbsp;&nbsp; ├── BootStrap.groovy
-│&nbsp;&nbsp; │&nbsp;&nbsp; └── qotd
-│&nbsp;&nbsp; │&nbsp;&nbsp;     └── Application.groovy
-│&nbsp;&nbsp; ├── services
-│&nbsp;&nbsp; ├── taglib
-│&nbsp;&nbsp; ├── utils
-│&nbsp;&nbsp; └── views
-│&nbsp;&nbsp;     ├── error.gsp
-│&nbsp;&nbsp;     ├── index.gsp
-│&nbsp;&nbsp;     ├── layouts
-│&nbsp;&nbsp;     │&nbsp;&nbsp; └── main.gsp
-│&nbsp;&nbsp;     └── notFound.gsp
+│   ├── assets
+│   │   ├── images
+│   │   │   ├── apple-touch-icon.png
+│   │   │   ├── apple-touch-icon-retina.png
+│   │   │   ├── favicon.ico
+│   │   │   ├── grails_logo.png
+│   │   │   ├── skin
+│   │   │   │   ├── database_add.png
+│   │   │   │   ├── database_delete.png
+│   │   │   │   ├── database_edit.png
+│   │   │   │   ├── database_save.png
+│   │   │   │   ├── database_table.png
+│   │   │   │   ├── exclamation.png
+│   │   │   │   ├── house.png
+│   │   │   │   ├── information.png
+│   │   │   │   ├── shadow.jpg
+│   │   │   │   ├── sorted_asc.gif
+│   │   │   │   └── sorted_desc.gif
+│   │   │   ├── spinner.gif
+│   │   │   └── springsource.png
+│   │   ├── javascripts
+│   │   │   ├── application.js
+│   │   │   └── jquery-2.1.3.js
+│   │   └── stylesheets
+│   │       ├── application.css
+│   │       ├── errors.css
+│   │       ├── main.css
+│   │       └── mobile.css
+│   ├── conf
+│   │   ├── application.yml
+│   │   ├── logback.groovy
+│   │   └── spring
+│   │       └── resources.groovy
+│   ├── controllers
+│   │   └── UrlMappings.groovy
+│   ├── domain
+│   ├── i18n
+│   │   ├── messages_cs_CZ.properties
+│   │   ├── messages_da.properties
+│   │   ├── messages_de.properties
+│   │   ├── messages_es.properties
+│   │   ├── messages_fr.properties
+│   │   ├── messages_it.properties
+│   │   ├── messages_ja.properties
+│   │   ├── messages_nb.properties
+│   │   ├── messages_nl.properties
+│   │   ├── messages_pl.properties
+│   │   ├── messages.properties
+│   │   ├── messages_pt_BR.properties
+│   │   ├── messages_pt_PT.properties
+│   │   ├── messages_ru.properties
+│   │   ├── messages_sv.properties
+│   │   ├── messages_th.properties
+│   │   └── messages_zh_CN.properties
+│   ├── init
+│   │   ├── BootStrap.groovy
+│   │   └── qotd
+│   │       └── Application.groovy
+│   ├── services
+│   ├── taglib
+│   ├── utils
+│   └── views
+│       ├── error.gsp
+│       ├── index.gsp
+│       ├── layouts
+│       │   └── main.gsp
+│       └── notFound.gsp
 └── src
     ├── integration-test
-    │&nbsp;&nbsp; └── groovy
+    │   └── groovy
     ├── main
-    │&nbsp;&nbsp; ├── groovy
-    │&nbsp;&nbsp; └── webapp
+    │   ├── groovy
+    │   └── webapp
     └── test
         └── groovy
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

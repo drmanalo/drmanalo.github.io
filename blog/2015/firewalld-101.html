@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,63 +58,33 @@
 		<div class="post">
 			<h1>firewalld 101</h1>
 			<p><em>20 November 2015</em></p>
-			<p><p><strong>firewalld</strong> provides a dynamically managed firewall with support for network/firewall zones to define the trust level of network connections or interfaces. It has support for IPv4, IPv6 firewall settings and for ethernet bridges and has a separation of runtime and permanent configuration options. It also supports an interface for services or applications to add firewall rules directly.</p> 
-<p>The two important concepts of firewalld is <strong>zones</strong> and <strong>services</strong>.</p> 
-<p>A <strong>zone</strong> defines the trust level of the interface used for a connection. There are several pre-defined zones provided by firewalld.zone.</p> 
-<p>A <strong>service</strong> can be a list of local ports and destinations and additionally also a list of firewall helper modules automatically loaded if a service is enabled. Service configuration options and generic information about services are described in firewalld.service. The use of predefined services makes it easier for the user to enable and disable access to a service.</p> 
+			<p><p><strong>firewalld</strong> provides a dynamically managed firewall with support for network/firewall zones to define the trust level of network connections or interfaces. It has support for IPv4, IPv6 firewall settings and for ethernet bridges and has a separation of runtime and permanent configuration options. It also supports an interface for services or applications to add firewall rules directly.</p>
+<p>The two important concepts of firewalld is <strong>zones</strong> and <strong>services</strong>.</p>
+<p>A <strong>zone</strong> defines the trust level of the interface used for a connection. There are several pre-defined zones provided by firewalld.zone.</p>
+<p>A <strong>service</strong> can be a list of local ports and destinations and additionally also a list of firewall helper modules automatically loaded if a service is enabled. Service configuration options and generic information about services are described in firewalld.service. The use of predefined services makes it easier for the user to enable and disable access to a service.</p>
 <pre><code>$ firewall-cmd --get-zones
 block dmz drop external home internal public trusted work
-</code></pre> 
-<p>In order from least trusted to most trusted, the pre-defined zones within firewalld are:</p> 
-<!-- more --> 
-<table> 
- <thead> 
-  <tr>
-   <th> Zone </th>
-   <th> Definition </th>
-  </tr> 
- </thead> 
- <tbody> 
-  <tr>
-   <td> drop </td>
-   <td> The lowest level of trust. All incoming connections are dropped without reply and only outgoing connections are possible </td>
-  </tr> 
-  <tr>
-   <td> block </td>
-   <td> Similar to the above, but instead of simply dropping connections, incoming requests are rejected with an icmp-host-prohibited or icmp6-adm-prohibited message </td>
-  </tr> 
-  <tr>
-   <td> public </td>
-   <td> Represents public, untrusted networks. You don't trust other computers but may allow selected incoming connections on a case-by-case basis </td>
-  </tr> 
-  <tr>
-   <td> external </td>
-   <td> External networks in the event that you are using the firewall as your gateway. It is configured for NAT masquerading so that your internal network remains private but reachable </td>
-  </tr> 
-  <tr>
-   <td> internal </td>
-   <td> The other side of the external zone, used for the internal portion of a gateway. The computers are fairly trustworthy and some additional services are available </td>
-  </tr> 
-  <tr>
-   <td> dmz </td>
-   <td> Used for computers located in a DMZ (isolated computers that will not have access to the rest of your network). Only certain incoming connections are allowed </td>
-  </tr> 
-  <tr>
-   <td> work </td>
-   <td> work: Used for work machines. Trust most of the computers in the network. A few more services might be allowed </td>
-  </tr> 
-  <tr>
-   <td> home </td>
-   <td> A home environment. It generally implies that you trust most of the other computers and that a few more services will be accepted </td>
-  </tr> 
-  <tr>
-   <td> trusted </td>
-   <td> Trust all of the machines in the network. The most open of the available options and should be used sparingly </td>
-  </tr> 
- </tbody> 
-</table> 
-<h3>Changing the zone of your interface permanently</h3> 
-<p>Interfaces will always revert to the default zone if they do not have an alternative zone defined within their configuration. On CentOS, these configurations are defined within the <code>/etc/sysconfig/network-scripts</code> directory with files of the format ifcfg-interface.</p> 
+</code></pre>
+<p>In order from least trusted to most trusted, the pre-defined zones within firewalld are:</p>
+<!-- more -->
+<table>
+<thead>
+<tr><th> Zone </th><th> Definition </th></tr>
+</thead>
+<tbody>
+<tr><td> drop </td><td> The lowest level of trust. All incoming connections are dropped without reply and only outgoing connections are possible </td></tr>
+<tr><td> block </td><td> Similar to the above, but instead of simply dropping connections, incoming requests are rejected with an icmp-host-prohibited or icmp6-adm-prohibited message </td></tr>
+<tr><td> public </td><td> Represents public, untrusted networks. You don't trust other computers but may allow selected incoming connections on a case-by-case basis </td></tr>
+<tr><td> external </td><td> External networks in the event that you are using the firewall as your gateway. It is configured for NAT masquerading so that your internal network remains private but reachable </td></tr>
+<tr><td> internal </td><td> The other side of the external zone, used for the internal portion of a gateway. The computers are fairly trustworthy and some additional services are available </td></tr>
+<tr><td> dmz </td><td> Used for computers located in a DMZ (isolated computers that will not have access to the rest of your network). Only certain incoming connections are allowed </td></tr>
+<tr><td> work </td><td> work: Used for work machines. Trust most of the computers in the network. A few more services might be allowed </td></tr>
+<tr><td> home </td><td> A home environment. It generally implies that you trust most of the other computers and that a few more services will be accepted </td></tr>
+<tr><td> trusted </td><td> Trust all of the machines in the network. The most open of the available options and should be used sparingly </td></tr>
+</tbody>
+</table>
+<h3>Changing the zone of your interface permanently</h3>
+<p>Interfaces will always revert to the default zone if they do not have an alternative zone defined within their configuration. On CentOS, these configurations are defined within the <code>/etc/sysconfig/network-scripts</code> directory with files of the format ifcfg-interface.</p>
 <pre><code>$ firewall-cmd --list-all
 public (default, active)
   interfaces: enp0s3
@@ -125,32 +95,32 @@ public (default, active)
   forward-ports:
   icmp-blocks:
   rich rules:
-</code></pre> 
-<p>You will see from the output that I have a public zone applied to <strong>enp0s3</strong>. I will then open <strong>/etc/sysconfig/network-scripts/ifcfg-enp0s3</strong> to add zone at the bottom.</p> 
-<pre><code>TYPE="Ethernet"
-BOOTPROTO="dhcp"
-DEFROUTE="yes"
-PEERDNS="yes"
-PEERROUTES="yes"
-IPV4_FAILURE_FATAL="no"
-IPV6INIT="yes"
-IPV6_AUTOCONF="yes"
-IPV6_DEFROUTE="yes"
-IPV6_PEERDNS="yes"
-IPV6_PEERROUTES="yes"
-IPV6_FAILURE_FATAL="no"
-NAME="enp0s3"
-UUID="d51651b7-8f3a-4ee0-bee4-3b58f9e356b7"
-DEVICE="enp0s3"
-ONBOOT="yes"
+</code></pre>
+<p>You will see from the output that I have a public zone applied to <strong>enp0s3</strong>. I will then open <strong>/etc/sysconfig/network-scripts/ifcfg-enp0s3</strong> to add zone at the bottom.</p>
+<pre><code>TYPE=&quot;Ethernet&quot;
+BOOTPROTO=&quot;dhcp&quot;
+DEFROUTE=&quot;yes&quot;
+PEERDNS=&quot;yes&quot;
+PEERROUTES=&quot;yes&quot;
+IPV4_FAILURE_FATAL=&quot;no&quot;
+IPV6INIT=&quot;yes&quot;
+IPV6_AUTOCONF=&quot;yes&quot;
+IPV6_DEFROUTE=&quot;yes&quot;
+IPV6_PEERDNS=&quot;yes&quot;
+IPV6_PEERROUTES=&quot;yes&quot;
+IPV6_FAILURE_FATAL=&quot;no&quot;
+NAME=&quot;enp0s3&quot;
+UUID=&quot;d51651b7-8f3a-4ee0-bee4-3b58f9e356b7&quot;
+DEVICE=&quot;enp0s3&quot;
+ONBOOT=&quot;yes&quot;
 ZONE=home
-</code></pre> 
-<p>To implement your changes, you'll have to restart the network service, followed by the firewall service:</p> 
+</code></pre>
+<p>To implement your changes, you'll have to restart the network service, followed by the firewall service:</p>
 <pre><code>$ sudo systemctl restart network.service
 $ sudo systemctl restart firewalld.service
-</code></pre> 
-<h3>Adjusting the Default Zone</h3> 
-<p>You can change the default zone with the <code>--set-default-zone=</code> parameter. This will immediately change any interface that had fallen back on the default to the new zone.</p> 
+</code></pre>
+<h3>Adjusting the Default Zone</h3>
+<p>You can change the default zone with the <code>--set-default-zone=</code> parameter. This will immediately change any interface that had fallen back on the default to the new zone.</p>
 <pre><code>$ sudo firewall-cmd --set-default-zone=home
 success
 $ firewall-cmd --list-all
@@ -163,51 +133,52 @@ home (default, active)
   forward-ports:
   icmp-blocks:
   rich rules:
-</code></pre> 
-<h3>Adding a Service to your Zones</h3> 
-<p>The easiest method is to add the services or ports you need to the zones you are using. Again, you can get a list of the available services with the --get-services option.</p> 
+</code></pre>
+<h3>Adding a Service to your Zones</h3>
+<p>The easiest method is to add the services or ports you need to the zones you are using. Again, you can get a list of the available services with the --get-services option.</p>
 <pre><code>$ firewall-cmd --get-services
 RH-Satellite-6 amanda-client bacula bacula-client dhcp dhcpv6 dhcpv6-client dns ftp high-availability
 http https imaps ipp ipp-client ipsec kerberos kpasswd ldap ldaps libvirt libvirt-tls mdns mountd
 ms-wbt mysql nfs ntp openvpn pmcd pmproxy pmwebapi pmwebapis pop3s postgresql proxy-dhcp radius
 rpc-bind samba samba-client smtp ssh telnet tftp tftp-client transmission-client vnc-server wbem-https
-</code></pre> 
-<p>You can enable a service for a zone using the <strong>--add-service=</strong> parameter. The operation will target the default zone or whatever zone is specified by the <strong>--zone=</strong> parameter. By default, this will only adjust the current firewall session. You can adjust the permanent firewall configuration by including the <strong>--permanent</strong> flag.</p> 
+</code></pre>
+<p>You can enable a service for a zone using the <strong>--add-service=</strong> parameter. The operation will target the default zone or whatever zone is specified by the <strong>--zone=</strong> parameter. By default, this will only adjust the current firewall session. You can adjust the permanent firewall configuration by including the <strong>--permanent</strong> flag.</p>
 <pre><code>$ sudo firewall-cmd --zone=home --add-service=http
 success
 $ firewall-cmd --zone=home --list-services
 dhcpv6-client http ipp-client mdns samba-client ssh
-</code></pre> 
-<p>Once you have tested that everything is working as it should, you will probably want to modify the permanent firewall rules so that your service will still be available after a reboot.</p> 
+</code></pre>
+<p>Once you have tested that everything is working as it should, you will probably want to modify the permanent firewall rules so that your service will still be available after a reboot.</p>
 <pre><code>$ sudo firewall-cmd --zone=home --permanent --add-service=http
 success
 $ sudo firewall-cmd --zone=home --permanent --list-services
 dhcpv6-client http ipp-client mdns samba-client ssh
-</code></pre> 
-<h3>Opening a Port for your Zones</h3> 
-<p>The easiest way to add support for your specific application is to open up the ports that it uses in the appropriate zone(s). This is as easy as specifying the port or port range, and the associated protocol for the ports you need to open.</p> 
-<p>For instance, if our application runs on port 4000 and uses TCP, we could add this to the "home" zone for this session using the <strong>--add-port=</strong> parameter. Protocols can be either <strong>tcp</strong> or <strong>udp</strong>.</p> 
+</code></pre>
+<h3>Opening a Port for your Zones</h3>
+<p>The easiest way to add support for your specific application is to open up the ports that it uses in the appropriate zone(s). This is as easy as specifying the port or port range, and the associated protocol for the ports you need to open.</p>
+<p>For instance, if our application runs on port 4000 and uses TCP, we could add this to the &quot;home&quot; zone for this session using the <strong>--add-port=</strong> parameter. Protocols can be either <strong>tcp</strong> or <strong>udp</strong>.</p>
 <pre><code>$ sudo firewall-cmd --zone=home --add-port=4000/tcp
-</code></pre> 
-<p>After testing, you would likely want to add these to the permanent firewall.</p> 
+</code></pre>
+<p>After testing, you would likely want to add these to the permanent firewall.</p>
 <pre><code>$ sudo firewall-cmd --zone=home --permanent --add-port=4000/tcp
 success
 $ sudo firewall-cmd --zone=home --permanent --list-ports
 4000/tcp
-</code></pre> 
-<h3>Defining a Service</h3> 
-<p>Opening ports for your zones is easy, but it can be difficult to keep track of what each one is for. If you ever decommission a service on your server, you may have a hard time remembering which ports that have been opened are still required. To avoid this situation, it is possible to define a service.</p> 
-<p>Services are simply collections of ports with an associated name and description. Using services is easier to administer than ports, but requires a bit of upfront work. The easiest way to start is to copy an existing script <code>/usr/lib/firewalld/services</code> to the <code>/etc/firewalld/services</code> directory<br> where the firewall looks for non-standard definitions.</p> 
+</code></pre>
+<h3>Defining a Service</h3>
+<p>Opening ports for your zones is easy, but it can be difficult to keep track of what each one is for. If you ever decommission a service on your server, you may have a hard time remembering which ports that have been opened are still required. To avoid this situation, it is possible to define a service.</p>
+<p>Services are simply collections of ports with an associated name and description. Using services is easier to administer than ports, but requires a bit of upfront work. The easiest way to start is to copy an existing script <code>/usr/lib/firewalld/services</code> to the <code>/etc/firewalld/services</code> directory<br />
+where the firewall looks for non-standard definitions.</p>
 <pre><code>$ sudo cp /usr/lib/firewalld/services/http.xml /etc/firewalld/services/webrick.xml
 $ sudo vi /etc/firewalld/services/webrick.xml
-</code></pre> 
-<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+</code></pre>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
 &lt;service&gt;
   &lt;short&gt;webrick&lt;/short&gt;
   &lt;description&gt;Ruby's default HTTP server.This is single threaded which means can only process single request at a time.&lt;/description&gt;
-  &lt;port protocol="tcp" port="4000"/&gt;
+  &lt;port protocol=&quot;tcp&quot; port=&quot;4000&quot;/&gt;
 &lt;/service&gt;
-</code></pre> 
+</code></pre>
 <pre><code>$ sudo firewall-cmd --reload
 success
 $ firewall-cmd --get-services
@@ -215,15 +186,16 @@ RH-Satellite-6 amanda-client bacula bacula-client dhcp dhcpv6 dhcpv6-client dns 
 http https imaps ipp ipp-client ipsec kerberos kpasswd ldap ldaps libvirt libvirt-tls mdns mountd ms-wbt
 mysql nfs ntp openvpn pmcd pmproxy pmwebapi pmwebapis pop3s postgresql proxy-dhcp radius rpc-bind samba
 samba-client smtp ssh telnet tftp tftp-client transmission-client vnc-server wbem-https webrick
-</code></pre> 
-<h3>Creating Your Own Zones</h3> 
-<p>While the predefined zones will probably be more than enough for most users, it can be helpful to define your own zones that are more descriptive of their function.</p> 
-<p>When adding a zone, you must add it to the permanent firewall configuration. You can then reload to bring the configuration into your running session. For instance, I could create a zone by typing</p> 
+</code></pre>
+<h3>Creating Your Own Zones</h3>
+<p>While the predefined zones will probably be more than enough for most users, it can be helpful to define your own zones that are more descriptive of their function.</p>
+<p>When adding a zone, you must add it to the permanent firewall configuration. You can then reload to bring the configuration into your running session. For instance, I could create a zone by typing</p>
 <pre><code>$ sudo firewall-cmd --permanent --new-zone=
 success
 $ sudo firewall-cmd --permanent --get-zones
 block dmz drop external home internal public publicweb trusted work
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

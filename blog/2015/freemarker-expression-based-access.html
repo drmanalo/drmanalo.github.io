@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,27 +58,27 @@
 		<div class="post">
 			<h1>Expression-based Access with FreeMarker</h1>
 			<p><em>05 April 2015</em></p>
-			<p><p>Spring Security 3.0 introduced the ability to use Spring EL expressions as an authorisation mechanism. Expression-based access control is built on the same architecture but allows complicated boolean logic to be encapsulated in a single expression. This comes handy when you want to secure a Controller method or even the entire Controller. JSP has native support for this feature using</p> 
-<p><code>&lt;%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %&gt;</code></p> 
-<p>FreeMarker don't so you need to do more than just importing a tag library.</p> 
-<!-- more --> 
-<p>I followed this article here <a href="http://timtang.me/blog/2012/11/16/use-spring-security-tags-in-freemaker">tech talk</a>, very simple yet precise!</p> 
-<h3>Add JspTagLibs</h3> 
-<p>Consider the first line of the snippet.</p> 
-<pre><code>&lt;#assign security=JspTaglibs["/WEB-INF/security.tld"]/&gt;
-&lt;#include "/user/logout.ftl"/&gt;
+			<p><p>Spring Security 3.0 introduced the ability to use Spring EL expressions as an authorisation mechanism. Expression-based access control is built on the same architecture but allows complicated boolean logic to be encapsulated in a single expression. This comes handy when you want to secure a Controller method or even the entire Controller. JSP has native support for this feature using</p>
+<p><code>&lt;%@ taglib prefix=&quot;sec&quot; uri=&quot;http://www.springframework.org/security/tags&quot; %&gt;</code></p>
+<p>FreeMarker don't so you need to do more than just importing a tag library.</p>
+<!-- more -->
+<p>I followed this article here <a href="http://timtang.me/blog/2012/11/16/use-spring-security-tags-in-freemaker">tech talk</a>, very simple yet precise!</p>
+<h3>Add JspTagLibs</h3>
+<p>Consider the first line of the snippet.</p>
+<pre><code>&lt;#assign security=JspTaglibs[&quot;/WEB-INF/security.tld&quot;]/&gt;
+&lt;#include &quot;/user/logout.ftl&quot;/&gt;
 &lt;#macro navigation&gt;
-	&lt;div class="masthead clearfix"&gt;
-    	&lt;div class="inner"&gt;
-      		&lt;h3 class="masthead-brand"&gt;&lt;@spring.message "prototype"/&gt;&lt;/h3&gt;
+	&lt;div class=&quot;masthead clearfix&quot;&gt;
+    	&lt;div class=&quot;inner&quot;&gt;
+      		&lt;h3 class=&quot;masthead-brand&quot;&gt;&lt;@spring.message &quot;prototype&quot;/&gt;&lt;/h3&gt;
       		&lt;nav&gt;
-        		&lt;ul class="nav masthead-nav"&gt;
-					&lt;#if Session["SPRING_SECURITY_CONTEXT"]?exists&gt;
+        		&lt;ul class=&quot;nav masthead-nav&quot;&gt;
+					&lt;#if Session[&quot;SPRING_SECURITY_CONTEXT&quot;]?exists&gt;
 						&lt;li&gt;&lt;@logout/&gt;&lt;/li&gt;
-          				&lt;li&gt;&lt;a href="home"&gt;&lt;@spring.message "home"/&gt;&lt;/a&gt;&lt;/li&gt; 				
-						&lt;#assign authorities = Session["SPRING_SECURITY_CONTEXT"].authentication.authorities /&gt;
-						&lt;#if authorities?seq_contains("ROLE_ADMIN")&gt;
-							&lt;li&gt;&lt;a href="listUsers"&gt;&lt;@spring.message "users"/&gt;&lt;/a&gt;&lt;/li&gt;
+          				&lt;li&gt;&lt;a href=&quot;home&quot;&gt;&lt;@spring.message &quot;home&quot;/&gt;&lt;/a&gt;&lt;/li&gt; 				
+						&lt;#assign authorities = Session[&quot;SPRING_SECURITY_CONTEXT&quot;].authentication.authorities /&gt;
+						&lt;#if authorities?seq_contains(&quot;ROLE_ADMIN&quot;)&gt;
+							&lt;li&gt;&lt;a href=&quot;listUsers&quot;&gt;&lt;@spring.message &quot;users&quot;/&gt;&lt;/a&gt;&lt;/li&gt;
 						&lt;/#if&gt;
 	          		&lt;/#if&gt;
         		&lt;/ul&gt;
@@ -86,16 +86,23 @@
     	&lt;/div&gt;
   	&lt;/div&gt;
 &lt;/#macro&gt;  
-</code></pre> 
-<p>It's a shame I cannot use <code>&lt;security:authorize access="hasRole('ROLE_ADMIN')"&gt;</code> but the end result is the same, you will gain authorisation to specified pages.</p> 
-<h3>Copy security.tld</h3> 
-<ul> 
- <li> <p>Open your <code>spring-security-taglibs-x.x.x.RELEASE.jar</code>.<br> This is one of the jars inside <code>.m2/repository/org/springframework/security/spring-security-taglibs</code> if you are using maven.</p> </li> 
- <li> <p>Copy <code>security.tld</code> from <code>META-INF</code> folder.</p> </li> 
- <li> <p>Paste it into your <code>src/main/webapp/WEB-INF</code> folder.</p> </li> 
-</ul> 
-<h3>Check your POM</h3> 
-<p>Make sure you have <code>spring-security-taglibs</code> dependency.</p> 
+</code></pre>
+<p>It's a shame I cannot use <code>&lt;security:authorize access=&quot;hasRole('ROLE_ADMIN')&quot;&gt;</code> but the end result is the same, you will gain authorisation to specified pages.</p>
+<h3>Copy security.tld</h3>
+<ul>
+<li>
+<p>Open your <code>spring-security-taglibs-x.x.x.RELEASE.jar</code>.<br />
+This is one of the jars inside <code>.m2/repository/org/springframework/security/spring-security-taglibs</code> if you are using maven.</p>
+</li>
+<li>
+<p>Copy <code>security.tld</code> from <code>META-INF</code> folder.</p>
+</li>
+<li>
+<p>Paste it into your <code>src/main/webapp/WEB-INF</code> folder.</p>
+</li>
+</ul>
+<h3>Check your POM</h3>
+<p>Make sure you have <code>spring-security-taglibs</code> dependency.</p>
 <pre><code>&lt;dependency&gt;
 	&lt;groupId&gt;org.springframework.security&lt;/groupId&gt;
 	&lt;artifactId&gt;spring-security-web&lt;/artifactId&gt;
@@ -111,17 +118,17 @@
 	&lt;artifactId&gt;spring-security-config&lt;/artifactId&gt;
 	&lt;version&gt;${spring.security.version}&lt;/version&gt;
 &lt;/dependency&gt;
-</code></pre> 
-<h3>Check your Spring Security @Configuration</h3> 
-<p>If you are extending <code>WebSecurityConfigurerAdapter</code> and overriding configure to create your own AuthenticationManagerBuilder, you will have BeanCreationException.</p> 
+</code></pre>
+<h3>Check your Spring Security @Configuration</h3>
+<p>If you are extending <code>WebSecurityConfigurerAdapter</code> and overriding configure to create your own AuthenticationManagerBuilder, you will have BeanCreationException.</p>
 <pre><code>Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'methodSecurityInterceptor' defined in class path resource [org/springframework/security/config/annotation/method/configuration/GlobalMethodSecurityConfiguration.class]: Invocation of init method failed; nested exception is java.lang.IllegalArgumentException: An AuthenticationManager is required
-</code></pre> 
-<p>The solution is documented in <a href="http://docs.spring.io/autorepo/docs/spring-security/3.2.5.RELEASE/apidocs/org/springframework/security/config/annotation/web/configuration/WebSecurityConfigurerAdapter.html">Spring Security docs</a>. You can check my own configuration on <a href="https://github.com/drmanalo/springmvc/blob/master/src/main/java/com/manalo/prototype/config/WebSecurityConfiguration.java">Github</a>.</p> 
+</code></pre>
+<p>The solution is documented in <a href="http://docs.spring.io/autorepo/docs/spring-security/3.2.5.RELEASE/apidocs/org/springframework/security/config/annotation/web/configuration/WebSecurityConfigurerAdapter.html">Spring Security docs</a>. You can check my own configuration on <a href="https://github.com/drmanalo/springmvc/blob/master/src/main/java/com/manalo/prototype/config/WebSecurityConfiguration.java">Github</a>.</p>
 <pre><code>public AuthenticationManager authenticationManagerBean() throws Exception
 
 Override this method to expose the AuthenticationManager from configure(AuthenticationManagerBuilder) to be exposed as a Bean. For example:
 
- @Bean(name name="myAuthenticationManager")
+ @Bean(name name=&quot;myAuthenticationManager&quot;)
  @Override
  public AuthenticationManager authenticationManagerBean() throws Exception {
      return super.authenticationManagerBean();
@@ -131,20 +138,22 @@ Returns:
     the AuthenticationManager
 Throws:
     Exception
-</code></pre> 
-<h3>Finally, annotate your @Controller</h3> 
-<pre><code>@PreAuthorize("hasRole('ROLE_ADMIN')")
-@RequestMapping(value = "listUsers", method = RequestMethod.GET)
+</code></pre>
+<h3>Finally, annotate your @Controller</h3>
+<pre><code>@PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+@RequestMapping(value = &quot;listUsers&quot;, method = RequestMethod.GET)
 public ModelAndView listUsers() {
 
 	ModelAndView mav = new ModelAndView();
-	mav.addObject("users", userService.list());
+	mav.addObject(&quot;users&quot;, userService.list());
 	mav.setViewName(ControllerConstant.USER_LIST);
 
 	return mav;
 }
-</code></pre> 
-<p><a href="http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/guides">Spring Security 3.2.5 Guide</a><br> <a href="http://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html">Spring EL Documentation</a></p></p>
+</code></pre>
+<p><a href="http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/guides">Spring Security 3.2.5 Guide</a><br />
+<a href="http://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html">Spring EL Documentation</a></p>
+</p>
 		</div>
 	</div>
 

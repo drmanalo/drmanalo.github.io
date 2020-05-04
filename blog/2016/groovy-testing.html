@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,10 +58,10 @@
 		<div class="post">
 			<h1>Groovy Testing</h1>
 			<p><em>16 March 2016</em></p>
-			<p><p>My previous post is all about writing a simple Groovy CRUD application. It includes writing your views in Groovy as well though it doesn't involve where to put the files. But if you're a seasoned Java developer, you should know your way out.</p> 
-<p>What it lacks is how to test your Groovy classes which I'm about to document on this post.</p> 
-<h3>FakeLoader</h3> 
-<p>This is a workaround assuming your Spring Boot application bootstraps more <code>@Configuration</code> and you don't want to include them in your integration tests.</p> 
+			<p><p>My previous post is all about writing a simple Groovy CRUD application. It includes writing your views in Groovy as well though it doesn't involve where to put the files. But if you're a seasoned Java developer, you should know your way out.</p>
+<p>What it lacks is how to test your Groovy classes which I'm about to document on this post.</p>
+<h3>FakeLoader</h3>
+<p>This is a workaround assuming your Spring Boot application bootstraps more <code>@Configuration</code> and you don't want to include them in your integration tests.</p>
 <pre><code>import org.junit.Test
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.test.context.ActiveProfiles
@@ -69,14 +69,14 @@ import org.springframework.test.context.ActiveProfiles
 /**
  * For integration tests
  */
-@ActiveProfiles("dev")
+@ActiveProfiles(&quot;dev&quot;)
 @SpringBootApplication
 class FakeLoader {
 
 }
-</code></pre> 
-<!-- more --> 
-<h3>Repository integration test</h3> 
+</code></pre>
+<!-- more -->
+<h3>Repository integration test</h3>
 <pre><code>package com.manalo.repository
 
 import com.manalo.FakeLoader
@@ -88,7 +88,7 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.web.WebAppConfiguration
 import spock.lang.Specification
 
-@ActiveProfiles("dev")
+@ActiveProfiles(&quot;dev&quot;)
 @SpringApplicationConfiguration(classes = FakeLoader)
 @WebAppConfiguration
 class UserRepositorySpec extends Specification{
@@ -99,50 +99,50 @@ class UserRepositorySpec extends Specification{
     User user
 
     def setup() {
-        user = new User(id: 1, username: "admin", password: "secret")
+        user = new User(id: 1, username: &quot;admin&quot;, password: &quot;secret&quot;)
     }
 
-    def "Should save user"() {
+    def &quot;Should save user&quot;() {
 
-        when: "save is invoked"
+        when: &quot;save is invoked&quot;
         userRepository.save(user)
 
-        then: "user saved and searchable"
+        then: &quot;user saved and searchable&quot;
         User actual = userRepository.findOne(1)
         actual.getId() == 1
-        actual.getUsername() == "admin"
-        actual.getPassword() == "secret"
+        actual.getUsername() == &quot;admin&quot;
+        actual.getPassword() == &quot;secret&quot;
     }
 
-    def "Should edit user"() {
+    def &quot;Should edit user&quot;() {
 
-        String username = "updated user"
-        String password = "updated password"
+        String username = &quot;updated user&quot;
+        String password = &quot;updated password&quot;
 
-        when: "update is invoked"
+        when: &quot;update is invoked&quot;
         user.setUsername(username)
         user.setPassword(password)
         userRepository.save(user)
 
-        then: "user updated and searchable"
+        then: &quot;user updated and searchable&quot;
         User actual = userRepository.findOne(1)
         actual.getId() == 1
         actual.getUsername() == username
         actual.getPassword() == password
     }
 
-    def "Should delete user"() {
+    def &quot;Should delete user&quot;() {
 
-        when: "user is invoked"
+        when: &quot;user is invoked&quot;
         userRepository.delete(user)
 
-        then: "user deleted and not searchable"
+        then: &quot;user deleted and not searchable&quot;
         User actual = userRepository.findOne(1)
         assert actual == null
     }
 }
-</code></pre> 
-<h3>Service layer test</h3> 
+</code></pre>
+<h3>Service layer test</h3>
 <pre><code>package com.manalo.controller
 
 import com.manalo.domain.User
@@ -161,66 +161,66 @@ class UserServiceSpec extends Specification {
         userService = new UserService(userRepository: userRepository)
     }
 
-    def "Should find all users"() {
+    def &quot;Should find all users&quot;() {
 
-        when: "the users are retrieved"
+        when: &quot;the users are retrieved&quot;
         userService.list()
 
-        then: "a list of users is returned"
+        then: &quot;a list of users is returned&quot;
         1 * userRepository.findAll()
     }
 
-    def "Should find by id"() {
+    def &quot;Should find by id&quot;() {
 
-        when: "looking for user.id $userId"
+        when: &quot;looking for user.id $userId&quot;
         userService.findById(userId)
 
-        then: "user.id $userId is found"
+        then: &quot;user.id $userId is found&quot;
         1 * userRepository.findOne(userId)
     }
 
-    def "Should save a user"() {
+    def &quot;Should save a user&quot;() {
 
-        given: "a new user"
+        given: &quot;a new user&quot;
         User user = new User()
 
-        when: "save is invoked"
+        when: &quot;save is invoked&quot;
         userService.save(user)
 
-        then: "user is saved"
+        then: &quot;user is saved&quot;
         1 * userRepository.save(user)
     }
 
-    def "Should update existing user"() {
+    def &quot;Should update existing user&quot;() {
 
-        given: "an existing user"
+        given: &quot;an existing user&quot;
         User user = new User()
         user.id = userId
         userRepository.findOne(userId) &gt;&gt; user
 
-        when: "save is invoked"
+        when: &quot;save is invoked&quot;
         userService.save(user)
 
-        then: "user is saved"
+        then: &quot;user is saved&quot;
         1 * userRepository.save(user)
     }
 
-    def "Should delete existing user"() {
+    def &quot;Should delete existing user&quot;() {
 
-        given: "an existing user"
+        given: &quot;an existing user&quot;
         User user = new User()
         user.id = userId
         userRepository.findOne(userId) &gt;&gt; user
 
-        when: "delete is invoked"
+        when: &quot;delete is invoked&quot;
         userService.delete(user)
 
-        then: "user is deleted"
+        then: &quot;user is deleted&quot;
         1 * userRepository.delete(user)
     }
 }
-</code></pre> 
-<h3>Controller test</h3> 
+</code></pre>
+<h3>Controller test</h3>
 <pre><code>package com.manalo.controller
 
 import com.manalo.domain.User
@@ -242,80 +242,81 @@ class UserControllerSpec extends Specification {
         mockMvc = standaloneSetup(controller).build()
     }
 
-    def "should return list of users"() {
+    def &quot;should return list of users&quot;() {
 
         given:
-        final String userList = "/user/list"
+        final String userList = &quot;/user/list&quot;
 
         when:
-        "requesting $userList"
+        &quot;requesting $userList&quot;
         def response = mockMvc.perform(get(userList))
 
-        then: "receive 200"
+        then: &quot;receive 200&quot;
         response.andExpect(status().isOk())
         1 * userService.list()
     }
 
-    def "should load screen for adding new user"() {
+    def &quot;should load screen for adding new user&quot;() {
 
         given:
-        final String userAdd = "/user/add"
+        final String userAdd = &quot;/user/add&quot;
 
         when:
-        "requesting $userAdd"
+        &quot;requesting $userAdd&quot;
         def response = mockMvc.perform((get(userAdd)))
 
-        then: "receive 200"
+        then: &quot;receive 200&quot;
         response.andExpect(status().isOk())
-                .andExpect(view().name("views/user/edit"))
+                .andExpect(view().name(&quot;views/user/edit&quot;))
     }
 
-    def "should load screen for editing user"() {
+    def &quot;should load screen for editing user&quot;() {
 
         given:
-        final String userEdit = "/user/1"
+        final String userEdit = &quot;/user/1&quot;
 
         when:
-        "requesting $userEdit"
+        &quot;requesting $userEdit&quot;
         def response = mockMvc.perform((get(userEdit)))
 
-        then: "receive 200"
+        then: &quot;receive 200&quot;
         response.andExpect(status().isOk())
-                .andExpect(view().name("views/user/edit"))
+                .andExpect(view().name(&quot;views/user/edit&quot;))
         1 * userService.findById(1)
     }
 
-    def "should redirect after save"() {
+    def &quot;should redirect after save&quot;() {
 
         given:
-        final String userSave = "/user/save"
+        final String userSave = &quot;/user/save&quot;
 
         when:
-        "requesting $userSave"
+        &quot;requesting $userSave&quot;
         def response = mockMvc.perform((post(userSave)))
 
-        then: "receive 302"
+        then: &quot;receive 302&quot;
         response.andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/user/list"))
+                .andExpect(view().name(&quot;redirect:/user/list&quot;))
     }
 
-    def "should delete existing user"() {
+    def &quot;should delete existing user&quot;() {
 
         given:
-        final String userDelete = "/user/delete"
+        final String userDelete = &quot;/user/delete&quot;
 
         when:
-        "requesting $userDelete"
+        &quot;requesting $userDelete&quot;
         def response = mockMvc.perform(post(userDelete))
 
-        then: "receive 302"
+        then: &quot;receive 302&quot;
         response.andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/user/list"))
+                .andExpect(view().name(&quot;redirect:/user/list&quot;))
     }
 
 
 }
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

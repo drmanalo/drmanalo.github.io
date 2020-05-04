@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,8 +58,8 @@
 		<div class="post">
 			<h1>JVM Garbage Collector Switches</h1>
 			<p><em>19 May 2015</em></p>
-			<p><p>I took this from my Java best practices notes training. This is a verbatim of the switches I used as part of our exercises.</p> 
-<p>In many cases an application can meet performance goals with the default garbage collector. For sufficiently large applications that scale to large numbers of threads, processors, sockets, or a large amount of memory choosing an appropriate garbage collector will make a difference.</p> 
+			<p><p>I took this from my Java best practices notes training. This is a verbatim of the switches I used as part of our exercises.</p>
+<p>In many cases an application can meet performance goals with the default garbage collector. For sufficiently large applications that scale to large numbers of threads, processors, sockets, or a large amount of memory choosing an appropriate garbage collector will make a difference.</p>
 <pre><code>-XX:+UseSerialGC
 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC
 -XX:+UseG1GC
@@ -68,24 +68,26 @@
 -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:GCTimeRatio=9
 -XX:+UseG1GC -Xmx30m
 -XX:+UseSerialGC -Xmx30m
-</code></pre> 
-<!-- more --> 
-<h3>-XX:+UseSerialGC</h3> 
-<p><strong>Serial Garbage Collector</strong> is a single threaded garbage collector. It was the default on all of Sun's VMs prior to Java 5. There is no communication overhead between threads. Best for a single processor machine or a multiprocessor machine with small (say &lt; 100 MB) data sets.</p> 
-<h3>-XX:+UseParallelGC</h3> 
-<p><strong>Parallel Collector</strong> also known as the <strong>Throughput Collector</strong>. The young generation will be collected using a Parallel Collector. It is intended for applications with medium- to large-sized data sets that are run on multiprocessor or multi-threaded hardware. It is only available after java 1.3.1. and is the default for server VMs on Java 5 and 6. The old generation defaults to collection by the Serial Collector.</p> 
-<h3>-XX:+UseParNewGC -XX:+UseConcMarkSweepGC</h3> 
-<p>This setting will use the <strong>Concurrent Mark</strong> and <strong>Sweep Collector</strong> for the old generation and the Parallel New GC for the young space. The difference between <strong>UseParNewGC</strong> (parallel copying collector in the new space) and <strong>UseParallelGC</strong> is that the copy phase in the former uses multiple threads while the latter uses a single thread.</p> 
-<h3>-XX:+UseParallelGC -XX:+UseParallelOldGC</h3> 
-<p>This setting uses the Parallel (Throughput) Collector for the young generation and uses parallel threads rather than a Serial Collector for the old generation.</p> 
-<h3>UseG1GC</h3> 
-<p><strong>G1 collector</strong> does both the young and tenured spaces. It is best for applications that require large heaps with limited GC latency. Large means<br> heap sizes of around 6GB or larger, and stable and predictable pause time below 0.5 seconds.</p> 
-<h3>-XX:+UseAdaptiveSizePolicy</h3> 
-<p>Use built-in tuning with the Parallel (Throughput) collector. It keeps statistics and adjusts the sizes of the young and old generation.</p> 
-<h3>-XX:+AggressiveHeap</h3> 
-<p>Uses the Parallel Collector with adaptive sizing. The JVM can attempt to aggressively tune the parameters of its tuning algorithm based on using all the resources of the operating system on which you are running. It attempts to set various parameters to be optimal for long-running, memory allocation-intensive jobs. In situations where the JVM can use all of the resources of the operating system, use this option to determine if the JVM can deliver satisfactory results.</p> 
-<h3>-XX:GCTimeRatio=nnn</h3> 
-<p>A hint to the virtual machine that it's desirable that not more than 1 / (1 + nnn) of the application execution time be spent in the collector.</p></p>
+</code></pre>
+<!-- more -->
+<h3>-XX:+UseSerialGC</h3>
+<p><strong>Serial Garbage Collector</strong> is a single threaded garbage collector. It was the default on all of Sun's VMs prior to Java 5. There is no communication overhead between threads. Best for a single processor machine or a multiprocessor machine with small (say &lt; 100 MB) data sets.</p>
+<h3>-XX:+UseParallelGC</h3>
+<p><strong>Parallel Collector</strong> also known as the <strong>Throughput Collector</strong>. The young generation will be collected using a Parallel Collector. It is intended for applications with medium- to large-sized data sets that are run on multiprocessor or multi-threaded hardware. It is only available after java 1.3.1. and is the default for server VMs on Java 5 and 6. The old generation defaults to collection by the Serial Collector.</p>
+<h3>-XX:+UseParNewGC -XX:+UseConcMarkSweepGC</h3>
+<p>This setting will use  the <strong>Concurrent Mark</strong> and <strong>Sweep Collector</strong> for the old generation and the Parallel New GC for the young space. The difference between <strong>UseParNewGC</strong> (parallel copying collector in the new space) and <strong>UseParallelGC</strong> is that the copy phase in the former uses multiple threads while the latter uses a single thread.</p>
+<h3>-XX:+UseParallelGC -XX:+UseParallelOldGC</h3>
+<p>This setting uses the Parallel (Throughput) Collector for the young generation and uses parallel threads rather than a Serial Collector for the old generation.</p>
+<h3>UseG1GC</h3>
+<p><strong>G1 collector</strong> does both the young and tenured spaces. It is best for applications that require large heaps with limited GC latency. Large means<br />
+heap sizes of around 6GB or larger, and stable and predictable pause time below 0.5 seconds.</p>
+<h3>-XX:+UseAdaptiveSizePolicy</h3>
+<p>Use built-in tuning with the Parallel (Throughput) collector. It keeps statistics and adjusts the sizes of the young and old generation.</p>
+<h3>-XX:+AggressiveHeap</h3>
+<p>Uses the Parallel Collector with adaptive sizing. The JVM can attempt to aggressively tune the parameters of its tuning algorithm based on using all the resources of the operating system on which you are running. It attempts to set various parameters to be optimal for long-running, memory allocation-intensive jobs. In situations where the JVM can use all of the resources of the operating system, use this option to determine if the JVM can deliver satisfactory results.</p>
+<h3>-XX:GCTimeRatio=nnn</h3>
+<p>A hint to the virtual machine that it's desirable that not more than 1 / (1 + nnn) of the application execution time be spent in the collector.</p>
+</p>
 		</div>
 	</div>
 

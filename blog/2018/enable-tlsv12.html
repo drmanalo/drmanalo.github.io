@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,8 +58,8 @@
 		<div class="post">
 			<h1>Enabling TLSv1.2 on CentOS 5</h1>
 			<p><em>18 June 2018</em></p>
-			<p><p>We have a legacy IVR (Interactive Voice Response) software running an <a href="https://asterisk.org">Asterisk PBX Server</a>. It executes AGI (Asterisk Gateway Interface) compliant protocol to launch external programs written in Python to control telephony channel, play audio, read DTMF (Dual Tone Multi Frequency) digits, etc. We ran into an issue when the payment gateway stopped supporting lower versions of TLS (Transport Layer Security). It requires TLSv1.2 as minimum version.</p> 
-<h3>Issue</h3> 
+			<p><p>We have a legacy IVR (Interactive Voice Response) software running an <a href="https://asterisk.org">Asterisk PBX Server</a>. It executes AGI (Asterisk Gateway Interface) compliant protocol to launch external programs written in Python to control telephony channel, play audio, read DTMF (Dual Tone Multi Frequency) digits, etc. We ran into an issue when the payment gateway stopped supporting lower versions of TLS (Transport Layer Security). It requires TLSv1.2 as minimum version.</p>
+<h3>Issue</h3>
 <pre><code>$ curl -Ivvv https://secure.payment.com
 * About to connect() to secure.payment.com port 443
 *   Trying 185.n.n.n... connected
@@ -71,10 +71,10 @@
 Unknown SSL protocol error in connection to secure.payment.com:443 
 * Closing connection #0
 curl: (35) Unknown SSL protocol error in connection to secure.payment.com:443
-</code></pre> 
-<!-- more --> 
-<h3>Workaround</h3> 
-<p>You need to build OpenSSL and cURL using your current CentOS.</p> 
+</code></pre>
+<!-- more -->
+<h3>Workaround</h3>
+<p>You need to build OpenSSL and cURL using your current CentOS.</p>
 <pre><code>$ wget https://www.openssl.org/source/openssl-1.0.2a.tar.gz --no-check-certificate
 
 Resolving www.openssl.org... 23.214.162.69, 2a02:26f0:f6:199::c1e, 2a02:26f0:f6:1be::c1e
@@ -86,7 +86,7 @@ Length: 5262089 (5.0M) [application/x-gzip]
 Saving to: `openssl-1.0.2a.tar.gz'
 
 100%[============================================================&gt;] 5,262,089   3.14M/s   in 1.6s    
-</code></pre> 
+</code></pre>
 <pre><code>$ wget http://curl.haxx.se/download/curl-7.42.1.tar.gz
 
 Resolving curl.haxx.se (curl.haxx.se)... 151.101.2.49, 151.101.66.49, 151.101.130.49, ...
@@ -100,8 +100,8 @@ Length: 4291533 (4.1M) [application/x-gzip]
 Saving to: ‘curl-7.42.1.tar.gz’
 
 100%[===========================================================&gt;]   4.09M  4.33MB/s    in 0.9s
-</code></pre> 
-<h3>Build OpenSSL</h3> 
+</code></pre>
+<h3>Build OpenSSL</h3>
 <pre><code>$ ./config -fpic shared
 Operating system: x86_64-whatever-linux2
 Configuring for linux-x86_64
@@ -122,7 +122,7 @@ Configuring for linux-x86_64
     no-zlib-dynamic [default] 
 ...
 Configured for linux-x86_64.
-</code></pre> 
+</code></pre>
 <pre><code>$ sudo make &amp;&amp; make build
 ...
 cp libcrypto.pc /usr/local/ssl/lib/pkgconfig
@@ -133,8 +133,8 @@ cp openssl.pc /usr/local/ssl/lib/pkgconfig
 chmod 644 /usr/local/ssl/lib/pkgconfig/openssl.pc
 
 $ sudo /sbin/ldconfig
-</code></pre> 
-<h3>Build cURL</h3> 
+</code></pre>
+<h3>Build cURL</h3>
 <pre><code>$ sudo ./configure --with-ssl=/usr/local/ssl
 ...
 configure: Configured to build curl/libcurl:
@@ -168,8 +168,8 @@ configure: Configured to build curl/libcurl:
   Protocols:        DICT FILE FTP FTPS GOPHER HTTP HTTPS IMAP IMAPS POP3 POP3S RTSP SMB SMBS SMTP SMTPS TELNET TFTP
 
 $ sudo make &amp;&amp; make install
-</code></pre> 
-<h3>Test the workaround</h3> 
+</code></pre>
+<h3>Test the workaround</h3>
 <pre><code>curl -Ivvv https://secure.payment.com
 *   Trying 185.n.n.n...
 * Connected to secure.payment.com (185.n.n.n) port 443 (#0)
@@ -207,9 +207,10 @@ $ sudo make &amp;&amp; make install
 *    subjectAltName: secure.payment.com matched
 *    issuer: C=US; O=Symantec Corporation; OU=Symantec Trust Network; CN=Symantec Class 3 EV SSL CA - G3
 *    SSL certificate verify ok.
-</code></pre> 
-<p>Next challenge is updating Python. Having <code>curl</code> working can be a good fallback if Python 2.7.9 upgrade fails.</p> 
-<p><strong>Credit</strong> goes <a href="https://miteshshah.github.io/linux/centos/how-to-enable-openssl-1-0-2-a-tlsv1-1-and-tlsv1-2-on-centos-5-and-rhel5/">to this blog</a></p></p>
+</code></pre>
+<p>Next challenge is updating Python. Having <code>curl</code> working can be a good fallback if Python 2.7.9 upgrade fails.</p>
+<p><strong>Credit</strong> goes <a href="https://miteshshah.github.io/linux/centos/how-to-enable-openssl-1-0-2-a-tlsv1-1-and-tlsv1-2-on-centos-5-and-rhel5/">to this blog</a></p>
+</p>
 		</div>
 	</div>
 

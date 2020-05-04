@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,8 +58,8 @@
 		<div class="post">
 			<h1>Cisco Dialup VPN Configuration</h1>
 			<p><em>13 May 2014</em></p>
-			<p><p>This is my working Cisco dialup configuration. IP addresses and wildcard masks are fictitious.</p> 
-<!-- more --> 
+			<p><p>This is my working Cisco dialup configuration. IP addresses and wildcard masks are fictitious.</p>
+<!-- more -->
 <pre><code>cisco887(config)#crypto isakmp policy 2
 cisco887(config-isakmp)#encryption 3des
 cisco887(config-isakmp)#hash md5
@@ -108,7 +108,8 @@ cisco887(config-if)#exit
 
 cisco887(config)#access-list 103 remark -===VPN Client users===-
 cisco887(config)#access-list 103 permit ip x.x.x.x y.y.y.y host x.x.x.x
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

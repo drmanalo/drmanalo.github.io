@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,22 +58,22 @@
 		<div class="post">
 			<h1>Migrating to MySQL Enterprise</h1>
 			<p><em>08 May 2018</em></p>
-			<p><p>We are migrating to MySQL Enterprise from community version. Currently I'm upgrading from 5.7.22 to 8.0.11. It's my bad not reading the <a href="https://dev.mysql.com/doc/refman/8.0/en/upgrading-strategies.html">upgrade strategy</a> from Oracle themselves so I ended up with some issues.</p> 
-<p>What I did was uninstall the community version using <code>yum remove</code> and install the following RPMs. I got them from Oracle website as trial.</p> 
-<ul> 
- <li>mysql-commercial-client-8.0.11-1.1.el7.x86_64.rpm</li> 
- <li>mysql-commercial-common-8.0.11-1.1.el7.x86_64.rpm</li> 
- <li>mysql-commercial-libs-8.0.11-1.1.el7.x86_64.rpm</li> 
- <li>mysql-commercial-server-8.0.11-1.1.el7.x86_64.rpm</li> 
-</ul> 
-<!-- more --> 
-<h3>ISSUE #1: User specified as a definer does not exist</h3> 
-<p>After starting <code>mysqld</code> service and logging in as root, I got error with permissions I'm assuming.</p> 
+			<p><p>We are migrating to MySQL Enterprise from community version. Currently I'm upgrading from 5.7.22 to 8.0.11. It's my bad not reading the <a href="https://dev.mysql.com/doc/refman/8.0/en/upgrading-strategies.html">upgrade strategy</a> from Oracle themselves  so I ended up with some issues.</p>
+<p>What I did was uninstall the community version using <code>yum remove</code> and install the following RPMs. I got them from Oracle website as trial.</p>
+<ul>
+<li>mysql-commercial-client-8.0.11-1.1.el7.x86_64.rpm</li>
+<li>mysql-commercial-common-8.0.11-1.1.el7.x86_64.rpm</li>
+<li>mysql-commercial-libs-8.0.11-1.1.el7.x86_64.rpm</li>
+<li>mysql-commercial-server-8.0.11-1.1.el7.x86_64.rpm</li>
+</ul>
+<!-- more -->
+<h3>ISSUE #1: User specified as a definer does not exist</h3>
+<p>After starting <code>mysqld</code> service and logging in as root, I got error with permissions I'm assuming.</p>
 <pre><code>mysql&gt; show databases;
 ERROR 1449 (HY000): The user specified as a definer ('mysql.infoschema'@'localhost') does not exist
-</code></pre> 
-<h3>Solution</h3> 
-<p>I set innodb_fast_shutdown to 1 as per upgrade strategy. Value 1 means InnoDB skips full purge at shutdown.</p> 
+</code></pre>
+<h3>Solution</h3>
+<p>I set innodb_fast_shutdown to 1 as per upgrade strategy. Value 1 means InnoDB skips full purge at shutdown.</p>
 <pre><code>mysql&gt; set global innodb_fast_shutdown=1;
 Query OK, 0 rows affected (0.00 sec)
 
@@ -93,11 +93,12 @@ Checking databases
 ...
 Upgrade process completed successfully.
 Checking if update is needed.
-</code></pre> 
-<h3>Conclusion</h3> 
-<p>I don't know what <code>mysql_upgrade</code> is doing behind the scene but it's definitely fixing what seemed to have lost on user root.</p> 
-<h3>TODO</h3> 
-<p>I will update this post if I will encounter any migration-related issue.</p></p>
+</code></pre>
+<h3>Conclusion</h3>
+<p>I don't know what <code>mysql_upgrade</code> is doing behind the scene but it's definitely fixing what seemed to have lost on user root.</p>
+<h3>TODO</h3>
+<p>I will update this post if I will encounter any migration-related issue.</p>
+</p>
 		</div>
 	</div>
 

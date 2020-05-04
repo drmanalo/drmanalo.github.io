@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,18 +58,19 @@
 		<div class="post">
 			<h1>Workaround for ORA-01489</h1>
 			<p><em>08 February 2015</em></p>
-			<p><p>Just saw this issue while concatenating fields in Oracle.</p> 
-<h3>Issue</h3> 
+			<p><p>Just saw this issue while concatenating fields in Oracle.</p>
+<h3>Issue</h3>
 <pre><code>SELECT LISTAGG(column_name, ', ') WITHIN GROUP (ORDER BY column_name) alias FROM table_name;
 
 ORA-01489: result of string concatenation is too long
-01489. 00000 -  "result of string concatenation is too long"
+01489. 00000 -  &quot;result of string concatenation is too long&quot;
 *Cause:    String concatenation result is more than the maximum size.
 *Action:   Make sure that the result is less than the maximum size.
-</code></pre> 
-<h3>Workaround</h3> 
+</code></pre>
+<h3>Workaround</h3>
 <pre><code>SELECT RTRIM(XMLAGG(XMLELEMENT(e, column_name, ',').EXTRACT('//text()') ORDER BY column_name).GETCLOBVAL(), ',') alias FROM table_name;
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

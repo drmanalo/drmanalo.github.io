@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,17 +58,17 @@
 		<div class="post">
 			<h1>Using LetsEncrypt with CentOS on Apache</h1>
 			<p><em>24 February 2019</em></p>
-			<p><p>From <a href="https://letsencrypt.org">letsencrypt.org</a>:</p> 
-<blockquote> 
- <p>To enable HTTPS on your website, you need to get a certificate from a Certificate Authority (CA). Let's Encrypt is a CA. In order to get a certificate for your website's domain from Let's Encrypt, you have to demonstrate control over the domain. With Let's Encrypt, you do this using software that uses the <a href="https://ietf-wg-acme.github.io/acme">ACME protocol</a>, which typically runs on your web host.</p> 
-</blockquote> 
-<p>You will need SSH access to your web host to install a <code>certbot</code> client. <code>certbot</code> will automate certificate issuance and installation with no downtime.</p> 
-<h3>Install certbot</h3> 
-<p>On my machine, it added more Python dependencies.</p> 
+			<p><p>From <a href="https://letsencrypt.org">letsencrypt.org</a>:</p>
+<blockquote>
+<p>To enable HTTPS on your website, you need to get a certificate from a Certificate Authority (CA). Let's Encrypt is a CA. In order to get a certificate for your website's domain from Let's Encrypt, you have to demonstrate control over the domain. With Let's Encrypt, you do this using software that uses the <a href="https://ietf-wg-acme.github.io/acme">ACME protocol</a>, which typically runs on your web host.</p>
+</blockquote>
+<p>You will need SSH access to your web host to install a <code>certbot</code> client. <code>certbot</code> will automate certificate issuance and installation with no downtime.</p>
+<h3>Install certbot</h3>
+<p>On my machine, it added more Python dependencies.</p>
 <pre><code>$ sudo yum install certbot python2-certbot-apache
-</code></pre> 
-<!-- more --> 
-<h3>Run certbot</h3> 
+</code></pre>
+<!-- more -->
+<h3>Run certbot</h3>
 <pre><code>$ sudo certbot certonly --manual --preferred-challenges=dns -d *.yourdomain.com
 Saving debug log to /var/log/letsencrypt/letsencrypt.log
 Plugins selected: Authenticator manual, Installer None
@@ -85,9 +85,9 @@ your server, please ensure you're okay with that.
 Are you OK with your IP being logged?
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 (Y)es/(N)o: Y
-</code></pre> 
-<h3>Add a TXT record to your DNS</h3> 
-<p>This is part of the certbot script</p> 
+</code></pre>
+<h3>Add a TXT record to your DNS</h3>
+<p>This is part of the certbot script</p>
 <pre><code>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Please deploy a DNS TXT record under the name
 _acme-challenge.yourdomain.com with the following value:
@@ -96,18 +96,18 @@ RandomTextFromCommandLine_AUywrQH1pxx88NTKG7OgUod
 
 Before continuing, verify the record is deployed.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-</code></pre> 
-<h3>Verify the TXT record</h3> 
+</code></pre>
+<h3>Verify the TXT record</h3>
 <pre><code>$ nslookup -type=TXT _acme-challenge.yourdomain.com
 Server:		127.0.1.1
 Address:	127.0.1.1#53
 
 Non-authoritative answer:
-_acme-challenge.yourdomain.com	text = "RandomTextFromCommandLine_AUywrQH1pxx88NTKG7OgUod"
-</code></pre> 
-<h3>Hit Enter to continue</h3> 
-<p>Press Enter if you're seeing your TXT record. It might take a while for the TXT record to propagate. Please be patient.</p> 
-<p>Eventually the certificate will be issued and you should see something similar to this.</p> 
+_acme-challenge.yourdomain.com	text = &quot;RandomTextFromCommandLine_AUywrQH1pxx88NTKG7OgUod&quot;
+</code></pre>
+<h3>Hit Enter to continue</h3>
+<p>Press Enter if you're seeing your TXT record. It might take a while for the TXT record to propagate. Please be patient.</p>
+<p>Eventually the certificate will be issued and you should see something similar to this.</p>
 <pre><code>Waiting for verification...
 Cleaning up challenges
 Resetting dropped connection: acme-v02.api.letsencrypt.org
@@ -120,12 +120,13 @@ IMPORTANT NOTES:
    Your cert will expire on 2019-05-25. To obtain a new or tweaked
    version of this certificate in the future, simply run certbot
    again. To non-interactively renew *all* of your certificates, run
-   "certbot renew"
+   &quot;certbot renew&quot;
  - If you like Certbot, please consider supporting our work by:
 
    Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
    Donating to EFF:                    https://eff.org/donate-le
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

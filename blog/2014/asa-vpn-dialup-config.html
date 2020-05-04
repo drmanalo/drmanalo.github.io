@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,51 +58,52 @@
 		<div class="post">
 			<h1>ASA Dialup VPN Configuration</h1>
 			<p><em>07 June 2014</em></p>
-			<p><p>This Cisco dialup VPN configuration worked for ASA 5505 running on version 8.4(7). All upper case letters are labels and should be changed according to your standards and taste. IP addresses are representational.</p> 
-<h3>Network Object Mapping</h3> 
+			<p><p>This Cisco dialup VPN configuration worked for ASA 5505 running on version 8.4(7). All upper case letters are labels and should be changed according to your standards and taste. IP addresses are representational.</p>
+<h3>Network Object Mapping</h3>
 <pre><code>object network OBJ_VPN_ENDPOINT1
 subnet 10.175.0.0 255.255.128.0
 description OBJ_VPN_ENDPOINT1 is a label
-</code></pre> 
-<h3>DHCP Pool</h3> 
+</code></pre>
+<h3>DHCP Pool</h3>
 <pre><code>ip local pool VPN_DHCP_POOL1 10.0.20.10-10.0.20.14
-</code></pre> 
-<!-- more --> 
-<h3>Access Control List</h3> 
+</code></pre>
+<!-- more -->
+<h3>Access Control List</h3>
 <pre><code>access-list ACL_SPLIT_TUNNEL standard permit 10.175.0.0 255.255.128.0
 access-list OUTSIDE-INSIDE extended permit ip object VPN_DHCP_POOL1 object OBJ_VPN_ENDPOINT1
-</code></pre> 
-<h3>Network Address Translation</h3> 
+</code></pre>
+<h3>Network Address Translation</h3>
 <pre><code>  nat (outside,outside) source static VPN_DHCP_POOL1 VPN_DHCP_POOL1 destination
     static OBJ_VPN_ENDPOINT1 OBJ_VPN_ENDPOINT1
     description NAT EXEMPTION FOR VPN CLIENT IPs TO VPN ENDPOINTS
-</code></pre> 
-<h3>Crypto Map</h3> 
+</code></pre>
+<h3>Crypto Map</h3>
 <pre><code>crypto dynamic-map DYN_CMAP_OUTSIDE 1 set ikev1 transform-set 3DES_SHA
 crypto dynamic-map DYN_CMAP_OUTSIDE 1 set reverse-route
 crypto map CMAP_OUTSIDE 99 ipsec-isakmp dynamic DYN_CMAP_OUTSIDE
-</code></pre> 
-<h3>Group Policy</h3> 
+</code></pre>
+<h3>Group Policy</h3>
 <pre><code>group-policy GPOLICY_POLICY1 internal
 group-policy GPOLICY_POLICY1 attributes
  dns-server value 8.8.8.8
  vpn-tunnel-protocol ikev1 ikev2
  split-tunnel-policy tunnelspecified
  split-tunnel-network-list value ACL_SPLIT_TUNNEL
-</code></pre> 
-<h3>Tunnel Group</h3> 
+</code></pre>
+<h3>Tunnel Group</h3>
 <pre><code>tunnel-group DIALUP_TUNNEL_GROUP type remote-access
 tunnel-group DIALUP_TUNNEL_GROUP general-attributes
  address-pool VPN_DHCP_POOL1
  default-group-policy GPOLICY_POLICY1
 tunnel-group DIALUP_TUNNEL_GROUP ipsec-attributes
  ikev1 pre-shared-key ********
-</code></pre> 
-<h3>Dialup Credentials</h3> 
+</code></pre>
+<h3>Dialup Credentials</h3>
 <pre><code>username USERNAME password INSECURE encrypted
 username USERNAME attributes
  service-type remote-access
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

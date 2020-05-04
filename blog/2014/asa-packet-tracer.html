@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,12 +58,12 @@
 		<div class="post">
 			<h1>ASA Packet Tracer</h1>
 			<p><em>28 June 2014</em></p>
-			<p><p>Cisco ASA includes a very nice debugging feature called <code>packet-tracer</code>. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I'm using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.</p> 
-<h3>Command syntax</h3> 
+			<p><p>Cisco ASA includes a very nice debugging feature called <code>packet-tracer</code>. You can inject and trace a packet as it travels through different phases and quickly determine whether or not the packet will pass through. I'm using this quite often to verify traffic passing through ACL rules, NAT rules and VPN but its uses is not limited to these.</p>
+<h3>Command syntax</h3>
 <pre><code>packet-tracer input &lt;source interface&gt; &lt;protocol&gt; &lt;source IP&gt; &lt;source port&gt; &lt;destination IP&gt; &lt;destination port&gt; [detailed]
-</code></pre> 
-<!-- more --> 
-<h3>Sample output</h3> 
+</code></pre>
+<!-- more -->
+<h3>Sample output</h3>
 <pre><code>ASA-5505# packet-tracer input inside tcp x.x.x.x 80 y.y.y.y 80
 
 Phase: 1
@@ -135,7 +135,8 @@ output-interface: outside
 output-status: up
 output-line-status: up
 Action: allow
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

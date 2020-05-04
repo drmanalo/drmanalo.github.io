@@ -48,7 +48,7 @@
            <input id="searchButton" name="googleSearchName" type="submit" value="Search">
         </form>
 
-        <small>Baked with <a href="https://jbake.org">JBake v2.6.1</a></small><br/>
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
         <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
 
       </div>
@@ -58,29 +58,30 @@
 		<div class="post">
 			<h1>Enable L2TP over IPSec on Ubuntu</h1>
 			<p><em>30 November 2018</em></p>
-			<p><p>If you're running the latest Ubuntu 18.04, then you don't need to add the PPA repository. If on lower version of Ubuntu, please add this PPA.</p> 
+			<p><p>If you're running the latest Ubuntu 18.04, then you don't need to add the PPA repository. If on lower version of Ubuntu, please add this PPA.</p>
 <pre><code>$ sudo add-apt-repository ppa:nm-l2tp/network-manager-l2tp  
 $ sudo apt-get update
-</code></pre> 
-<h3>Install network manager l2tp</h3> 
-<p><code>network-manager-l2tp-gnome</code> is required if running gnome</p> 
+</code></pre>
+<h3>Install network manager l2tp</h3>
+<p><code>network-manager-l2tp-gnome</code> is required if running gnome</p>
 <pre><code>$ sudo apt-get install network-manager-l2tp
 $ sudo apt-get install network-manager-l2tp-gnome
-</code></pre> 
-<!-- more --> 
-<h3>Add your dialer</h3> 
-<ol> 
- <li>Navigate to Settings &gt; Network &gt; VPN.</li> 
- <li>Click the + button and Select Layer 2 Tunneling Protocol (L2TP) then click Create.</li> 
- <li>Fill up Name, Gateway and Username fields.</li> 
- <li>On the Password field, select your preference on how to supply the password.</li> 
- <li>Configure IPSec settings as described. <img src="https://drmanalo.github.io/images/ipsec_settings.png" alt="IPSec Settings"></li> 
-</ol> 
-<h3>Disable xl2tpd</h3> 
-<p>I have to disable <code>xl2tpd</code> on my machine.</p> 
+</code></pre>
+<!-- more -->
+<h3>Add your dialer</h3>
+<ol>
+<li>Navigate to Settings &gt; Network &gt; VPN.</li>
+<li>Click the + button and Select Layer 2 Tunneling Protocol (L2TP) then click Create.</li>
+<li>Fill up Name, Gateway and Username fields.</li>
+<li>On the Password field, select your preference on how to supply the password.</li>
+<li>Configure IPSec settings as described. <img src="/images/ipsec_settings.png" alt="IPSec Settings" /></li>
+</ol>
+<h3>Disable xl2tpd</h3>
+<p>I have to disable <code>xl2tpd</code> on my machine.</p>
 <pre><code>sudo service xl2tpd stop
 sudo systemctl disable xl2tpd
-</code></pre></p>
+</code></pre>
+</p>
 		</div>
 	</div>
 

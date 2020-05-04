@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Using SSH through AWS Session Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.5</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Using SSH through AWS Session Manager</h1>
+			<p><em>18 April 2020</em></p>
+			<p><p>We are planning to use AWS for our Java applications which is a step forward from the dedicated hosting that we currently have. Being on a corporate world, security is pretty tight and common ports are locked down including SSH port. This is a challenge since I have to SCP to deploy my jar and war files.</p>
+<p>Luckily AWS allows to tunnel SSH through their session manager. I followed <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html">this guide</a> to setup my connection. There are prerequisites to comply with and you need to have the correct role provisioned to your AWS login.</p>
+<!-- more -->
+<h3>SSH connections through Session Manager checklist</h3>
+<ul>
+<li>SSH is running on the instance (with inbound ports closed)</li>
+</ul>
+<pre><code>   sudo netstat -tlnp | grep 22
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1056/sshd
+tcp6       0      0 :::22                   :::*                    LISTEN      1056/sshd
+</code></pre>
+<ul>
+<li>SSM agent version 2.3.672.0 or higher is installed on the instance. You can view this using AWS System Manager &gt; Session Manager or <code>sudo yum info amazon-ssm-agent</code></li>
+</ul>
+<p><img src="/images/redhat.test.instance.png" alt="Redhat test instance image" /></p>
+<ul>
+<li>Session manager plugin is installed on my local machine with version 1.1.23.0 or later</li>
+</ul>
+<p>You can download session manager plugin from <a href="https://s3.amazonaws.com/session-manager-downloads/plugin/latest/windows/SessionManagerPluginSetup.exe">this link</a>. This is an addon to your AWS CLI which you can install using <code>choco install awscli</code>. You can verify you have it by running</p>
+<pre><code>$ session-manager-plugin --version
+1.1.61.0
+</code></pre>
+<ul>
+<li>Add this to your SSH configuration typically at <code>~/.ssh/config</code></li>
+</ul>
+<p>I'm sadly running git bash on Windows so I have the first configuration. If you are on *nix, please use the next one.</p>
+<pre><code># SSH over Session Manager
+host i-* mi-*
+ProxyCommand /C/Windows/System32/WindowsPowerShell/v1.0/powershell.exe &quot;aws ssm start-session --target %h --document-na
+me AWS-StartSSHSession --parameters portNumber=%p&quot;
+</code></pre>
+<pre><code># SSH over Session Manager
+host i-* mi-*
+ProxyCommand sh -c &quot;aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'&quot;
+</code></pre>
+<ul>
+<li>Check if you have <strong>ssm:StartSession</strong> permission. Please check your IAM policy for this. On mine, it's attached to a custom SSMUserGroup with attached policy <code>AmazonSSMFullAccess</code>.</li>
+</ul>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: &quot;ssm:StartSession&quot;,
+            &quot;Resource&quot;: [
+                &quot;arn:aws:ec2:*:*:instance/instance-id&quot;,
+                &quot;arn:aws:ssm:region:account-id:document/AWS-StartSSHSession&quot;
+            ]
+        }
+    ]
+}
+</code></pre>
+<ul>
+<li>Configure your AWS CLI. You should ask your Administrator for your access Key ID and secret.</li>
+</ul>
+<pre><code>$ aws configure
+AWS Access Key ID [****************N6EQ]:
+AWS Secret Access Key [****************ffMZ]:
+Default region name [eu-west-2]:
+Default output format [json]:
+</code></pre>
+<p>Once configured, run <code>aws ec2 describe-instances</code>. You should see a long JSON describing your EC2 instance.</p>
+<h3>Testing your SSH console</h3>
+<p>Make sure you have downloaded the PEM file you created while launching the Amazon EC2 instance.</p>
+<pre><code>$ ssh -i Downloads/aws/redhat-free-tier.pem ec2-user@i-018faa8ae7c5e4565
+This system is not registered to Red Hat Insights. See https://cloud.redhat.com/
+To register this system, run: insights-client --register
+
+Last login: Fri Apr 17 19:02:01 2020 from ::1
+[ec2-user@ip-172-31-22-128 ~]$
+</code></pre>
+<p>To prove that port 22 is close, I run nmap and telnet against my EC2 instance.</p>
+<pre><code>$ nmap -Pn ec2-35-177-254-212.eu-west-2.compute.amazonaws.com
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2020-04-17 19:43 BST
+Nmap scan report for ec2-35-177-254-212.eu-west-2.compute.amazonaws.com (35.177.254.212)
+Host is up (0.013s latency).
+Not shown: 999 filtered ports
+PORT     STATE  SERVICE
+8080/tcp closed http-proxy
+</code></pre>
+<pre><code>$ telnet ec2-35-177-254-212.eu-west-2.compute.amazonaws.com 22
+Trying 35.177.254.212...
+telnet: connect to address 35.177.254.212: Connection timed out
+</code></pre>
+</p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2020/ssh-through-aws-ssm.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2020/ssh-through-aws-ssm.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>
