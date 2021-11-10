@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>My Rails Kali Linux Install Experience</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.7</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>My Rails Kali Linux Install Experience</h1>
+			<p><em>08 August 2021</em></p>
+			<p><p>We have microservices developed using Ruby on Rails. I have to install several of these microservices to run another Golang microservice. Being a <code>ruby</code> noob, I find it challenging to install since I think the README assumes every developer is seasoned Ruby programmer.</p>
+<p>The other challenge I have is that Kali Linux has out-of-the-box ruby which version is lower than what its <code>Gemfile</code> requires. I have to uninstall the existing ruby and install <code>rbenv</code>. But the hurdle doesn't stop there.</p>
+<!-- more -->
+<h3>Customising Ruby</h3>
+<pre><code>$ sudo apt remove ruby
+
+$ sudo apt install rbenv
+
+$ echo 'eval &quot;$(rbenv init)&quot;' &gt;&gt; ~/.zshrc
+
+$ source ~/.zshrc
+
+$ git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+$ curl -fsSL https://github.com/rbenv/rbenv-installer/raw/main/bin/rbenv-doctor | bash  
+Checking for `rbenv' in PATH: /usr/bin/rbenv
+Checking for rbenv shims in PATH: OK
+Checking `rbenv install' support: /home/drmanalo/.rbenv/plugins/ruby-build/bin/rbenv-install (ruby-build 20210804-1-g57c397d)
+Counting installed Ruby versions: 2 versions
+Checking RubyGems settings: OK
+Auditing installed plugins: OK
+
+$ rbenv install 2.7.4
+
+$ rbenv global 2.7.4
+</code></pre>
+<h3>Installing Rails</h3>
+<pre><code>$ gem install rails
+
+$ bundle install
+
+# To mitigate issue with gem install pg
+$ sudo apt install libpq-dev
+
+$ bundle install
+...
+Bundle complete! 38 Gemfile dependencies, 139 gems now installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
+</code></pre>
+<h3>Fixing Github private repo issues</h3>
+<p>I created a Github token on <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> and added below to my <code>.zshrc</code></p>
+<pre><code>export BUNDLE_GITHUB__COM=x-access-token:ghp_xxxxxxxxxxxxxxxxxxxxx
+</code></pre>
+<h3>Running Rails</h3>
+<pre><code>$ rake db:migrate
+
+$ rails server
+=&gt; Booting Puma
+=&gt; Rails 6.1.4 application starting in development
+=&gt; Run `bin/rails server --help` for more startup options
+</code></pre>
+</p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2021/rails-kali-install.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2021/rails-kali-install.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

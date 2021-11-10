@@ -6,9 +6,354 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Mon, 4 May 2020 17:29:24 +0100</pubDate>
-    <lastBuildDate>Mon, 4 May 2020 17:29:24 +0100</lastBuildDate>
+    <pubDate>Wed, 10 Nov 2021 13:15:59 +0000</pubDate>
+    <lastBuildDate>Wed, 10 Nov 2021 13:15:59 +0000</lastBuildDate>
 
+      <item>
+        <title>My Rails Kali Linux Install Experience</title>
+        <link>https://drmanalo.github.io/blog/2021/rails-kali-install.html</link>
+        <pubDate>Sun, 8 Aug 2021 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2021/rails-kali-install.html</guid>
+        <description>
+  	         &lt;p&gt;We have microservices developed using Ruby on Rails. I have to install several of these microservices to run another Golang microservice. Being a &lt;code&gt;ruby&lt;/code&gt; noob, I find it challenging to install since I think the README assumes every developer is seasoned Ruby programmer.&lt;/p&gt;
+&lt;p&gt;The other challenge I have is that Kali Linux has out-of-the-box ruby which version is lower than what its &lt;code&gt;Gemfile&lt;/code&gt; requires. I have to uninstall the existing ruby and install &lt;code&gt;rbenv&lt;/code&gt;. But the hurdle doesn&apos;t stop there.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;Customising Ruby&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo apt remove ruby
+
+$ sudo apt install rbenv
+
+$ echo &apos;eval &amp;quot;$(rbenv init)&amp;quot;&apos; &amp;gt;&amp;gt; ~/.zshrc
+
+$ source ~/.zshrc
+
+$ git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+$ curl -fsSL https://github.com/rbenv/rbenv-installer/raw/main/bin/rbenv-doctor | bash  
+Checking for `rbenv&apos; in PATH: /usr/bin/rbenv
+Checking for rbenv shims in PATH: OK
+Checking `rbenv install&apos; support: /home/drmanalo/.rbenv/plugins/ruby-build/bin/rbenv-install (ruby-build 20210804-1-g57c397d)
+Counting installed Ruby versions: 2 versions
+Checking RubyGems settings: OK
+Auditing installed plugins: OK
+
+$ rbenv install 2.7.4
+
+$ rbenv global 2.7.4
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Installing Rails&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ gem install rails
+
+$ bundle install
+
+# To mitigate issue with gem install pg
+$ sudo apt install libpq-dev
+
+$ bundle install
+...
+Bundle complete! 38 Gemfile dependencies, 139 gems now installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Fixing Github private repo issues&lt;/h3&gt;
+&lt;p&gt;I created a Github token on &lt;a href=&quot;https://github.com/settings/tokens&quot;&gt;https://github.com/settings/tokens&lt;/a&gt; and added below to my &lt;code&gt;.zshrc&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;export BUNDLE_GITHUB__COM=x-access-token:ghp_xxxxxxxxxxxxxxxxxxxxx
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Running Rails&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ rake db:migrate
+
+$ rails server
+=&amp;gt; Booting Puma
+=&amp;gt; Rails 6.1.4 application starting in development
+=&amp;gt; Run `bin/rails server --help` for more startup options
+&lt;/code&gt;&lt;/pre&gt;
+
+  	    </description>
+      </item>
+      <item>
+        <title>Installing Docker CE on Kali Linux</title>
+        <link>https://drmanalo.github.io/blog/2021/docker-kali-install.html</link>
+        <pubDate>Sun, 18 Jul 2021 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2021/docker-kali-install.html</guid>
+        <description>
+  	         &lt;p&gt;I have a similar post of &lt;a href=&quot;/blog/2020/dockerce-redhat.html&quot;&gt;installing Docker CE&lt;/a&gt; but on Red Hat 8. Installing on Kali Linux is not completely different but still documenting the steps I went through to set it up.&lt;/p&gt;
+&lt;p&gt;There&apos;s an existing docker package from &lt;code&gt;apt&lt;/code&gt; therefore Kali-rolling repository named it &lt;code&gt;docker.io&lt;/code&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;Install using apt&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo apt install docker.io
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  cgroupfs-mount containerd libintl-perl libintl-xs-perl libmodule-find-perl libmodule-scandeps-perl
+  libproc-processtable-perl libsort-naturally-perl needrestart runc tini
+Do you want to continue? [Y/n]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Post-installation&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo groupadd docker
+groupadd: group &apos;docker&apos; already exists
+
+$ sudo usermod -aG docker $USER
+
+$ sudo systemctl enable docker
+Synchronizing state of docker.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable docker
+Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /lib/systemd/system/docker.service.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Starting and testing&lt;/h3&gt;
+&lt;p&gt;Logout and then login back to update your permissions.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo systemctl start docker
+
+$ docker run hello-world
+Unable to find image &apos;hello-world:latest&apos; locally
+latest: Pulling from library/hello-world
+b8dfde127a29: Pull complete
+Digest: sha256:776b0895d5e2fcd5e80bcdd607adc45461ba11143ef3df531174bf00679f43fe
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+&lt;/code&gt;&lt;/pre&gt;
+
+  	    </description>
+      </item>
+      <item>
+        <title>My Codebashing Notes</title>
+        <link>https://drmanalo.github.io/blog/2021/code-bashing-notes.html</link>
+        <pubDate>Sun, 25 Apr 2021 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2021/code-bashing-notes.html</guid>
+        <description>
+  	         &lt;p&gt;As part of our training, we were given access to some courses on &lt;a href=&quot;https://codebashing.com&quot;&gt;codebashing&lt;/a&gt; and Java being my primary course. We were generously given access to other courses which I will pursue during my spare time. I&apos;m looking forward to complete other Java-related courses too and time-permitting, I&apos;ll try Golang and Ruby on Rails courses. That&apos;s a very optimistic wish but if access to this resources will remain, might as well consider it as opportunity.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/java.basher.png&quot; alt=&quot;Java Codebasher&quot; /&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;SQL Injection&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Attack:&lt;/strong&gt; &lt;code&gt;&apos; or 1=1)#&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use SQL prepared statements&lt;/p&gt;
+&lt;h3&gt;XXE (XML External Entity) Processing&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Attack:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE foo [&amp;lt;!ELEMENT foo ANY &amp;gt;
+&amp;lt;!ENTITY bar SYSTEM &amp;quot;file:///etc/passwd&amp;quot; &amp;gt;]&amp;gt;
+   &amp;lt;foo&amp;gt;&amp;amp;bar;&amp;lt;/foo&amp;gt; &amp;lt;!-- added to the metadata --&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;documentBuilderFactory.setFeature(&amp;quot;http://apache.org/xml/features/disallow-doctype-decl&amp;quot;, true);
+documentBuilderFactory.setFeature(&amp;quot;http://xml.org/sax/features/external-general-entities&amp;quot;, false);
+documentBuilderFactory.setFeature(&amp;quot;http://xml.org/sax/features/external-parameter-entities&amp;quot;, false);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Command Injection&lt;/h3&gt;
+&lt;p&gt;Attacker passed &lt;code&gt;;id&lt;/code&gt; to the URL after identifying that it executes a console command.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt;&lt;br /&gt;
+myUiD here is exposed as URL parameter therefore sanitise the value before processing.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;if (!Pattern.matches(&amp;quot;[0-9A-Za-z]+&amp;quot;, myUiD)) {  
+    return false;
+}
+Runtime rt = Runtime.getRuntime();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Session Fixation&lt;/h3&gt;
+&lt;p&gt;Attacker will copy the URL from the application login then send it as phising email to the target. If the target will use the login URL and authenticate himself, then the attack is successful.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Invalidate the sesssion after authentication and issue a new one.&lt;/p&gt;
+&lt;h3&gt;Use Of Insufficiently Random Values&lt;/h3&gt;
+&lt;p&gt;An attacker could use predictability of pseudo-random number generators to hijack valid user sessions.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use random value generated by secure random generator. In an instance,&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;SecureRandom rand = new SecureRandom();
+byte bytes[] = new byte[20];    
+rand.nextBytes(bytes);  
+String cookie = new String(Hex.encodeHex(bytes));   
+return cookie;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Reflected Cross-Site Scripting (XSS)&lt;/h3&gt;
+&lt;p&gt;An attacker found out that user input is returned in HTTP response to the browser.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use escaping techniques each time user-supplied data is used by the application when building responses to users&lt;/p&gt;
+&lt;h3&gt;Stored Cross-Site Scripting (XSS)&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; User input should be sanitised before persisting to the database and after its retrieval from the database and then served to the user.&lt;/p&gt;
+&lt;h3&gt;DOM (Document Object Model) XSS&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Precondition:&lt;/strong&gt; User input is not encoded and is rendered within a dynamic context.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Application should first HTML-encode and then JavaScript-encode any user-supplied data that is returned to the client.&lt;/p&gt;
+&lt;h3&gt;Directory (Path) Traversal&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation&lt;/strong&gt;: Canonicalise the path then validate if it&apos;s the expected location&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;File file = new File(&amp;quot;/tmp/&amp;quot; + filename);
+String canonicalPath = file.getCanonicalPath();
+if(!canonicalPath.startsWith(&amp;quot;/tmp/&amp;quot;)) {
+    throw new GenericException(&amp;quot;Unauthorized access&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Session Exposure within URL&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Ensure that session identifiers are not transmitted to the application via GET requests, only via POST requests and should be over HTTPS.&lt;/p&gt;
+&lt;h3&gt;User Enumeration&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Precondition:&lt;/strong&gt; Login form, password-recovery form reveals if user exists.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Don&apos;t reveal if a user (especially when email is the unique identifier) exists on your application.&lt;/p&gt;
+&lt;h3&gt;Horizontal Privilege Escalation&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Definition:&lt;/strong&gt; Attackers being able to steal other, similar user privileges which apply to a different scope or domain of access.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Before doing CRUD operation, verify the current user using HttpServletRequest&apos;s &lt;code&gt;getUserPrincipal().getName()&lt;/code&gt;;&lt;/p&gt;
+&lt;h3&gt;Vertical Privilege Escalation&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Definition:&lt;/strong&gt; Attacker gets access to the application&apos;s functionality that requires special privileges. For example, when a regular user gets access to the user management functionality that only the admin should be able to access.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Java Spring Framework provides support for Expression-Based Access Control with the hasRole([role]) expression.&lt;/p&gt;
+&lt;h3&gt;Cross Site Request Forgery (POST)&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Preconditions:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A form must be vulnerable to CSRF&lt;/li&gt;
+&lt;li&gt;Victim must be authenticated with the application&lt;/li&gt;
+&lt;li&gt;Victim must visit a URL crafted by the attacker&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use Synchroniser Token Patterns. In Spring Framework, enable csrf feature.&lt;/p&gt;
+&lt;h3&gt;Cross Site Request Forgery (POST)&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Preconditions:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A URL must be vulnerable to CSRF&lt;/li&gt;
+&lt;li&gt;Victim must be authenticated with the application&lt;/li&gt;
+&lt;li&gt;Victim must visit a URL crafted by the attacker&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use proper HTTP verbs for CRUD operations&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Use HTTP GET for Read operations (SQL SELECT)&lt;/li&gt;
+&lt;li&gt;Use HTTP PUT for Update operations (SQL UPDATE)&lt;/li&gt;
+&lt;li&gt;Use HTTP POST for Create operations (SQL INSERT)&lt;/li&gt;
+&lt;li&gt;Use HTTP DELETE for Delete operations (SQL DELETE)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Clickjacking&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Preconditions:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Victim must be authenticated with the application&lt;/li&gt;
+&lt;li&gt;Victim must visit a URL crafted by the attacker&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;IfModule mod_headers.so&amp;gt;
+# Prevent Clickjacking using X-Frame-Options header
+Header set X-Frame-Options &amp;quot;deny&amp;quot;
+
+# Prevent Clickjacking using Content Security Policy (Not supported by all major browsers yet)
+Header set Content-Security-Policy: frame-options &apos;deny&apos;; # Chrome / Firefox
+Header set X-Content-Security-Policy: frame-options &apos;deny&apos;; # Internet Explorer
+&amp;lt;/IfModule&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Insecure URL Redirect&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Attack:&lt;/strong&gt; Send the potential victim a link with malicious site in the URL parameter. The victim opens a legitimate site that redirects him to the malicious site where the attacker deployed a phising page&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Validate the URL parameter before redirection. If URL redirect can be avoided, don&apos;t use it on your application.&lt;/p&gt;
+&lt;h3&gt;Insecure TLS Validation&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; DES, Blowfish and RC4 algorithms are vulnerable to attacks that allow an attacker to view communication in plaintext. Currently, AES has not been proved to be vulnerable so it is the best choice for encryption in TLS connections.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use the &lt;code&gt;java.security.cert&lt;/code&gt; to validate peer certificates.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;HttpsURLConnection conn = (HttpsURLConnection) destinationURL.openConnection();
+java.security.cert.Certificate[] certs = conn.getServerCertificates();
+((X509Certificate) cert).checkValidity();
+&lt;/code&gt;&lt;/pre&gt;
+
+  	    </description>
+      </item>
+      <item>
+        <title>My MacBook Noob Experience</title>
+        <link>https://drmanalo.github.io/blog/2020/macbook-install-diary.html</link>
+        <pubDate>Tue, 23 Jun 2020 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2020/macbook-install-diary.html</guid>
+        <description>
+  	         &lt;p&gt;My employer is issuing new laptops during pandemic (I&apos;m not sure if this is part of the Work From Home (WFH) whenever possible initiative). Nevertheless, it&apos;s a good thing since we are getting MacBook instead of Windows machine. Don&apos;t get me wrong, Dell machines are reliable in general. The only thing missing on Windows is the opensource toolchain. And to be specific, I&apos;m missing a good console that&apos;s pleasing to my eye while reading texts. With my &lt;code&gt;git bash&lt;/code&gt;, I have to type clear every time since texts overlap each other (a common experience after tailing a log file). Another specific I&apos;m missing is the package manager though I survived with &lt;a href=&quot;https://chocolatey.org&quot;&gt;choco&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To my surprise, I received a brand spanking new MacBook Pro 2019. It has Intel Core i9 and AMD Radeon Pro with 4GB of GDDR6 memory, hardware specs that I&apos;m really proud of!&lt;/p&gt;
+&lt;p&gt;What I&apos;m about to write is my out-of-the-box experience and the commands I used to set it up.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;First thing first&lt;/h3&gt;
+&lt;p&gt;Get the latest IOS version which is Catalina 10.15.5 at the time of writing.&lt;/p&gt;
+&lt;h3&gt;Get a package manager&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;/bin/bash -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;My Cellar&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;∞ brew install wget
+% brew install git
+% brew install maven
+% brew install tree
+% brew install nmap
+% brew install inetutils
+% brew install awscli
+% brew install jenv
+% brew install nvm
+% brew install rbenv
+% brew install postgresql
+% brew tap mongodb/brew
+% brew install mongodb-community
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;My Caskroom&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;% brew cask install google-chrome
+% brew cask install firefox
+% brew cask install adoptopenjdk/openjdk/adoptopenjdk8
+% brew cask install zulu7
+% brew cask install intellij-idea
+% brew cask install eclipse-jee
+% brew cask install slack
+% brew cask install fork
+% brew cask install keepassx
+% brew cask install atom
+% brew cask install postman
+% brew cask install dotnet
+% brew cask install visual-studio-code
+% brew cask install adobe-acrobat-reader
+% brew cask install iterm2
+% brew cask install drawio
+% brew cask install mongodb-compass
+% brew cask install diffmerge
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Manually Downloaded applications&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;awsconnect-osx-x64.tar&lt;/li&gt;
+&lt;li&gt;mysql-workbench-community-6.3.10-macos-x86_64.dmg (since Cask version is too high for our db)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Caveats&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Maven downloaded its own version of OpenJDK but I want to match it with my lower version of Java. I followed &lt;a href=&quot;https://medium.com/@euedofia/fix-default-java-version-on-maven-on-mac-os-x-156cf5930078&quot;&gt;this post&lt;/a&gt; to fix it. I have to use nano since vim keeps on saying the file is read-only even if I sudo.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;% sudo nano /usr/local/Cellar/maven/3.6.3_1/bin/mvn
+#!/bin/bash
+# JAVA_HOME=&amp;quot;${JAVA_HOME:-/usr/local/opt/openjdk}&amp;quot; exec &amp;quot;/usr/local/Cellar/maven/3.6.3_1/libexec/bin/mvn&amp;quot; &amp;quot;$@&amp;quot;
+JAVA_HOME=&amp;quot;${JAVA_HOME:-$(/usr/libexec/java_home)}&amp;quot; exec &amp;quot;/usr/local/Cellar/maven/3.6.3_1/libexec/bin/mvn&amp;quot; &amp;quot;$@&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;NVM didn&apos;t create it&apos;s working directory. I also added some lines to my &lt;code&gt;.zshrc&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;% mkdir ~/.nvm
+% vim ~/.zshrc
+export NVM_DIR=&amp;quot;$HOME/.nvm&amp;quot;
+  [ -s &amp;quot;/usr/local/opt/nvm/nvm.sh&amp;quot; ] &amp;amp;&amp;amp; . &amp;quot;/usr/local/opt/nvm/nvm.sh&amp;quot;
+  [ -s &amp;quot;/usr/local/opt/nvm/etc/bash_completion.d/nvm&amp;quot; ] &amp;amp;&amp;amp; . &amp;quot;/usr/local/opt/nvm/etc/bash_completion.d/nvm&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Insecure directories, run compaudit for list&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;% sudo chown -R drmanalo /usr/local/share/zsh/site-functions
+% sudo chmod -R 755 drmanalo /usr/local/share/zsh/site-functions
+% sudo chown -R drmanalo /usr/local/share/zsh
+% sudo chmod -R 755 /usr/local/share/zsh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Running multiple versions of Java&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;% vim ~/.zshrc
+export PATH=&amp;quot;$HOME/.jenv/bin:$PATH&amp;quot;
+eval &amp;quot;$(jenv init -)&amp;quot;
+:wq
+% source ~/.zshrc
+
+% unset JAVA_TOOL_OPTIONS
+% jenv enable-plugin maven
+maven plugin activated
+% jenv enable-plugin export
+You may restart your session to activate jenv export plugin echo export plugin activated
+
+% jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+openjdk64-1.8.0.252 added
+1.8.0.252 added
+1.8 added
+
+% jenv add /Library/Java/JavaVirtualMachines/zulu-7.jdk/Contents/Home
+zulu64-1.7.0.262 added
+1.7.0.262 added
+1.7 added
+
+% jenv global 1.8.0.252
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Running mongodb community&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;brew services start mongodb/brew/mongodb-community
+&lt;/code&gt;&lt;/pre&gt;
+
+  	    </description>
+      </item>
       <item>
         <title>Installing Docker CE on Red Hat 8</title>
         <link>https://drmanalo.github.io/blog/2020/dockerce-redhat.html</link>

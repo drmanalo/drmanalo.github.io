@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>My MacBook Noob Experience</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.7</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>My MacBook Noob Experience</h1>
+			<p><em>23 June 2020</em></p>
+			<p><p>My employer is issuing new laptops during pandemic (I'm not sure if this is part of the Work From Home (WFH) whenever possible initiative). Nevertheless, it's a good thing since we are getting MacBook instead of Windows machine. Don't get me wrong, Dell machines are reliable in general. The only thing missing on Windows is the opensource toolchain. And to be specific, I'm missing a good console that's pleasing to my eye while reading texts. With my <code>git bash</code>, I have to type clear every time since texts overlap each other (a common experience after tailing a log file). Another specific I'm missing is the package manager though I survived with <a href="https://chocolatey.org">choco</a>.</p>
+<p>To my surprise, I received a brand spanking new MacBook Pro 2019. It has Intel Core i9 and AMD Radeon Pro with 4GB of GDDR6 memory, hardware specs that I'm really proud of!</p>
+<p>What I'm about to write is my out-of-the-box experience and the commands I used to set it up.</p>
+<!-- more -->
+<h3>First thing first</h3>
+<p>Get the latest IOS version which is Catalina 10.15.5 at the time of writing.</p>
+<h3>Get a package manager</h3>
+<pre><code>/bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)&quot;
+</code></pre>
+<h3>My Cellar</h3>
+<pre><code>∞ brew install wget
+% brew install git
+% brew install maven
+% brew install tree
+% brew install nmap
+% brew install inetutils
+% brew install awscli
+% brew install jenv
+% brew install nvm
+% brew install rbenv
+% brew install postgresql
+% brew tap mongodb/brew
+% brew install mongodb-community
+</code></pre>
+<h3>My Caskroom</h3>
+<pre><code>% brew cask install google-chrome
+% brew cask install firefox
+% brew cask install adoptopenjdk/openjdk/adoptopenjdk8
+% brew cask install zulu7
+% brew cask install intellij-idea
+% brew cask install eclipse-jee
+% brew cask install slack
+% brew cask install fork
+% brew cask install keepassx
+% brew cask install atom
+% brew cask install postman
+% brew cask install dotnet
+% brew cask install visual-studio-code
+% brew cask install adobe-acrobat-reader
+% brew cask install iterm2
+% brew cask install drawio
+% brew cask install mongodb-compass
+% brew cask install diffmerge
+</code></pre>
+<h3>Manually Downloaded applications</h3>
+<ul>
+<li>awsconnect-osx-x64.tar</li>
+<li>mysql-workbench-community-6.3.10-macos-x86_64.dmg (since Cask version is too high for our db)</li>
+</ul>
+<h3>Caveats</h3>
+<ul>
+<li>Maven downloaded its own version of OpenJDK but I want to match it with my lower version of Java. I followed <a href="https://medium.com/@euedofia/fix-default-java-version-on-maven-on-mac-os-x-156cf5930078">this post</a> to fix it. I have to use nano since vim keeps on saying the file is read-only even if I sudo.</li>
+</ul>
+<pre><code>% sudo nano /usr/local/Cellar/maven/3.6.3_1/bin/mvn
+#!/bin/bash
+# JAVA_HOME=&quot;${JAVA_HOME:-/usr/local/opt/openjdk}&quot; exec &quot;/usr/local/Cellar/maven/3.6.3_1/libexec/bin/mvn&quot; &quot;$@&quot;
+JAVA_HOME=&quot;${JAVA_HOME:-$(/usr/libexec/java_home)}&quot; exec &quot;/usr/local/Cellar/maven/3.6.3_1/libexec/bin/mvn&quot; &quot;$@&quot;
+</code></pre>
+<ul>
+<li>NVM didn't create it's working directory. I also added some lines to my <code>.zshrc</code></li>
+</ul>
+<pre><code>% mkdir ~/.nvm
+% vim ~/.zshrc
+export NVM_DIR=&quot;$HOME/.nvm&quot;
+  [ -s &quot;/usr/local/opt/nvm/nvm.sh&quot; ] &amp;&amp; . &quot;/usr/local/opt/nvm/nvm.sh&quot;
+  [ -s &quot;/usr/local/opt/nvm/etc/bash_completion.d/nvm&quot; ] &amp;&amp; . &quot;/usr/local/opt/nvm/etc/bash_completion.d/nvm&quot;
+</code></pre>
+<ul>
+<li>Insecure directories, run compaudit for list</li>
+</ul>
+<pre><code>% sudo chown -R drmanalo /usr/local/share/zsh/site-functions
+% sudo chmod -R 755 drmanalo /usr/local/share/zsh/site-functions
+% sudo chown -R drmanalo /usr/local/share/zsh
+% sudo chmod -R 755 /usr/local/share/zsh
+</code></pre>
+<ul>
+<li>Running multiple versions of Java</li>
+</ul>
+<pre><code>% vim ~/.zshrc
+export PATH=&quot;$HOME/.jenv/bin:$PATH&quot;
+eval &quot;$(jenv init -)&quot;
+:wq
+% source ~/.zshrc
+
+% unset JAVA_TOOL_OPTIONS
+% jenv enable-plugin maven
+maven plugin activated
+% jenv enable-plugin export
+You may restart your session to activate jenv export plugin echo export plugin activated
+
+% jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+openjdk64-1.8.0.252 added
+1.8.0.252 added
+1.8 added
+
+% jenv add /Library/Java/JavaVirtualMachines/zulu-7.jdk/Contents/Home
+zulu64-1.7.0.262 added
+1.7.0.262 added
+1.7 added
+
+% jenv global 1.8.0.252
+</code></pre>
+<ul>
+<li>Running mongodb community</li>
+</ul>
+<pre><code>brew services start mongodb/brew/mongodb-community
+</code></pre>
+</p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2020/macbook-install-diary.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2020/macbook-install-diary.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>
