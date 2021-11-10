@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Wed, 10 Nov 2021 13:15:59 +0000</pubDate>
-    <lastBuildDate>Wed, 10 Nov 2021 13:15:59 +0000</lastBuildDate>
+    <pubDate>Wed, 10 Nov 2021 16:34:10 +0000</pubDate>
+    <lastBuildDate>Wed, 10 Nov 2021 16:34:10 +0000</lastBuildDate>
 
       <item>
         <title>My Rails Kali Linux Install Experience</title>
@@ -112,6 +112,93 @@ Status: Downloaded newer image for hello-world:latest
 
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
+&lt;/code&gt;&lt;/pre&gt;
+
+  	    </description>
+      </item>
+      <item>
+        <title>Tomcat Manager Text Commands</title>
+        <link>https://drmanalo.github.io/blog/2021/tomcat-manager-text-commands.html</link>
+        <pubDate>Sun, 11 Jul 2021 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2021/tomcat-manager-text-commands.html</guid>
+        <description>
+  	         &lt;p&gt;I recently published Tomcat Manager Application to my existing tomcats. In a nutshell, the Tomcat Manager App is a web application packaged with the Tomcat server to provide basic functionality to manage our deployed web applications. I intentionally dropped them on the first instance I installed Tomcats since I lack the time to configure them.&lt;/p&gt;
+&lt;p&gt;Tomcat Manager App is a part of the existing Tomcat package so I just have to &lt;code&gt;untar&lt;/code&gt; it and copy the manager folder to the existing Tomcat webapps folder.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;Configuring Manager App&lt;/h3&gt;
+&lt;p&gt;Edit the &lt;code&gt;conf/tomcat-users.xml&lt;/code&gt; file then add the following making sure you change the username and password to its stronger equivalent.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;tomcat-users&amp;gt;
+  &amp;lt;role rolename=&amp;quot;manager-gui&amp;quot;/&amp;gt;
+  &amp;lt;role rolename=&amp;quot;manager-script&amp;quot;/&amp;gt;
+  &amp;lt;user username=&amp;quot;tomcatman&amp;quot; password=&amp;quot;s3cret&amp;quot; roles=&amp;quot;manager-gui,manager-script&amp;quot;/&amp;gt;
+&amp;lt;/tomcat-users&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you&apos;re planning to access the browser not from the machine where Tomcat is, you need to edit &lt;code&gt;WEB-INF/context.xml&lt;/code&gt; file to add your IP address. Look for the line with Valve element and add your IP within the allow property. Escape full stops with backslash.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;Valve className=&amp;quot;org.apache.catalina.valves.RemoteAddrValve&amp;quot;
+         allow=&amp;quot;127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Useful Commands&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;--insecure&lt;/code&gt; or &lt;code&gt;-k&lt;/code&gt; is to avoid TLS validation. When issuing &lt;code&gt;curl&lt;/code&gt; against unsecured URL, you can ommit this argument.&lt;/p&gt;
+&lt;p&gt;List all deployed applications&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/list
+OK - Listed applications for virtual host [localhost]
+/:running:1:ROOT
+/manager:running:0:manager
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Stopping an application&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/stop?path=/
+OK - Stopped application at context path [/]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Starting an application&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/start?path=/
+OK - Started application at context path [/]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Viewing the current user sessions&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sessions?path=/
+OK - Session information for application at context path [/]
+Default maximum session inactive interval [30] minutes
+[2 - &amp;lt;3] minutes: [1] sessions
+[3 - &amp;lt;4] minutes: [4] sessions
+[18 - &amp;lt;19] minutes: [1] sessions
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Viewing TLS configurations&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sslConnectorCiphers
+OK - Connector / SSL Cipher information
+Connector[HTTP/1.1-8443]-_default_
+  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+  TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+  TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
+  TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384
+  TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
+  TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
+....
+
+$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sslConnectorCerts
+OK - Connector / Certificate Chain information
+
+$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sslConnectorTrustedCerts
+OK - Connector / Trusted Certificate information
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Reloading TLS Configuration&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sslReload
+OK - Reloaded TLS configuration for all TLS virtual hosts
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Thread Dump&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/threaddump
+OK - JVM thread dump
+2021-07-10 16:24:10.172
+Full thread dump OpenJDK 64-Bit Server VM (25.272-b10 mixed mode):
+
+&amp;quot;ajp-nio-8011-exec-30&amp;quot; Id=177 cpu=2065390 ns usr=0 ns blocked 0 for -1 ms waited 4 for -1 ms
+   java.lang.Thread.State: WAITING
+        at sun.misc.Unsafe.park(Native Method)
+        - waiting on (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@6c422292)
+        at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finding Memory Leaks&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/findleaks?statusLine=true
+OK - No memory leaks found
 &lt;/code&gt;&lt;/pre&gt;
 
   	    </description>
