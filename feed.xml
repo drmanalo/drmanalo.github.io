@@ -6,8 +6,8 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Tue, 1 Aug 2023 21:34:27 +0100</pubDate>
-    <lastBuildDate>Tue, 1 Aug 2023 21:34:27 +0100</lastBuildDate>
+    <pubDate>Tue, 1 Aug 2023 21:38:42 +0100</pubDate>
+    <lastBuildDate>Tue, 1 Aug 2023 21:38:42 +0100</lastBuildDate>
 
       <item>
         <title>Install Arch Linux on Encrypted Disk</title>
@@ -771,6 +771,7 @@ Full thread dump OpenJDK 64-Bit Server VM (25.272-b10 mixed mode):
         <description>
   	         &lt;p&gt;As part of our training, we were given access to some courses on &lt;a href=&quot;https://codebashing.com/&quot;&gt;codebashing&lt;/a&gt; and Java being my primary course. We were generously given access to other courses which I will pursue during my spare time. I&apos;m looking forward to complete other Java-related courses too and time-permitting, I&apos;ll try Golang and Ruby on Rails courses. That&apos;s a very optimistic wish but if access to this resources will remain, might as well consider it as opportunity.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/images/java.basher.png&quot; alt=&quot;Java Codebashing Certificate&quot; /&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
 &lt;h3&gt;SQL Injection&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Attack:&lt;/strong&gt; &lt;code&gt;or 1=1)#&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use SQL prepared statements&lt;/p&gt;
