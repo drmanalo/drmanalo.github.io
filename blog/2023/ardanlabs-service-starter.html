@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Ultimate Go: Service with Kubernetes 4.1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.7</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>Ultimate Go: Service with Kubernetes 4.1</h1>
+			<p><em>24 June 2023</em></p>
+			<p><p>I attended recently a <code>golang</code> programming training. Our instructor is a respected Golang developer himself <a href="https://twitter.com/goinggodotnet">William Kennedy</a> who has trained thousands of developers worldwide in Go.</p>
+<p>The class I attended teaches how to build production-level services in Go leveraging the power of Kubernetes. From the beginning, you will pair program with the Bill Kennedy walking through the design philosophies and guidelines for building services in Go. With each new feature that is added to the service, you will learn how to deploy to and manage the Kubernetes environment used to run the service.</p>
+<p>I will outline here my install experience for the <a href="https://github.com/ardanlabs/service">starter service</a>. I installed it on my Mac during our training but this time, this is my Linux experience.</p>
+<!-- more -->
+<h3>Install brew</h3>
+<p>Dependecy installation scripts from <code>makefile</code> are calling <code>brew</code> so it's the first dependency to install. On Arch Linux, I tried the <code>aur</code> version of <a href="https://aur.archlinux.org/packages/brew-git">brew-git</a> but it's installing its own ruby dependencies instead of using the available so I have to remove it.</p>
+<pre><code>$ /bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;
+==&gt; Checking for `sudo` access (which may request your password)...
+==&gt; This script will install:
+/home/linuxbrew/.linuxbrew/bin/brew
+/home/linuxbrew/.linuxbrew/share/doc/homebrew
+/home/linuxbrew/.linuxbrew/share/man/man1/brew.1
+/home/linuxbrew/.linuxbrew/share/zsh/site-functions/_brew
+/home/linuxbrew/.linuxbrew/etc/bash_completion.d/brew
+/home/linuxbrew/.linuxbrew/Homebrew
+==&gt; The following new directories will be created:
+/home/linuxbrew/.linuxbrew/bin
+/home/linuxbrew/.linuxbrew/etc
+/home/linuxbrew/.linuxbrew/include
+/home/linuxbrew/.linuxbrew/lib
+/home/linuxbrew/.linuxbrew/sbin
+/home/linuxbrew/.linuxbrew/share
+/home/linuxbrew/.linuxbrew/var
+/home/linuxbrew/.linuxbrew/opt
+/home/linuxbrew/.linuxbrew/share/zsh
+/home/linuxbrew/.linuxbrew/share/zsh/site-functions
+/home/linuxbrew/.linuxbrew/var/homebrew
+/home/linuxbrew/.linuxbrew/var/homebrew/linked
+/home/linuxbrew/.linuxbrew/Cellar
+/home/linuxbrew/.linuxbrew/Caskroom
+/home/linuxbrew/.linuxbrew/Frameworks
+
+...
+==&gt; Installation successful!
+
+==&gt; Next steps:
+</code></pre>
+<pre><code>$ (echo; echo 'eval &quot;$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)&quot;') &gt;&gt; /home/$USER/.zprofile
+$ eval &quot;$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)&quot;
+</code></pre>
+<pre><code>$ sudo pacman -S base-devel
+warning: base-devel-1-1 is up to date -- reinstalling
+resolving dependencies...
+looking for conflicting packages...
+
+Packages (1) base-devel-1-1
+...
+(1/1) reinstalling base-devel                   [###############################################] 100%
+</code></pre>
+<pre><code>$ brew install gcc
+...
+==&gt; Installing gcc
+==&gt; Pouring gcc--13.1.0.x86_64_linux.bottle.tar.gz
+==&gt; Creating the GCC specs file: /home/linuxbrew/.linuxbrew/Cellar/gcc/13.1.0/bin/../lib/gcc/current/gcc/x86_64-pc-linux-gnu/13/specs
+🍺  /home/linuxbrew/.linuxbrew/Cellar/gcc/13.1.0: 1,668 files, 320.2MB
+==&gt; Running `brew cleanup gcc`...
+</code></pre>
+<h3>Install tooling and dependencies</h3>
+<pre><code>$ make dev-brew-common
+$ make dev-docker
+$ make dev-gotooling
+$ sudo curl -fL https://app.getambassador.io/download/tel2oss/releases/download/v2.14.0/telepresence-linux-amd64 -o /usr/local/bin/telepresence
+$ sudo chmod a+x /usr/local/bin/telepresence
+</code></pre>
+<h3>Verify you have properly installed the dependencies</h3>
+<pre><code>$ make test
+CGO_ENABLED=0 go test -count=1 ./...
+...
+ok  	github.com/ardanlabs/service/app/services/sales-api/tests/v1	5.634s
+ok  	github.com/ardanlabs/service/business/core/product	6.418s
+ok  	github.com/ardanlabs/service/business/core/user	5.633s
+ok  	github.com/ardanlabs/service/business/core/usersummary	5.176s
+ok  	github.com/ardanlabs/service/business/web/auth	0.108s
+ok  	github.com/ardanlabs/service/foundation/vault	3.117s
+ok  	github.com/ardanlabs/service/foundation/worker	0.303s
+</code></pre>
+<h3>Start the project</h3>
+<pre><code>$ make dev-up
+kind create cluster \
+	--image kindest/node:v1.27.3 \
+	--name ardan-starter-cluster \
+	--config zarf/k8s/dev/kind-config.yaml
+Creating cluster &quot;ardan-starter-cluster&quot; ...
+ ✓ Ensuring node image (kindest/node:v1.27.3) 🖼 
+ ✓ Preparing nodes 📦  
+ ✓ Writing configuration 📜 
+ ✓ Starting control-plane 🕹️ 
+ ✓ Installing CNI 🔌 
+ ✓ Installing StorageClass 💾 
+Set kubectl context to &quot;kind-ardan-starter-cluster&quot;
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-ardan-starter-cluster
+
+Thanks for using kind! 😊
+kubectl wait --timeout=120s --namespace=local-path-storage --for=condition=Available deployment/local-path-provisioner
+deployment.apps/local-path-provisioner condition met
+kind load docker-image datawire/ambassador-telepresence-manager:2.14.1 --name ardan-starter-cluster
+...
+telepresence --context=kind-ardan-starter-cluster helm install
+Launching Telepresence User Daemon
+
+Traffic Manager installed successfully
+telepresence --context=kind-ardan-starter-cluster connect
+Launching Telepresence Root Daemon
+Need root privileges to run: /usr/local/bin/telepresence daemon-foreground /home/$USER/.cache/telepresence/logs /home/$USER/.config/telepresence
+[sudo] password for $USER: 
+Connected to context kind-ardan-starter-cluster (https://127.0.0.1:38665)
+</code></pre>
+<pre><code>$ make dev-update-apply
+docker build \
+	-f zarf/docker/dockerfile.service \
+	-t ardanlabs/service/sales-api:0.0.1 \
+	--build-arg BUILD_REF=0.0.1 \
+	--build-arg BUILD_DATE=`date -u +&quot;%Y-%m-%dT%H:%M:%SZ&quot;` \
+	.
+[+] Building 30.7s (18/18) FINISHED 
+...
+
+docker build \
+	-f zarf/docker/dockerfile.metrics \
+	-t ardanlabs/service/sales-api-metrics:0.0.1 \
+	--build-arg BUILD_REF=0.0.1 \
+	--build-arg BUILD_DATE=`date -u +&quot;%Y-%m-%dT%H:%M:%SZ&quot;` \
+	.
+[+] Building 11.5s (14/14) FINISHED 
+
+</code></pre>
+</p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2023/ardanlabs-service-starter.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2023/ardanlabs-service-starter.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

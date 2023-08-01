@@ -6,17 +6,624 @@
     <atom:link href="https://drmanalo.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>dhon.manalo - software development blog by Dhonnee Manalo</description>
     <language>en-gb</language>
-    <pubDate>Wed, 10 Nov 2021 16:34:10 +0000</pubDate>
-    <lastBuildDate>Wed, 10 Nov 2021 16:34:10 +0000</lastBuildDate>
+    <pubDate>Tue, 1 Aug 2023 21:34:27 +0100</pubDate>
+    <lastBuildDate>Tue, 1 Aug 2023 21:34:27 +0100</lastBuildDate>
 
+      <item>
+        <title>Install Arch Linux on Encrypted Disk</title>
+        <link>https://drmanalo.github.io/blog/2023/install-arch-linux-encrypted.html</link>
+        <pubDate>Sun, 23 Jul 2023 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2023/install-arch-linux-encrypted.html</guid>
+        <description>
+  	         &lt;p&gt;I installed Arch Linux before but using &lt;a href=&quot;https://wiki.archlinux.org/title/archinstall&quot;&gt;archinstall script&lt;/a&gt;. &lt;code&gt;archinstall&lt;/code&gt; is a helper library which automates the installation. It is packaged with different pre-configured installers that work like a &amp;quot;guided&amp;quot; installer. Linux enthusiasts will oppose to this way of installing since Arch Linux is meant to be &lt;strong&gt;DIY&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Then I attempted to do the encrypted version using the same &lt;code&gt;archinstall&lt;/code&gt;. I am not happy with the result due to the following reasons.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;It has very limited swap space size. &lt;code&gt;archinstall&lt;/code&gt; is creating 4GB swap by default and cannot find a way around it.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;It doesn&apos;t wake up from hibernation. The only way to recover is through hard restart.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;On this post, I will put the step by step guide I followed for an encrypted Arch Linux setup. I had three attempts before I get a working one. Common issue I have is along bootloader and missing resume hook to wake up from deep sleep. I learned my lessons the hard way!&lt;/p&gt;
+&lt;p&gt;This setup will create an &lt;a href=&quot;https://wiki.archlinux.org/title/Dm-crypt/Encrypting_an_entire_system#LVM_on_LUKS&quot;&gt;LVM on LUKS&lt;/a&gt; with &lt;a href=&quot;https://wiki.archlinux.org/title/Dm-crypt/Encrypting_an_entire_system#Encrypted_boot_partition_(GRUB)&quot;&gt;GRUB boot loader&lt;/a&gt;.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;Preparing the USB boot disk&lt;/h3&gt;
+&lt;p&gt;The steps here are for Linux users. If you&apos;re a Windows user, please look for alternative way from &lt;a href=&quot;https://wiki.archlinux.org/title/USB_flash_installation_medium&quot;&gt;Arch Linux Wiki&lt;/a&gt;. &lt;a href=&quot;https://rufus.ie/en/&quot;&gt;rufus&lt;/a&gt; or &lt;a href=&quot;https://etcher.balena.io/&quot;&gt;Balena etcher&lt;/a&gt; will do the job for you.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Download the &lt;code&gt;.iso&lt;/code&gt; image from &lt;a href=&quot;https://archlinux.org/download/&quot;&gt;Arch Linux website&lt;/a&gt;. I downloaded mine using qBittorrent.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Plug your USB drive stick and check it&apos;s location usng &lt;code&gt;lsblk&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ lsblk
+NAME          MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINTS
+sda             8:0    1  7.5G  0 disk  
+├─sda1          8:1    1  798M  0 part  /run/media/drmanalo/ARCH_202307
+└─sda2          8:2    1   15M  0 part
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Verify the file integrity using its checksum from the &lt;a href=&quot;https://archlinux.org/download/&quot;&gt;Arch Linux Download Page&lt;/a&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sha256sum archlinux-2023.07.01-x86_64.iso
+1a2c1cdea0118b60525f55ee616e9cd4cf68fe17db906ce3d8e46fd06f9907eb  archlinux-2023.07.01-x86_64.iso
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Burn the &lt;code&gt;.iso&lt;/code&gt; image with the &lt;code&gt;dd&lt;/code&gt; tool.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo dd bs=4M if=/path/to/archlinux-2023.07.01-x86_64.iso of=/dev/sda oflag=sync status=progress
+852832256 bytes (853 MB, 813 MiB) copied, 210 s, 4.1 MB/s
+203+1 records in
+203+1 records out
+852832256 bytes (853 MB, 813 MiB) copied, 209.578 s, 4.1 MB/s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Let your machine reboot from the live USB. The prompt should say &lt;code&gt;root@archiso&lt;/code&gt;. Below is optional should the default font be small for your eyes.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;root@archiso ~ # setfont latarcyrheb-sun32
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Pre-installation&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Plug in your Ethernet cable or connect to your WiFi network using &lt;a href=&quot;https://wiki.archlinux.org/title/Iwd#iwctl&quot;&gt;iwctl&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Update the system clock.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# timedatectl set-ntp true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Partition your disk. &lt;code&gt;nvme0n1&lt;/code&gt; is my block device name. Use &lt;code&gt;lsblk&lt;/code&gt; to find yours.  Once on &lt;code&gt;gdisk&lt;/code&gt;, delete existing partitions using &lt;code&gt;d&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# gdisk /dev/nvme0n1
+o
+n
+[Enter]
+0
++1M
+ef02
+n
+[Enter]
+[Enter]
++550M
+ef00
+n
+[Enter]
+[Enter]
+[Enter]
+8309
+w
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Installation&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Create the Linux Unified Key Setup (LUKS) encrypted container on your &lt;code&gt;ext4&lt;/code&gt; partition.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# cryptsetup luksFormat --type luks1 --use-random -S 1 -s 512 -h sha512 -i 5000 /dev/nvme0n1p3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Decrypt the container and make it available at &lt;code&gt;/dev/mapper/cryptlvm&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# cryptsetup open /dev/nvme0n1p3 cryptlvm
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Create physical volume on the opened LUKS container.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# pvcreate /dev/mapper/cryptlvm
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Create the volume group.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# vgcreate vg /dev/mapper/cryptlvm
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Create the logical volumes. The size here is your personal preference.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# lvcreate -L 40G vg -n swap
+# lvcreate -L 500G vg -n root
+# lvcreate -l 100%FREE vg -n home
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Format filesystems on each logical volume.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# mkfs.ext4 /dev/vg/root
+# mkfs.ext4 /dev/vg/home
+# mkswap /dev/vg/swap
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Mount filesystems.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# mount /dev/vg/root /mnt
+# mkdir /mnt/home
+# mount /dev/vg/home /mnt/home
+# swapon /dev/vg/swap
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Create FAT32 filesystem for the EFI system partition.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# mkfs.fat -F32 /dev/nvme0n1p2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Create mount point for EFI system partition at /efi.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# mkdir /mnt/efi
+# mount /dev/nvme0n1p2 /mnt/efi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install the bare minimum packages.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# pacstrap /mnt base linux linux-firmware mkinitcpio lvm2 neovim dhcpcd wpa_supplicant
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Generate fstab file.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# genfstab -U /mnt &amp;gt;&amp;gt; /mnt/etc/fstab
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Change root into the new system.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# arch-chroot /mnt
+[root@archiso /]#
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Set the &lt;code&gt;/etc/localtime&lt;/code&gt; to you respective timezone.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Generate &lt;code&gt;/etc/adjtime&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# hwclock --systohc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Generate &lt;code&gt;/etc/locale.conf&lt;/code&gt;. Uncomment en_US.UTF-8 UTF-8 in &lt;code&gt;/etc/locale.gen&lt;/code&gt; and generate locale.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# locale-gen
+# echo &apos;LANG=en_US.UTF-8&apos; &amp;gt; /etc/locale.conf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Create your hostname file.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# echo yourhostname &amp;gt; /etc/hostname
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Add entries to hosts table.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# nvim /etc/hosts
+
+127.0.0.1 localhost
+::1 localhost
+127.0.1.1 yourhostname.localdomain yourhostname
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Add &lt;code&gt;encrypt&lt;/code&gt;, &lt;code&gt;lvm2&lt;/code&gt; and &lt;code&gt;resume&lt;/code&gt; hooks to &lt;code&gt;/etc/mkinitcpio.conf&lt;/code&gt; &lt;strong&gt;NOTE:&lt;/strong&gt; The order of hooks matters.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# nvim /etc/mkinitcpio.conf
+...
+##   NOTE: If you have /usr on a separate partition, you MUST include the
+#    usr and fsck hooks.
+HOOKS=(base udev autodetect modconf kms keyboard keymap consolefont block encrypt lvm2 filesystems resume fsck)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Recreate the initramfs image.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# mkinitcpio -p linux
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Set the root password using &lt;code&gt;passwd&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install GRUB boot loader.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# pacman -S grub
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install EFI boot manager.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# pacman -S efibootmgr
+# grub-install --target=x86_64-efi --efi-directory=/efi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install microcode. &lt;code&gt;grub-mkconfig&lt;/code&gt; will automatically detect microcode updates and configure accordingly. There&apos;s &lt;code&gt;amd-ucode&lt;/code&gt; package for AMD CPUs.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# pacman -S intel-ucode
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Embed a keyfile in initramfs to avoid having to enter the encryption passphrase twice (once for GRUB, once for initramfs.)&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# mkdir /root/secrets &amp;amp;&amp;amp; chmod 700 /root/secrets
+# head -c 64 /dev/urandom &amp;gt; /root/secrets/crypto_keyfile.bin &amp;amp;&amp;amp; chmod 600 /root/secrets/crypto_keyfile.bin
+# cryptsetup -v luksAddKey -i 1 /dev/nvme0n1p3 /root/secrets/crypto_keyfile.bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Add the keyfile to the initramfs image.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# nvim /etc/mkinitcpio.conf
+FILES=(/root/secrets/crypto_keyfile.bin)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Recreate the initramfs image.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# mkinitcpio -p linux
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Configure GRUB. Set kernel parameter to unlock the LVM physical volume at boot using &lt;code&gt;encrypt&lt;/code&gt; hook and allow hibernation to the swap space using &lt;code&gt;resume&lt;/code&gt; hook. Pass the &lt;code&gt;cryptkey&lt;/code&gt; file parameter you&apos;re going to generate later on.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# nvim /etc/default/grub
+# GRUB boot loader configuration
+
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR=&amp;quot;Arch&amp;quot;
+GRUB_CMDLINE_LINUX_DEFAULT=&amp;quot;loglevel=3 quiet cryptdevice=UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx:cryptlvm resume=UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx root=/dev/vg/root cryptkey=rootfs:/root/secrets/crypto_keyfile.bin&amp;quot;
+#GRUB_CMDLINE_LINUX
+
+# Preload both GPT and MBR modules so that they are not missed
+GRUB_PRELOAD_MODULES=&amp;quot;part_gpt part_msdos&amp;quot;
+
+# Uncomment to enable booting from LUKS encrypted devices
+GRUB_ENABLE_CRYPTODISK=y
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can get the required UUID using &lt;code&gt;blkid&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# blkid
+/dev/mapper/vg-swap: UUID=&amp;quot;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;quot; TYPE=&amp;quot;swap&amp;quot;
+/dev/nvme0n1p3: UUID=&amp;quot;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;quot; TYPE=&amp;quot;crypto_LUKS&amp;quot; PARTLABEL=&amp;quot;Linux LUKS&amp;quot; PARTUUID=&amp;quot;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Generate GRUB&apos;s configuration files.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# grub-mkconfig -o /boot/grub/grub.cfg
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Obtain the volume&apos;s major and minor device numbers from &lt;code&gt;lsblk&lt;/code&gt; and echo it to &lt;code&gt;/sys/power/resume&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# lsblk  
+NAME          MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINTS
+nvme0n1       259:0    0  1.8T  0 disk  
+├─nvme0n1p1   259:1    0    1M  0 part  
+├─nvme0n1p2   259:2    0  550M  0 part  /efi
+└─nvme0n1p3   259:3    0  1.8T  0 part  
+└─cryptlvm  254:0    0  1.8T  0 crypt 
+    ├─vg-swap 254:1    0   40G  0 lvm   [SWAP]
+    ├─vg-root 254:2    0  500G  0 lvm   /
+    └─vg-home 254:3    0  1.3T  0 lvm   /home
+
+# echo 254:1 &amp;gt; /sys/power/resume
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Restrict /boot permissions.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# chmod 700 /boot
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;At this point, you have a completely encrypted Arch Linux setup. &lt;strong&gt;DON&apos;T reboot&lt;/strong&gt; if you&apos;re not on Ethernet. You will lose the WiFi credentials from &lt;code&gt;iwctl&lt;/code&gt; and it&apos;s impossible to install additional packages.&lt;/p&gt;
+&lt;h3&gt;Post-installation&lt;/h3&gt;
+&lt;p&gt;I&apos;m always a GNOME fan so I&apos;m going to install &lt;code&gt;gnome&lt;/code&gt; as my Graphical User Interface. &lt;code&gt;sway&lt;/code&gt; is another option but I will not put the install instructions here. Perhaps it&apos;s for another blog post.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Create a non-root account.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# useradd -m -G wheel,users -s /bin/bash username
+# passwd username
+    New password: 
+    Retype new password: 
+    passwd: password updated successfully
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install &lt;code&gt;sudo&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# pacman -S sudo
+
+# visudo
+...
+##
+## User privilege specification
+##
+root ALL=(ALL) ALL
+
+# Options
+Defaults editor=/usr/bin/nvim, !env_editor
+Defaults insults
+
+# Full Access
+username ALL=(ALL) ALL
+
+# Last rule as a safety guard
+username ALL=/usr/sbin/visudo
+
+# Uncomment to allow member of group wheel to execute any command
+%wheel ALL=(ALL) ALL
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install GNOME.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# pacman -S gnome dhclient iw dialog
+# pacman -Sy networkmanager network-manager-applet xf86-input-libinput
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Enable Gnome Display and Network Manager.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# systemctl enable gdm
+# systemctl enable NetworkManager
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Exit &lt;code&gt;chroot&lt;/code&gt; and unmount your filesystems.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# exit
+# umount -R /mnt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Finally, reboot.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# reboot
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Congratulations!&lt;/strong&gt; You have survived Arch Linux installation.&lt;/p&gt;
+
+  	    </description>
+      </item>
+      <item>
+        <title>Ultimate Go: Service with Kubernetes 4.1</title>
+        <link>https://drmanalo.github.io/blog/2023/ardanlabs-service-starter.html</link>
+        <pubDate>Sat, 24 Jun 2023 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2023/ardanlabs-service-starter.html</guid>
+        <description>
+  	         &lt;p&gt;I attended recently a &lt;code&gt;golang&lt;/code&gt; programming training. Our instructor is a respected Golang developer himself &lt;a href=&quot;https://twitter.com/goinggodotnet&quot;&gt;William Kennedy&lt;/a&gt; who has trained thousands of developers worldwide in Go.&lt;/p&gt;
+&lt;p&gt;The class I attended teaches how to build production-level services in Go leveraging the power of Kubernetes. From the beginning, you will pair program with the Bill Kennedy walking through the design philosophies and guidelines for building services in Go. With each new feature that is added to the service, you will learn how to deploy to and manage the Kubernetes environment used to run the service.&lt;/p&gt;
+&lt;p&gt;I will outline here my install experience for the &lt;a href=&quot;https://github.com/ardanlabs/service&quot;&gt;starter service&lt;/a&gt;. I installed it on my Mac during our training but this time, this is my Linux experience.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;Install brew&lt;/h3&gt;
+&lt;p&gt;Dependecy installation scripts from &lt;code&gt;makefile&lt;/code&gt; are calling &lt;code&gt;brew&lt;/code&gt; so it&apos;s the first dependency to install. On Arch Linux, I tried the &lt;code&gt;aur&lt;/code&gt; version of &lt;a href=&quot;https://aur.archlinux.org/packages/brew-git&quot;&gt;brew-git&lt;/a&gt; but it&apos;s installing its own ruby dependencies instead of using the available so I have to remove it.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ /bin/bash -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&amp;quot;
+==&amp;gt; Checking for `sudo` access (which may request your password)...
+==&amp;gt; This script will install:
+/home/linuxbrew/.linuxbrew/bin/brew
+/home/linuxbrew/.linuxbrew/share/doc/homebrew
+/home/linuxbrew/.linuxbrew/share/man/man1/brew.1
+/home/linuxbrew/.linuxbrew/share/zsh/site-functions/_brew
+/home/linuxbrew/.linuxbrew/etc/bash_completion.d/brew
+/home/linuxbrew/.linuxbrew/Homebrew
+==&amp;gt; The following new directories will be created:
+/home/linuxbrew/.linuxbrew/bin
+/home/linuxbrew/.linuxbrew/etc
+/home/linuxbrew/.linuxbrew/include
+/home/linuxbrew/.linuxbrew/lib
+/home/linuxbrew/.linuxbrew/sbin
+/home/linuxbrew/.linuxbrew/share
+/home/linuxbrew/.linuxbrew/var
+/home/linuxbrew/.linuxbrew/opt
+/home/linuxbrew/.linuxbrew/share/zsh
+/home/linuxbrew/.linuxbrew/share/zsh/site-functions
+/home/linuxbrew/.linuxbrew/var/homebrew
+/home/linuxbrew/.linuxbrew/var/homebrew/linked
+/home/linuxbrew/.linuxbrew/Cellar
+/home/linuxbrew/.linuxbrew/Caskroom
+/home/linuxbrew/.linuxbrew/Frameworks
+
+...
+==&amp;gt; Installation successful!
+
+==&amp;gt; Next steps:
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;$ (echo; echo &apos;eval &amp;quot;$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)&amp;quot;&apos;) &amp;gt;&amp;gt; /home/$USER/.zprofile
+$ eval &amp;quot;$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo pacman -S base-devel
+warning: base-devel-1-1 is up to date -- reinstalling
+resolving dependencies...
+looking for conflicting packages...
+
+Packages (1) base-devel-1-1
+...
+(1/1) reinstalling base-devel                   [###############################################] 100%
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;$ brew install gcc
+...
+==&amp;gt; Installing gcc
+==&amp;gt; Pouring gcc--13.1.0.x86_64_linux.bottle.tar.gz
+==&amp;gt; Creating the GCC specs file: /home/linuxbrew/.linuxbrew/Cellar/gcc/13.1.0/bin/../lib/gcc/current/gcc/x86_64-pc-linux-gnu/13/specs
+🍺  /home/linuxbrew/.linuxbrew/Cellar/gcc/13.1.0: 1,668 files, 320.2MB
+==&amp;gt; Running `brew cleanup gcc`...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Install tooling and dependencies&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ make dev-brew-common
+$ make dev-docker
+$ make dev-gotooling
+$ sudo curl -fL https://app.getambassador.io/download/tel2oss/releases/download/v2.14.0/telepresence-linux-amd64 -o /usr/local/bin/telepresence
+$ sudo chmod a+x /usr/local/bin/telepresence
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Verify you have properly installed the dependencies&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ make test
+CGO_ENABLED=0 go test -count=1 ./...
+...
+ok  	github.com/ardanlabs/service/app/services/sales-api/tests/v1	5.634s
+ok  	github.com/ardanlabs/service/business/core/product	6.418s
+ok  	github.com/ardanlabs/service/business/core/user	5.633s
+ok  	github.com/ardanlabs/service/business/core/usersummary	5.176s
+ok  	github.com/ardanlabs/service/business/web/auth	0.108s
+ok  	github.com/ardanlabs/service/foundation/vault	3.117s
+ok  	github.com/ardanlabs/service/foundation/worker	0.303s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Start the project&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ make dev-up
+kind create cluster \
+	--image kindest/node:v1.27.3 \
+	--name ardan-starter-cluster \
+	--config zarf/k8s/dev/kind-config.yaml
+Creating cluster &amp;quot;ardan-starter-cluster&amp;quot; ...
+ ✓ Ensuring node image (kindest/node:v1.27.3) 🖼 
+ ✓ Preparing nodes 📦  
+ ✓ Writing configuration 📜 
+ ✓ Starting control-plane 🕹️ 
+ ✓ Installing CNI 🔌 
+ ✓ Installing StorageClass 💾 
+Set kubectl context to &amp;quot;kind-ardan-starter-cluster&amp;quot;
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-ardan-starter-cluster
+
+Thanks for using kind! 😊
+kubectl wait --timeout=120s --namespace=local-path-storage --for=condition=Available deployment/local-path-provisioner
+deployment.apps/local-path-provisioner condition met
+kind load docker-image datawire/ambassador-telepresence-manager:2.14.1 --name ardan-starter-cluster
+...
+telepresence --context=kind-ardan-starter-cluster helm install
+Launching Telepresence User Daemon
+
+Traffic Manager installed successfully
+telepresence --context=kind-ardan-starter-cluster connect
+Launching Telepresence Root Daemon
+Need root privileges to run: /usr/local/bin/telepresence daemon-foreground /home/$USER/.cache/telepresence/logs /home/$USER/.config/telepresence
+[sudo] password for $USER: 
+Connected to context kind-ardan-starter-cluster (https://127.0.0.1:38665)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;$ make dev-update-apply
+docker build \
+	-f zarf/docker/dockerfile.service \
+	-t ardanlabs/service/sales-api:0.0.1 \
+	--build-arg BUILD_REF=0.0.1 \
+	--build-arg BUILD_DATE=`date -u +&amp;quot;%Y-%m-%dT%H:%M:%SZ&amp;quot;` \
+	.
+[+] Building 30.7s (18/18) FINISHED 
+...
+
+docker build \
+	-f zarf/docker/dockerfile.metrics \
+	-t ardanlabs/service/sales-api-metrics:0.0.1 \
+	--build-arg BUILD_REF=0.0.1 \
+	--build-arg BUILD_DATE=`date -u +&amp;quot;%Y-%m-%dT%H:%M:%SZ&amp;quot;` \
+	.
+[+] Building 11.5s (14/14) FINISHED 
+
+&lt;/code&gt;&lt;/pre&gt;
+
+  	    </description>
+      </item>
+      <item>
+        <title>My Docker Desktop Arch Linux Install Experience</title>
+        <link>https://drmanalo.github.io/blog/2023/docker-arch-linux-install.html</link>
+        <pubDate>Sat, 6 May 2023 00:00:00 +0100</pubDate>
+        <guid isPermaLink="false">blog/2023/docker-arch-linux-install.html</guid>
+        <description>
+  	         &lt;p&gt;Docker is an open source project which allows us to deploy applications inside containers. A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and realiably from one computing environment to another. A docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system librarries and settings.&lt;/p&gt;
+&lt;p&gt;It&apos;s been a while since I installed Docker desktop but hopefully it&apos;s a similar &lt;code&gt;apt&lt;/code&gt; or  &lt;code&gt;yum&lt;/code&gt; install experience on yet another flavour of Linux.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3&gt;Install docker&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo pacman -S docker
+resolving dependencies...
+looking for conflicting packages...
+
+Packages (4) bridge-utils-1.7.1-1  containerd-1.7.2-1  runc-1.1.8-1  docker-1:24.0.2-1
+
+Total Download Size:    55.84 MiB
+Total Installed Size:  236.93 MiB
+
+:: Proceed with installation? [Y/n] 
+:: Retrieving packages...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Install Docker Desktop&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Download the Arch package from the &lt;a href=&quot;https://docs.docker.com/desktop/release-notes/&quot;&gt;release&lt;/a&gt; page.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ wget https://desktop.docker.com/linux/main/amd64/docker-desktop-4.21.1-x86_64.pkg.tar.zst
+Saving to: &apos;docker-desktop-4.21.1-x86_64.pkg.tar.zst&apos;
+
+docker-desktop-4.21.1-x 100%[==============================&amp;gt;] 618.70M  5.73MB/s    in 1m 52s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install the package.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo pacman -U ./docker-desktop-4.21.1-x86_64.pkg.tar.zst
+loading packages...
+resolving dependencies...
+:: There are 3 providers available for qemu&amp;gt;=5.2.0:
+:: Repository extra
+   1) qemu-base  2) qemu-desktop  3) qemu-full
+
+Enter a number (default=1): 2
+
+Total Download Size:     31.84 MiB
+Total Installed Size:  1697.58 MiB
+
+:: Proceed with installation? [Y/n]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Manage Docker as non-root user&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Create the &lt;code&gt;docker&lt;/code&gt; group.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo groupadd docker
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Add your user to the &lt;code&gt;docker&lt;/code&gt; group.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo usermod -aG docker $USER
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Log out and log back in so that your group membership is re-evaluated.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Enable Docker daemon&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo systemctl enable docker.service
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Run Docker desktop&lt;/h3&gt;
+&lt;p&gt;To start Docker Desktop for Linux, search Docker Desktop on the Applications menu and open it. This launches the Docker  and opens the Docker Dashboard, reporting the status of Docker Desktop. Alternatively, open a terminal and run:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ systemctl --user start docker-desktop
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can check the versions of installed binaries by running the following commands:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ docker --version
+Docker version 24.0.0, build 98fdcd7
+
+$ docker compose version
+Docker Compose version v2.19.1
+
+$ docker version
+Client:
+ Cloud integration: v1.0.35
+ Version:           24.0.0
+ API version:       1.43
+ Go version:        go1.20.4
+ Git commit:        98fdcd7
+ Built:             Mon May 15 18:47:06 2023
+ OS/Arch:           linux/amd64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.21.1 (114176)
+ Engine:
+  Version:          24.0.2
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.4
+  Git commit:       659604f
+  Built:            Thu May 25 21:52:17 2023
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.6.21
+  GitCommit:        3dce8eb055cbb6872793272b4f20ed16117344f8
+ runc:
+  Version:          1.1.7
+  GitCommit:        v1.1.7-0-g860f061
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+&lt;/code&gt;&lt;/pre&gt;
+
+  	    </description>
+      </item>
       <item>
         <title>My Rails Kali Linux Install Experience</title>
         <link>https://drmanalo.github.io/blog/2021/rails-kali-install.html</link>
         <pubDate>Sun, 8 Aug 2021 00:00:00 +0100</pubDate>
         <guid isPermaLink="false">blog/2021/rails-kali-install.html</guid>
         <description>
-  	         &lt;p&gt;We have microservices developed using Ruby on Rails. I have to install several of these microservices to run another Golang microservice. Being a &lt;code&gt;ruby&lt;/code&gt; noob, I find it challenging to install since I think the README assumes every developer is seasoned Ruby programmer.&lt;/p&gt;
-&lt;p&gt;The other challenge I have is that Kali Linux has out-of-the-box ruby which version is lower than what its &lt;code&gt;Gemfile&lt;/code&gt; requires. I have to uninstall the existing ruby and install &lt;code&gt;rbenv&lt;/code&gt;. But the hurdle doesn&apos;t stop there.&lt;/p&gt;
+  	         &lt;p&gt;We have microservices developed using Ruby on Rails. I have to install several of these microservices to run another Golang microservice. Being a ruby noob, I find it challenging to install since I think the README assumes every developer is seasoned Ruby programmer.&lt;/p&gt;
+&lt;p&gt;The other challenge I have is that Kali Linux has out-of-the-box ruby which version is lower than what its Gemfile requires. I have to uninstall the existing ruby and install rbenv. But the hurdle doesn&apos;t stop there.&lt;/p&gt;
 &lt;!-- more --&gt;
 &lt;h3&gt;Customising Ruby&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;$ sudo apt remove ruby
@@ -55,7 +662,7 @@ Bundle complete! 38 Gemfile dependencies, 139 gems now installed.
 Use `bundle info [gemname]` to see where a bundled gem is installed.
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Fixing Github private repo issues&lt;/h3&gt;
-&lt;p&gt;I created a Github token on &lt;a href=&quot;https://github.com/settings/tokens&quot;&gt;https://github.com/settings/tokens&lt;/a&gt; and added below to my &lt;code&gt;.zshrc&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I created a Github token on &lt;a href=&quot;https://github.com/settings/tokens&quot;&gt;https://github.com/settings/tokens&lt;/a&gt; and added below to my .&lt;code&gt;zshrc&lt;/code&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;export BUNDLE_GITHUB__COM=x-access-token:ghp_xxxxxxxxxxxxxxxxxxxxx
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Running Rails&lt;/h3&gt;
@@ -70,60 +677,17 @@ $ rails server
   	    </description>
       </item>
       <item>
-        <title>Installing Docker CE on Kali Linux</title>
-        <link>https://drmanalo.github.io/blog/2021/docker-kali-install.html</link>
-        <pubDate>Sun, 18 Jul 2021 00:00:00 +0100</pubDate>
-        <guid isPermaLink="false">blog/2021/docker-kali-install.html</guid>
-        <description>
-  	         &lt;p&gt;I have a similar post of &lt;a href=&quot;/blog/2020/dockerce-redhat.html&quot;&gt;installing Docker CE&lt;/a&gt; but on Red Hat 8. Installing on Kali Linux is not completely different but still documenting the steps I went through to set it up.&lt;/p&gt;
-&lt;p&gt;There&apos;s an existing docker package from &lt;code&gt;apt&lt;/code&gt; therefore Kali-rolling repository named it &lt;code&gt;docker.io&lt;/code&gt;&lt;/p&gt;
-&lt;!-- more --&gt;
-&lt;h3&gt;Install using apt&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;$ sudo apt install docker.io
-Reading package lists... Done
-Building dependency tree... Done
-Reading state information... Done
-The following additional packages will be installed:
-  cgroupfs-mount containerd libintl-perl libintl-xs-perl libmodule-find-perl libmodule-scandeps-perl
-  libproc-processtable-perl libsort-naturally-perl needrestart runc tini
-Do you want to continue? [Y/n]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Post-installation&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;$ sudo groupadd docker
-groupadd: group &apos;docker&apos; already exists
-
-$ sudo usermod -aG docker $USER
-
-$ sudo systemctl enable docker
-Synchronizing state of docker.service with SysV service script with /lib/systemd/systemd-sysv-install.
-Executing: /lib/systemd/systemd-sysv-install enable docker
-Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /lib/systemd/system/docker.service.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Starting and testing&lt;/h3&gt;
-&lt;p&gt;Logout and then login back to update your permissions.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ sudo systemctl start docker
-
-$ docker run hello-world
-Unable to find image &apos;hello-world:latest&apos; locally
-latest: Pulling from library/hello-world
-b8dfde127a29: Pull complete
-Digest: sha256:776b0895d5e2fcd5e80bcdd607adc45461ba11143ef3df531174bf00679f43fe
-Status: Downloaded newer image for hello-world:latest
-
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
-&lt;/code&gt;&lt;/pre&gt;
-
-  	    </description>
-      </item>
-      <item>
         <title>Tomcat Manager Text Commands</title>
         <link>https://drmanalo.github.io/blog/2021/tomcat-manager-text-commands.html</link>
         <pubDate>Sun, 11 Jul 2021 00:00:00 +0100</pubDate>
         <guid isPermaLink="false">blog/2021/tomcat-manager-text-commands.html</guid>
         <description>
   	         &lt;p&gt;I recently published Tomcat Manager Application to my existing tomcats. In a nutshell, the Tomcat Manager App is a web application packaged with the Tomcat server to provide basic functionality to manage our deployed web applications. I intentionally dropped them on the first instance I installed Tomcats since I lack the time to configure them.&lt;/p&gt;
-&lt;p&gt;Tomcat Manager App is a part of the existing Tomcat package so I just have to &lt;code&gt;untar&lt;/code&gt; it and copy the manager folder to the existing Tomcat webapps folder.&lt;/p&gt;
+&lt;p&gt;Tomcat Manager App is a part of the existing Tomcat package so I just have to untar it and copy the manager folder to the existing Tomcat webapps folder.&lt;/p&gt;
+&lt;p&gt;In an instance, here&apos;s how you can test if there are memory leaks&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/findleaks?statusLine=true
+OK - No memory leaks found
+&lt;/code&gt;&lt;/pre&gt;
 &lt;!-- more --&gt;
 &lt;h3&gt;Configuring Manager App&lt;/h3&gt;
 &lt;p&gt;Edit the &lt;code&gt;conf/tomcat-users.xml&lt;/code&gt; file then add the following making sure you change the username and password to its stronger equivalent.&lt;/p&gt;
@@ -139,21 +703,21 @@ This message shows that your installation appears to be working correctly.
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Useful Commands&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;--insecure&lt;/code&gt; or &lt;code&gt;-k&lt;/code&gt; is to avoid TLS validation. When issuing &lt;code&gt;curl&lt;/code&gt; against unsecured URL, you can ommit this argument.&lt;/p&gt;
-&lt;p&gt;List all deployed applications&lt;/p&gt;
+&lt;h4&gt;List all deployed applications&lt;/h4&gt;
 &lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/list
 OK - Listed applications for virtual host [localhost]
 /:running:1:ROOT
 /manager:running:0:manager
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Stopping an application&lt;/p&gt;
+&lt;h4&gt;Stopping an application&lt;/h4&gt;
 &lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/stop?path=/
 OK - Stopped application at context path [/]
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Starting an application&lt;/p&gt;
+&lt;h4&gt;Starting an application&lt;/h4&gt;
 &lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/start?path=/
 OK - Started application at context path [/]
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Viewing the current user sessions&lt;/p&gt;
+&lt;h4&gt;Viewing the current user sessions&lt;/h4&gt;
 &lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sessions?path=/
 OK - Session information for application at context path [/]
 Default maximum session inactive interval [30] minutes
@@ -161,7 +725,7 @@ Default maximum session inactive interval [30] minutes
 [3 - &amp;lt;4] minutes: [4] sessions
 [18 - &amp;lt;19] minutes: [1] sessions
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Viewing TLS configurations&lt;/p&gt;
+&lt;h4&gt;Viewing TLS configurations&lt;/h4&gt;
 &lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sslConnectorCiphers
 OK - Connector / SSL Cipher information
 Connector[HTTP/1.1-8443]-_default_
@@ -179,11 +743,11 @@ OK - Connector / Certificate Chain information
 $ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sslConnectorTrustedCerts
 OK - Connector / Trusted Certificate information
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Reloading TLS Configuration&lt;/p&gt;
+&lt;h4&gt;Reloading TLS Configuration&lt;/h4&gt;
 &lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sslReload
 OK - Reloaded TLS configuration for all TLS virtual hosts
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Thread Dump&lt;/p&gt;
+&lt;h4&gt;Thread Dump&lt;/h4&gt;
 &lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/threaddump
 OK - JVM thread dump
 2021-07-10 16:24:10.172
@@ -196,30 +760,25 @@ Full thread dump OpenJDK 64-Bit Server VM (25.272-b10 mixed mode):
         at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
 ...
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Finding Memory Leaks&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/findleaks?statusLine=true
-OK - No memory leaks found
-&lt;/code&gt;&lt;/pre&gt;
 
   	    </description>
       </item>
       <item>
-        <title>My Codebashing Notes</title>
-        <link>https://drmanalo.github.io/blog/2021/code-bashing-notes.html</link>
+        <title>My Java Codebashing Notes</title>
+        <link>https://drmanalo.github.io/blog/2021/java-codebashing-notes.html</link>
         <pubDate>Sun, 25 Apr 2021 00:00:00 +0100</pubDate>
-        <guid isPermaLink="false">blog/2021/code-bashing-notes.html</guid>
+        <guid isPermaLink="false">blog/2021/java-codebashing-notes.html</guid>
         <description>
-  	         &lt;p&gt;As part of our training, we were given access to some courses on &lt;a href=&quot;https://codebashing.com&quot;&gt;codebashing&lt;/a&gt; and Java being my primary course. We were generously given access to other courses which I will pursue during my spare time. I&apos;m looking forward to complete other Java-related courses too and time-permitting, I&apos;ll try Golang and Ruby on Rails courses. That&apos;s a very optimistic wish but if access to this resources will remain, might as well consider it as opportunity.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/images/java.basher.png&quot; alt=&quot;Java Codebasher&quot; /&gt;&lt;/p&gt;
-&lt;!-- more --&gt;
+  	         &lt;p&gt;As part of our training, we were given access to some courses on &lt;a href=&quot;https://codebashing.com/&quot;&gt;codebashing&lt;/a&gt; and Java being my primary course. We were generously given access to other courses which I will pursue during my spare time. I&apos;m looking forward to complete other Java-related courses too and time-permitting, I&apos;ll try Golang and Ruby on Rails courses. That&apos;s a very optimistic wish but if access to this resources will remain, might as well consider it as opportunity.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/java.basher.png&quot; alt=&quot;Java Codebashing Certificate&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;SQL Injection&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Attack:&lt;/strong&gt; &lt;code&gt;&apos; or 1=1)#&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Attack:&lt;/strong&gt; &lt;code&gt;or 1=1)#&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use SQL prepared statements&lt;/p&gt;
 &lt;h3&gt;XXE (XML External Entity) Processing&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Attack:&lt;/strong&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE foo [&amp;lt;!ELEMENT foo ANY &amp;gt;
 &amp;lt;!ENTITY bar SYSTEM &amp;quot;file:///etc/passwd&amp;quot; &amp;gt;]&amp;gt;
-   &amp;lt;foo&amp;gt;&amp;amp;bar;&amp;lt;/foo&amp;gt; &amp;lt;!-- added to the metadata --&amp;gt;
+&amp;lt;foo&amp;gt;&amp;amp;bar;&amp;lt;/foo&amp;gt; &amp;lt;!-- added to the metadata --&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;documentBuilderFactory.setFeature(&amp;quot;http://apache.org/xml/features/disallow-doctype-decl&amp;quot;, true);
@@ -227,7 +786,7 @@ documentBuilderFactory.setFeature(&amp;quot;http://xml.org/sax/features/external
 documentBuilderFactory.setFeature(&amp;quot;http://xml.org/sax/features/external-parameter-entities&amp;quot;, false);
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Command Injection&lt;/h3&gt;
-&lt;p&gt;Attacker passed &lt;code&gt;;id&lt;/code&gt; to the URL after identifying that it executes a console command.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Attacker&lt;/strong&gt; passed &lt;code&gt;;id&lt;/code&gt; to the URL after identifying that it executes a console command.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt;&lt;br /&gt;
 myUiD here is exposed as URL parameter therefore sanitise the value before processing.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;if (!Pattern.matches(&amp;quot;[0-9A-Za-z]+&amp;quot;, myUiD)) {  
@@ -236,10 +795,10 @@ myUiD here is exposed as URL parameter therefore sanitise the value before proce
 Runtime rt = Runtime.getRuntime();
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Session Fixation&lt;/h3&gt;
-&lt;p&gt;Attacker will copy the URL from the application login then send it as phising email to the target. If the target will use the login URL and authenticate himself, then the attack is successful.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Attacker&lt;/strong&gt; will copy the URL from the application login then send it as phising email to the target. If the target will use the login URL and authenticate himself, then the attack is successful.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Invalidate the sesssion after authentication and issue a new one.&lt;/p&gt;
 &lt;h3&gt;Use Of Insufficiently Random Values&lt;/h3&gt;
-&lt;p&gt;An attacker could use predictability of pseudo-random number generators to hijack valid user sessions.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Attacker&lt;/strong&gt; could use predictability of pseudo-random number generators to hijack valid user sessions.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use random value generated by secure random generator. In an instance,&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;SecureRandom rand = new SecureRandom();
 byte bytes[] = new byte[20];    
@@ -248,15 +807,15 @@ String cookie = new String(Hex.encodeHex(bytes));
 return cookie;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Reflected Cross-Site Scripting (XSS)&lt;/h3&gt;
-&lt;p&gt;An attacker found out that user input is returned in HTTP response to the browser.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use escaping techniques each time user-supplied data is used by the application when building responses to users&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Attacker&lt;/strong&gt; found out that user input is returned in HTTP response to the browser.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use escaping techniques each time user-supplied data is used by the application when building responses to users.&lt;/p&gt;
 &lt;h3&gt;Stored Cross-Site Scripting (XSS)&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; User input should be sanitised before persisting to the database and after its retrieval from the database and then served to the user.&lt;/p&gt;
 &lt;h3&gt;DOM (Document Object Model) XSS&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Precondition:&lt;/strong&gt; User input is not encoded and is rendered within a dynamic context.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Application should first HTML-encode and then JavaScript-encode any user-supplied data that is returned to the client.&lt;/p&gt;
 &lt;h3&gt;Directory (Path) Traversal&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Mitigation&lt;/strong&gt;: Canonicalise the path then validate if it&apos;s the expected location&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Canonicalise the path then validate if it&apos;s the expected location&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;File file = new File(&amp;quot;/tmp/&amp;quot; + filename);
 String canonicalPath = file.getCanonicalPath();
 if(!canonicalPath.startsWith(&amp;quot;/tmp/&amp;quot;)) {
@@ -270,18 +829,10 @@ if(!canonicalPath.startsWith(&amp;quot;/tmp/&amp;quot;)) {
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Don&apos;t reveal if a user (especially when email is the unique identifier) exists on your application.&lt;/p&gt;
 &lt;h3&gt;Horizontal Privilege Escalation&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Definition:&lt;/strong&gt; Attackers being able to steal other, similar user privileges which apply to a different scope or domain of access.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Before doing CRUD operation, verify the current user using HttpServletRequest&apos;s &lt;code&gt;getUserPrincipal().getName()&lt;/code&gt;;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Before doing CRUD operation, verify the current user using HttpServletRequest&apos;s &lt;code&gt;getUserPrincipal().getName()&lt;/code&gt;&lt;/p&gt;
 &lt;h3&gt;Vertical Privilege Escalation&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Definition:&lt;/strong&gt; Attacker gets access to the application&apos;s functionality that requires special privileges. For example, when a regular user gets access to the user management functionality that only the admin should be able to access.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Java Spring Framework provides support for Expression-Based Access Control with the hasRole([role]) expression.&lt;/p&gt;
-&lt;h3&gt;Cross Site Request Forgery (POST)&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Preconditions:&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;A form must be vulnerable to CSRF&lt;/li&gt;
-&lt;li&gt;Victim must be authenticated with the application&lt;/li&gt;
-&lt;li&gt;Victim must visit a URL crafted by the attacker&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use Synchroniser Token Patterns. In Spring Framework, enable csrf feature.&lt;/p&gt;
 &lt;h3&gt;Cross Site Request Forgery (POST)&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Preconditions:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
@@ -290,13 +841,13 @@ if(!canonicalPath.startsWith(&amp;quot;/tmp/&amp;quot;)) {
 &lt;li&gt;Victim must visit a URL crafted by the attacker&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use proper HTTP verbs for CRUD operations&lt;/p&gt;
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;Use HTTP GET for Read operations (SQL SELECT)&lt;/li&gt;
 &lt;li&gt;Use HTTP PUT for Update operations (SQL UPDATE)&lt;/li&gt;
 &lt;li&gt;Use HTTP POST for Create operations (SQL INSERT)&lt;/li&gt;
 &lt;li&gt;Use HTTP DELETE for Delete operations (SQL DELETE)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;Clickjacking&lt;/strong&gt;&lt;/p&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Clickjacking&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Preconditions:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Victim must be authenticated with the application&lt;/li&gt;
@@ -304,12 +855,12 @@ if(!canonicalPath.startsWith(&amp;quot;/tmp/&amp;quot;)) {
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;lt;IfModule mod_headers.so&amp;gt;
-# Prevent Clickjacking using X-Frame-Options header
-Header set X-Frame-Options &amp;quot;deny&amp;quot;
+    # Prevent Clickjacking using X-Frame-Options header
+    Header set X-Frame-Options &amp;quot;deny&amp;quot;
 
-# Prevent Clickjacking using Content Security Policy (Not supported by all major browsers yet)
-Header set Content-Security-Policy: frame-options &apos;deny&apos;; # Chrome / Firefox
-Header set X-Content-Security-Policy: frame-options &apos;deny&apos;; # Internet Explorer
+    # Prevent Clickjacking using Content Security Policy (Not supported by all major browsers yet)
+    Header set Content-Security-Policy: frame-options &apos;deny&apos;; # Chrome / Firefox
+    Header set X-Content-Security-Policy: frame-options &apos;deny&apos;; # Internet Explorer
 &amp;lt;/IfModule&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Insecure URL Redirect&lt;/h3&gt;
@@ -317,7 +868,7 @@ Header set X-Content-Security-Policy: frame-options &apos;deny&apos;; # Internet
 &lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Validate the URL parameter before redirection. If URL redirect can be avoided, don&apos;t use it on your application.&lt;/p&gt;
 &lt;h3&gt;Insecure TLS Validation&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; DES, Blowfish and RC4 algorithms are vulnerable to attacks that allow an attacker to view communication in plaintext. Currently, AES has not been proved to be vulnerable so it is the best choice for encryption in TLS connections.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use the &lt;code&gt;java.security.cert&lt;/code&gt; to validate peer certificates.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation:&lt;/strong&gt; Use the java.security.cert to validate peer certificates.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;HttpsURLConnection conn = (HttpsURLConnection) destinationURL.openConnection();
 java.security.cert.Certificate[] certs = conn.getServerCertificates();
 ((X509Certificate) cert).checkValidity();
@@ -437,43 +988,6 @@ zulu64-1.7.0.262 added
 &lt;li&gt;Running mongodb community&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code&gt;brew services start mongodb/brew/mongodb-community
-&lt;/code&gt;&lt;/pre&gt;
-
-  	    </description>
-      </item>
-      <item>
-        <title>Installing Docker CE on Red Hat 8</title>
-        <link>https://drmanalo.github.io/blog/2020/dockerce-redhat.html</link>
-        <pubDate>Sun, 26 Apr 2020 00:00:00 +0100</pubDate>
-        <guid isPermaLink="false">blog/2020/dockerce-redhat.html</guid>
-        <description>
-  	         &lt;p&gt;Docker is an open source project which allows us to deploy applications inside containers. A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and realiably from one computing environment to another. A docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system librarries and settings.&lt;/p&gt;
-&lt;p&gt;Wtih the release of RHEL 8 and CentOS 8, docker package has been removed from their default repositories. docker has been replaced with &lt;code&gt;podman&lt;/code&gt; and &lt;code&gt;buildah&lt;/code&gt;. By using external reposity, it&apos;s still possible to install Docker CE (Community Edition).&lt;/p&gt;
-&lt;!-- more --&gt;
-&lt;h3&gt;Add external repository&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;$ sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-Adding repo from: https://download.docker.com/linux/centos/docker-ce.repo
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Install using --nobest option&lt;/h3&gt;
-&lt;p&gt;Without using --nobest, the first best canditate at the time of writing is bound to fail.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ sudo dnf install docker-ce --nobest
-....
-Installed:
- docker-ce-3:18.09.1-3.el7.x86_64                                         containerd.io-1.2.0-3.el7.x86_64        docker-ce-cli-1:19.03.8-3.el7.x86_64
- container-selinux-2:2.124.0-1.module+el8.2.0+6368+cf16aa14.noarch        libcgroup-0.41-19.el8.x86_64            libnetfilter_conntrack-1.0.6-5.el8.x86_64
- libnfnetlink-1.0.1-13.el8.x86_64                                         iptables-1.8.2-16.el8.x86_64            policycoreutils-python-utils-2.9-3.el8_1.1.noarch
- libnftnl-1.1.5-4.el8.x86_64
-
-Skipped:
- docker-ce-3:19.03.8-3.el7.x86_64
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Enable and start docker daemon&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;$ sudo systemctl enable --now docker
-Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /usr/lib/systemd/system/docker.service.
-$ sudo systemctl is-active docker
-active
-$ sudo systemctl is-enabled docker
-enabled
 &lt;/code&gt;&lt;/pre&gt;
 
   	    </description>

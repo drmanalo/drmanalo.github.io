@@ -56,39 +56,174 @@
  	<div class="content container">
     	<ul id="posts">
 					<li>
-								<a href="blog/2021/rails-kali-install.html"><h1 class="post-title">My Rails Kali Linux Install Experience</h1></a>
-								<span class="post-date">08 August 2021</span>
-								<p>We have microservices developed using Ruby on Rails. I have to install several of these microservices to run another Golang microservice. Being a <code>ruby</code> noob, I find it challenging to install since I think the README assumes every developer is seasoned Ruby programmer.</p>
-<p>The other challenge I have is that Kali Linux has out-of-the-box ruby which version is lower than what its <code>Gemfile</code> requires. I have to uninstall the existing ruby and install <code>rbenv</code>. But the hurdle doesn't stop there.</p>
+								<a href="blog/2023/install-arch-linux-encrypted.html"><h1 class="post-title">Install Arch Linux on Encrypted Disk</h1></a>
+								<span class="post-date">23 July 2023</span>
+								<p>I installed Arch Linux before but using <a href="https://wiki.archlinux.org/title/archinstall">archinstall script</a>. <code>archinstall</code> is a helper library which automates the installation. It is packaged with different pre-configured installers that work like a &quot;guided&quot; installer. Linux enthusiasts will oppose to this way of installing since Arch Linux is meant to be <strong>DIY</strong>.</p>
+<p>Then I attempted to do the encrypted version using the same <code>archinstall</code>. I am not happy with the result due to the following reasons.</p>
+<ul>
+<li>
+<p>It has very limited swap space size. <code>archinstall</code> is creating 4GB swap by default and cannot find a way around it.</p>
+</li>
+<li>
+<p>It doesn't wake up from hibernation. The only way to recover is through hard restart.</p>
+</li>
+</ul>
+<p>On this post, I will put the step by step guide I followed for an encrypted Arch Linux setup. I had three attempts before I get a working one. Common issue I have is along bootloader and missing resume hook to wake up from deep sleep. I learned my lessons the hard way!</p>
+<p>This setup will create an <a href="https://wiki.archlinux.org/title/Dm-crypt/Encrypting_an_entire_system#LVM_on_LUKS">LVM on LUKS</a> with <a href="https://wiki.archlinux.org/title/Dm-crypt/Encrypting_an_entire_system#Encrypted_boot_partition_(GRUB)">GRUB boot loader</a>.</p>
 
-								<a class="btn btn-default" href="blog/2021/rails-kali-install.html">Read More →</a>
+								<a class="btn btn-default" href="blog/2023/install-arch-linux-encrypted.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>
-								<a href="blog/2021/docker-kali-install.html"><h1 class="post-title">Installing Docker CE on Kali Linux</h1></a>
-								<span class="post-date">18 July 2021</span>
-								<p>I have a similar post of <a href="/blog/2020/dockerce-redhat.html">installing Docker CE</a> but on Red Hat 8. Installing on Kali Linux is not completely different but still documenting the steps I went through to set it up.</p>
-<p>There's an existing docker package from <code>apt</code> therefore Kali-rolling repository named it <code>docker.io</code></p>
+								<a href="blog/2023/ardanlabs-service-starter.html"><h1 class="post-title">Ultimate Go: Service with Kubernetes 4.1</h1></a>
+								<span class="post-date">24 June 2023</span>
+								<p>I attended recently a <code>golang</code> programming training. Our instructor is a respected Golang developer himself <a href="https://twitter.com/goinggodotnet">William Kennedy</a> who has trained thousands of developers worldwide in Go.</p>
+<p>The class I attended teaches how to build production-level services in Go leveraging the power of Kubernetes. From the beginning, you will pair program with the Bill Kennedy walking through the design philosophies and guidelines for building services in Go. With each new feature that is added to the service, you will learn how to deploy to and manage the Kubernetes environment used to run the service.</p>
+<p>I will outline here my install experience for the <a href="https://github.com/ardanlabs/service">starter service</a>. I installed it on my Mac during our training but this time, this is my Linux experience.</p>
 
-								<a class="btn btn-default" href="blog/2021/docker-kali-install.html">Read More →</a>
+								<a class="btn btn-default" href="blog/2023/ardanlabs-service-starter.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2023/docker-arch-linux-install.html"><h1 class="post-title">My Docker Desktop Arch Linux Install Experience</h1></a>
+								<span class="post-date">06 May 2023</span>
+								<p>Docker is an open source project which allows us to deploy applications inside containers. A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and realiably from one computing environment to another. A docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system librarries and settings.</p>
+<p>It's been a while since I installed Docker desktop but hopefully it's a similar <code>apt</code> or  <code>yum</code> install experience on yet another flavour of Linux.</p>
+
+								<a class="btn btn-default" href="blog/2023/docker-arch-linux-install.html">Read More →</a>
+								<hr class="spacer"/>
+					</li>
+					<li>
+								<a href="blog/2021/rails-kali-install.html"><h1 class="post-title">My Rails Kali Linux Install Experience</h1></a>
+								<span class="post-date">08 August 2021</span>
+								<p>We have microservices developed using Ruby on Rails. I have to install several of these microservices to run another Golang microservice. Being a ruby noob, I find it challenging to install since I think the README assumes every developer is seasoned Ruby programmer.</p>
+<p>The other challenge I have is that Kali Linux has out-of-the-box ruby which version is lower than what its Gemfile requires. I have to uninstall the existing ruby and install rbenv. But the hurdle doesn't stop there.</p>
+
+								<a class="btn btn-default" href="blog/2021/rails-kali-install.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>
 								<a href="blog/2021/tomcat-manager-text-commands.html"><h1 class="post-title">Tomcat Manager Text Commands</h1></a>
 								<span class="post-date">11 July 2021</span>
 								<p>I recently published Tomcat Manager Application to my existing tomcats. In a nutshell, the Tomcat Manager App is a web application packaged with the Tomcat server to provide basic functionality to manage our deployed web applications. I intentionally dropped them on the first instance I installed Tomcats since I lack the time to configure them.</p>
-<p>Tomcat Manager App is a part of the existing Tomcat package so I just have to <code>untar</code> it and copy the manager folder to the existing Tomcat webapps folder.</p>
+<p>Tomcat Manager App is a part of the existing Tomcat package so I just have to untar it and copy the manager folder to the existing Tomcat webapps folder.</p>
+<p>In an instance, here's how you can test if there are memory leaks</p>
+<pre><code>$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/findleaks?statusLine=true
+OK - No memory leaks found
+</code></pre>
 
 								<a class="btn btn-default" href="blog/2021/tomcat-manager-text-commands.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>
-								<a href="blog/2021/code-bashing-notes.html"><h1 class="post-title">My Codebashing Notes</h1></a>
+								<a href="blog/2021/java-codebashing-notes.html"><h1 class="post-title">My Java Codebashing Notes</h1></a>
 								<span class="post-date">25 April 2021</span>
-								<p>As part of our training, we were given access to some courses on <a href="https://codebashing.com">codebashing</a> and Java being my primary course. We were generously given access to other courses which I will pursue during my spare time. I'm looking forward to complete other Java-related courses too and time-permitting, I'll try Golang and Ruby on Rails courses. That's a very optimistic wish but if access to this resources will remain, might as well consider it as opportunity.</p>
-<p><img src="/images/java.basher.png" alt="Java Codebasher" /></p>
+								<p>As part of our training, we were given access to some courses on <a href="https://codebashing.com/">codebashing</a> and Java being my primary course. We were generously given access to other courses which I will pursue during my spare time. I'm looking forward to complete other Java-related courses too and time-permitting, I'll try Golang and Ruby on Rails courses. That's a very optimistic wish but if access to this resources will remain, might as well consider it as opportunity.</p>
+<p><img src="/images/java.basher.png" alt="Java Codebashing Certificate" /></p>
+<h3>SQL Injection</h3>
+<p><strong>Attack:</strong> <code>or 1=1)#</code></p>
+<p><strong>Mitigation:</strong> Use SQL prepared statements</p>
+<h3>XXE (XML External Entity) Processing</h3>
+<p><strong>Attack:</strong></p>
+<pre><code>&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;
+&lt;!ENTITY bar SYSTEM &quot;file:///etc/passwd&quot; &gt;]&gt;
+&lt;foo&gt;&amp;bar;&lt;/foo&gt; &lt;!-- added to the metadata --&gt;
+</code></pre>
+<p><strong>Mitigation:</strong></p>
+<pre><code>documentBuilderFactory.setFeature(&quot;http://apache.org/xml/features/disallow-doctype-decl&quot;, true);
+documentBuilderFactory.setFeature(&quot;http://xml.org/sax/features/external-general-entities&quot;, false);
+documentBuilderFactory.setFeature(&quot;http://xml.org/sax/features/external-parameter-entities&quot;, false);
+</code></pre>
+<h3>Command Injection</h3>
+<p><strong>Attacker</strong> passed <code>;id</code> to the URL after identifying that it executes a console command.</p>
+<p><strong>Mitigation:</strong><br />
+myUiD here is exposed as URL parameter therefore sanitise the value before processing.</p>
+<pre><code>if (!Pattern.matches(&quot;[0-9A-Za-z]+&quot;, myUiD)) {  
+    return false;
+}
+Runtime rt = Runtime.getRuntime();
+</code></pre>
+<h3>Session Fixation</h3>
+<p><strong>Attacker</strong> will copy the URL from the application login then send it as phising email to the target. If the target will use the login URL and authenticate himself, then the attack is successful.</p>
+<p><strong>Mitigation:</strong> Invalidate the sesssion after authentication and issue a new one.</p>
+<h3>Use Of Insufficiently Random Values</h3>
+<p><strong>Attacker</strong> could use predictability of pseudo-random number generators to hijack valid user sessions.</p>
+<p><strong>Mitigation:</strong> Use random value generated by secure random generator. In an instance,</p>
+<pre><code>SecureRandom rand = new SecureRandom();
+byte bytes[] = new byte[20];    
+rand.nextBytes(bytes);  
+String cookie = new String(Hex.encodeHex(bytes));   
+return cookie;
+</code></pre>
+<h3>Reflected Cross-Site Scripting (XSS)</h3>
+<p><strong>Attacker</strong> found out that user input is returned in HTTP response to the browser.</p>
+<p><strong>Mitigation:</strong> Use escaping techniques each time user-supplied data is used by the application when building responses to users.</p>
+<h3>Stored Cross-Site Scripting (XSS)</h3>
+<p><strong>Mitigation:</strong> User input should be sanitised before persisting to the database and after its retrieval from the database and then served to the user.</p>
+<h3>DOM (Document Object Model) XSS</h3>
+<p><strong>Precondition:</strong> User input is not encoded and is rendered within a dynamic context.</p>
+<p><strong>Mitigation:</strong> Application should first HTML-encode and then JavaScript-encode any user-supplied data that is returned to the client.</p>
+<h3>Directory (Path) Traversal</h3>
+<p><strong>Mitigation:</strong> Canonicalise the path then validate if it's the expected location</p>
+<pre><code>File file = new File(&quot;/tmp/&quot; + filename);
+String canonicalPath = file.getCanonicalPath();
+if(!canonicalPath.startsWith(&quot;/tmp/&quot;)) {
+    throw new GenericException(&quot;Unauthorized access&quot;);
+}
+</code></pre>
+<h3>Session Exposure within URL</h3>
+<p><strong>Mitigation:</strong> Ensure that session identifiers are not transmitted to the application via GET requests, only via POST requests and should be over HTTPS.</p>
+<h3>User Enumeration</h3>
+<p><strong>Precondition:</strong> Login form, password-recovery form reveals if user exists.</p>
+<p><strong>Mitigation:</strong> Don't reveal if a user (especially when email is the unique identifier) exists on your application.</p>
+<h3>Horizontal Privilege Escalation</h3>
+<p><strong>Definition:</strong> Attackers being able to steal other, similar user privileges which apply to a different scope or domain of access.</p>
+<p><strong>Mitigation:</strong> Before doing CRUD operation, verify the current user using HttpServletRequest's <code>getUserPrincipal().getName()</code></p>
+<h3>Vertical Privilege Escalation</h3>
+<p><strong>Definition:</strong> Attacker gets access to the application's functionality that requires special privileges. For example, when a regular user gets access to the user management functionality that only the admin should be able to access.</p>
+<p><strong>Mitigation:</strong> Java Spring Framework provides support for Expression-Based Access Control with the hasRole([role]) expression.</p>
+<h3>Cross Site Request Forgery (POST)</h3>
+<p><strong>Preconditions:</strong></p>
+<ul>
+<li>A URL must be vulnerable to CSRF</li>
+<li>Victim must be authenticated with the application</li>
+<li>Victim must visit a URL crafted by the attacker</li>
+</ul>
+<p><strong>Mitigation:</strong> Use proper HTTP verbs for CRUD operations</p>
+<ul>
+<li>Use HTTP GET for Read operations (SQL SELECT)</li>
+<li>Use HTTP PUT for Update operations (SQL UPDATE)</li>
+<li>Use HTTP POST for Create operations (SQL INSERT)</li>
+<li>Use HTTP DELETE for Delete operations (SQL DELETE)</li>
+</ul>
+<h3>Clickjacking</h3>
+<p><strong>Preconditions:</strong></p>
+<ul>
+<li>Victim must be authenticated with the application</li>
+<li>Victim must visit a URL crafted by the attacker</li>
+</ul>
+<p><strong>Mitigation:</strong></p>
+<pre><code>&lt;IfModule mod_headers.so&gt;
+    # Prevent Clickjacking using X-Frame-Options header
+    Header set X-Frame-Options &quot;deny&quot;
 
-								<a class="btn btn-default" href="blog/2021/code-bashing-notes.html">Read More →</a>
+    # Prevent Clickjacking using Content Security Policy (Not supported by all major browsers yet)
+    Header set Content-Security-Policy: frame-options 'deny'; # Chrome / Firefox
+    Header set X-Content-Security-Policy: frame-options 'deny'; # Internet Explorer
+&lt;/IfModule&gt;
+</code></pre>
+<h3>Insecure URL Redirect</h3>
+<p><strong>Attack:</strong> Send the potential victim a link with malicious site in the URL parameter. The victim opens a legitimate site that redirects him to the malicious site where the attacker deployed a phising page</p>
+<p><strong>Mitigation:</strong> Validate the URL parameter before redirection. If URL redirect can be avoided, don't use it on your application.</p>
+<h3>Insecure TLS Validation</h3>
+<p><strong>Note:</strong> DES, Blowfish and RC4 algorithms are vulnerable to attacks that allow an attacker to view communication in plaintext. Currently, AES has not been proved to be vulnerable so it is the best choice for encryption in TLS connections.</p>
+<p><strong>Mitigation:</strong> Use the java.security.cert to validate peer certificates.</p>
+<pre><code>HttpsURLConnection conn = (HttpsURLConnection) destinationURL.openConnection();
+java.security.cert.Certificate[] certs = conn.getServerCertificates();
+((X509Certificate) cert).checkValidity();
+</code></pre>
+
+								<a class="btn btn-default" href="blog/2021/java-codebashing-notes.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>
@@ -99,15 +234,6 @@
 <p>What I'm about to write is my out-of-the-box experience and the commands I used to set it up.</p>
 
 								<a class="btn btn-default" href="blog/2020/macbook-install-diary.html">Read More →</a>
-								<hr class="spacer"/>
-					</li>
-					<li>
-								<a href="blog/2020/dockerce-redhat.html"><h1 class="post-title">Installing Docker CE on Red Hat 8</h1></a>
-								<span class="post-date">26 April 2020</span>
-								<p>Docker is an open source project which allows us to deploy applications inside containers. A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and realiably from one computing environment to another. A docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system librarries and settings.</p>
-<p>Wtih the release of RHEL 8 and CentOS 8, docker package has been removed from their default repositories. docker has been replaced with <code>podman</code> and <code>buildah</code>. By using external reposity, it's still possible to install Docker CE (Community Edition).</p>
-
-								<a class="btn btn-default" href="blog/2020/dockerce-redhat.html">Read More →</a>
 								<hr class="spacer"/>
 					</li>
 					<li>

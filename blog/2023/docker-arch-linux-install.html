@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>My Docker Desktop Arch Linux Install Experience</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dhonnee Manalo">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/poole.css">
+    <link rel="stylesheet" href="../../css/syntax.css">
+    <link rel="stylesheet" href="../../css/hyde.css">
+    <link rel="stylesheet" href="../../css/jpages.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/monokai.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="theme-base-01">
+
+    <div class="sidebar">
+      <div class="container sidebar-sticky">
+
+        <div class="sidebar-about">
+          <h1><a href="/">dhon.manalo</a></h1>
+          <p class="lead">"Any fool can write code that a computer can understand"</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li><a href="/">Home</a> </li>
+          <li><a href="../../pages/disclaimer.html">Disclaimer</a></li>
+          <li><a href="../../archive.html">Archives</a></li>
+          <li><a href="../../feed.xml">Feed</a></li>
+        </ul>
+
+        <form id="search" method="get" action="../../pages/search.html">
+           <input id="searchString" name="searchString" placeholder="Search" type="text">
+           <input id="searchButton" name="googleSearchName" type="submit" value="Search">
+        </form>
+
+        <small>Baked with <a href="https://jbake.org">JBake v2.6.7</a></small><br/>
+        <small>Theme by <a href="https://github.com/mdo">Mark Otto</a></small><br/>
+
+      </div>
+    </div>
+
+	<div class="content container">
+		<div class="post">
+			<h1>My Docker Desktop Arch Linux Install Experience</h1>
+			<p><em>06 May 2023</em></p>
+			<p><p>Docker is an open source project which allows us to deploy applications inside containers. A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and realiably from one computing environment to another. A docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system librarries and settings.</p>
+<p>It's been a while since I installed Docker desktop but hopefully it's a similar <code>apt</code> or  <code>yum</code> install experience on yet another flavour of Linux.</p>
+<!-- more -->
+<h3>Install docker</h3>
+<pre><code>$ sudo pacman -S docker
+resolving dependencies...
+looking for conflicting packages...
+
+Packages (4) bridge-utils-1.7.1-1  containerd-1.7.2-1  runc-1.1.8-1  docker-1:24.0.2-1
+
+Total Download Size:    55.84 MiB
+Total Installed Size:  236.93 MiB
+
+:: Proceed with installation? [Y/n] 
+:: Retrieving packages...
+</code></pre>
+<h3>Install Docker Desktop</h3>
+<ol>
+<li>
+<p>Download the Arch package from the <a href="https://docs.docker.com/desktop/release-notes/">release</a> page.</p>
+<pre><code>$ wget https://desktop.docker.com/linux/main/amd64/docker-desktop-4.21.1-x86_64.pkg.tar.zst
+Saving to: 'docker-desktop-4.21.1-x86_64.pkg.tar.zst'
+
+docker-desktop-4.21.1-x 100%[==============================&gt;] 618.70M  5.73MB/s    in 1m 52s
+</code></pre>
+</li>
+<li>
+<p>Install the package.</p>
+<pre><code>$ sudo pacman -U ./docker-desktop-4.21.1-x86_64.pkg.tar.zst
+loading packages...
+resolving dependencies...
+:: There are 3 providers available for qemu&gt;=5.2.0:
+:: Repository extra
+   1) qemu-base  2) qemu-desktop  3) qemu-full
+
+Enter a number (default=1): 2
+
+Total Download Size:     31.84 MiB
+Total Installed Size:  1697.58 MiB
+
+:: Proceed with installation? [Y/n]
+</code></pre>
+</li>
+</ol>
+<h3>Manage Docker as non-root user</h3>
+<ol>
+<li>
+<p>Create the <code>docker</code> group.</p>
+<pre><code>$ sudo groupadd docker
+</code></pre>
+</li>
+<li>
+<p>Add your user to the <code>docker</code> group.</p>
+<pre><code>$ sudo usermod -aG docker $USER
+</code></pre>
+</li>
+<li>
+<p>Log out and log back in so that your group membership is re-evaluated.</p>
+</li>
+</ol>
+<h3>Enable Docker daemon</h3>
+<pre><code>$ sudo systemctl enable docker.service
+</code></pre>
+<h3>Run Docker desktop</h3>
+<p>To start Docker Desktop for Linux, search Docker Desktop on the Applications menu and open it. This launches the Docker  and opens the Docker Dashboard, reporting the status of Docker Desktop. Alternatively, open a terminal and run:</p>
+<pre><code>$ systemctl --user start docker-desktop
+</code></pre>
+<p>You can check the versions of installed binaries by running the following commands:</p>
+<pre><code>$ docker --version
+Docker version 24.0.0, build 98fdcd7
+
+$ docker compose version
+Docker Compose version v2.19.1
+
+$ docker version
+Client:
+ Cloud integration: v1.0.35
+ Version:           24.0.0
+ API version:       1.43
+ Go version:        go1.20.4
+ Git commit:        98fdcd7
+ Built:             Mon May 15 18:47:06 2023
+ OS/Arch:           linux/amd64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.21.1 (114176)
+ Engine:
+  Version:          24.0.2
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.4
+  Git commit:       659604f
+  Built:            Thu May 25 21:52:17 2023
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.6.21
+  GitCommit:        3dce8eb055cbb6872793272b4f20ed16117344f8
+ runc:
+  Version:          1.1.7
+  GitCommit:        v1.1.7-0-g860f061
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+</code></pre>
+</p>
+		</div>
+	</div>
+
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES * * */
+	    var disqus_shortname = '';
+		var disqus_identifier = 'blog/2023/docker-arch-linux-install.html';
+	    var disqus_url = 'https://drmanalo.github.ioblog/2023/docker-arch-linux-install.html';
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    <!-- Javascript -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="../../js/jpages.js"></script>
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

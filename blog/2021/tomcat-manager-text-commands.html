@@ -59,7 +59,11 @@
 			<h1>Tomcat Manager Text Commands</h1>
 			<p><em>11 July 2021</em></p>
 			<p><p>I recently published Tomcat Manager Application to my existing tomcats. In a nutshell, the Tomcat Manager App is a web application packaged with the Tomcat server to provide basic functionality to manage our deployed web applications. I intentionally dropped them on the first instance I installed Tomcats since I lack the time to configure them.</p>
-<p>Tomcat Manager App is a part of the existing Tomcat package so I just have to <code>untar</code> it and copy the manager folder to the existing Tomcat webapps folder.</p>
+<p>Tomcat Manager App is a part of the existing Tomcat package so I just have to untar it and copy the manager folder to the existing Tomcat webapps folder.</p>
+<p>In an instance, here's how you can test if there are memory leaks</p>
+<pre><code>$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/findleaks?statusLine=true
+OK - No memory leaks found
+</code></pre>
 <!-- more -->
 <h3>Configuring Manager App</h3>
 <p>Edit the <code>conf/tomcat-users.xml</code> file then add the following making sure you change the username and password to its stronger equivalent.</p>
@@ -75,21 +79,21 @@
 </code></pre>
 <h3>Useful Commands</h3>
 <p><code>--insecure</code> or <code>-k</code> is to avoid TLS validation. When issuing <code>curl</code> against unsecured URL, you can ommit this argument.</p>
-<p>List all deployed applications</p>
+<h4>List all deployed applications</h4>
 <pre><code>$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/list
 OK - Listed applications for virtual host [localhost]
 /:running:1:ROOT
 /manager:running:0:manager
 </code></pre>
-<p>Stopping an application</p>
+<h4>Stopping an application</h4>
 <pre><code>$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/stop?path=/
 OK - Stopped application at context path [/]
 </code></pre>
-<p>Starting an application</p>
+<h4>Starting an application</h4>
 <pre><code>$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/start?path=/
 OK - Started application at context path [/]
 </code></pre>
-<p>Viewing the current user sessions</p>
+<h4>Viewing the current user sessions</h4>
 <pre><code>$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sessions?path=/
 OK - Session information for application at context path [/]
 Default maximum session inactive interval [30] minutes
@@ -97,7 +101,7 @@ Default maximum session inactive interval [30] minutes
 [3 - &lt;4] minutes: [4] sessions
 [18 - &lt;19] minutes: [1] sessions
 </code></pre>
-<p>Viewing TLS configurations</p>
+<h4>Viewing TLS configurations</h4>
 <pre><code>$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sslConnectorCiphers
 OK - Connector / SSL Cipher information
 Connector[HTTP/1.1-8443]-_default_
@@ -115,11 +119,11 @@ OK - Connector / Certificate Chain information
 $ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sslConnectorTrustedCerts
 OK - Connector / Trusted Certificate information
 </code></pre>
-<p>Reloading TLS Configuration</p>
+<h4>Reloading TLS Configuration</h4>
 <pre><code>$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/sslReload
 OK - Reloaded TLS configuration for all TLS virtual hosts
 </code></pre>
-<p>Thread Dump</p>
+<h4>Thread Dump</h4>
 <pre><code>$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/threaddump
 OK - JVM thread dump
 2021-07-10 16:24:10.172
@@ -131,10 +135,6 @@ Full thread dump OpenJDK 64-Bit Server VM (25.272-b10 mixed mode):
         - waiting on (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@6c422292)
         at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
 ...
-</code></pre>
-<p>Finding Memory Leaks</p>
-<pre><code>$ curl -ku tomcatman:s3cret https://yourdomain.com/manager/text/findleaks?statusLine=true
-OK - No memory leaks found
 </code></pre>
 </p>
 		</div>
