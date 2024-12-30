@@ -2,6 +2,7 @@
 date = "2024-12-29T20:13:21Z"
 draft = false
 title = "Hello Hugo"
+tags = ["golang"]
 +++
 
 ### Goodbye jbake
@@ -47,12 +48,6 @@ Just a few more steps...
 ```
 ❯ git submodule add git@github.com:lukeorth/poison.git themes/poison
 Cloning into '~/sunday.project/drmanalo/themes/poison'...
-remote: Enumerating objects: 1595, done.
-remote: Counting objects: 100% (790/790), done.
-remote: Compressing objects: 100% (172/172), done.
-remote: Total 1595 (delta 687), reused 618 (delta 618), pack-reused 805 (from 2)
-Receiving objects: 100% (1595/1595), 5.71 MiB | 9.17 MiB/s, done.
-Resolving deltas: 100% (958/958), done.
 ```
 
 ### Step 3
@@ -86,11 +81,9 @@ Content "~/sunday.project/drmanalo/content/posts/hello-hugo.md" created
 ```
 
 ### Step 5
-Navigate to [http://localhost:1313](http://localhost:1313/hello-hugo)
+Navigate to [http://localhost:1313](http://localhost:1313)
 ```
 ❯ hugo server -D
-Watching for changes in ~/sunday.project/drmanalo/{archetypes,assets,content,data,i18n,layouts,static,themes}
-Watching for config changes in ~/sunday.project/drmanalo/hugo.toml, ~/sunday.project/drmanalo/themes/poison/config.toml
 Start building sites … 
 hugo v0.140.1+extended linux/amd64 BuildDate=unknown
                    | EN   
@@ -200,13 +193,4 @@ jobs:
 ❯ git add .
 ❯ git commit -m "github workflow"
 ❯ git push
-Enumerating objects: 6, done.
-Counting objects: 100% (6/6), done.
-Delta compression using up to 16 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (5/5), 1.25 KiB | 1.25 MiB/s, done.
-Total 5 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To github.com:drmanalo/drmanalo.github.io.git
-   51bb2d2..67f7e26  main -> main
 ```
