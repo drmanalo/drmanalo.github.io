@@ -9,24 +9,7 @@ I have a Proxmox setup on an old Xeon server with TrueNAS Scale running as VM. B
 
 ![wtrpro](../wtrpro.webp)
 
-I installed TrueNAS ElectricEel-24.10.1 on this bad boy and will document the `docker` containers I'm going to deploy. I chose `fast` as the pool I'm using for my containers.
-```
-$ sudo zpool iostat -v
-                                            capacity     operations     bandwidth 
-pool                                      alloc   free   read  write   read  write
-----------------------------------------  -----  -----  -----  -----  -----  -----
-boot-pool                                 11.1G   209G      0      1  2.57K  15.4K
-  nvme1n1p3                               11.1G   209G      0      1  2.57K  15.4K
-----------------------------------------  -----  -----  -----  -----  -----  -----
-fast                                      8.19G  1.80T      0     10  5.91K   127K
-  331b0bd0-29cf-4b1f-a305-68180c72f8f3    8.19G  1.80T      0     10  5.91K   127K
-----------------------------------------  -----  -----  -----  -----  -----  -----
-tank0                                     1.38T  2.24T      0      1  3.05K  23.3K
-  mirror-0                                1.38T  2.24T      0      1  3.05K  23.3K
-    c66dbfa8-acf8-4cb7-a8da-3c08466da016      -      -      0      0  1.52K  11.7K
-    abcd18fc-e944-483b-bc69-e6ae8569875e      -      -      0      0  1.53K  11.7K
-----------------------------------------  -----  -----  -----  -----  -----  -----
-```
+I installed TrueNAS ElectricEel-24.10.1 on this bad boy and will document the `docker` containers I'm going to deploy.
 
 ### Portainer
 I installed Portainer Community Edition from the community Train. It's available by default and I only need to click Discover Apps to reveal itself. It's a box-standard setup where you need to fill up the UI for Portainer, Network, Storage and Resources Configuration. It's running on 2 CPUs with 4096 MB of RAM. The rest of the containers are `stack` deployment within `portainer`.
@@ -284,7 +267,7 @@ services:
       - 81:80/tcp
     environment:
       TZ: Europe/London
-      WEBPASSWORD: Admin268
+      WEBPASSWORD: STRONG_PASSWORD
       PIHOLE_DNS_: 172.16.8.8#5053
     volumes:
       - /mnt/fast/pihole:/etc/pihole
