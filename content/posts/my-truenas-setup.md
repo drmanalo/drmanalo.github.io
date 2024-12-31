@@ -337,3 +337,20 @@ services:
                -c shared_buffers=512MB
                -c wal_compression=on"
 ```
+
+### Trilium
+```
+services:
+ trilium:
+   container_name: trilium
+   image: triliumnext/notes:v0.90.4
+   restart: always
+   environment:
+     - TRILIUM_DATA_DIR=/home/node/trilium-data
+     - USER_GID=1000
+   ports:
+     - 8082:8080
+   volumes:
+     - /mnt/fast/trilium/notes:/home/node/trilium-data
+```
+     
