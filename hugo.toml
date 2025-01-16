@@ -1,0 +1,18 @@
+baseURL = "https://drmanalo.github.io/"
+languageCode = "en-us"
+title = "drmanalo"
+theme = "poison"
+
+[params]
+    brand = "don"
+    description = "Any fool can write code that a computer can understand"
+    dark_mode = true
+
+    menu = [
+        {Name = "About", URL = "/about/", HasChildren = false},
+        {Name = "Posts", URL = "/posts/", Pre = "Recent", HasChildren = true, Limit = 5},
+    ]
+
+    github_url = "https://github.com/drmanalo"
+    linkedin_url = "https://linkedin.com/in/drmanalo"
+    twitter_url = "https://x.com/drmanalo"
