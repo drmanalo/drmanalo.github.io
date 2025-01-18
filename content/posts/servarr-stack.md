@@ -1,6 +1,6 @@
 +++
 date = "2025-01-18T13:49:38Z"
-draft = true
+draft = false
 title = "Servarr Stack"
 tags = ["docker","truenas"]
 +++
