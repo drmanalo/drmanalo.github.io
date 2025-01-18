@@ -22,9 +22,18 @@ I installed TrueNAS ElectricEel-24.10.1 on this bad boy and will document the `d
 Do not enable `apt` if you don't know what you're doing. It can destroy the appliance.
 
 ```
-admin@truenas[~]$ sudo mount -o remount,rw 'boot-pool/ROOT/24.10.1/usr'
-admin@truenas[~]$ sudo chmod +x /usr/bin/apt*
-admin@truenas[~]$ sudo chmod +x /usr/bin/dpkg
+$ sudo mount -o remount,rw 'boot-pool/ROOT/24.10.1/usr'
+$ sudo chmod +x /usr/bin/apt*
+$ sudo chmod +x /usr/bin/dpkg
+```
+
+## Install cockpit
+```
+$ sudo nvim /etc/apt/sources.list.d/backports.list
+deb http://deb.debian.org/debian bookworm-backports main
+
+$ sudo apt install -t bookworm-backports cockpit --no-install-recommends
+$ sudo systemctl start cockpit
 ```
 
 ### Portainer
