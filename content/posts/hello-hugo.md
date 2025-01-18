@@ -2,8 +2,8 @@
 date = "2024-12-29T20:13:21Z"
 draft = false
 title = "Hello Hugo"
-tags = ["golang"]
-+++
+tags = ["golang","linux"]
++++`
 
 ## Prerequisites 
 Being an `archlinux` user means dependencies are for `arch` but this blog post should work with any `nix` distribution.
@@ -25,7 +25,7 @@ There are steps 1 through 5 here that I'm keeping for documentation. That's pret
 ❯ hugo new site drmanalo
 Congratulations! Your new Hugo site was created in ~/sunday.project/drmanalo.
 
-Just a few more steps...
+Just a few more steps... 
 
 1. Change the current directory to ~/sunday.project/drmanalo.
 2. Create or install a theme:
