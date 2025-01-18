@@ -221,6 +221,24 @@ services:
       - /mnt/tank0/data/media/music:/music:ro
 ```
 
+## Nextcloud
+```
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID=568
+      - PGID=568
+      - TZ=Europe/London
+    volumes:
+      - /mnt/fast/nextcloud/config:/config
+      - /mnt/fast/nextcloud/data:/data
+    ports:
+      - 4443:443
+    restart: unless-stopped
+```    
+
 ### Nginx Proxy Manager
 ```
 services:
