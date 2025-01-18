@@ -34,6 +34,8 @@ deb http://deb.debian.org/debian bookworm-backports main
 
 $ sudo apt install -t bookworm-backports cockpit --no-install-recommends
 $ sudo systemctl start cockpit
+$ wget https://github.com/45Drives/cockpit-navigator/releases/download/v0.5.10/cockpit-navigator_0.5.10-1focal_all.deb
+$ sudo apt install ./cockpit-navigator_0.5.10-1focal_all.deb
 ```
 
 ### Portainer

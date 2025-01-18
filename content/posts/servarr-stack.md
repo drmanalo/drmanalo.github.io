@@ -14,21 +14,17 @@ Being an `archlinux` user means dependencies are for `arch` but this blog post s
 - [docker](https://get.docker.com)
 - [portainer](https://docs.portainer.io/start/install-ce/server/docker/linux)
 
-## Getting nordpvn private key
+## nordpvn details
 Steps were taken from [qdm12
 /
 gluetun-wiki](https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/nordvpn.md). Please pick your current VPN provider from the list.
 ```
 ❯ sudo pacman -S wireguard-tools
 ❯ sudo wg show nordlynx private-key
-```
-
-## Getting nordvpn public key
-```
 ❯ sudo wg show nordlynx public-key
 ```
 
-## Getting nordvpn endpoint IP
+## nordvpn endpoint
 Please make sure you are connected to the tunnel before clicking this link.
 
 https://api.nordvpn.com/v1/servers/recommendations?&filters%5C%5Bservers_technologies%5C%5D%5C%5Bidentifier%5C%5D=wireguard_udp&limit=1
