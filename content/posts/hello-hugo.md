@@ -5,7 +5,7 @@ title = "Hello Hugo"
 tags = ["golang","linux"]
 +++`
 
-## Prerequisites 
+## Prerequisites
 Being an `archlinux` user means dependencies are for `arch` but this blog post should work with any `nix` distribution.
 - [Linux](https://wiki.archlinux.org/title/Installation_guide)
 - [Golang](https://go.dev/doc/install)

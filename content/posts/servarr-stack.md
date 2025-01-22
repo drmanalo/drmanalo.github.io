@@ -8,8 +8,7 @@ tags = ["docker","truenas"]
 # DISCLAIMER
 I am not endorsing piracy nor supporting online illegal activities.
 
-## Prerequisites 
-Being an `archlinux` user means dependencies are for `arch` but this blog post should work with any `nix` distribution.
+## Prerequisites
 - [truenas](https://wiki.archlinux.org/title/Installation_guide)
 - [docker](https://get.docker.com)
 - [portainer](https://docs.portainer.io/start/install-ce/server/docker/linux)
