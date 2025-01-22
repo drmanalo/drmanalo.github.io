@@ -5,8 +5,7 @@ title = 'Truenas Setup'
 tags = ["truenas","docker"]
 +++
 
-## Prerequisites 
-Being an `archlinux` user means dependencies are for `arch` but this blog post should work with any `nix` distribution.
+## Prerequisites
 - [truenas](https://www.truenas.com/download-truenas-core)
 - [docker](https://get.docker.com)
 - [portainer](https://docs.portainer.io/start/install-ce/server/docker/linux)
@@ -27,21 +26,22 @@ $ sudo chmod +x /usr/bin/apt*
 $ sudo chmod +x /usr/bin/dpkg
 ```
 
-## Install cockpit
+### Install editor
 ```
-$ sudo nvim /etc/apt/sources.list.d/backports.list
-deb http://deb.debian.org/debian bookworm-backports main
-
-$ sudo apt install -t bookworm-backports cockpit --no-install-recommends
-$ sudo systemctl start cockpit
-$ wget https://github.com/45Drives/cockpit-navigator/releases/download/v0.5.10/cockpit-navigator_0.5.10-1focal_all.deb
-$ sudo apt install ./cockpit-navigator_0.5.10-1focal_all.deb
+$ sudo apt install neovim ncdu
+$ curl -s https://ohmyposh.dev/install.sh | bash -s
 ```
 
-### Portainer
+### Update ~/.profile
+```
+export PATH=$PATH:~/.local/bin
+eval "$(oh-my-posh init bash)"
+```
+
+## Portainer
 I installed Portainer Community Edition from the community Train. It's available by default and I only need to click Discover Apps to reveal itself. It's a box-standard setup where you need to fill up the UI for Portainer, Network, Storage and Resources Configuration. It's running on 2 CPUs with 4096 MB of RAM. The rest of the containers are `stack` deployment within `portainer`.
 
-### Authelia
+## Authelia
 I have `configuration.yml`, `users_database.yml` and `notification.txt` on the mounted volume so its persistent.
 ```
 services:
@@ -57,7 +57,29 @@ services:
      - TZ=Europe/London
 ```
 
-### Gitea
+## Filebrowser
+```
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    environment:
+      - PUID=568
+      - PGID=568
+      - TZ=Europe/London
+    ports:
+      - 8084:80
+    volumes:
+      - /mnt/fast:/srv/fast:rw
+      - /mnt/tank0:/srv/tank0:rw
+      - /mnt/fast/filebrowser/config/settings.json:/config/settings.json
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+networks: {}
+```
+
+## Gitea
 ```
 services:
  server:
@@ -84,7 +106,7 @@ Host 192.168.x.x
   User git
 ```  
 
-### Heimdall
+## Heimdall
 ```
 services:
   heimdall:
@@ -102,7 +124,7 @@ services:
     restart: unless-stopped
 ```
 
-### HomeAssistant
+## HomeAssistant
 ```
 services:
   homeassistant:
@@ -122,7 +144,7 @@ services:
     restart: always
 ```
 
-### Immich
+## Immich
 This is the most challenging container to setup. In my Proxmox, I have a bare-metal installation of this since I don't have success mounting volumes inside the LXC container.
 ```
 services:
@@ -213,7 +235,7 @@ DB_DATABASE_NAME=immich
 DB_PASSWORD=YOUR_STRONG_PASSWORD
 ```
 
-### Navidrome
+## Navidrome
 ```
 services:
   navidrome:
@@ -250,7 +272,7 @@ services:
     restart: unless-stopped
 ```    
 
-### Nginx Proxy Manager
+## Nginx Proxy Manager
 ```
 services:
   proxy:
@@ -283,7 +305,7 @@ services:
      - IP6_PROVIDER=none
 ```     
 
-### Pihole
+## Pihole
 ```
 networks:
   dns_net:
@@ -351,7 +373,7 @@ I edited the `unbound.conf` to remove the zone configurations.
     #include: "/opt/unbound/etc/unbound/*.conf"
 ```
 
-### PostgreSQL
+## PostgreSQL
 ```
 services:
   db:
@@ -377,7 +399,7 @@ services:
                -c wal_compression=on"
 ```
 
-### Trilium
+## Trilium
 ```
 services:
  trilium:
