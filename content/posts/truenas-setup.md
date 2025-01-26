@@ -24,18 +24,23 @@ Do not enable `apt` if you don't know what you're doing. It can destroy the appl
 $ sudo mount -o remount,rw 'boot-pool/ROOT/24.10.1/usr'
 $ sudo chmod +x /usr/bin/apt*
 $ sudo chmod +x /usr/bin/dpkg
-```
-
-### Install editor
-```
-$ sudo apt install neovim ncdu
+$ wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+$ echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+$ sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+$ sudo apt update
+$ sudo apt install eza vim ncdu
 $ curl -s https://ohmyposh.dev/install.sh | bash -s
 ```
 
 ### Update ~/.profile
 ```
-export PATH=$PATH:~/.local/bin
 eval "$(oh-my-posh init bash)"
+
+# aliases
+alias la='eza -la --icons=always'
+alias ls='eza -a --icons=always'
+alias ll='eza -l --icons=always'
+alias lt='eza -a --tree --level=1 --icons=always'
 ```
 
 ## Portainer
