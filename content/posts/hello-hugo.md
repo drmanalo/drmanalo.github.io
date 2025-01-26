@@ -199,3 +199,12 @@ jobs:
 ❯ git commit -m "github workflow"
 ❯ git push
 ```
+
+### How to reinitialise submodule
+```
+❯ git rm -r --cached themes/poison
+❯ rm -rf themes/poison
+❯ git submodule add git@github.com:lukeorth/poison.git themes/poison
+❯ git submodule status
+ 07485e85f0247518bc64ed0cc6fd6b39abe3d90d themes/poison (heads/master)
+```
