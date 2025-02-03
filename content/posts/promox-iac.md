@@ -9,6 +9,7 @@ tags = ["linux","proxmox"]
 Being an `archlinux` user means dependencies are for `arch` but this blog post should work with any `nix` distribution.
 - [Linux](https://wiki.archlinux.org/title/Installation_guide)
 - [Proxmox](https://www.proxmox.com/en/products/proxmox-virtual-environment/get-started)
+- [terraform](https://developer.hashicorp.com/terraform/install)
 
 ## Install procedure
 I downloaded the latest Proxmox release using [this link](https://www.proxmox.com/en/downloads/proxmox-virtual-environment/iso). Then I install `balena-etcher` to create the USB bootdisk. I then boot using the created bootdisk and followed the installation screen. It's vital that you configure the network correctly otherwise you will have an unreachable Proxmox instance.
@@ -77,90 +78,81 @@ $ qm template 9003
 
 ### Create user and role for terraform
 ```
-$ pveum role add tfrole -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.Monitor VM.PowerMgmt"
+$ pveum role add tfprovisioner -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate SDN.Use Sys.Audit Sys.Console Sys.Modify Sys.PowerMgmt VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.CPU VM.Config.Cloudinit VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.Monitor VM.PowerMgmt"
 
 $ pveum user add tfuser@pve --password secure1234
 
-$ pveum aclmod / -user tfuser@pve -role tfrole
+$ pveum aclmod / -user tfuser@pve -role tfprovisioner
 ```
 
 ## Configuration files
-Please change the input variables based on your setup.
+Please change the input variables based on your setup. Some useful links to grab resources from.
+- [Debian Cloud Images](https://cloud.debian.org/images/cloud/)
+- [Terraform Proxmox Provider](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs)
 
 ### main.tf
 ```
-
-variable "cloudinit_template_name" {
-    type = string 
-}
-
-variable "proxmox_node" {
-    type = string
-}
-
-variable "ssh_key" {
-  type = string 
-  sensitive = true
-}
-
-resource "proxmox_vm_qemu" "k8s-1" {
-  count = 3
-  name = "k8s-1${count.index + 1}"
-  target_node = var.proxmox_node
-  clone = var.cloudinit_template_name
-  agent = 1
-  os_type = "cloud-init"
-  cores = 4
-  sockets = 1
-  cpu = "host"
-  memory = 4096
-  scsihw = "virtio-scsi-pci"
-  bootdisk = "scsi0"
+resource "proxmox_vm_qemu" "vm-instance" {
+  name        = "vm-instance"
+  target_node = "pve"
+  clone       = var.cloudinit_template_name
+  full_clone  = true
+  cores       = 2
+  memory      = 2048
 
   disk {
-    slot = 0
-    size = "40G"
-    type = "scsi"
-    storage = "pve1"
+    size    = "32G"
+    type    = "scsi"
+    storage = "local-lvm"
+    discard = "on"
   }
 
   network {
-    model = "virtio"
-    bridge = "vmbr2"
+    model     = "virtio"
+    bridge    = "vmbr0"
+    firewall  = false
+    link_down = false
   }
-  
-  lifecycle {
-    ignore_changes = [
-      network,
-    ]
-  }
-
-  ipconfig0 = "ip=172.20.0.20${count.index + 1}/24,gw=172.20.0.1"
-  nameserver = "172.20.0.31"
-  
-  sshkeys = <<EOF
-  ${var.ssh_key}
-  EOF
 }
 ```
 
 ### provider.tf
 ```
-variable "pm_api_url" {
-  type = string
-}
-
 terraform {
   required_providers {
     proxmox = {
       source = "telmate/proxmox"
-      version = "2.9.11"
     }
   }
 }
 
 provider "proxmox" {
-  pm_api_url = var.pm_api_url
+  pm_api_url      = var.promox_api_url
+  pm_tls_insecure = true
+}
+```
+
+### variables.tf
+```
+variable "cloudinit_template_name" {
+  description = "The name of the Cloudinit template"
+  type        = string
+}
+
+variable "promox_api_url" {
+  description = "The Proxmox API URL"
+  type        = string
+}
+
+variable "proxmox_node" {
+  description = "The name of your Proxmox node"
+  type        = string
+}
+
+variable "ssh_key" {
+  description = "The SSH key to add to the virtual machine you're about to provision"
+  sensitive   = true
+  type        = string
 }
 ```
 
@@ -168,6 +160,140 @@ provider "proxmox" {
 ```
 pm_api_url = "https://192.168.0.200:8006/api2/json"
 cloudinit_template_name = "debian-11-cloudinit-template"
-proxmox_node = "dc"
+proxmox_node = "pve"
 ssh_key = "[YOUR_SSH_KEY]"
+```
+
+## terraform init
+```declarative
+$ terraform init
+Initializing the backend...
+Initializing provider plugins...
+- Finding latest version of telmate/proxmox...
+- Installing telmate/proxmox v2.9.14...
+- Installed telmate/proxmox v2.9.14 (self-signed, key ID A9EBBE091B35AFCE)
+```
+
+## terraform plan
+```declarative
+$ terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
++ create
+
+Terraform will perform the following actions:
+
+  # proxmox_vm_qemu.vm-instance will be created
+  + resource "proxmox_vm_qemu" "vm-instance" {
+      + additional_wait           = 5
+      + automatic_reboot          = true
+      + balloon                   = 0
+      + bios                      = "seabios"
+      + boot                      = (known after apply)
+      + bootdisk                  = (known after apply)
+      + clone                     = "debian-11-cloudinit-template"
+      + clone_wait                = 10
+      + cores                     = 2
+      + cpu                       = "host"
+      + default_ipv4_address      = (known after apply)
+      + define_connection_info    = true
+      + force_create              = false
+      + full_clone                = true
+      + guest_agent_ready_timeout = 100
+      + hotplug                   = "network,disk,usb"
+      + id                        = (known after apply)
+      + kvm                       = true
+      + memory                    = 2048
+      + name                      = "vm-instance"
+      + nameserver                = (known after apply)
+      + onboot                    = false
+      + oncreate                  = true
+      + preprovision              = true
+      + reboot_required           = (known after apply)
+      + scsihw                    = "lsi"
+      + searchdomain              = (known after apply)
+      + sockets                   = 1
+      + ssh_host                  = (known after apply)
+      + ssh_port                  = (known after apply)
+      + tablet                    = true
+      + target_node               = "pve"
+      + unused_disk               = (known after apply)
+      + vcpus                     = 0
+      + vlan                      = -1
+      + vmid                      = (known after apply)
+
+      + disk {
+          + backup             = true
+          + cache              = "none"
+          + discard            = "on"
+          + file               = (known after apply)
+          + format             = (known after apply)
+          + iops               = 0
+          + iops_max           = 0
+          + iops_max_length    = 0
+          + iops_rd            = 0
+          + iops_rd_max        = 0
+          + iops_rd_max_length = 0
+          + iops_wr            = 0
+          + iops_wr_max        = 0
+          + iops_wr_max_length = 0
+          + iothread           = 0
+          + mbps               = 0
+          + mbps_rd            = 0
+          + mbps_rd_max        = 0
+          + mbps_wr            = 0
+          + mbps_wr_max        = 0
+          + media              = (known after apply)
+          + replicate          = 0
+          + size               = "32G"
+          + slot               = (known after apply)
+          + ssd                = 0
+          + storage            = "local-lvm"
+          + storage_type       = (known after apply)
+          + type               = "scsi"
+          + volume             = (known after apply)
+        }
+
+      + network {
+          + bridge    = "vmbr0"
+          + firewall  = false
+          + link_down = false
+          + macaddr   = (known after apply)
+          + model     = "virtio"
+          + queues    = (known after apply)
+          + rate      = (known after apply)
+          + tag       = -1
+        }
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+```
+
+### terraform apply
+It threw me an error but I can see the resource was provisioned.
+
+```
+...
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+proxmox_vm_qemu.vm-instance: Creating...
+proxmox_vm_qemu.vm-instance: Still creating... [10s elapsed]
+proxmox_vm_qemu.vm-instance: Still creating... [20s elapsed]
+╷
+│ Error: Request cancelled
+│ 
+│   with proxmox_vm_qemu.vm-instance,
+│   on main.tf line 2, in resource "proxmox_vm_qemu" "vm-instance":
+│    2: resource "proxmox_vm_qemu" "vm-instance" {
+│ 
+│ The plugin.(*GRPCProvider).ApplyResourceChange request was cancelled.
+╵
+
+Stack trace from the terraform-provider-proxmox_v2.9.14 plugin:
 ```
