@@ -54,16 +54,24 @@ resource "proxmox_vm_qemu" "truenas" {
   sockets     = 2
   scsihw      = "virtio-scsi-pci"
   target_node = "pve"
-  clone       = var.cloudinit_template_name
-  full_clone  = true
-  cores       = 2
-  memory      = 2048
+  vmid        = 100
 
-  disk {
-    size    = "32G"
-    type    = "scsi"
-    storage = "local-lvm"
-    discard = "on"
+  disks {
+    ide {
+      ide0 {
+        cdrom {
+          iso = "local:iso/TrueNAS-SCALE-24.10.2.iso"
+        }
+      }
+    }
+    scsi {
+      scsi0 {
+        disk {
+          size    = "50G"
+          storage = "local-lvm"
+        }
+      }
+    }
   }
 
   network {
@@ -233,5 +241,5 @@ proxmox_vm_qemu.truenas: Creating...
 proxmox_vm_qemu.truenas: Still creating... [10s elapsed]
 proxmox_vm_qemu.truenas: Creation complete after 11s [id=pve/qemu/100]
 
-Stack trace from the terraform-provider-proxmox_v2.9.14 plugin:
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
