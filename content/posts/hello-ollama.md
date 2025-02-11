@@ -18,6 +18,15 @@ Being an `archlinux` user means dependencies are for `arch` but this blog post s
 ❯ curl -L https://ollama.com/download/ollama-linux-amd64-rocm.tgz
 
 ❯ tar -xzf ollama-linux-amd64-rocm.tgz
+
+❯ curl -fsSL https://cdn.useanything.com/latest/installer.sh | sh
+>>> Downloading latest AnythingLLM Desktop...
+>>> Extracting...
+>>> AnythingLLMDesktop is ready to run with ~/AnythingLLMDesktop/start.
+>>> You can rerun this installer anytime to get the latest version of AnythingLLM without effecting your existing data.
+>>> Documentation: https://docs.useanything.com
+>>> Issues: https://github.com/Mintplex-Labs/anything-llm
+>>> Thanks for using AnythingLLM!
 ```
 
 ### Create ollama user
@@ -30,7 +39,7 @@ Being an `archlinux` user means dependencies are for `arch` but this blog post s
 ```
 
 ### Customisation
-Create a service file in `/etc/systemd/system/ollama.service`
+Create a service file in `/etc/systemd/system/ollama.service`.
 ```declarative
 [Unit]
 Description=Ollama Service
@@ -43,6 +52,21 @@ Group=ollama
 Restart=always
 RestartSec=3
 Environment="PATH=$PATH;OLLAMA_HOST=0.0.0.0"
+```
+
+Create an application launcher in `~/.local/share/applications/anythingllm.desktop`
+```
+[Desktop Entry]
+Category=Artificial Intelligence
+Comment=Anything LLM
+Exec=~/AnythingLLMDesktop/start
+Icon=~/AnythingLLMDesktop/anythingllm-desktop/anythingllm-desktop.png
+Name=AnythingLLMDesktop
+StartupNotify=true
+Terminal=false
+Type=Application
+Version=1.0
+```
 
 [Install]
 WantedBy=default.target

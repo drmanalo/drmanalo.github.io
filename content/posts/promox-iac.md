@@ -49,12 +49,13 @@ Please change the input variables based on your setup. Some useful links to grab
 resource "proxmox_vm_qemu" "truenas" {
   name        = "TrueNAS-scale"
   bios        = "seabios"
-  cores       = 4
+  cores       = 2
   memory      = 8192
   sockets     = 2
   scsihw      = "virtio-scsi-pci"
-  target_node = "pve"
-  vmid        = 100
+  tags        = "terraform"
+  target_node = var.proxmox_node
+  vmid        = 3000
 
   disks {
     ide {
@@ -80,6 +81,51 @@ resource "proxmox_vm_qemu" "truenas" {
     model  = "virtio"
   }
 }
+
+resource "proxmox_lxc" "ollama" {
+  hostname        = "ollama"
+  ostemplate      = "local:vztmpl/ubuntu-24.04-standard_24.04-2_amd64.tar.zst"
+  password        = var.lxc_default_password
+  ssh_public_keys = var.public_key
+  target_node     = var.proxmox_node
+  tags            = "terraform"
+  unprivileged    = true
+  vmid            = 3001
+
+  network {
+    name   = "eth0"
+    bridge = "vmbr0"
+    hwaddr = "BC:24:11:F3:01:15"
+    gw     = "192.168.0.1"
+    ip     = "192.168.0.21/24"
+    ip6    = "manual"
+  }
+
+  rootfs {
+    storage = "local-lvm"
+    size    = "100G"
+  }
+}
+
+resource "null_resource" "ollama" {
+  depends_on = [proxmox_lxc.ollama]
+
+  provisioner "remote-exec" {
+    connection {
+      host        = "192.168.0.21"
+      private_key = file("~/.ssh/id_rsa")
+      timeout     = "6m"
+      type        = "ssh"
+      user        = "root"
+    }
+    inline = [
+      "apt update",
+      "apt upgrade -y",
+      "apt install -y curl neovim",
+      "curl -fsSL https://ollama.com/install.sh | sh",
+    ]
+  }
+}
 ```
 
 ### provider.tf
@@ -101,6 +147,12 @@ provider "proxmox" {
 
 ### variables.tf
 ```
+variable "lxc_default_password" {
+  description = "Default password for LXC containers"
+  sensitive   = true
+  type        = string
+}
+
 variable "promox_api_url" {
   description = "The Proxmox API URL"
   type        = string
@@ -120,8 +172,10 @@ variable "ssh_key" {
 
 ### terraform.tfvars
 ```
-promox_api_url = "https://192.168.0.230:8006/api2/json"
-proxmox_node   = "pve"
+lxc_default_password = "YOUR_VERY_STRONG_PASSWORD"
+promox_api_url       = "https://192.168.0.101:8006/api2/json"
+proxmox_node         = "pve"
+public_key           = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDiHxx5TT7voujM7LEmlLepuQWOSdaoNotLegitRSA= drmanalo@thinkcentre"
 ```
 
 ## terraform init
