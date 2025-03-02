@@ -5,5 +5,5 @@ title = "{{ replace .File.ContentBaseName "-" " " | title }}"
 +++
 
 ## Prerequisites
-Being an `archlinux` user means dependencies are for `arch` but this blog post should work with any `nix` distribution.
-- [Linux](https://wiki.archlinux.org/title/Installation_guide)
+Being a `Macbook` user means dependencies are for `brew` but this blog post should work with any `unix` distribution.
+- [homebrew](https://brew.sh/)
