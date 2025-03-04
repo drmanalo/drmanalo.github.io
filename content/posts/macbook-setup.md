@@ -7,8 +7,7 @@ tags = ["macbook","ansible"]
 
 ## Prerequisites
 Being a `Macbook` user means dependencies are for `brew` but this blog post should work with any `unix` distribution.
-- [homebrew](https://brew.sh/)
-- git - `brew install git`
+- [pip3](#setting-up-mac)
 
 ## Goodbye hyprland
 It is a weird feeling but I have to say goodbye to my `archlinux`. From my previous posts, I've been a Linux user and enjoying every bit of it. But now I have MacBook M4 which feels faster than my miniPC so I decided to make a switch. There is a learning curve to retrain my fingers for typing and for using gestures. It pains me to say goodbye to my tiling window application `hyprland` and I'm still searching for the closest replacement to it.
@@ -107,25 +106,6 @@ Edit `default.config.yml` if you don't like the applications below.
   - wrk
   - zsh-autosuggestions
   - zsh-autocomplete
-
-## dotfiles
-If you are planning to install my dotfiles, you will need to edit `roles/geerlingguy.dotfiles/defaults.yml` similar to below. This is because his ansible role is based from `master` and I have extra configuration saved on `.aerospace.toml`.
-
-```
----
-dotfiles_repo: "https://github.com/drmanalo/dotfiles.git"
-dotfiles_repo_version: main
-dotfiles_repo_accept_hostkey: false
-dotfiles_repo_local_destination: "~/Documents/dotfiles"
-
-dotfiles_home: "~"
-dotfiles_files:
-  - .aerospace.toml
-  - .gitignore
-  - .osx
-  - .vimrc
-  - .zshrc
-```
 
 ## Downloading the roles
 ```
