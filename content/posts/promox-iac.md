@@ -18,7 +18,7 @@ I downloaded the latest Proxmox release using [this link](https://www.proxmox.co
 
 ## Post install
 ```
-$ bash -c "$(wget -qLO - https://github.com/community-scripts/ProxmoxVE/raw/main/misc/post-pve-install.sh)"
+$ bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/tools/pve/post-pve-install.sh)"
  ✓ Corrected Proxmox VE Sources
  ✓ Disabled 'pve-enterprise' repository
  ✓ Enabled 'pve-no-subscription' repository
@@ -41,7 +41,7 @@ $ pveum aclmod / -user tfuser@pve -role tfprovisioner
 
 ## Configuration files
 Please change the input variables based on your setup. Some useful links to grab resources from.
-- [TrueNAS ISO image](https://download.sys.truenas.net/TrueNAS-SCALE-ElectricEel/24.10.2/TrueNAS-SCALE-24.10.2.iso)
+- [TrueNAS ISO image](https://download.sys.truenas.net/TrueNAS-SCALE-Fangtooth/25.04.0/TrueNAS-SCALE-25.04.0.iso)
 - [Terraform Proxmox Provider](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs)
 
 ### main.tf
