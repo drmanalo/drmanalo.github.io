@@ -1,6 +1,6 @@
 +++
 date = "2025-03-12T19:33:43Z"
-draft = true
+draft = false
 title = "Hello Django"
 tags = ["python"]
 +++
