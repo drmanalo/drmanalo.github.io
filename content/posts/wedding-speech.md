@@ -4,7 +4,7 @@ draft = false
 title = "Wedding Speech"
 +++
 
-Good afternoon French, Romans, countrymen. I mean families and friends from England, Wales, Scotland, Ireland, California and Montreal. Today marks the biggest `merge request` in Github's history, the union of Christopher and Sophia.
+Good afternoon friends, Romans, countrymen, lend me your ears. I mean families from England, Wales, Scotland, Ireland, California and Montreal. Today marks the biggest `merge request` in Github's history, the union of Christopher and Sophia.
 
 As software developers, they spend months, years and even decades in the near future writing codes, fixing bugs and pushing updates. But today they are committed to far greater, a lifetime `repository` together, where `love` is the main branch.
 
