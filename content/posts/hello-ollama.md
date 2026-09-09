@@ -29,6 +29,8 @@ Being an `archlinux` user means dependencies are for `arch` but this blog post s
 >>> Thanks for using AnythingLLM!
 ```
 
+<!--more-->
+
 ### Create ollama user
 ```declarative
 ❯ sudo useradd -r -s /bin/false -U -m -d /home/ollama ollama

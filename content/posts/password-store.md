@@ -14,6 +14,8 @@ Being an `archlinux` user means dependencies are for `arch` but this blog post s
 
 I have an existing password store so the steps to set it up have extra steps to begin with.
 
+<!--more-->
+
 ## Import existing key
 ```
 ❯ gpg --import secret.gpg

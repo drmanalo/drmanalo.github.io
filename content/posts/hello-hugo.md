@@ -19,6 +19,8 @@ I was using `jbake` in the past as my static site generator. But since I'm using
 hugo v0.140.1+extended linux/amd64 BuildDate=unknown
 ```
 
+<!--more-->
+
 ### Create hugo site
 There are steps 1 through 5 here that I'm keeping for documentation. That's pretty much you need to do as starter.
 ```
@@ -59,7 +61,7 @@ Cloning into '~/sunday.project/drmanalo/themes/poison'...
 Edit `hugo.toml`
 ```
 baseURL = "https://drmanalo.github.io/"
-languageCode = "en-us"
+locale = "en-us"
 title = "drmanalo"
 theme = "poison"
 

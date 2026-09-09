@@ -16,6 +16,8 @@ I downloaded the latest Proxmox release using [this link](https://www.proxmox.co
 
 ![proxmox_network](../proxmox-network-config.png)
 
+<!--more-->
+
 ## Post install
 ```
 $ bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/tools/pve/post-pve-install.sh)"

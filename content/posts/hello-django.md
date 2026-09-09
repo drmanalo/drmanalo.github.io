@@ -21,6 +21,8 @@ Installing collected packages: pipenv
 Successfully installed pipenv-2024.4.1
 ```
 
+<!--more-->
+
 ## django installation
 ```
 ❯ pipenv install django shell

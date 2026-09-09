@@ -17,6 +17,8 @@ I have a Proxmox setup on an old Xeon server with TrueNAS Scale running as VM. B
 
 I installed TrueNAS ElectricEel-24.10.1 on this bad boy and will document the `docker` containers I'm going to deploy.
 
+<!--more-->
+
 ## WARNING:
 Do not enable `apt` if you don't know what you're doing. It can destroy the appliance.
 

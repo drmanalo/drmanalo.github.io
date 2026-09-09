@@ -12,6 +12,8 @@ Being a `Macbook` user means dependencies are for `brew` but this blog post shou
 ## Goodbye hyprland
 It is a weird feeling but I have to say goodbye to my `archlinux`. From my previous posts, I've been a Linux user and enjoying every bit of it. But now I have MacBook M4 which feels faster than my miniPC so I decided to make a switch. There is a learning curve to retrain my fingers for typing and for using gestures. It pains me to say goodbye to my tiling window application `hyprland` and I'm still searching for the closest replacement to it.
 
+<!--more-->
+
 ## Setting up Mac
   1. Ensure Apple's command line tools are installed.`xcode-select --install` to launch the installer.
   1. [Install Ansible](https://docs.ansible.com/ansible/latest/installation_guide/index.html):

@@ -24,6 +24,8 @@ To start a podman VM automatically at login, also install the cask
 ```
 You can follow the recommendation to install `podman-desktop` so you can start podman VM automatically but I'm choosing `launchctl` since I'm going to use portainer later on.
 
+<!--more-->
+
 ## Initialise podman
 ```
 ❯ podman machine init --cpus 2 --disk-size 100 --memory 4096

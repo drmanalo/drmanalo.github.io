@@ -23,6 +23,8 @@ gluetun-wiki](https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/no
 ❯ sudo wg show nordlynx public-key
 ```
 
+<!--more-->
+
 ## nordvpn endpoint
 Please make sure you are connected to the tunnel before clicking this link.
 
