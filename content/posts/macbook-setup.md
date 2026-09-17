@@ -2,7 +2,7 @@
 date = "2025-03-02T14:09:13Z"
 draft = false
 title = "Macbook Setup"
-tags = ["macbook","ansible"]
+tags = ["ansible","macbook"]
 +++
 
 ## Prerequisites
