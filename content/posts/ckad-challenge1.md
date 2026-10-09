@@ -15,8 +15,6 @@ Any successful candidate will be comfortable:
 
 I'm currently preparing for my Certified Kubernetes Application Developer (CKAD). This free challenge is from the [kodecloud.com](https://bit.ly/3Lx76XH).
 
-
-
 <!--more-->
 
 ![jekyll-setup](../jekyll.png)
