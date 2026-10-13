@@ -5,13 +5,13 @@ title = "CKAD: Fourth Mock Challenge"
 tags = ["linux","kubernetes","docker"]
 +++
 
-## Task
+# Task
 
-Build a highly available Redis Cluster based on the given architecture diagram.
+Build a highly available `redis-cluster` based on the given architecture diagram.
 
 ![redis-cluster](../challenge4.png)
 
-<!-- more -->
+<!--more-->
 
 ## Inspect redis-cluster-configmap
 
@@ -36,23 +36,35 @@ protected-mode no
 update-node.sh:
 ```
 
-## Persistent volume
-
-You have to create `redis01` up to `redis06` volumes with 1Gi of `hostPath` storage.
+## Label node01 for affinity
 
 ```
-apiVersion: v1
+➜  kubectl label node node01 app=redis-cluster
+node/node01 labeled
+
+➜  kubectl get nodes --show-labels 
+NAME           STATUS   ROLES           AGE   VERSION   LABELS
+controlplane   Ready    control-plane   81m   v1.30.0   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=controlplane,kubernetes.io/os=linux,node-role.kubernetes.io/control-plane=,node.kubernetes.io/exclude-from-external-load-balancers=
+node01         Ready    <none>          81m   v1.30.0   app=redis-cluster,beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=node01,kubernetes.io/os=linux
+```
+
+## Persistent volume
+
+```
+➜  for name in redis{01..06}; do
+> kubectl create -f - <<EOF
+> apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: redis06
+  name: $name
 spec:
   capacity:
     storage: 1Gi
   volumeMode: Filesystem
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   hostPath:
-    path: /redis06
+    path: /$name
     type: DirectoryOrCreate
   nodeAffinity:
     required:
@@ -61,7 +73,15 @@ spec:
         - key: app
           operator: In
           values:
-          - redis
+          - redis-cluster
+> EOF
+> done
+persistentvolume/redis01 created
+persistentvolume/redis02 created
+persistentvolume/redis03 created
+persistentvolume/redis04 created
+persistentvolume/redis05 created
+persistentvolume/redis06 created
 ```
 
 ## redis-cluster.yaml
@@ -187,4 +207,40 @@ S: 432fbdfd825137ba62d59ea73d9641198d31ff71 172.17.1.5:6379
 >>> Check for open slots...
 >>> Check slots coverage...
 [OK] All 16384 slots covered.
+```
+
+## Verifications
+
+```
+➜  kubectl get service
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)              AGE
+kubernetes              ClusterIP   172.20.0.1      <none>        443/TCP              94m
+redis-cluster-service   ClusterIP   172.20.157.16   <none>        6379/TCP,16379/TCP   71s
+
+➜  kubectl get pods
+NAME              READY   STATUS    RESTARTS   AGE
+redis-cluster-0   1/1     Running   0          74s
+redis-cluster-1   1/1     Running   0          69s
+redis-cluster-2   1/1     Running   0          66s
+redis-cluster-3   1/1     Running   0          63s
+redis-cluster-4   1/1     Running   0          60s
+redis-cluster-5   1/1     Running   0          57s
+
+➜  kubectl get pvc
+NAME                   STATUS   VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-redis-cluster-0   Bound    redis04   1Gi        RWO                           <unset>                 78s
+data-redis-cluster-1   Bound    redis02   1Gi        RWO                           <unset>                 73s
+data-redis-cluster-2   Bound    redis05   1Gi        RWO                           <unset>                 70s
+data-redis-cluster-3   Bound    redis03   1Gi        RWO                           <unset>                 67s
+data-redis-cluster-4   Bound    redis06   1Gi        RWO                           <unset>                 64s
+data-redis-cluster-5   Bound    redis01   1Gi        RWO                           <unset>                 61s
+
+➜  kubectl get pv
+NAME      CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                          STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+redis01   1Gi        RWO            Retain           Bound    default/data-redis-cluster-5                  <unset>                          15m
+redis02   1Gi        RWO            Retain           Bound    default/data-redis-cluster-1                  <unset>                          15m
+redis03   1Gi        RWO            Retain           Bound    default/data-redis-cluster-3                  <unset>                          15m
+redis04   1Gi        RWO            Retain           Bound    default/data-redis-cluster-0                  <unset>                          15m
+redis05   1Gi        RWO            Retain           Bound    default/data-redis-cluster-2                  <unset>                          15m
+redis06   1Gi        RWO            Retain           Bound    default/data-redis-cluster-4                  <unset>                          15m
 ```

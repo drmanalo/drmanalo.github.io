@@ -10,7 +10,7 @@ Deploy the given architecture to `vote` namespace.
 
 ![vote-namespace](../challenge3.png)
 
-<!-- more -->
+<!--more-->
 
 ## Deployments
 
